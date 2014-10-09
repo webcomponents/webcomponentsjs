@@ -1,0 +1,20 @@
+{
+  "name": "webcomponents.js",
+  "main": "webcomponents.js",
+  "version": "0.4.2",
+  "homepage": "http://webcomponents.org",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "keywords": [
+    "webcomponents"
+  ],
+  "license": "BSD",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
