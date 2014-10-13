@@ -83,12 +83,9 @@ function register(name, options) {
   if (getRegisteredDefinition(name)) {
     throw new Error('DuplicateDefinitionError: a type with name \'' + String(name) + '\' is already registered');
   }
-  // must have a prototype, default to an extension of HTMLElement
-  // TODO(sjmiles): probably should throw if no prototype, check spec
+  // prototype is optional, default to an extension of HTMLElement
   if (!definition.prototype) {
-    // TODO(sjmiles): replace with more appropriate error (EricB can probably
-    // offer guidance)
-    throw new Error('Options missing required prototype property');
+    definition.prototype = Object.create(HTMLElement.prototype);
   }
   // record name
   definition.__name = name.toLowerCase();

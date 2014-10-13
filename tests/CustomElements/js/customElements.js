@@ -19,51 +19,40 @@ suite('customElements', function() {
   });
 
   test('document.registerElement requires name argument', function() {
-    try {
+    assert.throws(function() {
       document.registerElement();
-    } catch(x) {
-      return;
-    }
-    assert.ok(false, 'document.registerElement failed to throw when given no arguments');
+    }, '', 'document.registerElement failed to throw when given no arguments');
   });
 
   test('document.registerElement requires name argument to contain a dash', function() {
-    try {
+    assert.throws(function () {
       document.registerElement('xfoo', {prototype: Object.create(HTMLElement.prototype)});
-    } catch(x) {
-      return;
-    }
-    assert.ok(false, 'document.registerElement failed to throw when given no arguments');
+    }, '', 'document.registerElement failed to throw when given no arguments');
   });
 
   // http://w3c.github.io/webcomponents/spec/custom/#extensions-to-document-interface-to-register
   test('document.registerElement second argument is optional', function() {
-    try {
-      document.registerElement('x-no-proto');
-    } catch(x) {
-      return;
-    }
+    document.registerElement('x-no-options');
     assert.ok(true, 'document.registerElement failed to function without ElementRegistionOptions argument');
   });
 
+  test('document.registerElement second argument prototype property is optional', function() {
+    document.registerElement('x-no-proto', {});
+    assert.ok(true, 'document.registerElement failed to function without ElementRegistionOptions prototype property');
+  });
+
   test('document.registerElement requires name argument to not conflict with a reserved name', function() {
-    try {
+    assert.throws(function() {
       document.registerElement('font-face', {prototype: Object.create(HTMLElement.prototype)});
-    } catch(x) {
-      return;
-    }
-    assert.ok(false, 'Failed to execute \'registerElement\' on \'Document\': Registration failed for type \'font-face\'. The type name is invalid.');
+    }, '', 'Failed to execute \'registerElement\' on \'Document\': Registration failed for type \'font-face\'. The type name is invalid.');
   });
 
   test('document.registerElement requires name argument to be unique', function() {
     var proto = {prototype: Object.create(HTMLElement.prototype)};
     document.registerElement('x-duplicate', proto);
-    try {
+    assert.throws(function() {
       document.registerElement('x-duplicate', proto);
-    } catch(x) {
-      return;
-    }
-    assert.ok(false, 'document.registerElement failed to throw when called multiple times with the same element name');
+    }, '', 'document.registerElement failed to throw when called multiple times with the same element name');
   });
 
   test('document.registerElement create via new', function() {
