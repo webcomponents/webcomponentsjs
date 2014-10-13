@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <title>polyfill directive</title>
+  <script src="../../tools/chai/chai.js"></script>
+  <script src="../../tools/htmltest.js"></script>
+
+  <script src="../../../webcomponents.js" shadow></script>
+  <script src="register.js"></script>
+</head>
+<body>
+  <x-foo foo>
+    <div>Green?</div>
+    <section orange="true">Orange?</section>
+  </x-foo>
+
+  <x-bar foo>
+    <div>Green?</div>
+    <section orange="true">Orange?</section>
+  </x-bar>
+
+  <x-auto>
+    <div class="one">Green?</div>
+    <div class="two">Red?</div>
+  </x-auto>
+ 
+  <template id="x-foo">
+    <style>
+      :host {
+        display: block;
+        border: 1px solid black;
+      }
+
+      polyfill-next-selector {
+        content: ':host([foo=""])';
+      }
+      :host([foo=""]) {
+        padding: 10px;
+      }
+
+      polyfill-next-selector { content: ':host > div'; }
+      ::content > div {
+        background: green;
+      }
+
+      polyfill-next-selector { content: "section[orange='true']"; }
+      ::content > section {
+        background: orange;
+      }
+
+      polyfill-next-selector { content: 'section[orange="true"]'; }
+      ::content > section {
+        padding: 10px;
+      }
+
+      /*@polyfill :host > * */
+      ::content > * {
+        color: red;
+      }
+
+    </style>
+    <content></content>
+  </template>
+
+  <template id="x-auto">
+    <style>
+      .wrapper-one ::content > * {
+        background: green;
+      }
+
+      .wrapper-two ::content > * {
+        background: red;
+      }
+    </style>
+    <div class="wrapper-one">
+      <content select=".one"></content>
+    </div>
+    <div class="wrapper-two">
+      <content select=".two"></content>
+    </div>
+  </template>
+
+
+  
+  <script>
+    XFoo = register('x-foo', '', HTMLElement.prototype);
+    XBar = register('x-bar', 'x-foo', HTMLElement.prototype);
+    XAuto = register('x-auto', '', HTMLElement.prototype);
+    
+    document.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        // x-foo
+        var n = document.querySelector('x-foo');
+        var fooStyle = getComputedStyle(n);
+        chai.assert.equal(fooStyle.paddingTop, '10px', 'host attribute style correct');
+        var divStyle = getComputedStyle(n.firstElementChild);
+        chai.assert.equal(divStyle.backgroundColor, 
+          'rgb(0, 128, 0)', 'single quote polyfill-next-selector');
+        chai.assert.equal(divStyle.color, 
+          'rgb(255, 0, 0)', '@polyfill');
+        var sectionStyle = getComputedStyle(n.lastElementChild);
+        chai.assert.equal(sectionStyle.backgroundColor, 
+          'rgb(255, 165, 0)', 'double quote polyfill-next-selector');
+        chai.assert.equal(sectionStyle.paddingTop, 
+          '10px', 'double quote polyfill-next-selector');
+        chai.assert.equal(sectionStyle.color, 
+          'rgb(255, 0, 0)', '@polyfill');
+        //
+        // x-bar
+        var n = document.querySelector('x-bar');
+        var divStyle = getComputedStyle(n.firstElementChild);
+        chai.assert.equal(divStyle.backgroundColor, 
+          'rgb(0, 128, 0)', 'extended single quote polyfill-next-selector');
+        chai.assert.equal(divStyle.color, 
+          'rgb(255, 0, 0)', '@polyfill');
+        var sectionStyle = getComputedStyle(n.lastElementChild);
+        chai.assert.equal(sectionStyle.backgroundColor, 
+          'rgb(255, 165, 0)', 'extended double quote polyfill-next-selector');
+        chai.assert.equal(sectionStyle.color, 
+          'rgb(255, 0, 0)', '@polyfill');
+        //
+        var auto = document.querySelector('x-auto');
+        chai.assert.equal(getComputedStyle(auto.firstElementChild).backgroundColor, 
+        'rgb(0, 128, 0)', 'auto-replaced ::content');
+        chai.assert.equal(getComputedStyle(auto.lastElementChild).backgroundColor, 
+        'rgb(255, 0, 0)', 'auto-replaced ::content');
+        done();
+      });
+    });
+  </script>
+  
+  
+</body>
+</html>

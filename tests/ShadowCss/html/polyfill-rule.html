@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <title>polyfill rule</title>
+  <script src="../../tools/chai/chai.js"></script>
+  <script src="../../tools/htmltest.js"></script>
+
+  <script src="../../../webcomponents.js" shadow></script>
+  <script src="register.js"></script>
+</head>
+<body>
+  <x-foo>
+    <div class="zonk">red?</div>
+  </x-foo>
+  <div class="unscoped">unscoped</div>
+  <template id="x-foo">
+    <style>
+      polyfill-rule {
+        content: ':host > .zonk';
+        background: red;
+      }
+
+      polyfill-rule {
+        content: ".zonk";
+        padding: 10px;
+      }
+
+      /* @polyfill-rule :host > .zonk {
+        color: blue;
+      }*/
+
+      polyfill-unscoped-rule {
+        content: '.unscoped';
+        background: black;
+        color: white;
+      }
+
+      polyfill-unscoped-rule {
+        content: ".unscoped";
+        padding: 20px;
+      }
+    </style>
+    <content></content>
+  </template>
+  
+  <script>
+    XFoo = register('x-foo', '', HTMLElement.prototype);
+    
+    document.addEventListener('WebComponentsReady', function() {
+      var foo = document.querySelector('x-foo');
+      var zonkStyle = getComputedStyle(foo.querySelector('.zonk'));
+      chai.assert.equal(zonkStyle.backgroundColor, 
+        'rgb(255, 0, 0)', 'polyfill-rule, single quote');
+      chai.assert.equal(zonkStyle.paddingTop, 
+        '10px', 'polyfill-rule, double quote');
+      chai.assert.equal(zonkStyle.color, 
+        'rgb(0, 0, 255)', '@polyfill-rule');
+      var unscopedStyle = getComputedStyle(document.querySelector('.unscoped'));
+      chai.assert.equal(unscopedStyle.backgroundColor, 
+        'rgb(0, 0, 0)', 'polyfill-unscoped-rule single quote');
+      chai.assert.equal(unscopedStyle.paddingTop, 
+        '20px', 'polyfill-unscoped-rule double quote');
+      done();
+    });
+  </script>
+  
+  
+</body>
+</html>

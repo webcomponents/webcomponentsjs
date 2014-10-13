@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <title>content in :before pseudo-class</title>
+  <script src="../../tools/chai/chai.js"></script>
+  <script src="../../tools/htmltest.js"></script>
+
+  <script src="../../../webcomponents.js"></script>
+  <script src="register.js"></script>
+</head>
+<body>
+  <x-test></x-test>
+
+  <template id="x-test">
+    <style>
+      :host {
+        display: block;
+      }
+      #one::before {
+        color: green;
+        content: "hithere"; /* no space */
+        background: red;
+      }
+      #two::before {
+        content: "hithere ";
+      }
+      #three::before {
+        content: " hithere";
+      }
+      #four::before {
+        content: "hi there";
+      }
+      #five::before {
+        content: attr(test);
+      }
+    </style>
+    <div id="one">1</div>
+    <div id="two">2</div>
+    <div id="three">3</div>
+    <div id="four">4</div>
+    <div id="five" test="7"></div>
+  </template>
+  <script>
+    register('x-test', '', HTMLElement.prototype);
+    
+    document.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        var root = document.querySelector('x-test').shadowRoot;
+        function testContent(node, contentRe) {
+          chai.assert.match(getComputedStyle(node, ':before').content, contentRe, 'content ' +
+              'property set correctly.');
+        }
+        testContent(root.querySelector('#one'), new RegExp('hithere'));
+        testContent(root.querySelector('#two'), new RegExp('hithere '));
+        testContent(root.querySelector('#three'), new RegExp(' hithere'));
+        testContent(root.querySelector('#four'), new RegExp('hi there'));
+        testContent(root.querySelector('#five'), new RegExp('7|attr\\(test\\)'));
+        done();
+      });
+    });
+  </script>
+  
+  
+</body>
+</html>

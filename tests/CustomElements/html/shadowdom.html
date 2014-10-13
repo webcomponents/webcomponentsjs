@@ -1,0 +1,59 @@
+<!--
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<!doctype html>
+<html>
+<head>
+  <title>Custom Elements: shadowdom integration</title>
+  <script src="../../tools/htmltest.js"></script>
+  <script src="../../tools/chai/chai.js"></script>
+  <script>
+    hasShadowDOM = Boolean(Element.prototype.createShadowRoot);
+  </script>
+  <script src="../../../src/CustomElements/CustomElements.js"></script>
+</head>
+<body>
+  <x-host></x-host>
+  <script>
+    (function() {
+      if (hasShadowDOM) {
+        var elementsCreated = 0;
+        // basic proto
+        var proto = Object.create(HTMLElement.prototype);
+        proto.createdCallback = function() {
+          elementsCreated++;
+        };
+        // extend to create shadowRoot containing a custom element
+        var hostProto = Object.create(proto);
+        hostProto.createdCallback = function() {
+          proto.createdCallback.call(this);
+          chai.assert.equal(elementsCreated, 1, 'upgraded element');  
+          var root = this.createShadowRoot();
+          // create element via innerHTML
+          root.innerHTML = '<x-foo></x-foo>';
+          CustomElements.takeRecords(root);
+          chai.assert.equal(elementsCreated, 2, 'upgraded element inside shadowRoot');  
+          // now create async to test if the shadowRoot MutationObserver sees
+          setTimeout(function() {
+            root.innerHTML = '<x-foo></x-foo>';
+            CustomElements.takeRecords(root);
+            chai.assert.equal(elementsCreated, 3, 'upgraded element created async inside shadowRoot');  
+            done();
+          }, 50);
+
+        };
+        document.registerElement('x-foo', {prototype: proto});
+        document.registerElement('x-host', {prototype: hostProto});
+      } else {
+        done();
+      }
+    })();
+  </script>
+</body>
+</html>

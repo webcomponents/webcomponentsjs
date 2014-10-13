@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!--
+Copyright 2013 The Polymer Authors. All rights reserved.
+Use of this source code is governed by a BSD-style
+license that can be found in the LICENSE file.
+-->
+<title>WebComponents Tests</title>
+<meta charset="utf-8">
+
+<!-- Mocha/Chai -->
+<link rel="stylesheet" href="../tools/mocha/mocha.css">
+<script src="../tools/mocha/mocha.js"></script>
+<script src="../tools/chai/chai.js"></script>
+<script src="../tools/mocha-htmltest.js"></script>
+
+<!-- CustomElements -->
+<script src="../../webcomponents.js"></script>
+
+<div id="mocha"></div>
+<script>
+  mocha.setup({ui: 'tdd', slow: 1000});
+</script>
+
+<script src="tests.js"></script>
+
+<script>
+  document.addEventListener('WebComponentsReady', function() {
+    mocha.run();
+  });
+</script>

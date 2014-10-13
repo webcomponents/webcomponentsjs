@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1.0">
+  <title>Using compressed stylesheet</title>
+  <script src="../../tools/chai/chai.js"></script>
+  <script src="../../tools/htmltest.js"></script>
+
+  <script src="../../../webcomponents.js" shadow></script>
+  <script src="register.js"></script>
+</head>
+<body>
+
+  <template id="x-test">
+    <style>
+      h1,h2,h3,h4,h5{font-weight:300;letter-spacing:-0.01em;line-height:48px;margin:0}h1{font-size:40px}polyfill-next-selector{content:':host h1'}::content h1{font-size:40px}h2{font-size:24px}polyfill-next-selector{content:':host h2'}::content h2{font-size:24px}h3{font-size:20px}polyfill-next-selector{content:':host h3'}::content h3{font-size:20px}h4{font-size:16px;font-weight:500}polyfill-next-selector{content:':host h4'}::content h4{font-size:16px;font-weight:500}h5{font-size:12px;font-weight:500}polyfill-next-selector{content:':host h5'}::content h5{font-size:12px;font-weight:500}.platform{color:#9f499b}.elements-using{color:#3e50b4}.elements-creating{color:#e81d62}.main-bg{background-color:#eee !important}.main-purple{background-color:#1f2036}.main-purple paper-button{background:#262742 !important;color:white;fill:currentcolor}.main-purple paper-button:hover{background:#3a3b56 !important}code,pre{color:#9f499b;font-family:"Source Code Pro",Monaco,Menlo,Consolas,"Courier New",monospace}pre,.prettyprint{background-color:#fafafa;padding:16px;margin:30px 0}pre .typ,pre .inline,.prettyprint .typ,.prettyprint .inline{color:#6b499f}pre .pun,.prettyprint .pun{color:#5c6bc0}pre .str,pre .string,.prettyprint .str,.prettyprint .string{color:#ff4081}pre .pln,.prettyprint .pln{color:#7986cb}pre .kwd,.prettyprint .kwd{color:#d61a7f}pre .atn,pre .attribute-name,.prettyprint .atn,.prettyprint .attribute-name{color:#6b499f}pre .atv,pre .attribute-value,.prettyprint .atv,.prettyprint .attribute-value{color:#7986cb}pre .com,pre .comment,.prettyprint .com,.prettyprint .comment{color:#8a8a8a}:host{display:block}:host([sidebar]){padding-left:265px}polyfill-next-selector{content:':host[sidebar]:not(.mobile) site-banner app-bar.fixed'}:host([sidebar]:not(.mobile)) ::content site-banner app-bar.fixed{margin-left:265px}polyfill-next-selector{content:':host.scrolling:not(.mobile) site-banner'}:host(.scrolling:not(.mobile)) ::content site-banner{height:80px !important;padding-bottom:0;position:fixed !important;width:100%;box-shadow:0 1px 5px rgba(0,0,0,0.3)}polyfill-next-selector{content:':host.scrolling:not(.mobile) > article'}:host(.scrolling:not(.mobile)) ::content article{padding-top:310px}polyfill-next-selector{content:':host site-banner app-bar.fixed'}:host ::content site-banner app-bar.fixed{position:fixed}polyfill-next-selector{content:':host > article'}:host ::content article{padding:24px 64px;max-width:912px;min-height:300px;overflow:hidden}@media only screen and (max-width: 850px){:host([sidebar]){padding-left:0 !important}polyfill-next-selector{content:':host > article'}:host ::content article{padding-left:15px;padding-right:15px}}@media only screen and (max-width: 580px){polyfill-next-selector{content:':host > article '}::content article{padding-top:70px}}
+
+    </style>
+    <article>article</article>
+  </template>
+  
+  <script>
+    XTest = register('x-test', '', HTMLElement.prototype, ['x-test']);
+  </script>
+  
+  <x-test></x-test>
+  
+  <script>
+    document.addEventListener('WebComponentsReady', function() {
+      var sheet = document.querySelector('[shim-shadowdom-css]');
+      //chai.assert.notMatch(sheet.textContent, /polyfill-next-selector/, 'polyfill rules properly replaced');
+      //chai.assert.notMatch(sheet.textContent, /-shadowcsshost/, 'polyfill rules properly replaced');
+      done();
+    });
+  </script>
+</body>
+</html>

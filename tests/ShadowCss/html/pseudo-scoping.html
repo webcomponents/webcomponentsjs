@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <title>Psuedo scoped styling</title>
+  <script src="../../tools/chai/chai.js"></script>
+  <script src="../../tools/htmltest.js"></script>
+
+  <script src="../../../webcomponents.js" shadow></script>
+  <script src="register.js"></script>
+  <style>
+    div {
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+  <x-foo></x-foo>
+  <button is="x-button"></button>
+  <div id="outerScopeDiv">10px</div>
+
+  <template id="x-foo">
+    <style>
+      @host {
+        * {
+          display: block;
+          border: 1px solid black;
+        }
+      }
+
+      div {
+        font-size: 20px;
+        background: green;
+      }
+
+      div::before { 
+        background: blue;
+        content: 'zonk';
+      }
+
+      @media screen and (max-width: 800px) {
+        div {
+          font-size: 50px;
+        }
+      } 
+    </style>
+    <div>20px / 50px</div>
+  </template>
+
+  <template id="x-button">
+    <style>
+      div {
+        background: red;
+      }
+
+      @media screen and (min-width: 50px) {
+        div {
+          font-size: 50px;
+        }
+      }
+    </style>
+    <div>button</div>
+  </template>
+
+  <script>
+    register('x-foo', '', HTMLElement.prototype);
+    register('x-button', 'button', HTMLButtonElement.prototype, ['x-button']);
+    
+    document.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        var foo = document.querySelector('x-foo');
+        var fooDiv = foo.shadowRoot.querySelector('div');
+        var fooDivStyle = getComputedStyle(fooDiv);
+        chai.assert.equal(fooDivStyle.fontSize, window.innerWidth < 800 ? '50px' : '20px',
+          'shadowDOM styles are applied');
+        var fooDivBeforeStyle = getComputedStyle(fooDiv, ':before');
+        chai.assert.equal(fooDivBeforeStyle.backgroundColor, 'rgb(0, 0, 255)',
+          ':before styles are applied');
+
+        var xButtonDiv = document.querySelector('[is=x-button]')
+            .shadowRoot.querySelector('div');
+        var xButtonDivStyle = getComputedStyle(xButtonDiv);
+        chai.assert.equal(xButtonDivStyle.backgroundColor, 'rgb(255, 0, 0)',
+          'type extension is properly shimmed');        
+        chai.assert.equal(xButtonDivStyle.fontSize, '50px',
+          'media query for type extension is properly shimmed');        
+
+        done();
+      });
+    });
+  </script>
+  
+  
+</body>
+</html>

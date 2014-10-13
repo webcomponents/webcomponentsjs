@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1.0">
+  <title>Using combinators styling</title>
+  <script src="../../tools/chai/chai.js"></script>
+  <script src="../../tools/htmltest.js"></script>
+
+  <script src="../../../webcomponents.js"></script>
+  <script src="register.js"></script>
+  <style shim-shadowdom>
+    x-foo ^ .foo {
+      background: orange;
+    }
+  </style>
+  <link rel="stylesheet" href="combinators.css" shim-shadowdom>
+  <link rel="import" href="combinators-import.html">
+</head>
+<body>
+
+  <template id="x-foo">
+    <style>
+      x-bar ^ .bar {
+        background: red;
+      }
+
+      x-bar ^ .noogy {
+        background: blue;
+      }
+
+      x-bar ^^ .zot {
+        color: white;
+      }
+    </style>
+    <div class="foo">orange</div>
+    <div class="foo2">green</div>
+    <x-bar></x-bar>
+  </template>
+  <template id="x-bar">
+    <style>
+      x-zot ^ .zot {
+        background: green;
+      }
+    </style>
+    <div class="bar">Bar</div>
+    <div class="noogy">Noogy</div>
+    <x-zot></x-zot>
+  </template>
+
+  <template id="x-zot">
+    <div class="zot">Zot</div>
+    <div class="zot-inner">inner</div>
+  </template>
+
+  
+  <script>
+    XZot = register('x-zot', '', HTMLElement.prototype, ['x-zot']);
+    XBar = register('x-bar', '', HTMLElement.prototype, ['x-bar']);
+    XFoo = register('x-foo', '', HTMLElement.prototype, ['x-foo']);
+  </script>
+  
+  <x-foo></x-foo>
+  
+  <script>
+    document.addEventListener('WebComponentsReady', function() {
+      var foo = document.querySelector('x-foo');
+      var xBarRoot = foo.shadowRoot.querySelector('x-bar').shadowRoot;
+      var bar = xBarRoot.querySelector('.bar');
+      chai.assert.equal(getComputedStyle(bar).backgroundColor, 'rgb(255, 0, 0)',
+        '^ styles are applied (backgroundColor)');
+
+      var noogy = xBarRoot.querySelector('.noogy');
+      chai.assert.equal(getComputedStyle(noogy).backgroundColor, 'rgb(0, 0, 255)',
+        '^ styles are applied (backgroundColor)');
+      var xZot = foo.shadowRoot.querySelector('x-bar').shadowRoot
+          .querySelector('x-zot'); 
+      var zot = xZot.shadowRoot.querySelector('.zot');
+      
+      chai.assert.equal(getComputedStyle(zot).backgroundColor, 'rgb(0, 128, 0)',
+        '^ styles are applied (backgroundColor)');
+      chai.assert.equal(getComputedStyle(zot).color, 'rgb(255, 255, 255)',
+        '^^ styles are applied (color)');
+
+      // NOTE: native import styles not shimmed under SD polyfill
+      var unsupported = window.ShadowDOMPolyfill && HTMLImports.useNative;
+      if (!unsupported) {
+        var fooDiv = foo.shadowRoot.querySelector('.foo');
+        var zotDiv = xZot.shadowRoot.querySelector('.zot-inner');
+        var fooDiv2 = foo.shadowRoot.querySelector('.foo2');
+        
+        // TODO(sorvell): test blocked on 
+        // https://code.google.com/p/chromium/issues/detail?id=339657
+        //chai.assert.equal(getComputedStyle(fooDiv2).backgroundColor, 'rgb(0, 128, 0)',
+        //  'combinators applied via stylesheet in import');
+
+        chai.assert.equal(getComputedStyle(fooDiv).backgroundColor, 'rgb(255, 165, 0)',
+            'combinators applied via style in main document');
+        chai.assert.equal(getComputedStyle(zotDiv).backgroundColor, 'rgb(0, 0, 255)',
+            'combinators applied via stylesheet in main document');
+      }
+      done();
+    });
+  </script>
+</body>
+</html>

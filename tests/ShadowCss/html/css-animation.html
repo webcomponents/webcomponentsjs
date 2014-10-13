@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <title>polyfill rule</title>
+  <script src="../../tools/chai/chai.js"></script>
+  <script src="../../tools/htmltest.js"></script>
+
+  <script src="../../../webcomponents.js" shadow></script>
+  <script src="register.js"></script>
+</head>
+<body>
+
+<x-animate>Animate!</x-animate>
+
+<template id="x-animate">
+  <style>
+    .container {
+      text-align: center;
+    }
+    .animate {
+      -webkit-animation: animate 1ms both;
+      animation: animate 1ms both;
+    }
+
+    @-webkit-keyframes animate {
+        from {
+          background-color: red;
+          -webkit-transform: scale(1);
+        }
+        to {
+          background-color: blue;
+          -webkit-transform: scale(2);
+        }
+    }
+
+    @keyframes animate {
+        from {
+          background-color: red;
+          transform: scale(1);
+          -webkit-transform: scale(1);
+        }
+        to {
+          background-color: blue;
+          transform: scale(2);
+          -webkit-transform: scale(2);
+        }
+    }
+  </style>
+  <div class="container">
+    <div class="animate"><content></content></div>
+  </div>
+</template>
+<script>
+  XAnimate = register('x-animate', '', HTMLElement.prototype);
+  addEventListener('WebComponentsReady', function() {
+    setTimeout(function() {
+      var x = document.querySelector('x-animate');
+      var a = x.shadowRoot.querySelector('.animate');
+      chai.assert.match(getComputedStyle(a).backgroundColor, /\(0, 0, 255/, 'animation ran');
+      done();
+    }, 100);
+  });
+</script>
+    
+</body>
+</html>

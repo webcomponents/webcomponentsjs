@@ -1,0 +1,41 @@
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Element Upgrade Order</title>
+  <script src="../../tools/chai/chai.js"></script>
+  <script src="../../tools/htmltest.js"></script>
+
+  <script src="../../../webcomponents.js"></script>
+  <link rel="import" href="import-upgrade-order.html">
+</head>
+<body>
+  <x-foo id="main"></x-foo>
+  <script>
+    addEventListener('WebComponentsReady', function() {
+      // native CE will upgrade in creation order
+      // HTMLImports polyfill must be created after main document
+      // Therefore, skip this test in that scenario
+      if (CustomElements.useNative && !HTMLImports.useNative) {
+        return done();
+      }
+      var proto = Object.create(HTMLElement.prototype);
+      var order = [];
+      proto.createdCallback = function() {
+        order.push(this.id);
+      }
+      document.registerElement('x-foo', {prototype: proto});
+      chai.assert.deepEqual(order, ['import', 'main'], 'elements are upgraded in imports before main document');
+      done();
+    });
+  </script>
+</body>
+</html>
