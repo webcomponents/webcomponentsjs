@@ -34,6 +34,8 @@
       parts.forEach(function(f) {
         flags.log[f] = true;
       });
+    } else {
+      flags.log = {};
     }
   }
 
@@ -76,8 +78,8 @@
   );
 
   var src = script.getAttribute('src');
-  var path = src.slice(0, src.indexOf(file));
-
+  var path = src.slice(0, src.lastIndexOf(file));
+  
   modules.forEach(function(f) {
     document.write('<script src="' + path + 'src/' + f + '"></script>');
   });
