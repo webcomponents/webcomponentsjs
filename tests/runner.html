@@ -7,25 +7,25 @@ license that can be found in the LICENSE file.
 <title>All WebComponents Tests</title>
 <meta charset="utf-8">
 
+<!-- WebComponents -->
+<script src="../webcomponents.js" shadow></script>
+
 <!-- Mocha/Chai -->
 <link rel="stylesheet" href="tools/mocha/mocha.css">
 <script src="tools/mocha/mocha.js"></script>
 <script src="tools/chai/chai.js"></script>
 <script src="tools/mocha-htmltest.js"></script>
 
-<!-- CustomElements -->
-<script src="../webcomponents.js" shadow></script>
-
 <div id="mocha"></div>
 <script>
   mocha.setup({ui: 'tdd', slow: 1000});
 </script>
 
-<!-- <script src="CustomElements/tests.js"></script>
-<script src="HTMLImports/tests.js"></script> -->
+<script src="CustomElements/tests.js"></script>
+<script src="HTMLImports/tests.js"></script>
 <script src="ShadowDOM/tests.js"></script>
-<!-- <script src="ShadowCss/tests.js"></script>
-<script src="WebComponents/tests.js"></script> -->
+<script src="ShadowCss/tests.js"></script>
+<script src="WebComponents/tests.js"></script>
 
 <script>
   document.addEventListener('WebComponentsReady', function() {
