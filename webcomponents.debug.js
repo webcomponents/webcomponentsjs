@@ -6351,3 +6351,7 @@ CustomElements.addModule(function(scope) {
     var head = document.querySelector("head");
     head.insertBefore(style, head.firstChild);
 })(window.WebComponents);
+
+(function(scope) {
+    window.Platform = scope;
+})(window.WebComponents);
