@@ -1,0 +1,13 @@
+[
+  "build/boot.js",
+  "build/if-poly.js",
+  "../ShadowDOM/build.json",
+  "../ShadowCss/ShadowCss.js",
+  "build/end-if.js",
+  "shadowdom.js",
+  "../HTMLImports/build.json",
+  "../CustomElements/build.json",
+  "lang.js",
+  "dom.js",
+  "unresolved.js"
+]

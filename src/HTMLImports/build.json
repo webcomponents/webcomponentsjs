@@ -1,0 +1,13 @@
+[
+  "../WeakMap/WeakMap.js",
+  "../MutationObserver/MutationObserver.js",
+  "base.js",
+  "path.js",
+  "xhr.js",
+  "Loader.js",
+  "Observer.js",
+  "parser.js",
+  "importer.js",
+  "dynamic.js",
+  "boot.js"
+]

@@ -1,0 +1,10 @@
+[
+  "../WeakMap/WeakMap.js",
+  "../MutationObserver/MutationObserver.js",
+  "base.js",
+  "traverse.js",
+  "observe.js",
+  "upgrade.js",
+  "register.js",
+  "boot.js"
+]
