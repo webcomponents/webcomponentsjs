@@ -20,7 +20,7 @@ function defineBuildTask(name, output, folderName) {
     var manifest = './src/' + folderName + '/build.json';
     var list = readManifest(manifest);
     gulp.src(list)
-      .pipe(concat(output + '.js'))
+      .pipe(concat(output + '.debug.js'))
       .pipe(uglify({
         mangle: false,
         compress: false,
@@ -32,7 +32,7 @@ function defineBuildTask(name, output, folderName) {
     ;
     
     gulp.src(list)
-      .pipe(concat(output + '.min.js'))
+      .pipe(concat(output + '.js'))
       .pipe(uglify())
       .pipe(gulp.dest('dist/'))
     ;
