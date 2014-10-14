@@ -1,7 +1,7 @@
 [
   "../WeakMap/WeakMap.js",
   "wrappers.js",
-  "ArraySlice.js",
+  "ArraySplice.js",
   "microtask.js",
   "MutationObserver.js",
   "TreeScope.js",

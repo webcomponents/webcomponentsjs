@@ -703,7 +703,7 @@ function getSheet() {
 // add polyfill stylesheet to document
 if (window.ShadowDOMPolyfill) {
   addCssToDocument('style { display: none !important; }\n');
-  var doc = wrap(document);
+  var doc = ShadowDOMPolyfill.wrap(document);
   var head = doc.querySelector('head');
   head.insertBefore(getSheet(), head.childNodes[0]);
 
