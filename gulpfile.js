@@ -61,7 +61,10 @@ function readManifest(filename, modules) {
   return modules;
 }
 
-defineBuildTask('default', 'webcomponents', 'WebComponents');
+defineBuildTask('WebComponents', 'webcomponents');
 defineBuildTask('CustomElements');
 defineBuildTask('HTMLImports');
 defineBuildTask('ShadowDOM');
+
+gulp.task('default', ['WebComponents', 'CustomElements', 'HTMLImports', 
+  'ShadowDOM']);
