@@ -1,6 +1,6 @@
 {
   "name": "webcomponents.js-dev",
-  "version": "0.0.0",
+  "version": "0.5.0",
   "description": "webcomponents.js-dev",
   "main": "gulpfile.js",
   "directories": {
@@ -9,6 +9,7 @@
   "dependencies": {
     "gulp": "^3.8.8",
     "gulp-concat": "^2.4.1",
+    "gulp-header": "^1.1.1",
     "gulp-uglify": "^1.0.1",
     "unique-concat": "^0.2.2"
   },

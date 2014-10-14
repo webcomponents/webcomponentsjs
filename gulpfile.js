@@ -1,17 +1,25 @@
-/*
- * Copyright 2013 The Polymer Authors. All rights reserved.
- * Use of this source code is governed by a BSD-style
- * license that can be found in the LICENSE file.
+/**
+ * @license
+ * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+ * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+ * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+ * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+ * Code distributed by Google as part of the polymer project is also
+ * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-var 
-  gulp = require('gulp'),
+var
   concat = require('gulp-concat'),
-  uglify = require('gulp-uglify'),
+  fs = require('fs'),
+  gulp = require('gulp'),
+  header = require('gulp-header'),
   path = require('path'),
   uconcat = require('unique-concat'),
-  fs = require('fs')
+  uglify = require('gulp-uglify')
   ;
+
+var banner = fs.readFileSync('banner.txt', 'utf8');
+var pkg = require('./package.json');
 
 function defineBuildTask(name, output, folderName) {
   gulp.task(name, function() {
@@ -28,12 +36,14 @@ function defineBuildTask(name, output, folderName) {
           beautify: true
         }
       }))
+      .pipe(header(banner, {pkg: pkg}))
       .pipe(gulp.dest('dist/'))
     ;
-    
+
     gulp.src(list)
       .pipe(concat(output + '.js'))
       .pipe(uglify())
+      .pipe(header(banner, {pkg: pkg}))
       .pipe(gulp.dest('dist/'))
     ;
   });
@@ -66,5 +76,5 @@ defineBuildTask('CustomElements');
 defineBuildTask('HTMLImports');
 defineBuildTask('ShadowDOM');
 
-gulp.task('default', ['WebComponents', 'CustomElements', 'HTMLImports', 
+gulp.task('default', ['WebComponents', 'CustomElements', 'HTMLImports',
   'ShadowDOM']);
