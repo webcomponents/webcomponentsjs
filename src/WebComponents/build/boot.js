@@ -55,12 +55,6 @@ window.WebComponents = window.WebComponents || {};
     flags.shadow = flags.shadow || !HTMLElement.prototype.createShadowRoot;
   }
 
-  if (flags.shadow && document.querySelectorAll('script').length > 1) {
-    console.log('Warning: platform.js is not the first script on the page. ' +
-        'See http://www.polymer-project.org/docs/start/platform.html#setup ' +
-        'for details.');
-  }
-
   // forward flags
   if (flags.register) {
     window.CustomElements = window.CustomElements || {flags: {}};
