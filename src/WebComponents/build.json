@@ -9,5 +9,6 @@
   "../CustomElements/build.json",
   "lang.js",
   "dom.js",
-  "unresolved.js"
+  "unresolved.js",
+  "bc.js"
 ]
