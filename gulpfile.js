@@ -9,6 +9,7 @@
  */
 
 var
+  audit = require('gulp-audit'),
   concat = require('gulp-concat'),
   fs = require('fs'),
   gulp = require('gulp'),
@@ -22,12 +23,14 @@ var banner = fs.readFileSync('banner.txt', 'utf8');
 var pkg = require('./package.json');
 
 function defineBuildTask(name, output, folderName) {
-  gulp.task(name, function() {
+  (function() {
+
     output = output || name;
     folderName = folderName || name;
     var manifest = './src/' + folderName + '/build.json';
     var list = readManifest(manifest);
-    gulp.src(list)
+    gulp.task(name + '-debug', function() {
+      return gulp.src(list)
       .pipe(concat(output + '.debug.js'))
       .pipe(uglify({
         mangle: false,
@@ -38,21 +41,31 @@ function defineBuildTask(name, output, folderName) {
       }))
       .pipe(header(banner, {pkg: pkg}))
       .pipe(gulp.dest('dist/'))
-    ;
+      ;
+    });
 
-    gulp.src(list)
+    gulp.task(name, [name + '-debug'], function() {
+      return gulp.src(list)
       .pipe(concat(output + '.js'))
       .pipe(uglify())
       .pipe(header(banner, {pkg: pkg}))
       .pipe(gulp.dest('dist/'))
-    ;
-  });
+      ;
+    });
+
+  })();
 }
 
 function readJSON(filename) {
   var blob = fs.readFileSync(filename, 'utf8');
   return JSON.parse(blob);
 }
+
+gulp.task('audit', ['default'], function() {
+  return gulp.src('dist/*.js')
+  .pipe(audit('build.log', {repos:['.']}))
+  .pipe(gulp.dest('dist/'));
+});
 
 function readManifest(filename, modules) {
   modules = modules || [];
@@ -76,5 +89,4 @@ defineBuildTask('CustomElements');
 defineBuildTask('HTMLImports');
 defineBuildTask('ShadowDOM');
 
-gulp.task('default', ['WebComponents', 'CustomElements', 'HTMLImports',
-  'ShadowDOM']);
+gulp.task('default', ['WebComponents', 'CustomElements', 'HTMLImports', 'ShadowDOM']);
