@@ -22,9 +22,11 @@
       o[0] && (flags[o[0]] = o[1] || true);
     });
     // from script
-    for (var i=0, a; (a=script.attributes[i]); i++) {
-      if (a.name !== 'src') {
-        flags[a.name] = a.value || true;
+    if (script) {
+      for (var i=0, a; (a=script.attributes[i]); i++) {
+        if (a.name !== 'src') {
+          flags[a.name] = a.value || true;
+        }
       }
     }
     // log flags
