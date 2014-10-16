@@ -8,19 +8,27 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
+// jshint node: true
+
+'use strict';
+
 var
   audit = require('gulp-audit'),
   concat = require('gulp-concat'),
+  exec = require('child_process').exec,
   fs = require('fs'),
   gulp = require('gulp'),
   header = require('gulp-header'),
   path = require('path'),
-  uconcat = require('unique-concat'),
+  runseq = require('run-sequence'),
   uglify = require('gulp-uglify')
-  ;
+;
+
+var isRelease = process.env.RELEASE !== undefined;
 
 var banner = fs.readFileSync('banner.txt', 'utf8');
-var pkg = require('./package.json');
+
+var pkg;
 
 function defineBuildTask(name, output, folderName) {
   (function() {
@@ -29,7 +37,7 @@ function defineBuildTask(name, output, folderName) {
     folderName = folderName || name;
     var manifest = './src/' + folderName + '/build.json';
     var list = readManifest(manifest);
-    gulp.task(name + '-debug', function() {
+    gulp.task(name + '-debug', ['version'], function() {
       return gulp.src(list)
       .pipe(concat(output + '.debug.js'))
       .pipe(uglify({
@@ -44,7 +52,7 @@ function defineBuildTask(name, output, folderName) {
       ;
     });
 
-    gulp.task(name, [name + '-debug'], function() {
+    gulp.task(name, ['version', name + '-debug'], function() {
       return gulp.src(list)
       .pipe(concat(output + '.js'))
       .pipe(uglify())
@@ -61,10 +69,29 @@ function readJSON(filename) {
   return JSON.parse(blob);
 }
 
-gulp.task('audit', ['default'], function() {
+gulp.task('audit', function() {
   return gulp.src('dist/*.js')
   .pipe(audit('build.log', {repos:['.']}))
   .pipe(gulp.dest('dist/'));
+});
+
+gulp.task('version', function(cb) {
+  pkg = require('./package.json');
+  var cmd = ['git', 'rev-parse', '--short', 'HEAD'].join(' ');
+  if (!isRelease) {
+    exec(cmd, function(err, stdout, stderr) {
+      if (err) {
+        return cb(err);
+      }
+      if (stdout) {
+        stdout = stdout.trim();
+      }
+      pkg.version = pkg.version + '-' + stdout;
+      cb();
+    });
+  } else {
+    cb();
+  }
 });
 
 function readManifest(filename, modules) {
@@ -77,10 +104,14 @@ function readManifest(filename, modules) {
       // recurse
       modules = modules.concat(readManifest(fullpath, modules));
     } else {
-      // TODO(dfreedm): make this smarter
-      modules = uconcat(modules, [fullpath]);
+      modules.push(fullpath);
     }
   });
+  var tmp = Object.create(null);
+  for (var i = 0; i < modules.length; i++) {
+    tmp[modules[i]] = 1;
+  }
+  modules = Object.keys(tmp);
   return modules;
 }
 
@@ -89,4 +120,13 @@ defineBuildTask('CustomElements');
 defineBuildTask('HTMLImports');
 defineBuildTask('ShadowDOM');
 
-gulp.task('default', ['WebComponents', 'CustomElements', 'HTMLImports', 'ShadowDOM']);
+gulp.task('build', ['WebComponents', 'CustomElements', 'HTMLImports', 'ShadowDOM']);
+
+gulp.task('release', function(cb) {
+  isRelease = true;
+  runseq('build', 'audit', cb);
+});
+
+gulp.task('default', function(cb) {
+  runseq('build', 'audit', cb);
+});
