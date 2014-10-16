@@ -20,9 +20,12 @@ if (useNative) {
 
   // exports
   scope.watchShadow = nop;
+  scope.upgrade = nop;
   scope.upgradeAll = nop;
   scope.upgradeDocumentTree = nop;
+  scope.upgradeSubtree = nop;
   scope.takeRecords = nop;
+
   scope.instanceof = function(obj, base) {
     return obj instanceof base;
   };
