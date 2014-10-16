@@ -44,7 +44,8 @@ function defineBuildTask(name, output, folderName) {
         mangle: false,
         compress: false,
         output: {
-          beautify: true
+          beautify: true,
+          indent_level: 2
         }
       }))
       .pipe(header(banner, {pkg: pkg}))
