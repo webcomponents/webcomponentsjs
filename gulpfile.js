@@ -30,16 +30,15 @@ var banner = fs.readFileSync('banner.txt', 'utf8');
 
 var pkg;
 
-function defineBuildTask(name, output, folderName) {
+function defineBuildTask(name, manifest) {
   (function() {
 
-    output = output || name;
-    folderName = folderName || name;
-    var manifest = './src/' + folderName + '/build.json';
+    manifest = manifest || './src/' + name + '/build.json';
+    var output = name;
     var list = readManifest(manifest);
     gulp.task(name + '-debug', ['version'], function() {
       return gulp.src(list)
-      .pipe(concat(output + '.debug.js'))
+      .pipe(concat(output + '.js'))
       .pipe(uglify({
         mangle: false,
         compress: false,
@@ -55,7 +54,7 @@ function defineBuildTask(name, output, folderName) {
 
     gulp.task(name, ['version', name + '-debug'], function() {
       return gulp.src(list)
-      .pipe(concat(output + '.js'))
+      .pipe(concat(output + '.min.js'))
       .pipe(uglify())
       .pipe(header(banner, {pkg: pkg}))
       .pipe(gulp.dest('dist/'))
@@ -116,12 +115,14 @@ function readManifest(filename, modules) {
   return modules;
 }
 
-defineBuildTask('WebComponents', 'webcomponents');
+defineBuildTask('webcomponents', './src/WebComponents/build.json');
+defineBuildTask('webcomponents-lite', './src/WebComponents/build-lite.json');
 defineBuildTask('CustomElements');
 defineBuildTask('HTMLImports');
 defineBuildTask('ShadowDOM');
 
-gulp.task('build', ['WebComponents', 'CustomElements', 'HTMLImports', 'ShadowDOM']);
+gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements', 
+  'HTMLImports', 'ShadowDOM']);
 
 gulp.task('release', function(cb) {
   isRelease = true;

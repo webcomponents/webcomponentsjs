@@ -1,0 +1,6 @@
+[
+  "build/boot.js",
+  "../HTMLImports/build.json",
+  "../CustomElements/build.json",
+  "unresolved.js"
+]
