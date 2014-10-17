@@ -7,8 +7,6365 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
-// @version 0.5.0
-window.WebComponents=window.WebComponents||{},function(e){var t=e.flags||{},n="webcomponents.js",r=document.querySelector('script[src*="'+n+'"]'),t={};if(!t.noOpts){location.search.slice(1).split("&").forEach(function(e){e=e.split("="),e[0]&&(t[e[0]]=e[1]||!0)});for(var o,i=0;o=r.attributes[i];i++)"src"!==o.name&&(t[o.name]=o.value||!0);if(t.log){var a=t.log.split(",");t.log={},a.forEach(function(e){t.log[e]=!0})}else t.log={}}t.shadow=t.shadow||t.shadowdom||t.polyfill,t.shadow="native"===t.shadow?!1:t.shadow||!HTMLElement.prototype.createShadowRoot,t.register&&(window.CustomElements=window.CustomElements||{flags:{}},window.CustomElements.flags.register=t.register),e.flags=t}(WebComponents),WebComponents.flags.shadow&&("undefined"==typeof WeakMap&&!function(){var e=Object.defineProperty,t=Date.now()%1e9,n=function(){this.name="__st"+(1e9*Math.random()>>>0)+(t++ +"__")};n.prototype={set:function(t,n){var r=t[this.name];return r&&r[0]===t?r[1]=n:e(t,this.name,{value:[t,n],writable:!0}),this},get:function(e){var t;return(t=e[this.name])&&t[0]===e?t[1]:void 0},"delete":function(e){var t=e[this.name];if(!t)return!1;var n=t[0]===e;return t[0]=t[1]=void 0,n},has:function(e){var t=e[this.name];return t?t[0]===e:!1}},window.WeakMap=n}(),window.ShadowDOMPolyfill={},function(e){"use strict";function t(){if("undefined"!=typeof chrome&&chrome.app&&chrome.app.runtime)return!1;if(navigator.getDeviceStorage)return!1;try{var e=new Function("return true;");return e()}catch(t){return!1}}function n(e){if(!e)throw new Error("Assertion failed")}function r(e,t){for(var n=W(t),r=0;r<n.length;r++){var o=n[r];k(e,o,F(t,o))}return e}function o(e,t){for(var n=W(t),r=0;r<n.length;r++){var o=n[r];switch(o){case"arguments":case"caller":case"length":case"name":case"prototype":case"toString":continue}k(e,o,F(t,o))}return e}function i(e,t){for(var n=0;n<t.length;n++)if(t[n]in e)return t[n]}function a(e,t,n){U.value=n,k(e,t,U)}function s(e){var t=e.__proto__||Object.getPrototypeOf(e),n=R.get(t);if(n)return n;var r=s(t),o=E(r);return g(t,o,e),o}function c(e,t){w(e,t,!0)}function l(e,t){w(t,e,!1)}function u(e){return/^on[a-z]+$/.test(e)}function d(e){return/^\w[a-zA-Z_0-9]*$/.test(e)}function p(e){return A&&d(e)?new Function("return this.__impl4cf1e782hg__."+e):function(){return this.__impl4cf1e782hg__[e]}}function f(e){return A&&d(e)?new Function("v","this.__impl4cf1e782hg__."+e+" = v"):function(t){this.__impl4cf1e782hg__[e]=t}}function h(e){return A&&d(e)?new Function("return this.__impl4cf1e782hg__."+e+".apply(this.__impl4cf1e782hg__, arguments)"):function(){return this.__impl4cf1e782hg__[e].apply(this.__impl4cf1e782hg__,arguments)}}function m(e,t){try{return Object.getOwnPropertyDescriptor(e,t)}catch(n){return q}}function w(t,n,r){for(var o=W(t),i=0;i<o.length;i++){var a=o[i];if("polymerBlackList_"!==a&&!(a in n||t.polymerBlackList_&&t.polymerBlackList_[a])){B&&t.__lookupGetter__(a);var s,c,l=m(t,a);if(r&&"function"==typeof l.value)n[a]=h(a);else{var d=u(a);s=d?e.getEventHandlerGetter(a):p(a),(l.writable||l.set||V)&&(c=d?e.getEventHandlerSetter(a):f(a)),k(n,a,{get:s,set:c,configurable:l.configurable,enumerable:l.enumerable})}}}}function v(e,t,n){var r=e.prototype;g(r,t,n),o(t,e)}function g(e,t,r){var o=t.prototype;n(void 0===R.get(e)),R.set(e,t),P.set(o,e),c(e,o),r&&l(o,r),a(o,"constructor",t),t.prototype=o}function b(e,t){return R.get(t.prototype)===e}function y(e){var t=Object.getPrototypeOf(e),n=s(t),r=E(n);return g(t,r,e),r}function E(e){function t(t){e.call(this,t)}var n=Object.create(e.prototype);return n.constructor=t,t.prototype=n,t}function S(e){return e&&e.__impl4cf1e782hg__}function M(e){return!S(e)}function T(e){return null===e?null:(n(M(e)),e.__wrapper8e3dd93a60__||(e.__wrapper8e3dd93a60__=new(s(e))(e)))}function _(e){return null===e?null:(n(S(e)),e.__impl4cf1e782hg__)}function O(e){return e.__impl4cf1e782hg__}function L(e,t){t.__impl4cf1e782hg__=e,e.__wrapper8e3dd93a60__=t}function N(e){return e&&S(e)?_(e):e}function C(e){return e&&!S(e)?T(e):e}function D(e,t){null!==t&&(n(M(e)),n(void 0===t||S(t)),e.__wrapper8e3dd93a60__=t)}function H(e,t,n){G.get=n,k(e.prototype,t,G)}function j(e,t){H(e,t,function(){return T(this.__impl4cf1e782hg__[t])})}function x(e,t){e.forEach(function(e){t.forEach(function(t){e.prototype[t]=function(){var e=C(this);return e[t].apply(e,arguments)}})})}var R=new WeakMap,P=new WeakMap,I=Object.create(null),A=t(),k=Object.defineProperty,W=Object.getOwnPropertyNames,F=Object.getOwnPropertyDescriptor,U={value:void 0,configurable:!0,enumerable:!1,writable:!0};W(window);var B=/Firefox/.test(navigator.userAgent),q={get:function(){},set:function(){},configurable:!0,enumerable:!0},V=function(){var e=Object.getOwnPropertyDescriptor(Node.prototype,"nodeType");return e&&!e.get&&!e.set}(),G={get:void 0,configurable:!0,enumerable:!0};e.assert=n,e.constructorTable=R,e.defineGetter=H,e.defineWrapGetter=j,e.forwardMethodsToWrapper=x,e.isWrapper=S,e.isWrapperFor=b,e.mixin=r,e.nativePrototypeTable=P,e.oneOf=i,e.registerObject=y,e.registerWrapper=v,e.rewrap=D,e.setWrapper=L,e.unsafeUnwrap=O,e.unwrap=_,e.unwrapIfNeeded=N,e.wrap=T,e.wrapIfNeeded=C,e.wrappers=I}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e,t,n){return{index:e,removed:t,addedCount:n}}function n(){}var r=0,o=1,i=2,a=3;n.prototype={calcEditDistances:function(e,t,n,r,o,i){for(var a=i-o+1,s=n-t+1,c=new Array(a),l=0;a>l;l++)c[l]=new Array(s),c[l][0]=l;for(var u=0;s>u;u++)c[0][u]=u;for(var l=1;a>l;l++)for(var u=1;s>u;u++)if(this.equals(e[t+u-1],r[o+l-1]))c[l][u]=c[l-1][u-1];else{var d=c[l-1][u]+1,p=c[l][u-1]+1;c[l][u]=p>d?d:p}return c},spliceOperationsFromEditDistances:function(e){for(var t=e.length-1,n=e[0].length-1,s=e[t][n],c=[];t>0||n>0;)if(0!=t)if(0!=n){var l,u=e[t-1][n-1],d=e[t-1][n],p=e[t][n-1];l=p>d?u>d?d:u:u>p?p:u,l==u?(u==s?c.push(r):(c.push(o),s=u),t--,n--):l==d?(c.push(a),t--,s=d):(c.push(i),n--,s=p)}else c.push(a),t--;else c.push(i),n--;return c.reverse(),c},calcSplices:function(e,n,s,c,l,u){var d=0,p=0,f=Math.min(s-n,u-l);if(0==n&&0==l&&(d=this.sharedPrefix(e,c,f)),s==e.length&&u==c.length&&(p=this.sharedSuffix(e,c,f-d)),n+=d,l+=d,s-=p,u-=p,s-n==0&&u-l==0)return[];if(n==s){for(var h=t(n,[],0);u>l;)h.removed.push(c[l++]);return[h]}if(l==u)return[t(n,[],s-n)];for(var m=this.spliceOperationsFromEditDistances(this.calcEditDistances(e,n,s,c,l,u)),h=void 0,w=[],v=n,g=l,b=0;b<m.length;b++)switch(m[b]){case r:h&&(w.push(h),h=void 0),v++,g++;break;case o:h||(h=t(v,[],0)),h.addedCount++,v++,h.removed.push(c[g]),g++;break;case i:h||(h=t(v,[],0)),h.addedCount++,v++;break;case a:h||(h=t(v,[],0)),h.removed.push(c[g]),g++}return h&&w.push(h),w},sharedPrefix:function(e,t,n){for(var r=0;n>r;r++)if(!this.equals(e[r],t[r]))return r;return n},sharedSuffix:function(e,t,n){for(var r=e.length,o=t.length,i=0;n>i&&this.equals(e[--r],t[--o]);)i++;return i},calculateSplices:function(e,t){return this.calcSplices(e,0,e.length,t,0,t.length)},equals:function(e,t){return e===t}},e.ArraySplice=n}(window.ShadowDOMPolyfill),function(e){"use strict";function t(){a=!1;var e=i.slice(0);i=[];for(var t=0;t<e.length;t++)e[t]()}function n(e){i.push(e),a||(a=!0,r(t,0))}var r,o=window.MutationObserver,i=[],a=!1;if(o){var s=1,c=new o(t),l=document.createTextNode(s);c.observe(l,{characterData:!0}),r=function(){s=(s+1)%2,l.data=s}}else r=window.setImmediate||window.setTimeout;e.setEndOfMicrotask=n}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){e.scheduled_||(e.scheduled_=!0,h.push(e),m||(u(n),m=!0))}function n(){for(m=!1;h.length;){var e=h;h=[],e.sort(function(e,t){return e.uid_-t.uid_});for(var t=0;t<e.length;t++){var n=e[t];n.scheduled_=!1;var r=n.takeRecords();i(n),r.length&&n.callback_(r,n)}}}function r(e,t){this.type=e,this.target=t,this.addedNodes=new p.NodeList,this.removedNodes=new p.NodeList,this.previousSibling=null,this.nextSibling=null,this.attributeName=null,this.attributeNamespace=null,this.oldValue=null}function o(e,t){for(;e;e=e.parentNode){var n=f.get(e);if(n)for(var r=0;r<n.length;r++){var o=n[r];o.options.subtree&&o.addTransientObserver(t)}}}function i(e){for(var t=0;t<e.nodes_.length;t++){var n=e.nodes_[t],r=f.get(n);if(!r)return;for(var o=0;o<r.length;o++){var i=r[o];i.observer===e&&i.removeTransientObservers()}}}function a(e,n,o){for(var i=Object.create(null),a=Object.create(null),s=e;s;s=s.parentNode){var c=f.get(s);if(c)for(var l=0;l<c.length;l++){var u=c[l],d=u.options;if((s===e||d.subtree)&&!("attributes"===n&&!d.attributes||"attributes"===n&&d.attributeFilter&&(null!==o.namespace||-1===d.attributeFilter.indexOf(o.name))||"characterData"===n&&!d.characterData||"childList"===n&&!d.childList)){var p=u.observer;i[p.uid_]=p,("attributes"===n&&d.attributeOldValue||"characterData"===n&&d.characterDataOldValue)&&(a[p.uid_]=o.oldValue)}}}for(var h in i){var p=i[h],m=new r(n,e);"name"in o&&"namespace"in o&&(m.attributeName=o.name,m.attributeNamespace=o.namespace),o.addedNodes&&(m.addedNodes=o.addedNodes),o.removedNodes&&(m.removedNodes=o.removedNodes),o.previousSibling&&(m.previousSibling=o.previousSibling),o.nextSibling&&(m.nextSibling=o.nextSibling),void 0!==a[h]&&(m.oldValue=a[h]),t(p),p.records_.push(m)}}function s(e){if(this.childList=!!e.childList,this.subtree=!!e.subtree,this.attributes="attributes"in e||!("attributeOldValue"in e||"attributeFilter"in e)?!!e.attributes:!0,this.characterData="characterDataOldValue"in e&&!("characterData"in e)?!0:!!e.characterData,!this.attributes&&(e.attributeOldValue||"attributeFilter"in e)||!this.characterData&&e.characterDataOldValue)throw new TypeError;if(this.characterData=!!e.characterData,this.attributeOldValue=!!e.attributeOldValue,this.characterDataOldValue=!!e.characterDataOldValue,"attributeFilter"in e){if(null==e.attributeFilter||"object"!=typeof e.attributeFilter)throw new TypeError;this.attributeFilter=w.call(e.attributeFilter)}else this.attributeFilter=null}function c(e){this.callback_=e,this.nodes_=[],this.records_=[],this.uid_=++v,this.scheduled_=!1}function l(e,t,n){this.observer=e,this.target=t,this.options=n,this.transientObservedNodes=[]}var u=e.setEndOfMicrotask,d=e.wrapIfNeeded,p=e.wrappers,f=new WeakMap,h=[],m=!1,w=Array.prototype.slice,v=0;c.prototype={constructor:c,observe:function(e,t){e=d(e);var n,r=new s(t),o=f.get(e);o||f.set(e,o=[]);for(var i=0;i<o.length;i++)o[i].observer===this&&(n=o[i],n.removeTransientObservers(),n.options=r);n||(n=new l(this,e,r),o.push(n),this.nodes_.push(e))},disconnect:function(){this.nodes_.forEach(function(e){for(var t=f.get(e),n=0;n<t.length;n++){var r=t[n];if(r.observer===this){t.splice(n,1);break}}},this),this.records_=[]},takeRecords:function(){var e=this.records_;return this.records_=[],e}},l.prototype={addTransientObserver:function(e){if(e!==this.target){t(this.observer),this.transientObservedNodes.push(e);var n=f.get(e);n||f.set(e,n=[]),n.push(this)}},removeTransientObservers:function(){var e=this.transientObservedNodes;this.transientObservedNodes=[];for(var t=0;t<e.length;t++)for(var n=e[t],r=f.get(n),o=0;o<r.length;o++)if(r[o]===this){r.splice(o,1);break}}},e.enqueueMutation=a,e.registerTransientObservers=o,e.wrappers.MutationObserver=c,e.wrappers.MutationRecord=r}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e,t){this.root=e,this.parent=t}function n(e,t){if(e.treeScope_!==t){e.treeScope_=t;for(var r=e.shadowRoot;r;r=r.olderShadowRoot)r.treeScope_.parent=t;for(var o=e.firstChild;o;o=o.nextSibling)n(o,t)}}function r(n){if(n instanceof e.wrappers.Window,n.treeScope_)return n.treeScope_;var o,i=n.parentNode;return o=i?r(i):new t(n,null),n.treeScope_=o}t.prototype={get renderer(){return this.root instanceof e.wrappers.ShadowRoot?e.getRendererForHost(this.root.host):null},contains:function(e){for(;e;e=e.parent)if(e===this)return!0;return!1}},e.TreeScope=t,e.getTreeScope=r,e.setTreeScope=n}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){return e instanceof G.ShadowRoot}function n(e){return k(e).root}function r(e,r){var s=[],c=e;for(s.push(c);c;){var l=a(c);if(l&&l.length>0){for(var u=0;u<l.length;u++){var p=l[u];if(i(p)){var f=n(p),h=f.olderShadowRoot;h&&s.push(h)}s.push(p)}c=l[l.length-1]}else if(t(c)){if(d(e,c)&&o(r))break;c=c.host,s.push(c)}else c=c.parentNode,c&&s.push(c)}return s}function o(e){if(!e)return!1;switch(e.type){case"abort":case"error":case"select":case"change":case"load":case"reset":case"resize":case"scroll":case"selectstart":return!0}return!1}function i(e){return e instanceof HTMLShadowElement}function a(t){return e.getDestinationInsertionPoints(t)}function s(e,t){if(0===e.length)return t;t instanceof G.Window&&(t=t.document);for(var n=k(t),r=e[0],o=k(r),i=l(n,o),a=0;a<e.length;a++){var s=e[a];if(k(s)===i)return s}return e[e.length-1]}function c(e){for(var t=[];e;e=e.parent)t.push(e);return t}function l(e,t){for(var n=c(e),r=c(t),o=null;n.length>0&&r.length>0;){var i=n.pop(),a=r.pop();if(i!==a)break;o=i}return o}function u(e,t,n){t instanceof G.Window&&(t=t.document);var o,i=k(t),a=k(n),s=r(n,e),o=l(i,a);o||(o=a.root);for(var c=o;c;c=c.parent)for(var u=0;u<s.length;u++){var d=s[u];if(k(d)===c)return d}return null}function d(e,t){return k(e)===k(t)}function p(e){if(!K.get(e)&&(K.set(e,!0),h(V(e),V(e.target)),I)){var t=I;throw I=null,t}}function f(e){switch(e.type){case"load":case"beforeunload":case"unload":return!0}return!1}function h(t,n){if(Y.get(t))throw new Error("InvalidStateError");Y.set(t,!0),e.renderAllPending();var o,i,a;if(f(t)&&!t.bubbles){var s=n;s instanceof G.Document&&(a=s.defaultView)&&(i=s,o=[])}if(!o)if(n instanceof G.Window)a=n,o=[];else if(o=r(n,t),!f(t)){var s=o[o.length-1];s instanceof G.Document&&(a=s.defaultView)}return nt.set(t,o),m(t,o,a,i)&&w(t,o,a,i)&&v(t,o,a,i),Z.set(t,rt),$.delete(t,null),Y.delete(t),t.defaultPrevented}function m(e,t,n,r){var o=ot;if(n&&!g(n,e,o,t,r))return!1;for(var i=t.length-1;i>0;i--)if(!g(t[i],e,o,t,r))return!1;return!0}function w(e,t,n,r){var o=it,i=t[0]||n;return g(i,e,o,t,r)}function v(e,t,n,r){for(var o=at,i=1;i<t.length;i++)if(!g(t[i],e,o,t,r))return;n&&t.length>0&&g(n,e,o,t,r)}function g(e,t,n,r,o){var i=z.get(e);if(!i)return!0;var a=o||s(r,e);if(a===e){if(n===ot)return!0;n===at&&(n=it)}else if(n===at&&!t.bubbles)return!0;if("relatedTarget"in t){var c=q(t),l=c.relatedTarget;if(l){if(l instanceof Object&&l.addEventListener){var d=V(l),p=u(t,e,d);if(p===a)return!0}else p=null;J.set(t,p)}}Z.set(t,n);var f=t.type,h=!1;X.set(t,a),$.set(t,e),i.depth++;for(var m=0,w=i.length;w>m;m++){var v=i[m];if(v.removed)h=!0;else if(!(v.type!==f||!v.capture&&n===ot||v.capture&&n===at))try{if("function"==typeof v.handler?v.handler.call(e,t):v.handler.handleEvent(t),et.get(t))return!1}catch(g){I||(I=g)}}if(i.depth--,h&&0===i.depth){var b=i.slice();i.length=0;for(var m=0;m<b.length;m++)b[m].removed||i.push(b[m])}return!Q.get(t)}function b(e,t,n){this.type=e,this.handler=t,this.capture=Boolean(n)}function y(e,t){if(!(e instanceof st))return V(T(st,"Event",e,t));var n=e;return gt||"beforeunload"!==n.type||this instanceof _?void U(n,this):new _(n)}function E(e){return e&&e.relatedTarget?Object.create(e,{relatedTarget:{value:q(e.relatedTarget)}}):e}function S(e,t,n){var r=window[e],o=function(t,n){return t instanceof r?void U(t,this):V(T(r,e,t,n))};if(o.prototype=Object.create(t.prototype),n&&W(o.prototype,n),r)try{F(r,o,new r("temp"))}catch(i){F(r,o,document.createEvent(e))}return o}function M(e,t){return function(){arguments[t]=q(arguments[t]);var n=q(this);n[e].apply(n,arguments)}}function T(e,t,n,r){if(wt)return new e(n,E(r));var o=q(document.createEvent(t)),i=mt[t],a=[n];return Object.keys(i).forEach(function(e){var t=null!=r&&e in r?r[e]:i[e];"relatedTarget"===e&&(t=q(t)),a.push(t)}),o["init"+t].apply(o,a),o}function _(e){y.call(this,e)}function O(e){return"function"==typeof e?!0:e&&e.handleEvent}function L(e){switch(e){case"DOMAttrModified":case"DOMAttributeNameChanged":case"DOMCharacterDataModified":case"DOMElementNameChanged":case"DOMNodeInserted":case"DOMNodeInsertedIntoDocument":case"DOMNodeRemoved":case"DOMNodeRemovedFromDocument":case"DOMSubtreeModified":return!0}return!1}function N(e){U(e,this)}function C(e){return e instanceof G.ShadowRoot&&(e=e.host),q(e)}function D(e,t){var n=z.get(e);if(n)for(var r=0;r<n.length;r++)if(!n[r].removed&&n[r].type===t)return!0;return!1}function H(e,t){for(var n=q(e);n;n=n.parentNode)if(D(V(n),t))return!0;return!1}function j(e){A(e,yt)}function x(t,n,o,i){e.renderAllPending();var a=V(Et.call(B(n),o,i));if(!a)return null;var c=r(a,null),l=c.lastIndexOf(t);return-1==l?null:(c=c.slice(0,l),s(c,t))}function R(e){return function(){var t=tt.get(this);return t&&t[e]&&t[e].value||null}}function P(e){var t=e.slice(2);return function(n){var r=tt.get(this);r||(r=Object.create(null),tt.set(this,r));var o=r[e];if(o&&this.removeEventListener(t,o.wrapped,!1),"function"==typeof n){var i=function(t){var r=n.call(this,t);r===!1?t.preventDefault():"onbeforeunload"===e&&"string"==typeof r&&(t.returnValue=r)};this.addEventListener(t,i,!1),r[e]={value:n,wrapped:i}}}}var I,A=e.forwardMethodsToWrapper,k=e.getTreeScope,W=e.mixin,F=e.registerWrapper,U=e.setWrapper,B=e.unsafeUnwrap,q=e.unwrap,V=e.wrap,G=e.wrappers,z=(new WeakMap,new WeakMap),K=new WeakMap,Y=new WeakMap,X=new WeakMap,$=new WeakMap,J=new WeakMap,Z=new WeakMap,Q=new WeakMap,et=new WeakMap,tt=new WeakMap,nt=new WeakMap,rt=0,ot=1,it=2,at=3;b.prototype={equals:function(e){return this.handler===e.handler&&this.type===e.type&&this.capture===e.capture},get removed(){return null===this.handler},remove:function(){this.handler=null}};var st=window.Event;st.prototype.polymerBlackList_={returnValue:!0,keyLocation:!0},y.prototype={get target(){return X.get(this)},get currentTarget(){return $.get(this)},get eventPhase(){return Z.get(this)},get path(){var e=nt.get(this);return e?e.slice():[]},stopPropagation:function(){Q.set(this,!0)},stopImmediatePropagation:function(){Q.set(this,!0),et.set(this,!0)}},F(st,y,document.createEvent("Event"));var ct=S("UIEvent",y),lt=S("CustomEvent",y),ut={get relatedTarget(){var e=J.get(this);return void 0!==e?e:V(q(this).relatedTarget)}},dt=W({initMouseEvent:M("initMouseEvent",14)},ut),pt=W({initFocusEvent:M("initFocusEvent",5)},ut),ft=S("MouseEvent",ct,dt),ht=S("FocusEvent",ct,pt),mt=Object.create(null),wt=function(){try{new window.FocusEvent("focus")}catch(e){return!1}return!0}();if(!wt){var vt=function(e,t,n){if(n){var r=mt[n];t=W(W({},r),t)}mt[e]=t};vt("Event",{bubbles:!1,cancelable:!1}),vt("CustomEvent",{detail:null},"Event"),vt("UIEvent",{view:null,detail:0},"Event"),vt("MouseEvent",{screenX:0,screenY:0,clientX:0,clientY:0,ctrlKey:!1,altKey:!1,shiftKey:!1,metaKey:!1,button:0,relatedTarget:null},"UIEvent"),vt("FocusEvent",{relatedTarget:null},"UIEvent")}var gt=window.BeforeUnloadEvent;_.prototype=Object.create(y.prototype),W(_.prototype,{get returnValue(){return B(this).returnValue},set returnValue(e){B(this).returnValue=e}}),gt&&F(gt,_);var bt=window.EventTarget,yt=["addEventListener","removeEventListener","dispatchEvent"];[Node,Window].forEach(function(e){var t=e.prototype;yt.forEach(function(e){Object.defineProperty(t,e+"_",{value:t[e]})})}),N.prototype={addEventListener:function(e,t,n){if(O(t)&&!L(e)){var r=new b(e,t,n),o=z.get(this);if(o){for(var i=0;i<o.length;i++)if(r.equals(o[i]))return}else o=[],o.depth=0,z.set(this,o);o.push(r);var a=C(this);a.addEventListener_(e,p,!0)}},removeEventListener:function(e,t,n){n=Boolean(n);var r=z.get(this);if(r){for(var o=0,i=!1,a=0;a<r.length;a++)r[a].type===e&&r[a].capture===n&&(o++,r[a].handler===t&&(i=!0,r[a].remove()));if(i&&1===o){var s=C(this);s.removeEventListener_(e,p,!0)}}},dispatchEvent:function(t){var n=q(t),r=n.type;K.set(n,!1),e.renderAllPending();var o;H(this,r)||(o=function(){},this.addEventListener(r,o,!0));try{return q(this).dispatchEvent_(n)}finally{o&&this.removeEventListener(r,o,!0)}}},bt&&F(bt,N);var Et=document.elementFromPoint;e.elementFromPoint=x,e.getEventHandlerGetter=R,e.getEventHandlerSetter=P,e.wrapEventTargetMethods=j,e.wrappers.BeforeUnloadEvent=_,e.wrappers.CustomEvent=lt,e.wrappers.Event=y,e.wrappers.EventTarget=N,e.wrappers.FocusEvent=ht,e.wrappers.MouseEvent=ft,e.wrappers.UIEvent=ct}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e,t){Object.defineProperty(e,t,m)}function n(e){l(e,this)}function r(){this.length=0,t(this,"length")}function o(e){for(var t=new r,o=0;o<e.length;o++)t[o]=new n(e[o]);return t.length=o,t}function i(e){a.call(this,e)}var a=e.wrappers.UIEvent,s=e.mixin,c=e.registerWrapper,l=e.setWrapper,u=e.unsafeUnwrap,d=e.wrap,p=window.TouchEvent;if(p){var f;try{f=document.createEvent("TouchEvent")}catch(h){return}var m={enumerable:!1};n.prototype={get target(){return d(u(this).target)}};var w={configurable:!0,enumerable:!0,get:null};["clientX","clientY","screenX","screenY","pageX","pageY","identifier","webkitRadiusX","webkitRadiusY","webkitRotationAngle","webkitForce"].forEach(function(e){w.get=function(){return u(this)[e]},Object.defineProperty(n.prototype,e,w)}),r.prototype={item:function(e){return this[e]}},i.prototype=Object.create(a.prototype),s(i.prototype,{get touches(){return o(u(this).touches)},get targetTouches(){return o(u(this).targetTouches)},get changedTouches(){return o(u(this).changedTouches)},initTouchEvent:function(){throw new Error("Not implemented")}}),c(p,i,f),e.wrappers.Touch=n,e.wrappers.TouchEvent=i,e.wrappers.TouchList=r}}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e,t){Object.defineProperty(e,t,s)}function n(){this.length=0,t(this,"length")}function r(e){if(null==e)return e;for(var t=new n,r=0,o=e.length;o>r;r++)t[r]=a(e[r]);return t.length=o,t}function o(e,t){e.prototype[t]=function(){return r(i(this)[t].apply(i(this),arguments))}}var i=e.unsafeUnwrap,a=e.wrap,s={enumerable:!1};n.prototype={item:function(e){return this[e]}},t(n.prototype,"item"),e.wrappers.NodeList=n,e.addWrapNodeListMethod=o,e.wrapNodeList=r}(window.ShadowDOMPolyfill),function(e){"use strict";e.wrapHTMLCollection=e.wrapNodeList,e.wrappers.HTMLCollection=e.wrappers.NodeList}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){O(e instanceof S)}function n(e){var t=new T;return t[0]=e,t.length=1,t}function r(e,t,n){N(t,"childList",{removedNodes:n,previousSibling:e.previousSibling,nextSibling:e.nextSibling})}function o(e,t){N(e,"childList",{removedNodes:t})}function i(e,t,r,o){if(e instanceof DocumentFragment){var i=s(e);U=!0;for(var a=i.length-1;a>=0;a--)e.removeChild(i[a]),i[a].parentNode_=t;U=!1;for(var a=0;a<i.length;a++)i[a].previousSibling_=i[a-1]||r,i[a].nextSibling_=i[a+1]||o;return r&&(r.nextSibling_=i[0]),o&&(o.previousSibling_=i[i.length-1]),i}var i=n(e),c=e.parentNode;return c&&c.removeChild(e),e.parentNode_=t,e.previousSibling_=r,e.nextSibling_=o,r&&(r.nextSibling_=e),o&&(o.previousSibling_=e),i}function a(e){if(e instanceof DocumentFragment)return s(e);var t=n(e),o=e.parentNode;return o&&r(e,o,t),t}function s(e){for(var t=new T,n=0,r=e.firstChild;r;r=r.nextSibling)t[n++]=r;return t.length=n,o(e,t),t}function c(e){return e}function l(e,t){R(e,t),e.nodeIsInserted_()}function u(e,t){for(var n=C(t),r=0;r<e.length;r++)l(e[r],n)}function d(e){R(e,new _(e,null))}function p(e){for(var t=0;t<e.length;t++)d(e[t])}function f(e,t){var n=e.nodeType===S.DOCUMENT_NODE?e:e.ownerDocument;n!==t.ownerDocument&&n.adoptNode(t)}function h(t,n){if(n.length){var r=t.ownerDocument;if(r!==n[0].ownerDocument)for(var o=0;o<n.length;o++)e.adoptNodeNoRemove(n[o],r)}}function m(e,t){h(e,t);var n=t.length;if(1===n)return I(t[0]);for(var r=I(e.ownerDocument.createDocumentFragment()),o=0;n>o;o++)r.appendChild(I(t[o]));return r}function w(e){if(void 0!==e.firstChild_)for(var t=e.firstChild_;t;){var n=t;t=t.nextSibling_,n.parentNode_=n.previousSibling_=n.nextSibling_=void 0}e.firstChild_=e.lastChild_=void 0}function v(e){if(e.invalidateShadowRenderer()){for(var t=e.firstChild;t;){O(t.parentNode===e);var n=t.nextSibling,r=I(t),o=r.parentNode;o&&Y.call(o,r),t.previousSibling_=t.nextSibling_=t.parentNode_=null,t=n}e.firstChild_=e.lastChild_=null}else for(var n,i=I(e),a=i.firstChild;a;)n=a.nextSibling,Y.call(i,a),a=n}function g(e){var t=e.parentNode;return t&&t.invalidateShadowRenderer()}function b(e){for(var t,n=0;n<e.length;n++)t=e[n],t.parentNode.removeChild(t)}function y(e,t,n){var r;if(r=k(n?B.call(n,P(e),!1):q.call(P(e),!1)),t){for(var o=e.firstChild;o;o=o.nextSibling)r.appendChild(y(o,!0,n));if(e instanceof F.HTMLTemplateElement)for(var i=r.content,o=e.content.firstChild;o;o=o.nextSibling)i.appendChild(y(o,!0,n))}return r}function E(e,t){if(!t||C(e)!==C(t))return!1;for(var n=t;n;n=n.parentNode)if(n===e)return!0;return!1}function S(e){O(e instanceof V),M.call(this,e),this.parentNode_=void 0,this.firstChild_=void 0,this.lastChild_=void 0,this.nextSibling_=void 0,this.previousSibling_=void 0,this.treeScope_=void 0}var M=e.wrappers.EventTarget,T=e.wrappers.NodeList,_=e.TreeScope,O=e.assert,L=e.defineWrapGetter,N=e.enqueueMutation,C=e.getTreeScope,D=e.isWrapper,H=e.mixin,j=e.registerTransientObservers,x=e.registerWrapper,R=e.setTreeScope,P=e.unsafeUnwrap,I=e.unwrap,A=e.unwrapIfNeeded,k=e.wrap,W=e.wrapIfNeeded,F=e.wrappers,U=!1,B=document.importNode,q=window.Node.prototype.cloneNode,V=window.Node,G=window.DocumentFragment,z=(V.prototype.appendChild,V.prototype.compareDocumentPosition),K=V.prototype.insertBefore,Y=V.prototype.removeChild,X=V.prototype.replaceChild,$=/Trident/.test(navigator.userAgent),J=$?function(e,t){try{Y.call(e,t)}catch(n){if(!(e instanceof G))throw n}}:function(e,t){Y.call(e,t)};S.prototype=Object.create(M.prototype),H(S.prototype,{appendChild:function(e){return this.insertBefore(e,null)},insertBefore:function(e,n){t(e);var r;n?D(n)?r=I(n):(r=n,n=k(r)):(n=null,r=null),n&&O(n.parentNode===this);var o,s=n?n.previousSibling:this.lastChild,c=!this.invalidateShadowRenderer()&&!g(e);if(o=c?a(e):i(e,this,s,n),c)f(this,e),w(this),K.call(P(this),I(e),r);else{s||(this.firstChild_=o[0]),n||(this.lastChild_=o[o.length-1],void 0===this.firstChild_&&(this.firstChild_=this.firstChild));var l=r?r.parentNode:P(this);l?K.call(l,m(this,o),r):h(this,o)}return N(this,"childList",{addedNodes:o,nextSibling:n,previousSibling:s}),u(o,this),e},removeChild:function(e){if(t(e),e.parentNode!==this){for(var r=!1,o=(this.childNodes,this.firstChild);o;o=o.nextSibling)if(o===e){r=!0;break}if(!r)throw new Error("NotFoundError")}var i=I(e),a=e.nextSibling,s=e.previousSibling;if(this.invalidateShadowRenderer()){var c=this.firstChild,l=this.lastChild,u=i.parentNode;u&&J(u,i),c===e&&(this.firstChild_=a),l===e&&(this.lastChild_=s),s&&(s.nextSibling_=a),a&&(a.previousSibling_=s),e.previousSibling_=e.nextSibling_=e.parentNode_=void 0}else w(this),J(P(this),i);return U||N(this,"childList",{removedNodes:n(e),nextSibling:a,previousSibling:s}),j(this,e),e},replaceChild:function(e,r){t(e);var o;if(D(r)?o=I(r):(o=r,r=k(o)),r.parentNode!==this)throw new Error("NotFoundError");var s,c=r.nextSibling,l=r.previousSibling,p=!this.invalidateShadowRenderer()&&!g(e);return p?s=a(e):(c===e&&(c=e.nextSibling),s=i(e,this,l,c)),p?(f(this,e),w(this),X.call(P(this),I(e),o)):(this.firstChild===r&&(this.firstChild_=s[0]),this.lastChild===r&&(this.lastChild_=s[s.length-1]),r.previousSibling_=r.nextSibling_=r.parentNode_=void 0,o.parentNode&&X.call(o.parentNode,m(this,s),o)),N(this,"childList",{addedNodes:s,removedNodes:n(r),nextSibling:c,previousSibling:l}),d(r),u(s,this),r},nodeIsInserted_:function(){for(var e=this.firstChild;e;e=e.nextSibling)e.nodeIsInserted_()},hasChildNodes:function(){return null!==this.firstChild},get parentNode(){return void 0!==this.parentNode_?this.parentNode_:k(P(this).parentNode)},get firstChild(){return void 0!==this.firstChild_?this.firstChild_:k(P(this).firstChild)},get lastChild(){return void 0!==this.lastChild_?this.lastChild_:k(P(this).lastChild)},get nextSibling(){return void 0!==this.nextSibling_?this.nextSibling_:k(P(this).nextSibling)},get previousSibling(){return void 0!==this.previousSibling_?this.previousSibling_:k(P(this).previousSibling)},get parentElement(){for(var e=this.parentNode;e&&e.nodeType!==S.ELEMENT_NODE;)e=e.parentNode;return e},get textContent(){for(var e="",t=this.firstChild;t;t=t.nextSibling)t.nodeType!=S.COMMENT_NODE&&(e+=t.textContent);return e},set textContent(e){null==e&&(e="");var t=c(this.childNodes);if(this.invalidateShadowRenderer()){if(v(this),""!==e){var n=P(this).ownerDocument.createTextNode(e);this.appendChild(n)}}else w(this),P(this).textContent=e;var r=c(this.childNodes);N(this,"childList",{addedNodes:r,removedNodes:t}),p(t),u(r,this)},get childNodes(){for(var e=new T,t=0,n=this.firstChild;n;n=n.nextSibling)e[t++]=n;return e.length=t,e},cloneNode:function(e){return y(this,e)},contains:function(e){return E(this,W(e))},compareDocumentPosition:function(e){return z.call(P(this),A(e))},normalize:function(){for(var e,t,n=c(this.childNodes),r=[],o="",i=0;i<n.length;i++)t=n[i],t.nodeType===S.TEXT_NODE?e||t.data.length?e?(o+=t.data,r.push(t)):e=t:this.removeNode(t):(e&&r.length&&(e.data+=o,b(r)),r=[],o="",e=null,t.childNodes.length&&t.normalize());e&&r.length&&(e.data+=o,b(r))}}),L(S,"ownerDocument"),x(V,S,document.createDocumentFragment()),delete S.prototype.querySelector,delete S.prototype.querySelectorAll,S.prototype=H(Object.create(M.prototype),S.prototype),e.cloneNode=y,e.nodeWasAdded=l,e.nodeWasRemoved=d,e.nodesWereAdded=u,e.nodesWereRemoved=p,e.originalInsertBefore=K,e.originalRemoveChild=Y,e.snapshotNodeList=c,e.wrappers.Node=S}(window.ShadowDOMPolyfill),function(e){"use strict";function t(t,n,r,o){for(var i=null,a=null,s=0,c=t.length;c>s;s++)i=g(t[s]),!o&&(a=w(i).root)&&a instanceof e.wrappers.ShadowRoot||(r[n++]=i);return n}function n(e){return String(e).replace(/\/deep\//g," ")}function r(e,t){for(var n,o=e.firstElementChild;o;){if(o.matches(t))return o;if(n=r(o,t))return n;o=o.nextElementSibling}return null}function o(e,t){return e.matches(t)}function i(e,t,n){var r=e.localName;return r===t||r===n&&e.namespaceURI===C}function a(){return!0}function s(e,t,n){return e.localName===n}function c(e,t){return e.namespaceURI===t}function l(e,t,n){return e.namespaceURI===t&&e.localName===n}function u(e,t,n,r,o,i){for(var a=e.firstElementChild;a;)r(a,o,i)&&(n[t++]=a),t=u(a,t,n,r,o,i),a=a.nextElementSibling;return t}function d(n,r,o,i,a){var s,c=v(this),l=w(this).root;if(l instanceof e.wrappers.ShadowRoot)return u(this,r,o,n,i,null);if(c instanceof L)s=S.call(c,i);else{if(!(c instanceof N))return u(this,r,o,n,i,null);s=E.call(c,i)}return t(s,r,o,a)}function p(n,r,o,i,a){var s,c=v(this),l=w(this).root;if(l instanceof e.wrappers.ShadowRoot)return u(this,r,o,n,i,a);if(c instanceof L)s=T.call(c,i,a);else{if(!(c instanceof N))return u(this,r,o,n,i,a);s=M.call(c,i,a)}return t(s,r,o,!1)}function f(n,r,o,i,a){var s,c=v(this),l=w(this).root;if(l instanceof e.wrappers.ShadowRoot)return u(this,r,o,n,i,a);if(c instanceof L)s=O.call(c,i,a);else{if(!(c instanceof N))return u(this,r,o,n,i,a);s=_.call(c,i,a)}return t(s,r,o,!1)}var h=e.wrappers.HTMLCollection,m=e.wrappers.NodeList,w=e.getTreeScope,v=e.unsafeUnwrap,g=e.wrap,b=document.querySelector,y=document.documentElement.querySelector,E=document.querySelectorAll,S=document.documentElement.querySelectorAll,M=document.getElementsByTagName,T=document.documentElement.getElementsByTagName,_=document.getElementsByTagNameNS,O=document.documentElement.getElementsByTagNameNS,L=window.Element,N=window.HTMLDocument||window.Document,C="http://www.w3.org/1999/xhtml",D={querySelector:function(t){var o=n(t),i=o!==t;t=o;var a,s=v(this),c=w(this).root;if(c instanceof e.wrappers.ShadowRoot)return r(this,t);if(s instanceof L)a=g(y.call(s,t));else{if(!(s instanceof N))return r(this,t);a=g(b.call(s,t))}return a&&!i&&(c=w(a).root)&&c instanceof e.wrappers.ShadowRoot?r(this,t):a},querySelectorAll:function(e){var t=n(e),r=t!==e;e=t;var i=new m;return i.length=d.call(this,o,0,i,e,r),i}},H={getElementsByTagName:function(e){var t=new h,n="*"===e?a:i;return t.length=p.call(this,n,0,t,e,e.toLowerCase()),t},getElementsByClassName:function(e){return this.querySelectorAll("."+e)},getElementsByTagNameNS:function(e,t){var n=new h,r=null;
-return r="*"===e?"*"===t?a:s:"*"===t?c:l,n.length=f.call(this,r,0,n,e||null,t),n}};e.GetElementsByInterface=H,e.SelectorsInterface=D}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){for(;e&&e.nodeType!==Node.ELEMENT_NODE;)e=e.nextSibling;return e}function n(e){for(;e&&e.nodeType!==Node.ELEMENT_NODE;)e=e.previousSibling;return e}var r=e.wrappers.NodeList,o={get firstElementChild(){return t(this.firstChild)},get lastElementChild(){return n(this.lastChild)},get childElementCount(){for(var e=0,t=this.firstElementChild;t;t=t.nextElementSibling)e++;return e},get children(){for(var e=new r,t=0,n=this.firstElementChild;n;n=n.nextElementSibling)e[t++]=n;return e.length=t,e},remove:function(){var e=this.parentNode;e&&e.removeChild(this)}},i={get nextElementSibling(){return t(this.nextSibling)},get previousElementSibling(){return n(this.previousSibling)}};e.ChildNodeInterface=i,e.ParentNodeInterface=o}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){r.call(this,e)}var n=e.ChildNodeInterface,r=e.wrappers.Node,o=e.enqueueMutation,i=e.mixin,a=e.registerWrapper,s=e.unsafeUnwrap,c=window.CharacterData;t.prototype=Object.create(r.prototype),i(t.prototype,{get textContent(){return this.data},set textContent(e){this.data=e},get data(){return s(this).data},set data(e){var t=s(this).data;o(this,"characterData",{oldValue:t}),s(this).data=e}}),i(t.prototype,n),a(c,t,document.createTextNode("")),e.wrappers.CharacterData=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){return e>>>0}function n(e){r.call(this,e)}var r=e.wrappers.CharacterData,o=(e.enqueueMutation,e.mixin),i=e.registerWrapper,a=window.Text;n.prototype=Object.create(r.prototype),o(n.prototype,{splitText:function(e){e=t(e);var n=this.data;if(e>n.length)throw new Error("IndexSizeError");var r=n.slice(0,e),o=n.slice(e);this.data=r;var i=this.ownerDocument.createTextNode(o);return this.parentNode&&this.parentNode.insertBefore(i,this.nextSibling),i}}),i(a,n,document.createTextNode("")),e.wrappers.Text=n}(window.ShadowDOMPolyfill),function(e){"use strict";function t(t){e.invalidateRendererBasedOnAttribute(t,"class")}function n(e,t){r(e,this),this.ownerElement_=t}var r=e.setWrapper,o=e.unsafeUnwrap;n.prototype={constructor:n,get length(){return o(this).length},item:function(e){return o(this).item(e)},contains:function(e){return o(this).contains(e)},add:function(){o(this).add.apply(o(this),arguments),t(this.ownerElement_)},remove:function(){o(this).remove.apply(o(this),arguments),t(this.ownerElement_)},toggle:function(){var e=o(this).toggle.apply(o(this),arguments);return t(this.ownerElement_),e},toString:function(){return o(this).toString()}},e.wrappers.DOMTokenList=n}(window.ShadowDOMPolyfill),function(e){"use strict";function t(t,n){var r=t.parentNode;if(r&&r.shadowRoot){var o=e.getRendererForHost(r);o.dependsOnAttribute(n)&&o.invalidate()}}function n(e,t,n){u(e,"attributes",{name:t,namespace:null,oldValue:n})}function r(e){a.call(this,e)}var o=e.ChildNodeInterface,i=e.GetElementsByInterface,a=e.wrappers.Node,s=e.wrappers.DOMTokenList,c=e.ParentNodeInterface,l=e.SelectorsInterface,u=(e.addWrapNodeListMethod,e.enqueueMutation),d=e.mixin,p=(e.oneOf,e.registerWrapper),f=e.unsafeUnwrap,h=e.wrappers,m=window.Element,w=["matches","mozMatchesSelector","msMatchesSelector","webkitMatchesSelector"].filter(function(e){return m.prototype[e]}),v=w[0],g=m.prototype[v],b=new WeakMap;r.prototype=Object.create(a.prototype),d(r.prototype,{createShadowRoot:function(){var t=new h.ShadowRoot(this);f(this).polymerShadowRoot_=t;var n=e.getRendererForHost(this);return n.invalidate(),t},get shadowRoot(){return f(this).polymerShadowRoot_||null},setAttribute:function(e,r){var o=f(this).getAttribute(e);f(this).setAttribute(e,r),n(this,e,o),t(this,e)},removeAttribute:function(e){var r=f(this).getAttribute(e);f(this).removeAttribute(e),n(this,e,r),t(this,e)},matches:function(e){return g.call(f(this),e)},get classList(){var e=b.get(this);return e||b.set(this,e=new s(f(this).classList,this)),e},get className(){return f(this).className},set className(e){this.setAttribute("class",e)},get id(){return f(this).id},set id(e){this.setAttribute("id",e)}}),w.forEach(function(e){"matches"!==e&&(r.prototype[e]=function(e){return this.matches(e)})}),m.prototype.webkitCreateShadowRoot&&(r.prototype.webkitCreateShadowRoot=r.prototype.createShadowRoot),d(r.prototype,o),d(r.prototype,i),d(r.prototype,c),d(r.prototype,l),p(m,r,document.createElementNS(null,"x")),e.invalidateRendererBasedOnAttribute=t,e.matchesNames=w,e.wrappers.Element=r}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){switch(e){case"&":return"&amp;";case"<":return"&lt;";case">":return"&gt;";case'"':return"&quot;";case" ":return"&nbsp;"}}function n(e){return e.replace(O,t)}function r(e){return e.replace(L,t)}function o(e){for(var t={},n=0;n<e.length;n++)t[e[n]]=!0;return t}function i(e,t){switch(e.nodeType){case Node.ELEMENT_NODE:for(var o,i=e.tagName.toLowerCase(),s="<"+i,c=e.attributes,l=0;o=c[l];l++)s+=" "+o.name+'="'+n(o.value)+'"';return s+=">",N[i]?s:s+a(e)+"</"+i+">";case Node.TEXT_NODE:var u=e.data;return t&&C[t.localName]?u:r(u);case Node.COMMENT_NODE:return"<!--"+e.data+"-->";default:throw console.error(e),new Error("not implemented")}}function a(e){e instanceof _.HTMLTemplateElement&&(e=e.content);for(var t="",n=e.firstChild;n;n=n.nextSibling)t+=i(n,e);return t}function s(e,t,n){var r=n||"div";e.textContent="";var o=M(e.ownerDocument.createElement(r));o.innerHTML=t;for(var i;i=o.firstChild;)e.appendChild(T(i))}function c(e){h.call(this,e)}function l(e,t){var n=M(e.cloneNode(!1));n.innerHTML=t;for(var r,o=M(document.createDocumentFragment());r=n.firstChild;)o.appendChild(r);return T(o)}function u(t){return function(){return e.renderAllPending(),S(this)[t]}}function d(e){m(c,e,u(e))}function p(t){Object.defineProperty(c.prototype,t,{get:u(t),set:function(n){e.renderAllPending(),S(this)[t]=n},configurable:!0,enumerable:!0})}function f(t){Object.defineProperty(c.prototype,t,{value:function(){return e.renderAllPending(),S(this)[t].apply(S(this),arguments)},configurable:!0,enumerable:!0})}var h=e.wrappers.Element,m=e.defineGetter,w=e.enqueueMutation,v=e.mixin,g=e.nodesWereAdded,b=e.nodesWereRemoved,y=e.registerWrapper,E=e.snapshotNodeList,S=e.unsafeUnwrap,M=e.unwrap,T=e.wrap,_=e.wrappers,O=/[&\u00A0"]/g,L=/[&\u00A0<>]/g,N=o(["area","base","br","col","command","embed","hr","img","input","keygen","link","meta","param","source","track","wbr"]),C=o(["style","script","xmp","iframe","noembed","noframes","plaintext","noscript"]),D=/MSIE/.test(navigator.userAgent),H=window.HTMLElement,j=window.HTMLTemplateElement;c.prototype=Object.create(h.prototype),v(c.prototype,{get innerHTML(){return a(this)},set innerHTML(e){if(D&&C[this.localName])return void(this.textContent=e);var t=E(this.childNodes);this.invalidateShadowRenderer()?this instanceof _.HTMLTemplateElement?s(this.content,e):s(this,e,this.tagName):!j&&this instanceof _.HTMLTemplateElement?s(this.content,e):S(this).innerHTML=e;var n=E(this.childNodes);w(this,"childList",{addedNodes:n,removedNodes:t}),b(t),g(n,this)},get outerHTML(){return i(this,this.parentNode)},set outerHTML(e){var t=this.parentNode;if(t){t.invalidateShadowRenderer();var n=l(t,e);t.replaceChild(n,this)}},insertAdjacentHTML:function(e,t){var n,r;switch(String(e).toLowerCase()){case"beforebegin":n=this.parentNode,r=this;break;case"afterend":n=this.parentNode,r=this.nextSibling;break;case"afterbegin":n=this,r=this.firstChild;break;case"beforeend":n=this,r=null;break;default:return}var o=l(n,t);n.insertBefore(o,r)},get hidden(){return this.hasAttribute("hidden")},set hidden(e){e?this.setAttribute("hidden",""):this.removeAttribute("hidden")}}),["clientHeight","clientLeft","clientTop","clientWidth","offsetHeight","offsetLeft","offsetTop","offsetWidth","scrollHeight","scrollWidth"].forEach(d),["scrollLeft","scrollTop"].forEach(p),["getBoundingClientRect","getClientRects","scrollIntoView"].forEach(f),y(H,c,document.createElement("b")),e.wrappers.HTMLElement=c,e.getInnerHTML=a,e.setInnerHTML=s}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){n.call(this,e)}var n=e.wrappers.HTMLElement,r=e.mixin,o=e.registerWrapper,i=e.unsafeUnwrap,a=e.wrap,s=window.HTMLCanvasElement;t.prototype=Object.create(n.prototype),r(t.prototype,{getContext:function(){var e=i(this).getContext.apply(i(this),arguments);return e&&a(e)}}),o(s,t,document.createElement("canvas")),e.wrappers.HTMLCanvasElement=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){n.call(this,e)}var n=e.wrappers.HTMLElement,r=e.mixin,o=e.registerWrapper,i=window.HTMLContentElement;t.prototype=Object.create(n.prototype),r(t.prototype,{constructor:t,get select(){return this.getAttribute("select")},set select(e){this.setAttribute("select",e)},setAttribute:function(e,t){n.prototype.setAttribute.call(this,e,t),"select"===String(e).toLowerCase()&&this.invalidateShadowRenderer(!0)}}),i&&o(i,t),e.wrappers.HTMLContentElement=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){n.call(this,e)}var n=e.wrappers.HTMLElement,r=e.mixin,o=e.registerWrapper,i=e.wrapHTMLCollection,a=e.unwrap,s=window.HTMLFormElement;t.prototype=Object.create(n.prototype),r(t.prototype,{get elements(){return i(a(this).elements)}}),o(s,t,document.createElement("form")),e.wrappers.HTMLFormElement=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){r.call(this,e)}function n(e,t){if(!(this instanceof n))throw new TypeError("DOM object constructor cannot be called as a function.");var o=i(document.createElement("img"));r.call(this,o),a(o,this),void 0!==e&&(o.width=e),void 0!==t&&(o.height=t)}var r=e.wrappers.HTMLElement,o=e.registerWrapper,i=e.unwrap,a=e.rewrap,s=window.HTMLImageElement;t.prototype=Object.create(r.prototype),o(s,t,document.createElement("img")),n.prototype=t.prototype,e.wrappers.HTMLImageElement=t,e.wrappers.Image=n}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){n.call(this,e)}var n=e.wrappers.HTMLElement,r=(e.mixin,e.wrappers.NodeList,e.registerWrapper),o=window.HTMLShadowElement;t.prototype=Object.create(n.prototype),t.prototype.constructor=t,o&&r(o,t),e.wrappers.HTMLShadowElement=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){if(!e.defaultView)return e;var t=d.get(e);if(!t){for(t=e.implementation.createHTMLDocument("");t.lastChild;)t.removeChild(t.lastChild);d.set(e,t)}return t}function n(e){for(var n,r=t(e.ownerDocument),o=c(r.createDocumentFragment());n=e.firstChild;)o.appendChild(n);return o}function r(e){if(o.call(this,e),!p){var t=n(e);u.set(this,l(t))}}var o=e.wrappers.HTMLElement,i=e.mixin,a=e.registerWrapper,s=e.unsafeUnwrap,c=e.unwrap,l=e.wrap,u=new WeakMap,d=new WeakMap,p=window.HTMLTemplateElement;r.prototype=Object.create(o.prototype),i(r.prototype,{constructor:r,get content(){return p?l(s(this).content):u.get(this)}}),p&&a(p,r),e.wrappers.HTMLTemplateElement=r}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){n.call(this,e)}var n=e.wrappers.HTMLElement,r=e.registerWrapper,o=window.HTMLMediaElement;o&&(t.prototype=Object.create(n.prototype),r(o,t,document.createElement("audio")),e.wrappers.HTMLMediaElement=t)}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){r.call(this,e)}function n(e){if(!(this instanceof n))throw new TypeError("DOM object constructor cannot be called as a function.");var t=i(document.createElement("audio"));r.call(this,t),a(t,this),t.setAttribute("preload","auto"),void 0!==e&&t.setAttribute("src",e)}var r=e.wrappers.HTMLMediaElement,o=e.registerWrapper,i=e.unwrap,a=e.rewrap,s=window.HTMLAudioElement;s&&(t.prototype=Object.create(r.prototype),o(s,t,document.createElement("audio")),n.prototype=t.prototype,e.wrappers.HTMLAudioElement=t,e.wrappers.Audio=n)}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){return e.replace(/\s+/g," ").trim()}function n(e){o.call(this,e)}function r(e,t,n,i){if(!(this instanceof r))throw new TypeError("DOM object constructor cannot be called as a function.");var a=c(document.createElement("option"));o.call(this,a),s(a,this),void 0!==e&&(a.text=e),void 0!==t&&a.setAttribute("value",t),n===!0&&a.setAttribute("selected",""),a.selected=i===!0}var o=e.wrappers.HTMLElement,i=e.mixin,a=e.registerWrapper,s=e.rewrap,c=e.unwrap,l=e.wrap,u=window.HTMLOptionElement;n.prototype=Object.create(o.prototype),i(n.prototype,{get text(){return t(this.textContent)},set text(e){this.textContent=t(String(e))},get form(){return l(c(this).form)}}),a(u,n,document.createElement("option")),r.prototype=n.prototype,e.wrappers.HTMLOptionElement=n,e.wrappers.Option=r}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){n.call(this,e)}var n=e.wrappers.HTMLElement,r=e.mixin,o=e.registerWrapper,i=e.unwrap,a=e.wrap,s=window.HTMLSelectElement;t.prototype=Object.create(n.prototype),r(t.prototype,{add:function(e,t){"object"==typeof t&&(t=i(t)),i(this).add(i(e),t)},remove:function(e){return void 0===e?void n.prototype.remove.call(this):("object"==typeof e&&(e=i(e)),void i(this).remove(e))},get form(){return a(i(this).form)}}),o(s,t,document.createElement("select")),e.wrappers.HTMLSelectElement=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){n.call(this,e)}var n=e.wrappers.HTMLElement,r=e.mixin,o=e.registerWrapper,i=e.unwrap,a=e.wrap,s=e.wrapHTMLCollection,c=window.HTMLTableElement;t.prototype=Object.create(n.prototype),r(t.prototype,{get caption(){return a(i(this).caption)},createCaption:function(){return a(i(this).createCaption())},get tHead(){return a(i(this).tHead)},createTHead:function(){return a(i(this).createTHead())},createTFoot:function(){return a(i(this).createTFoot())},get tFoot(){return a(i(this).tFoot)},get tBodies(){return s(i(this).tBodies)},createTBody:function(){return a(i(this).createTBody())},get rows(){return s(i(this).rows)},insertRow:function(e){return a(i(this).insertRow(e))}}),o(c,t,document.createElement("table")),e.wrappers.HTMLTableElement=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){n.call(this,e)}var n=e.wrappers.HTMLElement,r=e.mixin,o=e.registerWrapper,i=e.wrapHTMLCollection,a=e.unwrap,s=e.wrap,c=window.HTMLTableSectionElement;t.prototype=Object.create(n.prototype),r(t.prototype,{constructor:t,get rows(){return i(a(this).rows)},insertRow:function(e){return s(a(this).insertRow(e))}}),o(c,t,document.createElement("thead")),e.wrappers.HTMLTableSectionElement=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){n.call(this,e)}var n=e.wrappers.HTMLElement,r=e.mixin,o=e.registerWrapper,i=e.wrapHTMLCollection,a=e.unwrap,s=e.wrap,c=window.HTMLTableRowElement;t.prototype=Object.create(n.prototype),r(t.prototype,{get cells(){return i(a(this).cells)},insertCell:function(e){return s(a(this).insertCell(e))}}),o(c,t,document.createElement("tr")),e.wrappers.HTMLTableRowElement=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){switch(e.localName){case"content":return new n(e);case"shadow":return new o(e);case"template":return new i(e)}r.call(this,e)}var n=e.wrappers.HTMLContentElement,r=e.wrappers.HTMLElement,o=e.wrappers.HTMLShadowElement,i=e.wrappers.HTMLTemplateElement,a=(e.mixin,e.registerWrapper),s=window.HTMLUnknownElement;t.prototype=Object.create(r.prototype),a(s,t),e.wrappers.HTMLUnknownElement=t}(window.ShadowDOMPolyfill),function(e){"use strict";var t=e.wrappers.Element,n=e.wrappers.HTMLElement,r=e.registerObject,o="http://www.w3.org/2000/svg",i=document.createElementNS(o,"title"),a=r(i),s=Object.getPrototypeOf(a.prototype).constructor;if(!("classList"in i)){var c=Object.getOwnPropertyDescriptor(t.prototype,"classList");Object.defineProperty(n.prototype,"classList",c),delete t.prototype.classList}e.wrappers.SVGElement=s}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){p.call(this,e)}var n=e.mixin,r=e.registerWrapper,o=e.unwrap,i=e.wrap,a=window.SVGUseElement,s="http://www.w3.org/2000/svg",c=i(document.createElementNS(s,"g")),l=document.createElementNS(s,"use"),u=c.constructor,d=Object.getPrototypeOf(u.prototype),p=d.constructor;t.prototype=Object.create(d),"instanceRoot"in l&&n(t.prototype,{get instanceRoot(){return i(o(this).instanceRoot)},get animatedInstanceRoot(){return i(o(this).animatedInstanceRoot)}}),r(a,t,l),e.wrappers.SVGUseElement=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){n.call(this,e)}var n=e.wrappers.EventTarget,r=e.mixin,o=e.registerWrapper,i=e.unsafeUnwrap,a=e.wrap,s=window.SVGElementInstance;s&&(t.prototype=Object.create(n.prototype),r(t.prototype,{get correspondingElement(){return a(i(this).correspondingElement)},get correspondingUseElement(){return a(i(this).correspondingUseElement)},get parentNode(){return a(i(this).parentNode)},get childNodes(){throw new Error("Not implemented")},get firstChild(){return a(i(this).firstChild)},get lastChild(){return a(i(this).lastChild)},get previousSibling(){return a(i(this).previousSibling)},get nextSibling(){return a(i(this).nextSibling)}}),o(s,t),e.wrappers.SVGElementInstance=t)}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){o(e,this)}var n=e.mixin,r=e.registerWrapper,o=e.setWrapper,i=e.unsafeUnwrap,a=e.unwrap,s=e.unwrapIfNeeded,c=e.wrap,l=window.CanvasRenderingContext2D;n(t.prototype,{get canvas(){return c(i(this).canvas)},drawImage:function(){arguments[0]=s(arguments[0]),i(this).drawImage.apply(i(this),arguments)},createPattern:function(){return arguments[0]=a(arguments[0]),i(this).createPattern.apply(i(this),arguments)}}),r(l,t,document.createElement("canvas").getContext("2d")),e.wrappers.CanvasRenderingContext2D=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){o(e,this)}var n=e.mixin,r=e.registerWrapper,o=e.setWrapper,i=e.unsafeUnwrap,a=e.unwrapIfNeeded,s=e.wrap,c=window.WebGLRenderingContext;if(c){n(t.prototype,{get canvas(){return s(i(this).canvas)},texImage2D:function(){arguments[5]=a(arguments[5]),i(this).texImage2D.apply(i(this),arguments)},texSubImage2D:function(){arguments[6]=a(arguments[6]),i(this).texSubImage2D.apply(i(this),arguments)}});var l=/WebKit/.test(navigator.userAgent)?{drawingBufferHeight:null,drawingBufferWidth:null}:{};r(c,t,l),e.wrappers.WebGLRenderingContext=t}}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){r(e,this)}var n=e.registerWrapper,r=e.setWrapper,o=e.unsafeUnwrap,i=e.unwrap,a=e.unwrapIfNeeded,s=e.wrap,c=window.Range;t.prototype={get startContainer(){return s(o(this).startContainer)},get endContainer(){return s(o(this).endContainer)},get commonAncestorContainer(){return s(o(this).commonAncestorContainer)},setStart:function(e,t){o(this).setStart(a(e),t)},setEnd:function(e,t){o(this).setEnd(a(e),t)},setStartBefore:function(e){o(this).setStartBefore(a(e))},setStartAfter:function(e){o(this).setStartAfter(a(e))},setEndBefore:function(e){o(this).setEndBefore(a(e))},setEndAfter:function(e){o(this).setEndAfter(a(e))},selectNode:function(e){o(this).selectNode(a(e))},selectNodeContents:function(e){o(this).selectNodeContents(a(e))},compareBoundaryPoints:function(e,t){return o(this).compareBoundaryPoints(e,i(t))},extractContents:function(){return s(o(this).extractContents())},cloneContents:function(){return s(o(this).cloneContents())},insertNode:function(e){o(this).insertNode(a(e))},surroundContents:function(e){o(this).surroundContents(a(e))},cloneRange:function(){return s(o(this).cloneRange())},isPointInRange:function(e,t){return o(this).isPointInRange(a(e),t)},comparePoint:function(e,t){return o(this).comparePoint(a(e),t)},intersectsNode:function(e){return o(this).intersectsNode(a(e))},toString:function(){return o(this).toString()}},c.prototype.createContextualFragment&&(t.prototype.createContextualFragment=function(e){return s(o(this).createContextualFragment(e))}),n(window.Range,t,document.createRange()),e.wrappers.Range=t}(window.ShadowDOMPolyfill),function(e){"use strict";var t=e.GetElementsByInterface,n=e.ParentNodeInterface,r=e.SelectorsInterface,o=e.mixin,i=e.registerObject,a=i(document.createDocumentFragment());o(a.prototype,n),o(a.prototype,r),o(a.prototype,t);var s=i(document.createComment(""));e.wrappers.Comment=s,e.wrappers.DocumentFragment=a}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){var t=d(u(e).ownerDocument.createDocumentFragment());n.call(this,t),c(t,this);var o=e.shadowRoot;f.set(this,o),this.treeScope_=new r(this,a(o||e)),p.set(this,e)}var n=e.wrappers.DocumentFragment,r=e.TreeScope,o=e.elementFromPoint,i=e.getInnerHTML,a=e.getTreeScope,s=e.mixin,c=e.rewrap,l=e.setInnerHTML,u=e.unsafeUnwrap,d=e.unwrap,p=new WeakMap,f=new WeakMap,h=/[ \t\n\r\f]/;t.prototype=Object.create(n.prototype),s(t.prototype,{constructor:t,get innerHTML(){return i(this)},set innerHTML(e){l(this,e),this.invalidateShadowRenderer()},get olderShadowRoot(){return f.get(this)||null},get host(){return p.get(this)||null},invalidateShadowRenderer:function(){return p.get(this).invalidateShadowRenderer()},elementFromPoint:function(e,t){return o(this,this.ownerDocument,e,t)},getElementById:function(e){return h.test(e)?null:this.querySelector('[id="'+e+'"]')}}),e.wrappers.ShadowRoot=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){e.previousSibling_=e.previousSibling,e.nextSibling_=e.nextSibling,e.parentNode_=e.parentNode}function n(n,o,i){var a=x(n),s=x(o),c=i?x(i):null;if(r(o),t(o),i)n.firstChild===i&&(n.firstChild_=i),i.previousSibling_=i.previousSibling;else{n.lastChild_=n.lastChild,n.lastChild===n.firstChild&&(n.firstChild_=n.firstChild);var l=R(a.lastChild);l&&(l.nextSibling_=l.nextSibling)}e.originalInsertBefore.call(a,s,c)}function r(n){var r=x(n),o=r.parentNode;if(o){var i=R(o);t(n),n.previousSibling&&(n.previousSibling.nextSibling_=n),n.nextSibling&&(n.nextSibling.previousSibling_=n),i.lastChild===n&&(i.lastChild_=n),i.firstChild===n&&(i.firstChild_=n),e.originalRemoveChild.call(o,r)}}function o(e){I.set(e,[])}function i(e){var t=I.get(e);return t||I.set(e,t=[]),t}function a(e){for(var t=[],n=0,r=e.firstChild;r;r=r.nextSibling)t[n++]=r;return t}function s(){for(var e=0;e<F.length;e++){var t=F[e],n=t.parentRenderer;n&&n.dirty||t.render()}F=[]}function c(){T=null,s()}function l(e){var t=k.get(e);return t||(t=new f(e),k.set(e,t)),t}function u(e){var t=D(e).root;return t instanceof C?t:null}function d(e){return l(e.host)}function p(e){this.skip=!1,this.node=e,this.childNodes=[]}function f(e){this.host=e,this.dirty=!1,this.invalidateAttributes(),this.associateNode(e)}function h(e){for(var t=[],n=e.firstChild;n;n=n.nextSibling)E(n)?t.push.apply(t,i(n)):t.push(n);return t}function m(e){if(e instanceof L)return e;if(e instanceof O)return null;for(var t=e.firstChild;t;t=t.nextSibling){var n=m(t);if(n)return n}return null}function w(e,t){i(t).push(e);var n=A.get(e);n?n.push(t):A.set(e,[t])}function v(e){return A.get(e)}function g(e){A.set(e,void 0)}function b(e,t){var n=t.getAttribute("select");if(!n)return!0;if(n=n.trim(),!n)return!0;if(!(e instanceof _))return!1;if(!B.test(n))return!1;try{return e.matches(n)}catch(r){return!1}}function y(e,t){var n=v(t);return n&&n[n.length-1]===e}function E(e){return e instanceof O||e instanceof L}function S(e){return e.shadowRoot}function M(e){for(var t=[],n=e.shadowRoot;n;n=n.olderShadowRoot)t.push(n);return t}var T,_=e.wrappers.Element,O=e.wrappers.HTMLContentElement,L=e.wrappers.HTMLShadowElement,N=e.wrappers.Node,C=e.wrappers.ShadowRoot,D=(e.assert,e.getTreeScope),H=(e.mixin,e.oneOf),j=e.unsafeUnwrap,x=e.unwrap,R=e.wrap,P=e.ArraySplice,I=new WeakMap,A=new WeakMap,k=new WeakMap,W=H(window,["requestAnimationFrame","mozRequestAnimationFrame","webkitRequestAnimationFrame","setTimeout"]),F=[],U=new P;U.equals=function(e,t){return x(e.node)===t},p.prototype={append:function(e){var t=new p(e);return this.childNodes.push(t),t},sync:function(e){if(!this.skip){for(var t=this.node,o=this.childNodes,i=a(x(t)),s=e||new WeakMap,c=U.calculateSplices(o,i),l=0,u=0,d=0,p=0;p<c.length;p++){for(var f=c[p];d<f.index;d++)u++,o[l++].sync(s);for(var h=f.removed.length,m=0;h>m;m++){var w=R(i[u++]);s.get(w)||r(w)}for(var v=f.addedCount,g=i[u]&&R(i[u]),m=0;v>m;m++){var b=o[l++],y=b.node;n(t,y,g),s.set(y,!0),b.sync(s)}d+=v}for(var p=d;p<o.length;p++)o[p].sync(s)}}},f.prototype={render:function(e){if(this.dirty){this.invalidateAttributes();var t=this.host;this.distribution(t);var n=e||new p(t);this.buildRenderTree(n,t);var r=!e;r&&n.sync(),this.dirty=!1}},get parentRenderer(){return D(this.host).renderer},invalidate:function(){if(!this.dirty){this.dirty=!0;var e=this.parentRenderer;if(e&&e.invalidate(),F.push(this),T)return;T=window[W](c,0)}},distribution:function(e){this.resetAllSubtrees(e),this.distributionResolution(e)},resetAll:function(e){E(e)?o(e):g(e),this.resetAllSubtrees(e)},resetAllSubtrees:function(e){for(var t=e.firstChild;t;t=t.nextSibling)this.resetAll(t);e.shadowRoot&&this.resetAll(e.shadowRoot),e.olderShadowRoot&&this.resetAll(e.olderShadowRoot)},distributionResolution:function(e){if(S(e)){for(var t=e,n=h(t),r=M(t),o=0;o<r.length;o++)this.poolDistribution(r[o],n);for(var o=r.length-1;o>=0;o--){var i=r[o],a=m(i);if(a){var s=i.olderShadowRoot;s&&(n=h(s));for(var c=0;c<n.length;c++)w(n[c],a)}this.distributionResolution(i)}}for(var l=e.firstChild;l;l=l.nextSibling)this.distributionResolution(l)},poolDistribution:function(e,t){if(!(e instanceof L))if(e instanceof O){var n=e;this.updateDependentAttributes(n.getAttribute("select"));for(var r=!1,o=0;o<t.length;o++){var e=t[o];e&&b(e,n)&&(w(e,n),t[o]=void 0,r=!0)}if(!r)for(var i=n.firstChild;i;i=i.nextSibling)w(i,n)}else for(var i=e.firstChild;i;i=i.nextSibling)this.poolDistribution(i,t)},buildRenderTree:function(e,t){for(var n=this.compose(t),r=0;r<n.length;r++){var o=n[r],i=e.append(o);this.buildRenderTree(i,o)}if(S(t)){var a=l(t);a.dirty=!1}},compose:function(e){for(var t=[],n=e.shadowRoot||e,r=n.firstChild;r;r=r.nextSibling)if(E(r)){this.associateNode(n);for(var o=i(r),a=0;a<o.length;a++){var s=o[a];y(r,s)&&t.push(s)}}else t.push(r);return t},invalidateAttributes:function(){this.attributes=Object.create(null)},updateDependentAttributes:function(e){if(e){var t=this.attributes;/\.\w+/.test(e)&&(t["class"]=!0),/#\w+/.test(e)&&(t.id=!0),e.replace(/\[\s*([^\s=\|~\]]+)/g,function(e,n){t[n]=!0})}},dependsOnAttribute:function(e){return this.attributes[e]},associateNode:function(e){j(e).polymerShadowRenderer_=this}};var B=/^(:not\()?[*.#[a-zA-Z_|]/;N.prototype.invalidateShadowRenderer=function(){var e=j(this).polymerShadowRenderer_;return e?(e.invalidate(),!0):!1},O.prototype.getDistributedNodes=L.prototype.getDistributedNodes=function(){return s(),i(this)},_.prototype.getDestinationInsertionPoints=function(){return s(),v(this)||[]},O.prototype.nodeIsInserted_=L.prototype.nodeIsInserted_=function(){this.invalidateShadowRenderer();var e,t=u(this);t&&(e=d(t)),j(this).polymerShadowRenderer_=e,e&&e.invalidate()},e.getRendererForHost=l,e.getShadowTrees=M,e.renderAllPending=s,e.getDestinationInsertionPoints=v,e.visual={insertBefore:n,remove:r}}(window.ShadowDOMPolyfill),function(e){"use strict";function t(t){if(window[t]){r(!e.wrappers[t]);var c=function(e){n.call(this,e)};c.prototype=Object.create(n.prototype),o(c.prototype,{get form(){return s(a(this).form)}}),i(window[t],c,document.createElement(t.slice(4,-7))),e.wrappers[t]=c}}var n=e.wrappers.HTMLElement,r=e.assert,o=e.mixin,i=e.registerWrapper,a=e.unwrap,s=e.wrap,c=["HTMLButtonElement","HTMLFieldSetElement","HTMLInputElement","HTMLKeygenElement","HTMLLabelElement","HTMLLegendElement","HTMLObjectElement","HTMLOutputElement","HTMLTextAreaElement"];c.forEach(t)}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){r(e,this)}{var n=e.registerWrapper,r=e.setWrapper,o=e.unsafeUnwrap,i=e.unwrap,a=e.unwrapIfNeeded,s=e.wrap;window.Selection}t.prototype={get anchorNode(){return s(o(this).anchorNode)},get focusNode(){return s(o(this).focusNode)},addRange:function(e){o(this).addRange(i(e))},collapse:function(e,t){o(this).collapse(a(e),t)},containsNode:function(e,t){return o(this).containsNode(a(e),t)},extend:function(e,t){o(this).extend(a(e),t)},getRangeAt:function(e){return s(o(this).getRangeAt(e))},removeRange:function(e){o(this).removeRange(i(e))},selectAllChildren:function(e){o(this).selectAllChildren(a(e))},toString:function(){return o(this).toString()}},n(window.Selection,t,window.getSelection()),e.wrappers.Selection=t}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){u.call(this,e),this.treeScope_=new m(this,null)}function n(e){var n=document[e];t.prototype[e]=function(){return N(n.apply(O(this),arguments))}}function r(e,t){H.call(O(t),L(e)),o(e,t)}function o(e,t){e.shadowRoot&&t.adoptNode(e.shadowRoot),e instanceof h&&i(e,t);for(var n=e.firstChild;n;n=n.nextSibling)o(n,t)}function i(e,t){var n=e.olderShadowRoot;n&&t.adoptNode(n)}function a(e){_(e,this)}function s(e,t){var n=document.implementation[t];e.prototype[t]=function(){return N(n.apply(O(this),arguments))}}function c(e,t){var n=document.implementation[t];e.prototype[t]=function(){return n.apply(O(this),arguments)}}var l=e.GetElementsByInterface,u=e.wrappers.Node,d=e.ParentNodeInterface,p=e.wrappers.Selection,f=e.SelectorsInterface,h=e.wrappers.ShadowRoot,m=e.TreeScope,w=e.cloneNode,v=e.defineWrapGetter,g=e.elementFromPoint,b=e.forwardMethodsToWrapper,y=e.matchesNames,E=e.mixin,S=e.registerWrapper,M=e.renderAllPending,T=e.rewrap,_=e.setWrapper,O=e.unsafeUnwrap,L=e.unwrap,N=e.wrap,C=e.wrapEventTargetMethods,D=(e.wrapNodeList,new WeakMap);t.prototype=Object.create(u.prototype),v(t,"documentElement"),v(t,"body"),v(t,"head"),["createComment","createDocumentFragment","createElement","createElementNS","createEvent","createEventNS","createRange","createTextNode","getElementById"].forEach(n);var H=document.adoptNode,j=document.getSelection;if(E(t.prototype,{adoptNode:function(e){return e.parentNode&&e.parentNode.removeChild(e),r(e,this),e},elementFromPoint:function(e,t){return g(this,this,e,t)},importNode:function(e,t){return w(e,t,O(this))},getSelection:function(){return M(),new p(j.call(L(this)))},getElementsByName:function(e){return f.querySelectorAll.call(this,"[name="+JSON.stringify(String(e))+"]")}}),document.registerElement){var x=document.registerElement;t.prototype.registerElement=function(t,n){function r(e){return e?void _(e,this):i?document.createElement(i,t):document.createElement(t)}var o,i;if(void 0!==n&&(o=n.prototype,i=n.extends),o||(o=Object.create(HTMLElement.prototype)),e.nativePrototypeTable.get(o))throw new Error("NotSupportedError");for(var a,s=Object.getPrototypeOf(o),c=[];s&&!(a=e.nativePrototypeTable.get(s));)c.push(s),s=Object.getPrototypeOf(s);if(!a)throw new Error("NotSupportedError");for(var l=Object.create(a),u=c.length-1;u>=0;u--)l=Object.create(l);["createdCallback","attachedCallback","detachedCallback","attributeChangedCallback"].forEach(function(e){var t=o[e];t&&(l[e]=function(){N(this)instanceof r||T(this),t.apply(N(this),arguments)})});var d={prototype:l};i&&(d.extends=i),r.prototype=o,r.prototype.constructor=r,e.constructorTable.set(l,r),e.nativePrototypeTable.set(o,l);x.call(L(this),t,d);return r},b([window.HTMLDocument||window.Document],["registerElement"])}b([window.HTMLBodyElement,window.HTMLDocument||window.Document,window.HTMLHeadElement,window.HTMLHtmlElement],["appendChild","compareDocumentPosition","contains","getElementsByClassName","getElementsByTagName","getElementsByTagNameNS","insertBefore","querySelector","querySelectorAll","removeChild","replaceChild"].concat(y)),b([window.HTMLDocument||window.Document],["adoptNode","importNode","contains","createComment","createDocumentFragment","createElement","createElementNS","createEvent","createEventNS","createRange","createTextNode","elementFromPoint","getElementById","getElementsByName","getSelection"]),E(t.prototype,l),E(t.prototype,d),E(t.prototype,f),E(t.prototype,{get implementation(){var e=D.get(this);return e?e:(e=new a(L(this).implementation),D.set(this,e),e)},get defaultView(){return N(L(this).defaultView)}}),S(window.Document,t,document.implementation.createHTMLDocument("")),window.HTMLDocument&&S(window.HTMLDocument,t),C([window.HTMLBodyElement,window.HTMLDocument||window.Document,window.HTMLHeadElement]),s(a,"createDocumentType"),s(a,"createDocument"),s(a,"createHTMLDocument"),c(a,"hasFeature"),S(window.DOMImplementation,a),b([window.DOMImplementation],["createDocumentType","createDocument","createHTMLDocument","hasFeature"]),e.adoptNodeNoRemove=r,e.wrappers.DOMImplementation=a,e.wrappers.Document=t
-}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){n.call(this,e)}var n=e.wrappers.EventTarget,r=e.wrappers.Selection,o=e.mixin,i=e.registerWrapper,a=e.renderAllPending,s=e.unwrap,c=e.unwrapIfNeeded,l=e.wrap,u=window.Window,d=window.getComputedStyle,p=window.getDefaultComputedStyle,f=window.getSelection;t.prototype=Object.create(n.prototype),u.prototype.getComputedStyle=function(e,t){return l(this||window).getComputedStyle(c(e),t)},p&&(u.prototype.getDefaultComputedStyle=function(e,t){return l(this||window).getDefaultComputedStyle(c(e),t)}),u.prototype.getSelection=function(){return l(this||window).getSelection()},delete window.getComputedStyle,delete window.getDefaultComputedStyle,delete window.getSelection,["addEventListener","removeEventListener","dispatchEvent"].forEach(function(e){u.prototype[e]=function(){var t=l(this||window);return t[e].apply(t,arguments)},delete window[e]}),o(t.prototype,{getComputedStyle:function(e,t){return a(),d.call(s(this),c(e),t)},getSelection:function(){return a(),new r(f.call(s(this)))},get document(){return l(s(this).document)}}),p&&(t.prototype.getDefaultComputedStyle=function(e,t){return a(),p.call(s(this),c(e),t)}),i(u,t,window),e.wrappers.Window=t}(window.ShadowDOMPolyfill),function(e){"use strict";var t=e.unwrap,n=window.DataTransfer||window.Clipboard,r=n.prototype.setDragImage;r&&(n.prototype.setDragImage=function(e,n,o){r.call(this,t(e),n,o)})}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){var t;t=e instanceof i?e:new i(e&&o(e)),r(t,this)}var n=e.registerWrapper,r=e.setWrapper,o=e.unwrap,i=window.FormData;i&&(n(i,t,new i),e.wrappers.FormData=t)}(window.ShadowDOMPolyfill),function(e){"use strict";var t=e.unwrapIfNeeded,n=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.send=function(e){return n.call(this,t(e))}}(window.ShadowDOMPolyfill),function(e){"use strict";function t(e){var t=n[e],r=window[t];if(r){var o=document.createElement(e),i=o.constructor;window[t]=i}}var n=(e.isWrapperFor,{a:"HTMLAnchorElement",area:"HTMLAreaElement",audio:"HTMLAudioElement",base:"HTMLBaseElement",body:"HTMLBodyElement",br:"HTMLBRElement",button:"HTMLButtonElement",canvas:"HTMLCanvasElement",caption:"HTMLTableCaptionElement",col:"HTMLTableColElement",content:"HTMLContentElement",data:"HTMLDataElement",datalist:"HTMLDataListElement",del:"HTMLModElement",dir:"HTMLDirectoryElement",div:"HTMLDivElement",dl:"HTMLDListElement",embed:"HTMLEmbedElement",fieldset:"HTMLFieldSetElement",font:"HTMLFontElement",form:"HTMLFormElement",frame:"HTMLFrameElement",frameset:"HTMLFrameSetElement",h1:"HTMLHeadingElement",head:"HTMLHeadElement",hr:"HTMLHRElement",html:"HTMLHtmlElement",iframe:"HTMLIFrameElement",img:"HTMLImageElement",input:"HTMLInputElement",keygen:"HTMLKeygenElement",label:"HTMLLabelElement",legend:"HTMLLegendElement",li:"HTMLLIElement",link:"HTMLLinkElement",map:"HTMLMapElement",marquee:"HTMLMarqueeElement",menu:"HTMLMenuElement",menuitem:"HTMLMenuItemElement",meta:"HTMLMetaElement",meter:"HTMLMeterElement",object:"HTMLObjectElement",ol:"HTMLOListElement",optgroup:"HTMLOptGroupElement",option:"HTMLOptionElement",output:"HTMLOutputElement",p:"HTMLParagraphElement",param:"HTMLParamElement",pre:"HTMLPreElement",progress:"HTMLProgressElement",q:"HTMLQuoteElement",script:"HTMLScriptElement",select:"HTMLSelectElement",shadow:"HTMLShadowElement",source:"HTMLSourceElement",span:"HTMLSpanElement",style:"HTMLStyleElement",table:"HTMLTableElement",tbody:"HTMLTableSectionElement",template:"HTMLTemplateElement",textarea:"HTMLTextAreaElement",thead:"HTMLTableSectionElement",time:"HTMLTimeElement",title:"HTMLTitleElement",tr:"HTMLTableRowElement",track:"HTMLTrackElement",ul:"HTMLUListElement",video:"HTMLVideoElement"});Object.keys(n).forEach(t),Object.getOwnPropertyNames(e.wrappers).forEach(function(t){window[t]=e.wrappers[t]})}(window.ShadowDOMPolyfill),function(e){function t(e,t){var n="";return Array.prototype.forEach.call(e,function(e){n+=e.textContent+"\n\n"}),t||(n=n.replace(d,"")),n}function n(e){var t=document.createElement("style");return t.textContent=e,t}function r(e){var t=n(e);document.head.appendChild(t);var r=[];if(t.sheet)try{r=t.sheet.cssRules}catch(o){}else console.warn("sheet not found",t);return t.parentNode.removeChild(t),r}function o(){E.initialized=!0,document.body.appendChild(E);var e=E.contentDocument,t=e.createElement("base");t.href=document.baseURI,e.head.appendChild(t)}function i(e){E.initialized||o(),document.body.appendChild(E),e(E.contentDocument),document.body.removeChild(E)}function a(e,t){if(t){var o;if(e.match("@import")&&M){var a=n(e);i(function(e){e.head.appendChild(a.impl),o=Array.prototype.slice.call(a.sheet.cssRules,0),t(o)})}else o=r(e),t(o)}}function s(e){e&&l().appendChild(document.createTextNode(e))}function c(e,t){var r=n(e);r.setAttribute(t,""),r.setAttribute(_,""),document.head.appendChild(r)}function l(){return S||(S=document.createElement("style"),S.setAttribute(_,""),S[_]=!0),S}var u={strictStyling:!1,registry:{},shimStyling:function(e,n,r){var o=this.prepareRoot(e,n,r),i=this.isTypeExtension(r),a=this.makeScopeSelector(n,i),s=t(o,!0);s=this.scopeCssText(s,a),e&&(e.shimmedStyle=s),this.addCssToDocument(s,n)},shimStyle:function(e,t){return this.shimCssText(e.textContent,t)},shimCssText:function(e,t){return e=this.insertDirectives(e),this.scopeCssText(e,t)},makeScopeSelector:function(e,t){return e?t?"[is="+e+"]":e:""},isTypeExtension:function(e){return e&&e.indexOf("-")<0},prepareRoot:function(e,t,n){var r=this.registerRoot(e,t,n);return this.replaceTextInStyles(r.rootStyles,this.insertDirectives),this.removeStyles(e,r.rootStyles),this.strictStyling&&this.applyScopeToContent(e,t),r.scopeStyles},removeStyles:function(e,t){for(var n,r=0,o=t.length;o>r&&(n=t[r]);r++)n.parentNode.removeChild(n)},registerRoot:function(e,t,n){var r=this.registry[t]={root:e,name:t,extendsName:n},o=this.findStyles(e);r.rootStyles=o,r.scopeStyles=r.rootStyles;var i=this.registry[r.extendsName];return i&&(r.scopeStyles=i.scopeStyles.concat(r.scopeStyles)),r},findStyles:function(e){if(!e)return[];var t=e.querySelectorAll("style");return Array.prototype.filter.call(t,function(e){return!e.hasAttribute(O)})},applyScopeToContent:function(e,t){e&&(Array.prototype.forEach.call(e.querySelectorAll("*"),function(e){e.setAttribute(t,"")}),Array.prototype.forEach.call(e.querySelectorAll("template"),function(e){this.applyScopeToContent(e.content,t)},this))},insertDirectives:function(e){return e=this.insertPolyfillDirectivesInCssText(e),this.insertPolyfillRulesInCssText(e)},insertPolyfillDirectivesInCssText:function(e){return e=e.replace(p,function(e,t){return t.slice(0,-2)+"{"}),e.replace(f,function(e,t){return t+" {"})},insertPolyfillRulesInCssText:function(e){return e=e.replace(h,function(e,t){return t.slice(0,-1)}),e.replace(m,function(e,t,n,r){var o=e.replace(t,"").replace(n,"");return r+o})},scopeCssText:function(e,t){var n=this.extractUnscopedRulesFromCssText(e);if(e=this.insertPolyfillHostInCssText(e),e=this.convertColonHost(e),e=this.convertColonHostContext(e),e=this.convertShadowDOMSelectors(e),t){var e,r=this;a(e,function(n){e=r.scopeRules(n,t)})}return e=e+"\n"+n,e.trim()},extractUnscopedRulesFromCssText:function(e){for(var t,n="";t=w.exec(e);)n+=t[1].slice(0,-1)+"\n\n";for(;t=v.exec(e);)n+=t[0].replace(t[2],"").replace(t[1],t[3])+"\n\n";return n},convertColonHost:function(e){return this.convertColonRule(e,cssColonHostRe,this.colonHostPartReplacer)},convertColonHostContext:function(e){return this.convertColonRule(e,cssColonHostContextRe,this.colonHostContextPartReplacer)},convertColonRule:function(e,t,n){return e.replace(t,function(e,t,r,o){if(t=polyfillHostNoCombinator,r){for(var i,a=r.split(","),s=[],c=0,l=a.length;l>c&&(i=a[c]);c++)i=i.trim(),s.push(n(t,i,o));return s.join(",")}return t+o})},colonHostContextPartReplacer:function(e,t,n){return t.match(g)?this.colonHostPartReplacer(e,t,n):e+t+n+", "+t+" "+e+n},colonHostPartReplacer:function(e,t,n){return e+t.replace(g,"")+n},convertShadowDOMSelectors:function(e){for(var t=0;t<shadowDOMSelectorsRe.length;t++)e=e.replace(shadowDOMSelectorsRe[t]," ");return e},scopeRules:function(e,t){var n="";return e&&Array.prototype.forEach.call(e,function(e){if(e.selectorText&&e.style&&void 0!==e.style.cssText)n+=this.scopeSelector(e.selectorText,t,this.strictStyling)+" {\n	",n+=this.propertiesFromRule(e)+"\n}\n\n";else if(e.type===CSSRule.MEDIA_RULE)n+="@media "+e.media.mediaText+" {\n",n+=this.scopeRules(e.cssRules,t),n+="\n}\n\n";else try{e.cssText&&(n+=e.cssText+"\n\n")}catch(r){e.type===CSSRule.KEYFRAMES_RULE&&e.cssRules&&(n+=this.ieSafeCssTextFromKeyFrameRule(e))}},this),n},ieSafeCssTextFromKeyFrameRule:function(e){var t="@keyframes "+e.name+" {";return Array.prototype.forEach.call(e.cssRules,function(e){t+=" "+e.keyText+" {"+e.style.cssText+"}"}),t+=" }"},scopeSelector:function(e,t,n){var r=[],o=e.split(",");return o.forEach(function(e){e=e.trim(),this.selectorNeedsScoping(e,t)&&(e=n&&!e.match(polyfillHostNoCombinator)?this.applyStrictSelectorScope(e,t):this.applySelectorScope(e,t)),r.push(e)},this),r.join(", ")},selectorNeedsScoping:function(e,t){if(Array.isArray(t))return!0;var n=this.makeScopeMatcher(t);return!e.match(n)},makeScopeMatcher:function(e){return e=e.replace(/\[/g,"\\[").replace(/\[/g,"\\]"),new RegExp("^("+e+")"+selectorReSuffix,"m")},applySelectorScope:function(e,t){return Array.isArray(t)?this.applySelectorScopeList(e,t):this.applySimpleSelectorScope(e,t)},applySelectorScopeList:function(e,t){for(var n,r=[],o=0;n=t[o];o++)r.push(this.applySimpleSelectorScope(e,n));return r.join(", ")},applySimpleSelectorScope:function(e,t){return e.match(polyfillHostRe)?(e=e.replace(polyfillHostNoCombinator,t),e.replace(polyfillHostRe,t+" ")):t+" "+e},applyStrictSelectorScope:function(e,t){t=t.replace(/\[is=([^\]]*)\]/g,"$1");var n=[" ",">","+","~"],r=e,o="["+t+"]";return n.forEach(function(e){var t=r.split(e);r=t.map(function(e){var t=e.trim().replace(polyfillHostRe,"");return t&&n.indexOf(t)<0&&t.indexOf(o)<0&&(e=t.replace(/([^:]*)(:*)(.*)/,"$1"+o+"$2$3")),e}).join(e)}),r},insertPolyfillHostInCssText:function(e){return e.replace(colonHostContextRe,b).replace(colonHostRe,g)},propertiesFromRule:function(e){var t=e.style.cssText;e.style.content&&!e.style.content.match(/['"]+|attr/)&&(t=t.replace(/content:[^;]*;/g,"content: '"+e.style.content+"';"));var n=e.style;for(var r in n)"initial"===n[r]&&(t+=r+": initial; ");return t},replaceTextInStyles:function(e,t){e&&t&&(e instanceof Array||(e=[e]),Array.prototype.forEach.call(e,function(e){e.textContent=t.call(this,e.textContent)},this))},addCssToDocument:function(e,t){e.match("@import")?c(e,t):s(e)}},d=/\/\*[^*]*\*+([^/*][^*]*\*+)*\//gim,p=/\/\*\s*@polyfill ([^*]*\*+([^/*][^*]*\*+)*\/)([^{]*?){/gim,f=/polyfill-next-selector[^}]*content\:[\s]*?['"](.*?)['"][;\s]*}([^{]*?){/gim,h=/\/\*\s@polyfill-rule([^*]*\*+([^/*][^*]*\*+)*)\//gim,m=/(polyfill-rule)[^}]*(content\:[\s]*['"](.*?)['"])[;\s]*[^}]*}/gim,w=/\/\*\s@polyfill-unscoped-rule([^*]*\*+([^/*][^*]*\*+)*)\//gim,v=/(polyfill-unscoped-rule)[^}]*(content\:[\s]*['"](.*?)['"])[;\s]*[^}]*}/gim,g="-shadowcsshost",b="-shadowcsscontext",y=")(?:\\(((?:\\([^)(]*\\)|[^)(]*)+?)\\))?([^,{]*)";cssColonHostRe=new RegExp("("+g+y,"gim"),cssColonHostContextRe=new RegExp("("+b+y,"gim"),selectorReSuffix="([>\\s~+[.,{:][\\s\\S]*)?$",colonHostRe=/\:host/gim,colonHostContextRe=/\:host-context/gim,polyfillHostNoCombinator=g+"-no-combinator",polyfillHostRe=new RegExp(g,"gim"),polyfillHostContextRe=new RegExp(b,"gim"),shadowDOMSelectorsRe=[/\^\^/g,/\^/g,/\/shadow\//g,/\/shadow-deep\//g,/::shadow/g,/\/deep\//g,/::content/g];var E=document.createElement("iframe");E.style.display="none";var S,M=navigator.userAgent.match("Chrome"),T="shim-shadowdom",_="shim-shadowdom-css",O="no-shim";if(window.ShadowDOMPolyfill){s("style { display: none !important; }\n");var L=ShadowDOMPolyfill.wrap(document),N=L.querySelector("head");N.insertBefore(l(),N.childNodes[0]),document.addEventListener("DOMContentLoaded",function(){e.urlResolver;if(window.HTMLImports&&!HTMLImports.useNative){var t="link[rel=stylesheet]["+T+"]",n="style["+T+"]";HTMLImports.importer.documentPreloadSelectors+=","+t,HTMLImports.importer.importsPreloadSelectors+=","+t,HTMLImports.parser.documentSelectors=[HTMLImports.parser.documentSelectors,t,n].join(",");var r=HTMLImports.parser.parseGeneric;HTMLImports.parser.parseGeneric=function(e){if(!e[_]){var t=e.__importElement||e;if(!t.hasAttribute(T))return void r.call(this,e);e.__resource&&(t=e.ownerDocument.createElement("style"),t.textContent=e.__resource),HTMLImports.path.resolveUrlsInStyle(t),t.textContent=u.shimStyle(t),t.removeAttribute(T,""),t.setAttribute(_,""),t[_]=!0,t.parentNode!==N&&(e.parentNode===N?N.replaceChild(t,e):this.addElementToDocument(t)),t.__importParsed=!0,this.markParsingComplete(e),this.parseNext()}};var o=HTMLImports.parser.hasResource;HTMLImports.parser.hasResource=function(e){return"link"===e.localName&&"stylesheet"===e.rel&&e.hasAttribute(T)?e.__resource:o.call(this,e)}}})}e.ShadowCSS=u}(window.WebComponents)),function(){window.ShadowDOMPolyfill?(window.wrap=ShadowDOMPolyfill.wrapIfNeeded,window.unwrap=ShadowDOMPolyfill.unwrapIfNeeded):window.wrap=window.unwrap=function(e){return e}}(window.WebComponents),function(e){function t(e){y.push(e),b||(b=!0,w(r))}function n(e){return window.ShadowDOMPolyfill&&window.ShadowDOMPolyfill.wrapIfNeeded(e)||e}function r(){b=!1;var e=y;y=[],e.sort(function(e,t){return e.uid_-t.uid_});var t=!1;e.forEach(function(e){var n=e.takeRecords();o(e),n.length&&(e.callback_(n,e),t=!0)}),t&&r()}function o(e){e.nodes_.forEach(function(t){var n=m.get(t);n&&n.forEach(function(t){t.observer===e&&t.removeTransientObservers()})})}function i(e,t){for(var n=e;n;n=n.parentNode){var r=m.get(n);if(r)for(var o=0;o<r.length;o++){var i=r[o],a=i.options;if(n===e||a.subtree){var s=t(a);s&&i.enqueue(s)}}}}function a(e){this.callback_=e,this.nodes_=[],this.records_=[],this.uid_=++E}function s(e,t){this.type=e,this.target=t,this.addedNodes=[],this.removedNodes=[],this.previousSibling=null,this.nextSibling=null,this.attributeName=null,this.attributeNamespace=null,this.oldValue=null}function c(e){var t=new s(e.type,e.target);return t.addedNodes=e.addedNodes.slice(),t.removedNodes=e.removedNodes.slice(),t.previousSibling=e.previousSibling,t.nextSibling=e.nextSibling,t.attributeName=e.attributeName,t.attributeNamespace=e.attributeNamespace,t.oldValue=e.oldValue,t}function l(e,t){return S=new s(e,t)}function u(e){return M?M:(M=c(S),M.oldValue=e,M)}function d(){S=M=void 0}function p(e){return e===M||e===S}function f(e,t){return e===t?e:M&&p(e)?M:null}function h(e,t,n){this.observer=e,this.target=t,this.options=n,this.transientObservedNodes=[]}var m=new WeakMap,w=window.msSetImmediate;if(!w){var v=[],g=String(Math.random());window.addEventListener("message",function(e){if(e.data===g){var t=v;v=[],t.forEach(function(e){e()})}}),w=function(e){v.push(e),window.postMessage(g,"*")}}var b=!1,y=[],E=0;a.prototype={observe:function(e,t){if(e=n(e),!t.childList&&!t.attributes&&!t.characterData||t.attributeOldValue&&!t.attributes||t.attributeFilter&&t.attributeFilter.length&&!t.attributes||t.characterDataOldValue&&!t.characterData)throw new SyntaxError;var r=m.get(e);r||m.set(e,r=[]);for(var o,i=0;i<r.length;i++)if(r[i].observer===this){o=r[i],o.removeListeners(),o.options=t;break}o||(o=new h(this,e,t),r.push(o),this.nodes_.push(e)),o.addListeners()},disconnect:function(){this.nodes_.forEach(function(e){for(var t=m.get(e),n=0;n<t.length;n++){var r=t[n];if(r.observer===this){r.removeListeners(),t.splice(n,1);break}}},this),this.records_=[]},takeRecords:function(){var e=this.records_;return this.records_=[],e}};var S,M;h.prototype={enqueue:function(e){var n=this.observer.records_,r=n.length;if(n.length>0){var o=n[r-1],i=f(o,e);if(i)return void(n[r-1]=i)}else t(this.observer);n[r]=e},addListeners:function(){this.addListeners_(this.target)},addListeners_:function(e){var t=this.options;t.attributes&&e.addEventListener("DOMAttrModified",this,!0),t.characterData&&e.addEventListener("DOMCharacterDataModified",this,!0),t.childList&&e.addEventListener("DOMNodeInserted",this,!0),(t.childList||t.subtree)&&e.addEventListener("DOMNodeRemoved",this,!0)},removeListeners:function(){this.removeListeners_(this.target)},removeListeners_:function(e){var t=this.options;t.attributes&&e.removeEventListener("DOMAttrModified",this,!0),t.characterData&&e.removeEventListener("DOMCharacterDataModified",this,!0),t.childList&&e.removeEventListener("DOMNodeInserted",this,!0),(t.childList||t.subtree)&&e.removeEventListener("DOMNodeRemoved",this,!0)},addTransientObserver:function(e){if(e!==this.target){this.addListeners_(e),this.transientObservedNodes.push(e);var t=m.get(e);t||m.set(e,t=[]),t.push(this)}},removeTransientObservers:function(){var e=this.transientObservedNodes;this.transientObservedNodes=[],e.forEach(function(e){this.removeListeners_(e);for(var t=m.get(e),n=0;n<t.length;n++)if(t[n]===this){t.splice(n,1);break}},this)},handleEvent:function(e){switch(e.stopImmediatePropagation(),e.type){case"DOMAttrModified":var t=e.attrName,n=e.relatedNode.namespaceURI,r=e.target,o=new l("attributes",r);o.attributeName=t,o.attributeNamespace=n;var a=e.attrChange===MutationEvent.ADDITION?null:e.prevValue;i(r,function(e){return!e.attributes||e.attributeFilter&&e.attributeFilter.length&&-1===e.attributeFilter.indexOf(t)&&-1===e.attributeFilter.indexOf(n)?void 0:e.attributeOldValue?u(a):o});break;case"DOMCharacterDataModified":var r=e.target,o=l("characterData",r),a=e.prevValue;i(r,function(e){return e.characterData?e.characterDataOldValue?u(a):o:void 0});break;case"DOMNodeRemoved":this.addTransientObserver(e.target);case"DOMNodeInserted":var s,c,r=e.relatedNode,p=e.target;"DOMNodeInserted"===e.type?(s=[p],c=[]):(s=[],c=[p]);var f=p.previousSibling,h=p.nextSibling,o=l("childList",r);o.addedNodes=s,o.removedNodes=c,o.previousSibling=f,o.nextSibling=h,i(r,function(e){return e.childList?o:void 0})}d()}},e.JsMutationObserver=a,e.MutationObserver||(e.MutationObserver=a)}(this),window.HTMLImports=window.HTMLImports||{flags:{}},function(e){function t(e,t){t=t||v,r(function(){i(e,t)},t)}function n(e){return"complete"===e.readyState||e.readyState===y}function r(e,t){if(n(t))e&&e();else{var o=function(){("complete"===t.readyState||t.readyState===y)&&(t.removeEventListener(E,o),r(e,t))};t.addEventListener(E,o)}}function o(e){e.target.__loaded=!0}function i(e,t){function n(){s==c&&e&&e()}function r(e){o(e),s++,n()}var i=t.querySelectorAll("link[rel=import]"),s=0,c=i.length;if(c)for(var l,u=0;c>u&&(l=i[u]);u++)a(l)?r.call(l,{target:l}):(l.addEventListener("load",r),l.addEventListener("error",r));else n()}function a(e){return d?e.__loaded||e.import&&"loading"!==e.import.readyState:e.__importParsed}function s(e){for(var t,n=0,r=e.length;r>n&&(t=e[n]);n++)c(t)&&l(t)}function c(e){return"link"===e.localName&&"import"===e.rel}function l(e){var t=e.import;t?o({target:e}):(e.addEventListener("load",o),e.addEventListener("error",o))}var u="import",d=Boolean(u in document.createElement("link")),p=[],f=function(e){p.push(e)},h=function(){p.forEach(function(t){t(e)})},m=Boolean(window.ShadowDOMPolyfill),w=function(e){return m?ShadowDOMPolyfill.wrapIfNeeded(e):e},v=w(document),g={get:function(){var e=HTMLImports.currentScript||document.currentScript||("complete"!==document.readyState?document.scripts[document.scripts.length-1]:null);return w(e)},configurable:!0};Object.defineProperty(document,"_currentScript",g),Object.defineProperty(v,"_currentScript",g);var b=/Trident/.test(navigator.userAgent),y=b?"complete":"interactive",E="readystatechange";d&&(new MutationObserver(function(e){for(var t,n=0,r=e.length;r>n&&(t=e[n]);n++)t.addedNodes&&s(t.addedNodes)}).observe(document.head,{childList:!0}),function(){if("loading"===document.readyState)for(var e,t=document.querySelectorAll("link[rel=import]"),n=0,r=t.length;r>n&&(e=t[n]);n++)l(e)}()),"function"!=typeof window.CustomEvent&&(window.CustomEvent=function(e,t){var n=document.createEvent("HTMLEvents");return n.initEvent(e,t.bubbles===!1?!1:!0,t.cancelable===!1?!1:!0,t.detail),n}),t(function(){HTMLImports.ready=!0,HTMLImports.readyTime=(new Date).getTime(),v.dispatchEvent(new CustomEvent("HTMLImportsLoaded",{bubbles:!0}))}),e.IMPORT_LINK_TYPE=u,e.useNative=d,e.addModule=f,e.initializeModules=h,e.rootDocument=v,e.whenReady=t,e.isIE=b}(window.HTMLImports),HTMLImports.addModule(function(e){var t=/(url\()([^)]*)(\))/g,n=/(@import[\s]+(?!url\())([^;]*)(;)/g,r={resolveUrlsInStyle:function(e){var t=e.ownerDocument,n=t.createElement("a");return e.textContent=this.resolveUrlsInCssText(e.textContent,n),e},resolveUrlsInCssText:function(e,r){var o=this.replaceUrls(e,r,t);return o=this.replaceUrls(o,r,n)},replaceUrls:function(e,t,n){return e.replace(n,function(e,n,r,o){var i=r.replace(/["']/g,"");return t.href=i,i=t.href,n+"'"+i+"'"+o})}};e.path=r}),HTMLImports.addModule(function(e){xhr={async:!0,ok:function(e){return e.status>=200&&e.status<300||304===e.status||0===e.status},load:function(t,n,r){var o=new XMLHttpRequest;return(e.flags.debug||e.flags.bust)&&(t+="?"+Math.random()),o.open("GET",t,xhr.async),o.addEventListener("readystatechange",function(){if(4===o.readyState){var e=o.getResponseHeader("Location"),t=null;if(e)var t="/"===e.substr(0,1)?location.origin+e:e;n.call(r,!xhr.ok(o)&&o,o.response||o.responseText,t)}}),o.send(),o},loadDocument:function(e,t,n){this.load(e,t,n).responseType="document"}},e.xhr=xhr}),HTMLImports.addModule(function(e){var t=e.xhr,n=e.flags,r=function(e,t){this.cache={},this.onload=e,this.oncomplete=t,this.inflight=0,this.pending={}};r.prototype={addNodes:function(e){this.inflight+=e.length;for(var t,n=0,r=e.length;r>n&&(t=e[n]);n++)this.require(t);this.checkDone()},addNode:function(e){this.inflight++,this.require(e),this.checkDone()},require:function(e){var t=e.src||e.href;e.__nodeUrl=t,this.dedupe(t,e)||this.fetch(t,e)},dedupe:function(e,t){if(this.pending[e])return this.pending[e].push(t),!0;return this.cache[e]?(this.onload(e,t,this.cache[e]),this.tail(),!0):(this.pending[e]=[t],!1)},fetch:function(e,r){if(n.load&&console.log("fetch",e,r),e.match(/^data:/)){var o=e.split(","),i=o[0],a=o[1];a=i.indexOf(";base64")>-1?atob(a):decodeURIComponent(a),setTimeout(function(){this.receive(e,r,null,a)}.bind(this),0)}else{var s=function(t,n,o){this.receive(e,r,t,n,o)}.bind(this);t.load(e,s)}},receive:function(e,t,n,r,o){this.cache[e]=r;for(var i,a=this.pending[e],s=0,c=a.length;c>s&&(i=a[s]);s++)this.onload(e,i,r,n,o),this.tail();this.pending[e]=null},tail:function(){--this.inflight,this.checkDone()},checkDone:function(){this.inflight||this.oncomplete()}},e.Loader=r}),HTMLImports.addModule(function(e){var t=function(e){this.addCallback=e,this.mo=new MutationObserver(this.handler.bind(this))};t.prototype={handler:function(e){for(var t,n=0,r=e.length;r>n&&(t=e[n]);n++)"childList"===t.type&&t.addedNodes.length&&this.addedNodes(t.addedNodes)},addedNodes:function(e){this.addCallback&&this.addCallback(e);for(var t,n=0,r=e.length;r>n&&(t=e[n]);n++)t.children&&t.children.length&&this.addedNodes(t.children)},observe:function(e){this.mo.observe(e,{childList:!0,subtree:!0})}},e.Observer=t}),HTMLImports.addModule(function(e){function t(e){return"link"===e.localName&&e.rel===u}function n(e){var t=r(e);return"data:text/javascript;charset=utf-8,"+encodeURIComponent(t)}function r(e){return e.textContent+o(e)}function o(e){var t=e.ownerDocument;t.__importedScripts=t.__importedScripts||0;var n=e.ownerDocument.baseURI,r=t.__importedScripts?"-"+t.__importedScripts:"";return t.__importedScripts++,"\n//# sourceURL="+n+r+".js\n"}function i(e){var t=e.ownerDocument.createElement("style");return t.textContent=e.textContent,a.resolveUrlsInStyle(t),t}var a=e.path,s=e.rootDocument,c=e.flags,l=e.isIE,u=e.IMPORT_LINK_TYPE,d="link[rel="+u+"]",p={documentSelectors:d,importsSelectors:[d,"link[rel=stylesheet]","style","script:not([type])",'script[type="text/javascript"]'].join(","),map:{link:"parseLink",script:"parseScript",style:"parseStyle"},dynamicElements:[],parseNext:function(){var e=this.nextToParse();e&&this.parse(e)},parse:function(e){if(this.isParsed(e))return void(c.parse&&console.log("[%s] is already parsed",e.localName));var t=this[this.map[e.localName]];t&&(this.markParsing(e),t.call(this,e))},parseDynamic:function(e,t){this.dynamicElements.push(e),t||this.parseNext()},markParsing:function(e){c.parse&&console.log("parsing",e),this.parsingElement=e},markParsingComplete:function(e){e.__importParsed=!0,this.markDynamicParsingComplete(e),e.__importElement&&(e.__importElement.__importParsed=!0,this.markDynamicParsingComplete(e.__importElement)),this.parsingElement=null,c.parse&&console.log("completed",e)},markDynamicParsingComplete:function(e){var t=this.dynamicElements.indexOf(e);t>=0&&this.dynamicElements.splice(t,1)},parseImport:function(e){if(HTMLImports.__importsParsingHook&&HTMLImports.__importsParsingHook(e),e.import&&(e.import.__importParsed=!0),this.markParsingComplete(e),e.dispatchEvent(e.__resource&&!e.__error?new CustomEvent("load",{bubbles:!1}):new CustomEvent("error",{bubbles:!1})),e.__pending)for(var t;e.__pending.length;)t=e.__pending.shift(),t&&t({target:e});this.parseNext()},parseLink:function(e){t(e)?this.parseImport(e):(e.href=e.href,this.parseGeneric(e))},parseStyle:function(e){var t=e;e=i(e),e.__importElement=t,this.parseGeneric(e)},parseGeneric:function(e){this.trackElement(e),this.addElementToDocument(e)},rootImportForElement:function(e){for(var t=e;t.ownerDocument.__importLink;)t=t.ownerDocument.__importLink;return t},addElementToDocument:function(e){for(var t=this.rootImportForElement(e.__importElement||e),n=t.__insertedElements=t.__insertedElements||0,r=t.nextElementSibling,o=0;n>o;o++)r=r&&r.nextElementSibling;t.parentNode.insertBefore(e,r)},trackElement:function(e,t){var n=this,r=function(r){t&&t(r),n.markParsingComplete(e),n.parseNext()};if(e.addEventListener("load",r),e.addEventListener("error",r),l&&"style"===e.localName){var o=!1;if(-1==e.textContent.indexOf("@import"))o=!0;else if(e.sheet){o=!0;for(var i,a=e.sheet.cssRules,s=a?a.length:0,c=0;s>c&&(i=a[c]);c++)i.type===CSSRule.IMPORT_RULE&&(o=o&&Boolean(i.styleSheet))}o&&e.dispatchEvent(new CustomEvent("load",{bubbles:!1}))}},parseScript:function(t){var r=document.createElement("script");r.__importElement=t,r.src=t.src?t.src:n(t),e.currentScript=t,this.trackElement(r,function(){r.parentNode.removeChild(r),e.currentScript=null}),this.addElementToDocument(r)},nextToParse:function(){return this._mayParse=[],!this.parsingElement&&(this.nextToParseInDoc(s)||this.nextToParseDynamic())},nextToParseInDoc:function(e,n){if(e&&this._mayParse.indexOf(e)<0){this._mayParse.push(e);for(var r,o=e.querySelectorAll(this.parseSelectorsForNode(e)),i=0,a=o.length;a>i&&(r=o[i]);i++)if(!this.isParsed(r))return this.hasResource(r)?t(r)?this.nextToParseInDoc(r.import,r):r:void 0}return n},nextToParseDynamic:function(){return this.dynamicElements[0]},parseSelectorsForNode:function(e){var t=e.ownerDocument||e;return t===s?this.documentSelectors:this.importsSelectors},isParsed:function(e){return e.__importParsed},needsDynamicParsing:function(e){return this.dynamicElements.indexOf(e)>=0},hasResource:function(e){return t(e)&&void 0===e.import?!1:!0}};e.parser=p,e.IMPORT_SELECTOR=d}),HTMLImports.addModule(function(e){function t(e){return n(e,i)}function n(e,t){return"link"===e.localName&&e.getAttribute("rel")===t}function r(e,t){var n=document.implementation.createHTMLDocument(i);n._URL=t;var r=n.createElement("base");r.setAttribute("href",t),n.baseURI||(n.baseURI=t);var o=n.createElement("meta");return o.setAttribute("charset","utf-8"),n.head.appendChild(o),n.head.appendChild(r),n.body.innerHTML=e,window.HTMLTemplateElement&&HTMLTemplateElement.bootstrap&&HTMLTemplateElement.bootstrap(n),n}var o=e.flags,i=e.IMPORT_LINK_TYPE,a=e.IMPORT_SELECTOR,s=e.rootDocument,c=e.Loader,l=e.Observer,u=e.parser,d={documents:{},documentPreloadSelectors:a,importsPreloadSelectors:[a].join(","),loadNode:function(e){p.addNode(e)},loadSubtree:function(e){var t=this.marshalNodes(e);p.addNodes(t)},marshalNodes:function(e){return e.querySelectorAll(this.loadSelectorsForNode(e))},loadSelectorsForNode:function(e){var t=e.ownerDocument||e;return t===s?this.documentPreloadSelectors:this.importsPreloadSelectors},loaded:function(e,n,i,a,s){if(o.load&&console.log("loaded",e,n),n.__resource=i,n.__error=a,t(n)){var c=this.documents[e];void 0===c&&(c=a?null:r(i,s||e),c&&(c.__importLink=n,this.bootDocument(c)),this.documents[e]=c),n.import=c}u.parseNext()},bootDocument:function(e){this.loadSubtree(e),this.observer.observe(e),u.parseNext()},loadedAll:function(){u.parseNext()}},p=new c(d.loaded.bind(d),d.loadedAll.bind(d));if(d.observer=new l,!document.baseURI){var f={get:function(){var e=document.querySelector("base");return e?e.href:window.location.href},configurable:!0};Object.defineProperty(document,"baseURI",f),Object.defineProperty(s,"baseURI",f)}e.importer=d,e.importLoader=p}),HTMLImports.addModule(function(e){var t=e.parser,n=e.importer,r={added:function(e){for(var r,o,i,a=0,s=e.length;s>a&&(i=e[a]);a++)r||(r=i.ownerDocument,o=t.isParsed(r)),loading=this.shouldLoadNode(i),loading&&n.loadNode(i),this.shouldParseNode(i)&&o&&t.parseDynamic(i,loading)},shouldLoadNode:function(e){return 1===e.nodeType&&o.call(e,n.loadSelectorsForNode(e))},shouldParseNode:function(e){return 1===e.nodeType&&o.call(e,t.parseSelectorsForNode(e))}};n.observer.addCallback=r.added.bind(r);var o=HTMLElement.prototype.matches||HTMLElement.prototype.matchesSelector||HTMLElement.prototype.webkitMatchesSelector||HTMLElement.prototype.mozMatchesSelector||HTMLElement.prototype.msMatchesSelector}),function(e){function t(){HTMLImports.importer.bootDocument(n)}if(initializeModules=e.initializeModules,!e.useNative){initializeModules();var n=e.rootDocument;"complete"===document.readyState||"interactive"===document.readyState&&!window.attachEvent?t():document.addEventListener("DOMContentLoaded",t)}}(HTMLImports),window.CustomElements=window.CustomElements||{flags:{}},function(e){var t=e.flags,n=[],r=function(e){n.push(e)},o=function(){n.forEach(function(t){t(e)})};e.addModule=r,e.initializeModules=o,e.hasNative=Boolean(document.registerElement),e.useNative=!t.register&&e.hasNative&&!window.ShadowDOMPolyfill&&(!window.HTMLImports||HTMLImports.useNative)}(CustomElements),CustomElements.addModule(function(e){function t(e,t){n(e,function(e){return t(e)?!0:void r(e,t)}),r(e,t)}function n(e,t,r){var o=e.firstElementChild;if(!o)for(o=e.firstChild;o&&o.nodeType!==Node.ELEMENT_NODE;)o=o.nextSibling;for(;o;)t(o,r)!==!0&&n(o,t,r),o=o.nextElementSibling;return null}function r(e,n){for(var r=e.shadowRoot;r;)t(r,n),r=r.olderShadowRoot}function o(e,t){a=[],i(e,t),a=null}function i(e,t){if(e=wrap(e),!(a.indexOf(e)>=0)){a.push(e);for(var n,r=e.querySelectorAll("link[rel="+s+"]"),o=0,c=r.length;c>o&&(n=r[o]);o++)n.import&&i(n.import,t);t(e)}}var a,s=window.HTMLImports?HTMLImports.IMPORT_LINK_TYPE:"none";e.forDocumentTree=o,e.forSubtree=t}),CustomElements.addModule(function(e){function t(e){return n(e)||r(e)}function n(t){return e.upgrade(t)?!0:void s(t)}function r(e){y(e,function(e){return n(e)?!0:void 0})}function o(e){s(e),p(e)&&y(e,function(e){s(e)})}function i(e){T.push(e),M||(M=!0,setTimeout(a))}function a(){M=!1;for(var e,t=T,n=0,r=t.length;r>n&&(e=t[n]);n++)e();T=[]}function s(e){S?i(function(){c(e)}):c(e)}function c(e){e.__upgraded__&&(e.attachedCallback||e.detachedCallback)&&!e.__attached&&p(e)&&(e.__attached=!0,e.attachedCallback&&e.attachedCallback())}function l(e){u(e),y(e,function(e){u(e)})}function u(e){S?i(function(){d(e)}):d(e)}function d(e){e.__upgraded__&&(e.attachedCallback||e.detachedCallback)&&e.__attached&&!p(e)&&(e.__attached=!1,e.detachedCallback&&e.detachedCallback())}function p(e){for(var t=e,n=wrap(document);t;){if(t==n)return!0;t=t.parentNode||t.host}}function f(e){if(e.shadowRoot&&!e.shadowRoot.__watched){b.dom&&console.log("watching shadow-root for: ",e.localName);
-for(var t=e.shadowRoot;t;)w(t),t=t.olderShadowRoot}}function h(e){if(b.dom){var n=e[0];if(n&&"childList"===n.type&&n.addedNodes&&n.addedNodes){for(var r=n.addedNodes[0];r&&r!==document&&!r.host;)r=r.parentNode;var o=r&&(r.URL||r._URL||r.host&&r.host.localName)||"";o=o.split("/?").shift().split("/").pop()}console.group("mutations (%d) [%s]",e.length,o||"")}e.forEach(function(e){"childList"===e.type&&(_(e.addedNodes,function(e){e.localName&&t(e)}),_(e.removedNodes,function(e){e.localName&&l(e)}))}),b.dom&&console.groupEnd()}function m(e){for(e=wrap(e),e||(e=wrap(document));e.parentNode;)e=e.parentNode;var t=e.__observer;t&&(h(t.takeRecords()),a())}function w(e){if(!e.__observer){var t=new MutationObserver(h);t.observe(e,{childList:!0,subtree:!0}),e.__observer=t}}function v(e){e=wrap(e),b.dom&&console.group("upgradeDocument: ",e.baseURI.split("/").pop()),t(e),w(e),b.dom&&console.groupEnd()}function g(e){E(e,v)}var b=e.flags,y=e.forSubtree,E=e.forDocumentTree,S=!window.MutationObserver||window.MutationObserver===window.JsMutationObserver;e.hasPolyfillMutations=S;var M=!1,T=[],_=Array.prototype.forEach.call.bind(Array.prototype.forEach),O=Element.prototype.createShadowRoot;Element.prototype.createShadowRoot=function(){var e=O.call(this);return CustomElements.watchShadow(this),e},e.watchShadow=f,e.upgradeDocumentTree=g,e.upgradeSubtree=r,e.upgradeAll=t,e.attachedNode=o,e.takeRecords=m}),CustomElements.addModule(function(e){function t(t){if(!t.__upgraded__&&t.nodeType===Node.ELEMENT_NODE){var r=t.getAttribute("is"),o=e.getRegisteredDefinition(r||t.localName);if(o){if(r&&o.tag==t.localName)return n(t,o);if(!r&&!o.extends)return n(t,o)}}}function n(t,n){return a.upgrade&&console.group("upgrade:",t.localName),n.is&&t.setAttribute("is",n.is),r(t,n),t.__upgraded__=!0,i(t),e.attachedNode(t),e.upgradeSubtree(t),a.upgrade&&console.groupEnd(),t}function r(e,t){Object.__proto__?e.__proto__=t.prototype:(o(e,t.prototype,t.native),e.__proto__=t.prototype)}function o(e,t,n){for(var r={},o=t;o!==n&&o!==HTMLElement.prototype;){for(var i,a=Object.getOwnPropertyNames(o),s=0;i=a[s];s++)r[i]||(Object.defineProperty(e,i,Object.getOwnPropertyDescriptor(o,i)),r[i]=1);o=Object.getPrototypeOf(o)}}function i(e){e.createdCallback&&e.createdCallback()}var a=e.flags;e.upgrade=t,e.upgradeWithDefinition=n,e.implementPrototype=r}),CustomElements.addModule(function(e){function t(t,r){var c=r||{};if(!t)throw new Error("document.registerElement: first argument `name` must not be empty");if(t.indexOf("-")<0)throw new Error("document.registerElement: first argument ('name') must contain a dash ('-'). Argument provided was '"+String(t)+"'.");if(o(t))throw new Error("Failed to execute 'registerElement' on 'Document': Registration failed for type '"+String(t)+"'. The type name is invalid.");if(l(t))throw new Error("DuplicateDefinitionError: a type with name '"+String(t)+"' is already registered");return c.prototype||(c.prototype=Object.create(HTMLElement.prototype)),c.__name=t.toLowerCase(),c.lifecycle=c.lifecycle||{},c.ancestry=i(c.extends),a(c),s(c),n(c.prototype),u(c.__name,c),c.ctor=d(c),c.ctor.prototype=c.prototype,c.prototype.constructor=c.ctor,e.ready&&w(document),c.ctor}function n(e){if(!e.setAttribute._polyfilled){var t=e.setAttribute;e.setAttribute=function(e,n){r.call(this,e,n,t)};var n=e.removeAttribute;e.removeAttribute=function(e){r.call(this,e,null,n)},e.setAttribute._polyfilled=!0}}function r(e,t,n){e=e.toLowerCase();var r=this.getAttribute(e);n.apply(this,arguments);var o=this.getAttribute(e);this.attributeChangedCallback&&o!==r&&this.attributeChangedCallback(e,r,o)}function o(e){for(var t=0;t<E.length;t++)if(e===E[t])return!0}function i(e){var t=l(e);return t?i(t.extends).concat([t]):[]}function a(e){for(var t,n=e.extends,r=0;t=e.ancestry[r];r++)n=t.is&&t.tag;e.tag=n||e.__name,n&&(e.is=e.__name)}function s(e){if(!Object.__proto__){var t=HTMLElement.prototype;if(e.is){var n=document.createElement(e.tag),r=Object.getPrototypeOf(n);r===e.prototype&&(t=r)}for(var o,i=e.prototype;i&&i!==t;)o=Object.getPrototypeOf(i),i.__proto__=o,i=o;e.native=t}}function c(e){return g(T(e.tag),e)}function l(e){return e?S[e.toLowerCase()]:void 0}function u(e,t){S[e]=t}function d(e){return function(){return c(e)}}function p(e,t,n){return e===M?f(t,n):_(e,t)}function f(e,t){var n=l(t||e);if(n){if(e==n.tag&&t==n.is)return new n.ctor;if(!t&&!n.is)return new n.ctor}var r;return t?(r=f(e),r.setAttribute("is",t),r):(r=T(e),e.indexOf("-")>=0&&b(r,HTMLElement),r)}function h(e){var t=O.call(this,e);return v(t),t}var m,w=e.upgradeDocumentTree,v=e.upgrade,g=e.upgradeWithDefinition,b=e.implementPrototype,y=e.useNative,E=["annotation-xml","color-profile","font-face","font-face-src","font-face-uri","font-face-format","font-face-name","missing-glyph"],S={},M="http://www.w3.org/1999/xhtml",T=document.createElement.bind(document),_=document.createElementNS.bind(document),O=Node.prototype.cloneNode;m=Object.__proto__||y?function(e,t){return e instanceof t}:function(e,t){for(var n=e;n;){if(n===t.prototype)return!0;n=n.__proto__}return!1},document.registerElement=t,document.createElement=f,document.createElementNS=p,Node.prototype.cloneNode=h,e.registry=S,e.instanceof=m,e.reservedTagList=E,e.getRegisteredDefinition=l,document.register=document.registerElement}),function(e){function t(){i(wrap(document)),window.HTMLImports&&(HTMLImports.__importsParsingHook=function(e){i(wrap(e.import))}),CustomElements.ready=!0,setTimeout(function(){CustomElements.readyTime=Date.now(),window.HTMLImports&&(CustomElements.elapsed=CustomElements.readyTime-HTMLImports.readyTime),document.dispatchEvent(new CustomEvent("WebComponentsReady",{bubbles:!0}))})}var n=e.useNative,r=e.initializeModules;if(n){var o=function(){};e.watchShadow=o,e.upgradeAll=o,e.upgradeDocumentTree=o,e.takeRecords=o,e.instanceof=function(e,t){return e instanceof t}}else r();var i=e.upgradeDocumentTree;if(window.wrap||(window.ShadowDOMPolyfill?(window.wrap=ShadowDOMPolyfill.wrapIfNeeded,window.unwrap=ShadowDOMPolyfill.unwrapIfNeeded):window.wrap=window.unwrap=function(e){return e}),"function"!=typeof window.CustomEvent&&(window.CustomEvent=function(e,t){t=t||{};var n=document.createEvent("CustomEvent");return n.initCustomEvent(e,Boolean(t.bubbles),Boolean(t.cancelable),t.detail),n},window.CustomEvent.prototype=window.Event.prototype),"complete"===document.readyState||e.flags.eager)t();else if("interactive"!==document.readyState||window.attachEvent||window.HTMLImports&&!window.HTMLImports.ready){var a=window.HTMLImports&&!HTMLImports.ready?"HTMLImportsLoaded":"DOMContentLoaded";window.addEventListener(a,t)}else t()}(window.CustomElements),function(){Function.prototype.bind||(Function.prototype.bind=function(e){var t=this,n=Array.prototype.slice.call(arguments,1);return function(){var r=n.slice();return r.push.apply(r,arguments),t.apply(e,r)}})}(window.WebComponents),function(e){"use strict";function t(){window.Polymer===o&&(window.Polymer=function(){throw new Error('You tried to use polymer without loading it first. To load polymer, <link rel="import" href="components/polymer/polymer.html">')})}if(!window.performance){var n=Date.now();window.performance={now:function(){return Date.now()-n}}}window.requestAnimationFrame||(window.requestAnimationFrame=function(){var e=window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame;return e?function(t){return e(function(){t(performance.now())})}:function(e){return window.setTimeout(e,1e3/60)}}()),window.cancelAnimationFrame||(window.cancelAnimationFrame=function(){return window.webkitCancelAnimationFrame||window.mozCancelAnimationFrame||function(e){clearTimeout(e)}}());var r=[],o=function(e){"string"!=typeof e&&1===arguments.length&&Array.prototype.push.call(arguments,document._currentScript),r.push(arguments)};window.Polymer=o,e.consumeDeclarations=function(t){e.consumeDeclarations=function(){throw"Possible attempt to load Polymer twice"},t&&t(r),r=null},HTMLImports.useNative?t():addEventListener("DOMContentLoaded",t)}(window.WebComponents),function(){var e=document.createElement("style");e.textContent="body {transition: opacity ease-in 0.2s; } \nbody[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } \n";var t=document.querySelector("head");t.insertBefore(e,t.firstChild)}(window.WebComponents),function(e){window.Platform=e}(window.WebComponents);
+// @version 0.5.0-b6cf8b1
+window.WebComponents = window.WebComponents || {};
+
+(function(scope) {
+  var flags = scope.flags || {};
+  var file = "webcomponents.js";
+  var script = document.querySelector('script[src*="' + file + '"]');
+  var flags = {};
+  if (!flags.noOpts) {
+    location.search.slice(1).split("&").forEach(function(o) {
+      o = o.split("=");
+      o[0] && (flags[o[0]] = o[1] || true);
+    });
+    if (script) {
+      for (var i = 0, a; a = script.attributes[i]; i++) {
+        if (a.name !== "src") {
+          flags[a.name] = a.value || true;
+        }
+      }
+    }
+    if (flags.log) {
+      var parts = flags.log.split(",");
+      flags.log = {};
+      parts.forEach(function(f) {
+        flags.log[f] = true;
+      });
+    } else {
+      flags.log = {};
+    }
+  }
+  flags.shadow = flags.shadow || flags.shadowdom || flags.polyfill;
+  if (flags.shadow === "native") {
+    flags.shadow = false;
+  } else {
+    flags.shadow = flags.shadow || !HTMLElement.prototype.createShadowRoot;
+  }
+  if (flags.register) {
+    window.CustomElements = window.CustomElements || {
+      flags: {}
+    };
+    window.CustomElements.flags.register = flags.register;
+  }
+  scope.flags = flags;
+})(WebComponents);
+
+if (WebComponents.flags.shadow) {
+  if (typeof WeakMap === "undefined") {
+    (function() {
+      var defineProperty = Object.defineProperty;
+      var counter = Date.now() % 1e9;
+      var WeakMap = function() {
+        this.name = "__st" + (Math.random() * 1e9 >>> 0) + (counter++ + "__");
+      };
+      WeakMap.prototype = {
+        set: function(key, value) {
+          var entry = key[this.name];
+          if (entry && entry[0] === key) entry[1] = value; else defineProperty(key, this.name, {
+            value: [ key, value ],
+            writable: true
+          });
+          return this;
+        },
+        get: function(key) {
+          var entry;
+          return (entry = key[this.name]) && entry[0] === key ? entry[1] : undefined;
+        },
+        "delete": function(key) {
+          var entry = key[this.name];
+          if (!entry) return false;
+          var hasValue = entry[0] === key;
+          entry[0] = entry[1] = undefined;
+          return hasValue;
+        },
+        has: function(key) {
+          var entry = key[this.name];
+          if (!entry) return false;
+          return entry[0] === key;
+        }
+      };
+      window.WeakMap = WeakMap;
+    })();
+  }
+  window.ShadowDOMPolyfill = {};
+  (function(scope) {
+    "use strict";
+    var constructorTable = new WeakMap();
+    var nativePrototypeTable = new WeakMap();
+    var wrappers = Object.create(null);
+    function detectEval() {
+      if (typeof chrome !== "undefined" && chrome.app && chrome.app.runtime) {
+        return false;
+      }
+      if (navigator.getDeviceStorage) {
+        return false;
+      }
+      try {
+        var f = new Function("return true;");
+        return f();
+      } catch (ex) {
+        return false;
+      }
+    }
+    var hasEval = detectEval();
+    function assert(b) {
+      if (!b) throw new Error("Assertion failed");
+    }
+    var defineProperty = Object.defineProperty;
+    var getOwnPropertyNames = Object.getOwnPropertyNames;
+    var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+    function mixin(to, from) {
+      var names = getOwnPropertyNames(from);
+      for (var i = 0; i < names.length; i++) {
+        var name = names[i];
+        defineProperty(to, name, getOwnPropertyDescriptor(from, name));
+      }
+      return to;
+    }
+    function mixinStatics(to, from) {
+      var names = getOwnPropertyNames(from);
+      for (var i = 0; i < names.length; i++) {
+        var name = names[i];
+        switch (name) {
+         case "arguments":
+         case "caller":
+         case "length":
+         case "name":
+         case "prototype":
+         case "toString":
+          continue;
+        }
+        defineProperty(to, name, getOwnPropertyDescriptor(from, name));
+      }
+      return to;
+    }
+    function oneOf(object, propertyNames) {
+      for (var i = 0; i < propertyNames.length; i++) {
+        if (propertyNames[i] in object) return propertyNames[i];
+      }
+    }
+    var nonEnumerableDataDescriptor = {
+      value: undefined,
+      configurable: true,
+      enumerable: false,
+      writable: true
+    };
+    function defineNonEnumerableDataProperty(object, name, value) {
+      nonEnumerableDataDescriptor.value = value;
+      defineProperty(object, name, nonEnumerableDataDescriptor);
+    }
+    getOwnPropertyNames(window);
+    function getWrapperConstructor(node) {
+      var nativePrototype = node.__proto__ || Object.getPrototypeOf(node);
+      var wrapperConstructor = constructorTable.get(nativePrototype);
+      if (wrapperConstructor) return wrapperConstructor;
+      var parentWrapperConstructor = getWrapperConstructor(nativePrototype);
+      var GeneratedWrapper = createWrapperConstructor(parentWrapperConstructor);
+      registerInternal(nativePrototype, GeneratedWrapper, node);
+      return GeneratedWrapper;
+    }
+    function addForwardingProperties(nativePrototype, wrapperPrototype) {
+      installProperty(nativePrototype, wrapperPrototype, true);
+    }
+    function registerInstanceProperties(wrapperPrototype, instanceObject) {
+      installProperty(instanceObject, wrapperPrototype, false);
+    }
+    var isFirefox = /Firefox/.test(navigator.userAgent);
+    var dummyDescriptor = {
+      get: function() {},
+      set: function(v) {},
+      configurable: true,
+      enumerable: true
+    };
+    function isEventHandlerName(name) {
+      return /^on[a-z]+$/.test(name);
+    }
+    function isIdentifierName(name) {
+      return /^\w[a-zA-Z_0-9]*$/.test(name);
+    }
+    function getGetter(name) {
+      return hasEval && isIdentifierName(name) ? new Function("return this.__impl4cf1e782hg__." + name) : function() {
+        return this.__impl4cf1e782hg__[name];
+      };
+    }
+    function getSetter(name) {
+      return hasEval && isIdentifierName(name) ? new Function("v", "this.__impl4cf1e782hg__." + name + " = v") : function(v) {
+        this.__impl4cf1e782hg__[name] = v;
+      };
+    }
+    function getMethod(name) {
+      return hasEval && isIdentifierName(name) ? new Function("return this.__impl4cf1e782hg__." + name + ".apply(this.__impl4cf1e782hg__, arguments)") : function() {
+        return this.__impl4cf1e782hg__[name].apply(this.__impl4cf1e782hg__, arguments);
+      };
+    }
+    function getDescriptor(source, name) {
+      try {
+        return Object.getOwnPropertyDescriptor(source, name);
+      } catch (ex) {
+        return dummyDescriptor;
+      }
+    }
+    var isBrokenSafari = function() {
+      var descr = Object.getOwnPropertyDescriptor(Node.prototype, "nodeType");
+      return descr && !descr.get && !descr.set;
+    }();
+    function installProperty(source, target, allowMethod, opt_blacklist) {
+      var names = getOwnPropertyNames(source);
+      for (var i = 0; i < names.length; i++) {
+        var name = names[i];
+        if (name === "polymerBlackList_") continue;
+        if (name in target) continue;
+        if (source.polymerBlackList_ && source.polymerBlackList_[name]) continue;
+        if (isFirefox) {
+          source.__lookupGetter__(name);
+        }
+        var descriptor = getDescriptor(source, name);
+        var getter, setter;
+        if (allowMethod && typeof descriptor.value === "function") {
+          target[name] = getMethod(name);
+          continue;
+        }
+        var isEvent = isEventHandlerName(name);
+        if (isEvent) getter = scope.getEventHandlerGetter(name); else getter = getGetter(name);
+        if (descriptor.writable || descriptor.set || isBrokenSafari) {
+          if (isEvent) setter = scope.getEventHandlerSetter(name); else setter = getSetter(name);
+        }
+        defineProperty(target, name, {
+          get: getter,
+          set: setter,
+          configurable: descriptor.configurable,
+          enumerable: descriptor.enumerable
+        });
+      }
+    }
+    function register(nativeConstructor, wrapperConstructor, opt_instance) {
+      var nativePrototype = nativeConstructor.prototype;
+      registerInternal(nativePrototype, wrapperConstructor, opt_instance);
+      mixinStatics(wrapperConstructor, nativeConstructor);
+    }
+    function registerInternal(nativePrototype, wrapperConstructor, opt_instance) {
+      var wrapperPrototype = wrapperConstructor.prototype;
+      assert(constructorTable.get(nativePrototype) === undefined);
+      constructorTable.set(nativePrototype, wrapperConstructor);
+      nativePrototypeTable.set(wrapperPrototype, nativePrototype);
+      addForwardingProperties(nativePrototype, wrapperPrototype);
+      if (opt_instance) registerInstanceProperties(wrapperPrototype, opt_instance);
+      defineNonEnumerableDataProperty(wrapperPrototype, "constructor", wrapperConstructor);
+      wrapperConstructor.prototype = wrapperPrototype;
+    }
+    function isWrapperFor(wrapperConstructor, nativeConstructor) {
+      return constructorTable.get(nativeConstructor.prototype) === wrapperConstructor;
+    }
+    function registerObject(object) {
+      var nativePrototype = Object.getPrototypeOf(object);
+      var superWrapperConstructor = getWrapperConstructor(nativePrototype);
+      var GeneratedWrapper = createWrapperConstructor(superWrapperConstructor);
+      registerInternal(nativePrototype, GeneratedWrapper, object);
+      return GeneratedWrapper;
+    }
+    function createWrapperConstructor(superWrapperConstructor) {
+      function GeneratedWrapper(node) {
+        superWrapperConstructor.call(this, node);
+      }
+      var p = Object.create(superWrapperConstructor.prototype);
+      p.constructor = GeneratedWrapper;
+      GeneratedWrapper.prototype = p;
+      return GeneratedWrapper;
+    }
+    function isWrapper(object) {
+      return object && object.__impl4cf1e782hg__;
+    }
+    function isNative(object) {
+      return !isWrapper(object);
+    }
+    function wrap(impl) {
+      if (impl === null) return null;
+      assert(isNative(impl));
+      return impl.__wrapper8e3dd93a60__ || (impl.__wrapper8e3dd93a60__ = new (getWrapperConstructor(impl))(impl));
+    }
+    function unwrap(wrapper) {
+      if (wrapper === null) return null;
+      assert(isWrapper(wrapper));
+      return wrapper.__impl4cf1e782hg__;
+    }
+    function unsafeUnwrap(wrapper) {
+      return wrapper.__impl4cf1e782hg__;
+    }
+    function setWrapper(impl, wrapper) {
+      wrapper.__impl4cf1e782hg__ = impl;
+      impl.__wrapper8e3dd93a60__ = wrapper;
+    }
+    function unwrapIfNeeded(object) {
+      return object && isWrapper(object) ? unwrap(object) : object;
+    }
+    function wrapIfNeeded(object) {
+      return object && !isWrapper(object) ? wrap(object) : object;
+    }
+    function rewrap(node, wrapper) {
+      if (wrapper === null) return;
+      assert(isNative(node));
+      assert(wrapper === undefined || isWrapper(wrapper));
+      node.__wrapper8e3dd93a60__ = wrapper;
+    }
+    var getterDescriptor = {
+      get: undefined,
+      configurable: true,
+      enumerable: true
+    };
+    function defineGetter(constructor, name, getter) {
+      getterDescriptor.get = getter;
+      defineProperty(constructor.prototype, name, getterDescriptor);
+    }
+    function defineWrapGetter(constructor, name) {
+      defineGetter(constructor, name, function() {
+        return wrap(this.__impl4cf1e782hg__[name]);
+      });
+    }
+    function forwardMethodsToWrapper(constructors, names) {
+      constructors.forEach(function(constructor) {
+        names.forEach(function(name) {
+          constructor.prototype[name] = function() {
+            var w = wrapIfNeeded(this);
+            return w[name].apply(w, arguments);
+          };
+        });
+      });
+    }
+    scope.assert = assert;
+    scope.constructorTable = constructorTable;
+    scope.defineGetter = defineGetter;
+    scope.defineWrapGetter = defineWrapGetter;
+    scope.forwardMethodsToWrapper = forwardMethodsToWrapper;
+    scope.isWrapper = isWrapper;
+    scope.isWrapperFor = isWrapperFor;
+    scope.mixin = mixin;
+    scope.nativePrototypeTable = nativePrototypeTable;
+    scope.oneOf = oneOf;
+    scope.registerObject = registerObject;
+    scope.registerWrapper = register;
+    scope.rewrap = rewrap;
+    scope.setWrapper = setWrapper;
+    scope.unsafeUnwrap = unsafeUnwrap;
+    scope.unwrap = unwrap;
+    scope.unwrapIfNeeded = unwrapIfNeeded;
+    scope.wrap = wrap;
+    scope.wrapIfNeeded = wrapIfNeeded;
+    scope.wrappers = wrappers;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    function newSplice(index, removed, addedCount) {
+      return {
+        index: index,
+        removed: removed,
+        addedCount: addedCount
+      };
+    }
+    var EDIT_LEAVE = 0;
+    var EDIT_UPDATE = 1;
+    var EDIT_ADD = 2;
+    var EDIT_DELETE = 3;
+    function ArraySplice() {}
+    ArraySplice.prototype = {
+      calcEditDistances: function(current, currentStart, currentEnd, old, oldStart, oldEnd) {
+        var rowCount = oldEnd - oldStart + 1;
+        var columnCount = currentEnd - currentStart + 1;
+        var distances = new Array(rowCount);
+        for (var i = 0; i < rowCount; i++) {
+          distances[i] = new Array(columnCount);
+          distances[i][0] = i;
+        }
+        for (var j = 0; j < columnCount; j++) distances[0][j] = j;
+        for (var i = 1; i < rowCount; i++) {
+          for (var j = 1; j < columnCount; j++) {
+            if (this.equals(current[currentStart + j - 1], old[oldStart + i - 1])) distances[i][j] = distances[i - 1][j - 1]; else {
+              var north = distances[i - 1][j] + 1;
+              var west = distances[i][j - 1] + 1;
+              distances[i][j] = north < west ? north : west;
+            }
+          }
+        }
+        return distances;
+      },
+      spliceOperationsFromEditDistances: function(distances) {
+        var i = distances.length - 1;
+        var j = distances[0].length - 1;
+        var current = distances[i][j];
+        var edits = [];
+        while (i > 0 || j > 0) {
+          if (i == 0) {
+            edits.push(EDIT_ADD);
+            j--;
+            continue;
+          }
+          if (j == 0) {
+            edits.push(EDIT_DELETE);
+            i--;
+            continue;
+          }
+          var northWest = distances[i - 1][j - 1];
+          var west = distances[i - 1][j];
+          var north = distances[i][j - 1];
+          var min;
+          if (west < north) min = west < northWest ? west : northWest; else min = north < northWest ? north : northWest;
+          if (min == northWest) {
+            if (northWest == current) {
+              edits.push(EDIT_LEAVE);
+            } else {
+              edits.push(EDIT_UPDATE);
+              current = northWest;
+            }
+            i--;
+            j--;
+          } else if (min == west) {
+            edits.push(EDIT_DELETE);
+            i--;
+            current = west;
+          } else {
+            edits.push(EDIT_ADD);
+            j--;
+            current = north;
+          }
+        }
+        edits.reverse();
+        return edits;
+      },
+      calcSplices: function(current, currentStart, currentEnd, old, oldStart, oldEnd) {
+        var prefixCount = 0;
+        var suffixCount = 0;
+        var minLength = Math.min(currentEnd - currentStart, oldEnd - oldStart);
+        if (currentStart == 0 && oldStart == 0) prefixCount = this.sharedPrefix(current, old, minLength);
+        if (currentEnd == current.length && oldEnd == old.length) suffixCount = this.sharedSuffix(current, old, minLength - prefixCount);
+        currentStart += prefixCount;
+        oldStart += prefixCount;
+        currentEnd -= suffixCount;
+        oldEnd -= suffixCount;
+        if (currentEnd - currentStart == 0 && oldEnd - oldStart == 0) return [];
+        if (currentStart == currentEnd) {
+          var splice = newSplice(currentStart, [], 0);
+          while (oldStart < oldEnd) splice.removed.push(old[oldStart++]);
+          return [ splice ];
+        } else if (oldStart == oldEnd) return [ newSplice(currentStart, [], currentEnd - currentStart) ];
+        var ops = this.spliceOperationsFromEditDistances(this.calcEditDistances(current, currentStart, currentEnd, old, oldStart, oldEnd));
+        var splice = undefined;
+        var splices = [];
+        var index = currentStart;
+        var oldIndex = oldStart;
+        for (var i = 0; i < ops.length; i++) {
+          switch (ops[i]) {
+           case EDIT_LEAVE:
+            if (splice) {
+              splices.push(splice);
+              splice = undefined;
+            }
+            index++;
+            oldIndex++;
+            break;
+
+           case EDIT_UPDATE:
+            if (!splice) splice = newSplice(index, [], 0);
+            splice.addedCount++;
+            index++;
+            splice.removed.push(old[oldIndex]);
+            oldIndex++;
+            break;
+
+           case EDIT_ADD:
+            if (!splice) splice = newSplice(index, [], 0);
+            splice.addedCount++;
+            index++;
+            break;
+
+           case EDIT_DELETE:
+            if (!splice) splice = newSplice(index, [], 0);
+            splice.removed.push(old[oldIndex]);
+            oldIndex++;
+            break;
+          }
+        }
+        if (splice) {
+          splices.push(splice);
+        }
+        return splices;
+      },
+      sharedPrefix: function(current, old, searchLength) {
+        for (var i = 0; i < searchLength; i++) if (!this.equals(current[i], old[i])) return i;
+        return searchLength;
+      },
+      sharedSuffix: function(current, old, searchLength) {
+        var index1 = current.length;
+        var index2 = old.length;
+        var count = 0;
+        while (count < searchLength && this.equals(current[--index1], old[--index2])) count++;
+        return count;
+      },
+      calculateSplices: function(current, previous) {
+        return this.calcSplices(current, 0, current.length, previous, 0, previous.length);
+      },
+      equals: function(currentValue, previousValue) {
+        return currentValue === previousValue;
+      }
+    };
+    scope.ArraySplice = ArraySplice;
+  })(window.ShadowDOMPolyfill);
+  (function(context) {
+    "use strict";
+    var OriginalMutationObserver = window.MutationObserver;
+    var callbacks = [];
+    var pending = false;
+    var timerFunc;
+    function handle() {
+      pending = false;
+      var copies = callbacks.slice(0);
+      callbacks = [];
+      for (var i = 0; i < copies.length; i++) {
+        (0, copies[i])();
+      }
+    }
+    if (OriginalMutationObserver) {
+      var counter = 1;
+      var observer = new OriginalMutationObserver(handle);
+      var textNode = document.createTextNode(counter);
+      observer.observe(textNode, {
+        characterData: true
+      });
+      timerFunc = function() {
+        counter = (counter + 1) % 2;
+        textNode.data = counter;
+      };
+    } else {
+      timerFunc = window.setImmediate || window.setTimeout;
+    }
+    function setEndOfMicrotask(func) {
+      callbacks.push(func);
+      if (pending) return;
+      pending = true;
+      timerFunc(handle, 0);
+    }
+    context.setEndOfMicrotask = setEndOfMicrotask;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var setEndOfMicrotask = scope.setEndOfMicrotask;
+    var wrapIfNeeded = scope.wrapIfNeeded;
+    var wrappers = scope.wrappers;
+    var registrationsTable = new WeakMap();
+    var globalMutationObservers = [];
+    var isScheduled = false;
+    function scheduleCallback(observer) {
+      if (observer.scheduled_) return;
+      observer.scheduled_ = true;
+      globalMutationObservers.push(observer);
+      if (isScheduled) return;
+      setEndOfMicrotask(notifyObservers);
+      isScheduled = true;
+    }
+    function notifyObservers() {
+      isScheduled = false;
+      while (globalMutationObservers.length) {
+        var notifyList = globalMutationObservers;
+        globalMutationObservers = [];
+        notifyList.sort(function(x, y) {
+          return x.uid_ - y.uid_;
+        });
+        for (var i = 0; i < notifyList.length; i++) {
+          var mo = notifyList[i];
+          mo.scheduled_ = false;
+          var queue = mo.takeRecords();
+          removeTransientObserversFor(mo);
+          if (queue.length) {
+            mo.callback_(queue, mo);
+          }
+        }
+      }
+    }
+    function MutationRecord(type, target) {
+      this.type = type;
+      this.target = target;
+      this.addedNodes = new wrappers.NodeList();
+      this.removedNodes = new wrappers.NodeList();
+      this.previousSibling = null;
+      this.nextSibling = null;
+      this.attributeName = null;
+      this.attributeNamespace = null;
+      this.oldValue = null;
+    }
+    function registerTransientObservers(ancestor, node) {
+      for (;ancestor; ancestor = ancestor.parentNode) {
+        var registrations = registrationsTable.get(ancestor);
+        if (!registrations) continue;
+        for (var i = 0; i < registrations.length; i++) {
+          var registration = registrations[i];
+          if (registration.options.subtree) registration.addTransientObserver(node);
+        }
+      }
+    }
+    function removeTransientObserversFor(observer) {
+      for (var i = 0; i < observer.nodes_.length; i++) {
+        var node = observer.nodes_[i];
+        var registrations = registrationsTable.get(node);
+        if (!registrations) return;
+        for (var j = 0; j < registrations.length; j++) {
+          var registration = registrations[j];
+          if (registration.observer === observer) registration.removeTransientObservers();
+        }
+      }
+    }
+    function enqueueMutation(target, type, data) {
+      var interestedObservers = Object.create(null);
+      var associatedStrings = Object.create(null);
+      for (var node = target; node; node = node.parentNode) {
+        var registrations = registrationsTable.get(node);
+        if (!registrations) continue;
+        for (var j = 0; j < registrations.length; j++) {
+          var registration = registrations[j];
+          var options = registration.options;
+          if (node !== target && !options.subtree) continue;
+          if (type === "attributes" && !options.attributes) continue;
+          if (type === "attributes" && options.attributeFilter && (data.namespace !== null || options.attributeFilter.indexOf(data.name) === -1)) {
+            continue;
+          }
+          if (type === "characterData" && !options.characterData) continue;
+          if (type === "childList" && !options.childList) continue;
+          var observer = registration.observer;
+          interestedObservers[observer.uid_] = observer;
+          if (type === "attributes" && options.attributeOldValue || type === "characterData" && options.characterDataOldValue) {
+            associatedStrings[observer.uid_] = data.oldValue;
+          }
+        }
+      }
+      for (var uid in interestedObservers) {
+        var observer = interestedObservers[uid];
+        var record = new MutationRecord(type, target);
+        if ("name" in data && "namespace" in data) {
+          record.attributeName = data.name;
+          record.attributeNamespace = data.namespace;
+        }
+        if (data.addedNodes) record.addedNodes = data.addedNodes;
+        if (data.removedNodes) record.removedNodes = data.removedNodes;
+        if (data.previousSibling) record.previousSibling = data.previousSibling;
+        if (data.nextSibling) record.nextSibling = data.nextSibling;
+        if (associatedStrings[uid] !== undefined) record.oldValue = associatedStrings[uid];
+        scheduleCallback(observer);
+        observer.records_.push(record);
+      }
+    }
+    var slice = Array.prototype.slice;
+    function MutationObserverOptions(options) {
+      this.childList = !!options.childList;
+      this.subtree = !!options.subtree;
+      if (!("attributes" in options) && ("attributeOldValue" in options || "attributeFilter" in options)) {
+        this.attributes = true;
+      } else {
+        this.attributes = !!options.attributes;
+      }
+      if ("characterDataOldValue" in options && !("characterData" in options)) this.characterData = true; else this.characterData = !!options.characterData;
+      if (!this.attributes && (options.attributeOldValue || "attributeFilter" in options) || !this.characterData && options.characterDataOldValue) {
+        throw new TypeError();
+      }
+      this.characterData = !!options.characterData;
+      this.attributeOldValue = !!options.attributeOldValue;
+      this.characterDataOldValue = !!options.characterDataOldValue;
+      if ("attributeFilter" in options) {
+        if (options.attributeFilter == null || typeof options.attributeFilter !== "object") {
+          throw new TypeError();
+        }
+        this.attributeFilter = slice.call(options.attributeFilter);
+      } else {
+        this.attributeFilter = null;
+      }
+    }
+    var uidCounter = 0;
+    function MutationObserver(callback) {
+      this.callback_ = callback;
+      this.nodes_ = [];
+      this.records_ = [];
+      this.uid_ = ++uidCounter;
+      this.scheduled_ = false;
+    }
+    MutationObserver.prototype = {
+      constructor: MutationObserver,
+      observe: function(target, options) {
+        target = wrapIfNeeded(target);
+        var newOptions = new MutationObserverOptions(options);
+        var registration;
+        var registrations = registrationsTable.get(target);
+        if (!registrations) registrationsTable.set(target, registrations = []);
+        for (var i = 0; i < registrations.length; i++) {
+          if (registrations[i].observer === this) {
+            registration = registrations[i];
+            registration.removeTransientObservers();
+            registration.options = newOptions;
+          }
+        }
+        if (!registration) {
+          registration = new Registration(this, target, newOptions);
+          registrations.push(registration);
+          this.nodes_.push(target);
+        }
+      },
+      disconnect: function() {
+        this.nodes_.forEach(function(node) {
+          var registrations = registrationsTable.get(node);
+          for (var i = 0; i < registrations.length; i++) {
+            var registration = registrations[i];
+            if (registration.observer === this) {
+              registrations.splice(i, 1);
+              break;
+            }
+          }
+        }, this);
+        this.records_ = [];
+      },
+      takeRecords: function() {
+        var copyOfRecords = this.records_;
+        this.records_ = [];
+        return copyOfRecords;
+      }
+    };
+    function Registration(observer, target, options) {
+      this.observer = observer;
+      this.target = target;
+      this.options = options;
+      this.transientObservedNodes = [];
+    }
+    Registration.prototype = {
+      addTransientObserver: function(node) {
+        if (node === this.target) return;
+        scheduleCallback(this.observer);
+        this.transientObservedNodes.push(node);
+        var registrations = registrationsTable.get(node);
+        if (!registrations) registrationsTable.set(node, registrations = []);
+        registrations.push(this);
+      },
+      removeTransientObservers: function() {
+        var transientObservedNodes = this.transientObservedNodes;
+        this.transientObservedNodes = [];
+        for (var i = 0; i < transientObservedNodes.length; i++) {
+          var node = transientObservedNodes[i];
+          var registrations = registrationsTable.get(node);
+          for (var j = 0; j < registrations.length; j++) {
+            if (registrations[j] === this) {
+              registrations.splice(j, 1);
+              break;
+            }
+          }
+        }
+      }
+    };
+    scope.enqueueMutation = enqueueMutation;
+    scope.registerTransientObservers = registerTransientObservers;
+    scope.wrappers.MutationObserver = MutationObserver;
+    scope.wrappers.MutationRecord = MutationRecord;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    function TreeScope(root, parent) {
+      this.root = root;
+      this.parent = parent;
+    }
+    TreeScope.prototype = {
+      get renderer() {
+        if (this.root instanceof scope.wrappers.ShadowRoot) {
+          return scope.getRendererForHost(this.root.host);
+        }
+        return null;
+      },
+      contains: function(treeScope) {
+        for (;treeScope; treeScope = treeScope.parent) {
+          if (treeScope === this) return true;
+        }
+        return false;
+      }
+    };
+    function setTreeScope(node, treeScope) {
+      if (node.treeScope_ !== treeScope) {
+        node.treeScope_ = treeScope;
+        for (var sr = node.shadowRoot; sr; sr = sr.olderShadowRoot) {
+          sr.treeScope_.parent = treeScope;
+        }
+        for (var child = node.firstChild; child; child = child.nextSibling) {
+          setTreeScope(child, treeScope);
+        }
+      }
+    }
+    function getTreeScope(node) {
+      if (node instanceof scope.wrappers.Window) {
+        debugger;
+      }
+      if (node.treeScope_) return node.treeScope_;
+      var parent = node.parentNode;
+      var treeScope;
+      if (parent) treeScope = getTreeScope(parent); else treeScope = new TreeScope(node, null);
+      return node.treeScope_ = treeScope;
+    }
+    scope.TreeScope = TreeScope;
+    scope.getTreeScope = getTreeScope;
+    scope.setTreeScope = setTreeScope;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var forwardMethodsToWrapper = scope.forwardMethodsToWrapper;
+    var getTreeScope = scope.getTreeScope;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var setWrapper = scope.setWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var unwrap = scope.unwrap;
+    var wrap = scope.wrap;
+    var wrappers = scope.wrappers;
+    var wrappedFuns = new WeakMap();
+    var listenersTable = new WeakMap();
+    var handledEventsTable = new WeakMap();
+    var currentlyDispatchingEvents = new WeakMap();
+    var targetTable = new WeakMap();
+    var currentTargetTable = new WeakMap();
+    var relatedTargetTable = new WeakMap();
+    var eventPhaseTable = new WeakMap();
+    var stopPropagationTable = new WeakMap();
+    var stopImmediatePropagationTable = new WeakMap();
+    var eventHandlersTable = new WeakMap();
+    var eventPathTable = new WeakMap();
+    function isShadowRoot(node) {
+      return node instanceof wrappers.ShadowRoot;
+    }
+    function rootOfNode(node) {
+      return getTreeScope(node).root;
+    }
+    function getEventPath(node, event) {
+      var path = [];
+      var current = node;
+      path.push(current);
+      while (current) {
+        var destinationInsertionPoints = getDestinationInsertionPoints(current);
+        if (destinationInsertionPoints && destinationInsertionPoints.length > 0) {
+          for (var i = 0; i < destinationInsertionPoints.length; i++) {
+            var insertionPoint = destinationInsertionPoints[i];
+            if (isShadowInsertionPoint(insertionPoint)) {
+              var shadowRoot = rootOfNode(insertionPoint);
+              var olderShadowRoot = shadowRoot.olderShadowRoot;
+              if (olderShadowRoot) path.push(olderShadowRoot);
+            }
+            path.push(insertionPoint);
+          }
+          current = destinationInsertionPoints[destinationInsertionPoints.length - 1];
+        } else {
+          if (isShadowRoot(current)) {
+            if (inSameTree(node, current) && eventMustBeStopped(event)) {
+              break;
+            }
+            current = current.host;
+            path.push(current);
+          } else {
+            current = current.parentNode;
+            if (current) path.push(current);
+          }
+        }
+      }
+      return path;
+    }
+    function eventMustBeStopped(event) {
+      if (!event) return false;
+      switch (event.type) {
+       case "abort":
+       case "error":
+       case "select":
+       case "change":
+       case "load":
+       case "reset":
+       case "resize":
+       case "scroll":
+       case "selectstart":
+        return true;
+      }
+      return false;
+    }
+    function isShadowInsertionPoint(node) {
+      return node instanceof HTMLShadowElement;
+    }
+    function getDestinationInsertionPoints(node) {
+      return scope.getDestinationInsertionPoints(node);
+    }
+    function eventRetargetting(path, currentTarget) {
+      if (path.length === 0) return currentTarget;
+      if (currentTarget instanceof wrappers.Window) currentTarget = currentTarget.document;
+      var currentTargetTree = getTreeScope(currentTarget);
+      var originalTarget = path[0];
+      var originalTargetTree = getTreeScope(originalTarget);
+      var relativeTargetTree = lowestCommonInclusiveAncestor(currentTargetTree, originalTargetTree);
+      for (var i = 0; i < path.length; i++) {
+        var node = path[i];
+        if (getTreeScope(node) === relativeTargetTree) return node;
+      }
+      return path[path.length - 1];
+    }
+    function getTreeScopeAncestors(treeScope) {
+      var ancestors = [];
+      for (;treeScope; treeScope = treeScope.parent) {
+        ancestors.push(treeScope);
+      }
+      return ancestors;
+    }
+    function lowestCommonInclusiveAncestor(tsA, tsB) {
+      var ancestorsA = getTreeScopeAncestors(tsA);
+      var ancestorsB = getTreeScopeAncestors(tsB);
+      var result = null;
+      while (ancestorsA.length > 0 && ancestorsB.length > 0) {
+        var a = ancestorsA.pop();
+        var b = ancestorsB.pop();
+        if (a === b) result = a; else break;
+      }
+      return result;
+    }
+    function getTreeScopeRoot(ts) {
+      if (!ts.parent) return ts;
+      return getTreeScopeRoot(ts.parent);
+    }
+    function relatedTargetResolution(event, currentTarget, relatedTarget) {
+      if (currentTarget instanceof wrappers.Window) currentTarget = currentTarget.document;
+      var currentTargetTree = getTreeScope(currentTarget);
+      var relatedTargetTree = getTreeScope(relatedTarget);
+      var relatedTargetEventPath = getEventPath(relatedTarget, event);
+      var lowestCommonAncestorTree;
+      var lowestCommonAncestorTree = lowestCommonInclusiveAncestor(currentTargetTree, relatedTargetTree);
+      if (!lowestCommonAncestorTree) lowestCommonAncestorTree = relatedTargetTree.root;
+      for (var commonAncestorTree = lowestCommonAncestorTree; commonAncestorTree; commonAncestorTree = commonAncestorTree.parent) {
+        var adjustedRelatedTarget;
+        for (var i = 0; i < relatedTargetEventPath.length; i++) {
+          var node = relatedTargetEventPath[i];
+          if (getTreeScope(node) === commonAncestorTree) return node;
+        }
+      }
+      return null;
+    }
+    function inSameTree(a, b) {
+      return getTreeScope(a) === getTreeScope(b);
+    }
+    var NONE = 0;
+    var CAPTURING_PHASE = 1;
+    var AT_TARGET = 2;
+    var BUBBLING_PHASE = 3;
+    var pendingError;
+    function dispatchOriginalEvent(originalEvent) {
+      if (handledEventsTable.get(originalEvent)) return;
+      handledEventsTable.set(originalEvent, true);
+      dispatchEvent(wrap(originalEvent), wrap(originalEvent.target));
+      if (pendingError) {
+        var err = pendingError;
+        pendingError = null;
+        throw err;
+      }
+    }
+    function isLoadLikeEvent(event) {
+      switch (event.type) {
+       case "load":
+       case "beforeunload":
+       case "unload":
+        return true;
+      }
+      return false;
+    }
+    function dispatchEvent(event, originalWrapperTarget) {
+      if (currentlyDispatchingEvents.get(event)) throw new Error("InvalidStateError");
+      currentlyDispatchingEvents.set(event, true);
+      scope.renderAllPending();
+      var eventPath;
+      var overrideTarget;
+      var win;
+      if (isLoadLikeEvent(event) && !event.bubbles) {
+        var doc = originalWrapperTarget;
+        if (doc instanceof wrappers.Document && (win = doc.defaultView)) {
+          overrideTarget = doc;
+          eventPath = [];
+        }
+      }
+      if (!eventPath) {
+        if (originalWrapperTarget instanceof wrappers.Window) {
+          win = originalWrapperTarget;
+          eventPath = [];
+        } else {
+          eventPath = getEventPath(originalWrapperTarget, event);
+          if (!isLoadLikeEvent(event)) {
+            var doc = eventPath[eventPath.length - 1];
+            if (doc instanceof wrappers.Document) win = doc.defaultView;
+          }
+        }
+      }
+      eventPathTable.set(event, eventPath);
+      if (dispatchCapturing(event, eventPath, win, overrideTarget)) {
+        if (dispatchAtTarget(event, eventPath, win, overrideTarget)) {
+          dispatchBubbling(event, eventPath, win, overrideTarget);
+        }
+      }
+      eventPhaseTable.set(event, NONE);
+      currentTargetTable.delete(event, null);
+      currentlyDispatchingEvents.delete(event);
+      return event.defaultPrevented;
+    }
+    function dispatchCapturing(event, eventPath, win, overrideTarget) {
+      var phase = CAPTURING_PHASE;
+      if (win) {
+        if (!invoke(win, event, phase, eventPath, overrideTarget)) return false;
+      }
+      for (var i = eventPath.length - 1; i > 0; i--) {
+        if (!invoke(eventPath[i], event, phase, eventPath, overrideTarget)) return false;
+      }
+      return true;
+    }
+    function dispatchAtTarget(event, eventPath, win, overrideTarget) {
+      var phase = AT_TARGET;
+      var currentTarget = eventPath[0] || win;
+      return invoke(currentTarget, event, phase, eventPath, overrideTarget);
+    }
+    function dispatchBubbling(event, eventPath, win, overrideTarget) {
+      var phase = BUBBLING_PHASE;
+      for (var i = 1; i < eventPath.length; i++) {
+        if (!invoke(eventPath[i], event, phase, eventPath, overrideTarget)) return;
+      }
+      if (win && eventPath.length > 0) {
+        invoke(win, event, phase, eventPath, overrideTarget);
+      }
+    }
+    function invoke(currentTarget, event, phase, eventPath, overrideTarget) {
+      var listeners = listenersTable.get(currentTarget);
+      if (!listeners) return true;
+      var target = overrideTarget || eventRetargetting(eventPath, currentTarget);
+      if (target === currentTarget) {
+        if (phase === CAPTURING_PHASE) return true;
+        if (phase === BUBBLING_PHASE) phase = AT_TARGET;
+      } else if (phase === BUBBLING_PHASE && !event.bubbles) {
+        return true;
+      }
+      if ("relatedTarget" in event) {
+        var originalEvent = unwrap(event);
+        var unwrappedRelatedTarget = originalEvent.relatedTarget;
+        if (unwrappedRelatedTarget) {
+          if (unwrappedRelatedTarget instanceof Object && unwrappedRelatedTarget.addEventListener) {
+            var relatedTarget = wrap(unwrappedRelatedTarget);
+            var adjusted = relatedTargetResolution(event, currentTarget, relatedTarget);
+            if (adjusted === target) return true;
+          } else {
+            adjusted = null;
+          }
+          relatedTargetTable.set(event, adjusted);
+        }
+      }
+      eventPhaseTable.set(event, phase);
+      var type = event.type;
+      var anyRemoved = false;
+      targetTable.set(event, target);
+      currentTargetTable.set(event, currentTarget);
+      listeners.depth++;
+      for (var i = 0, len = listeners.length; i < len; i++) {
+        var listener = listeners[i];
+        if (listener.removed) {
+          anyRemoved = true;
+          continue;
+        }
+        if (listener.type !== type || !listener.capture && phase === CAPTURING_PHASE || listener.capture && phase === BUBBLING_PHASE) {
+          continue;
+        }
+        try {
+          if (typeof listener.handler === "function") listener.handler.call(currentTarget, event); else listener.handler.handleEvent(event);
+          if (stopImmediatePropagationTable.get(event)) return false;
+        } catch (ex) {
+          if (!pendingError) pendingError = ex;
+        }
+      }
+      listeners.depth--;
+      if (anyRemoved && listeners.depth === 0) {
+        var copy = listeners.slice();
+        listeners.length = 0;
+        for (var i = 0; i < copy.length; i++) {
+          if (!copy[i].removed) listeners.push(copy[i]);
+        }
+      }
+      return !stopPropagationTable.get(event);
+    }
+    function Listener(type, handler, capture) {
+      this.type = type;
+      this.handler = handler;
+      this.capture = Boolean(capture);
+    }
+    Listener.prototype = {
+      equals: function(that) {
+        return this.handler === that.handler && this.type === that.type && this.capture === that.capture;
+      },
+      get removed() {
+        return this.handler === null;
+      },
+      remove: function() {
+        this.handler = null;
+      }
+    };
+    var OriginalEvent = window.Event;
+    OriginalEvent.prototype.polymerBlackList_ = {
+      returnValue: true,
+      keyLocation: true
+    };
+    function Event(type, options) {
+      if (type instanceof OriginalEvent) {
+        var impl = type;
+        if (!OriginalBeforeUnloadEvent && impl.type === "beforeunload" && !(this instanceof BeforeUnloadEvent)) {
+          return new BeforeUnloadEvent(impl);
+        }
+        setWrapper(impl, this);
+      } else {
+        return wrap(constructEvent(OriginalEvent, "Event", type, options));
+      }
+    }
+    Event.prototype = {
+      get target() {
+        return targetTable.get(this);
+      },
+      get currentTarget() {
+        return currentTargetTable.get(this);
+      },
+      get eventPhase() {
+        return eventPhaseTable.get(this);
+      },
+      get path() {
+        var eventPath = eventPathTable.get(this);
+        if (!eventPath) return [];
+        return eventPath.slice();
+      },
+      stopPropagation: function() {
+        stopPropagationTable.set(this, true);
+      },
+      stopImmediatePropagation: function() {
+        stopPropagationTable.set(this, true);
+        stopImmediatePropagationTable.set(this, true);
+      }
+    };
+    registerWrapper(OriginalEvent, Event, document.createEvent("Event"));
+    function unwrapOptions(options) {
+      if (!options || !options.relatedTarget) return options;
+      return Object.create(options, {
+        relatedTarget: {
+          value: unwrap(options.relatedTarget)
+        }
+      });
+    }
+    function registerGenericEvent(name, SuperEvent, prototype) {
+      var OriginalEvent = window[name];
+      var GenericEvent = function(type, options) {
+        if (type instanceof OriginalEvent) setWrapper(type, this); else return wrap(constructEvent(OriginalEvent, name, type, options));
+      };
+      GenericEvent.prototype = Object.create(SuperEvent.prototype);
+      if (prototype) mixin(GenericEvent.prototype, prototype);
+      if (OriginalEvent) {
+        try {
+          registerWrapper(OriginalEvent, GenericEvent, new OriginalEvent("temp"));
+        } catch (ex) {
+          registerWrapper(OriginalEvent, GenericEvent, document.createEvent(name));
+        }
+      }
+      return GenericEvent;
+    }
+    var UIEvent = registerGenericEvent("UIEvent", Event);
+    var CustomEvent = registerGenericEvent("CustomEvent", Event);
+    var relatedTargetProto = {
+      get relatedTarget() {
+        var relatedTarget = relatedTargetTable.get(this);
+        if (relatedTarget !== undefined) return relatedTarget;
+        return wrap(unwrap(this).relatedTarget);
+      }
+    };
+    function getInitFunction(name, relatedTargetIndex) {
+      return function() {
+        arguments[relatedTargetIndex] = unwrap(arguments[relatedTargetIndex]);
+        var impl = unwrap(this);
+        impl[name].apply(impl, arguments);
+      };
+    }
+    var mouseEventProto = mixin({
+      initMouseEvent: getInitFunction("initMouseEvent", 14)
+    }, relatedTargetProto);
+    var focusEventProto = mixin({
+      initFocusEvent: getInitFunction("initFocusEvent", 5)
+    }, relatedTargetProto);
+    var MouseEvent = registerGenericEvent("MouseEvent", UIEvent, mouseEventProto);
+    var FocusEvent = registerGenericEvent("FocusEvent", UIEvent, focusEventProto);
+    var defaultInitDicts = Object.create(null);
+    var supportsEventConstructors = function() {
+      try {
+        new window.FocusEvent("focus");
+      } catch (ex) {
+        return false;
+      }
+      return true;
+    }();
+    function constructEvent(OriginalEvent, name, type, options) {
+      if (supportsEventConstructors) return new OriginalEvent(type, unwrapOptions(options));
+      var event = unwrap(document.createEvent(name));
+      var defaultDict = defaultInitDicts[name];
+      var args = [ type ];
+      Object.keys(defaultDict).forEach(function(key) {
+        var v = options != null && key in options ? options[key] : defaultDict[key];
+        if (key === "relatedTarget") v = unwrap(v);
+        args.push(v);
+      });
+      event["init" + name].apply(event, args);
+      return event;
+    }
+    if (!supportsEventConstructors) {
+      var configureEventConstructor = function(name, initDict, superName) {
+        if (superName) {
+          var superDict = defaultInitDicts[superName];
+          initDict = mixin(mixin({}, superDict), initDict);
+        }
+        defaultInitDicts[name] = initDict;
+      };
+      configureEventConstructor("Event", {
+        bubbles: false,
+        cancelable: false
+      });
+      configureEventConstructor("CustomEvent", {
+        detail: null
+      }, "Event");
+      configureEventConstructor("UIEvent", {
+        view: null,
+        detail: 0
+      }, "Event");
+      configureEventConstructor("MouseEvent", {
+        screenX: 0,
+        screenY: 0,
+        clientX: 0,
+        clientY: 0,
+        ctrlKey: false,
+        altKey: false,
+        shiftKey: false,
+        metaKey: false,
+        button: 0,
+        relatedTarget: null
+      }, "UIEvent");
+      configureEventConstructor("FocusEvent", {
+        relatedTarget: null
+      }, "UIEvent");
+    }
+    var OriginalBeforeUnloadEvent = window.BeforeUnloadEvent;
+    function BeforeUnloadEvent(impl) {
+      Event.call(this, impl);
+    }
+    BeforeUnloadEvent.prototype = Object.create(Event.prototype);
+    mixin(BeforeUnloadEvent.prototype, {
+      get returnValue() {
+        return unsafeUnwrap(this).returnValue;
+      },
+      set returnValue(v) {
+        unsafeUnwrap(this).returnValue = v;
+      }
+    });
+    if (OriginalBeforeUnloadEvent) registerWrapper(OriginalBeforeUnloadEvent, BeforeUnloadEvent);
+    function isValidListener(fun) {
+      if (typeof fun === "function") return true;
+      return fun && fun.handleEvent;
+    }
+    function isMutationEvent(type) {
+      switch (type) {
+       case "DOMAttrModified":
+       case "DOMAttributeNameChanged":
+       case "DOMCharacterDataModified":
+       case "DOMElementNameChanged":
+       case "DOMNodeInserted":
+       case "DOMNodeInsertedIntoDocument":
+       case "DOMNodeRemoved":
+       case "DOMNodeRemovedFromDocument":
+       case "DOMSubtreeModified":
+        return true;
+      }
+      return false;
+    }
+    var OriginalEventTarget = window.EventTarget;
+    function EventTarget(impl) {
+      setWrapper(impl, this);
+    }
+    var methodNames = [ "addEventListener", "removeEventListener", "dispatchEvent" ];
+    [ Node, Window ].forEach(function(constructor) {
+      var p = constructor.prototype;
+      methodNames.forEach(function(name) {
+        Object.defineProperty(p, name + "_", {
+          value: p[name]
+        });
+      });
+    });
+    function getTargetToListenAt(wrapper) {
+      if (wrapper instanceof wrappers.ShadowRoot) wrapper = wrapper.host;
+      return unwrap(wrapper);
+    }
+    EventTarget.prototype = {
+      addEventListener: function(type, fun, capture) {
+        if (!isValidListener(fun) || isMutationEvent(type)) return;
+        var listener = new Listener(type, fun, capture);
+        var listeners = listenersTable.get(this);
+        if (!listeners) {
+          listeners = [];
+          listeners.depth = 0;
+          listenersTable.set(this, listeners);
+        } else {
+          for (var i = 0; i < listeners.length; i++) {
+            if (listener.equals(listeners[i])) return;
+          }
+        }
+        listeners.push(listener);
+        var target = getTargetToListenAt(this);
+        target.addEventListener_(type, dispatchOriginalEvent, true);
+      },
+      removeEventListener: function(type, fun, capture) {
+        capture = Boolean(capture);
+        var listeners = listenersTable.get(this);
+        if (!listeners) return;
+        var count = 0, found = false;
+        for (var i = 0; i < listeners.length; i++) {
+          if (listeners[i].type === type && listeners[i].capture === capture) {
+            count++;
+            if (listeners[i].handler === fun) {
+              found = true;
+              listeners[i].remove();
+            }
+          }
+        }
+        if (found && count === 1) {
+          var target = getTargetToListenAt(this);
+          target.removeEventListener_(type, dispatchOriginalEvent, true);
+        }
+      },
+      dispatchEvent: function(event) {
+        var nativeEvent = unwrap(event);
+        var eventType = nativeEvent.type;
+        handledEventsTable.set(nativeEvent, false);
+        scope.renderAllPending();
+        var tempListener;
+        if (!hasListenerInAncestors(this, eventType)) {
+          tempListener = function() {};
+          this.addEventListener(eventType, tempListener, true);
+        }
+        try {
+          return unwrap(this).dispatchEvent_(nativeEvent);
+        } finally {
+          if (tempListener) this.removeEventListener(eventType, tempListener, true);
+        }
+      }
+    };
+    function hasListener(node, type) {
+      var listeners = listenersTable.get(node);
+      if (listeners) {
+        for (var i = 0; i < listeners.length; i++) {
+          if (!listeners[i].removed && listeners[i].type === type) return true;
+        }
+      }
+      return false;
+    }
+    function hasListenerInAncestors(target, type) {
+      for (var node = unwrap(target); node; node = node.parentNode) {
+        if (hasListener(wrap(node), type)) return true;
+      }
+      return false;
+    }
+    if (OriginalEventTarget) registerWrapper(OriginalEventTarget, EventTarget);
+    function wrapEventTargetMethods(constructors) {
+      forwardMethodsToWrapper(constructors, methodNames);
+    }
+    var originalElementFromPoint = document.elementFromPoint;
+    function elementFromPoint(self, document, x, y) {
+      scope.renderAllPending();
+      var element = wrap(originalElementFromPoint.call(unsafeUnwrap(document), x, y));
+      if (!element) return null;
+      var path = getEventPath(element, null);
+      var idx = path.lastIndexOf(self);
+      if (idx == -1) return null; else path = path.slice(0, idx);
+      return eventRetargetting(path, self);
+    }
+    function getEventHandlerGetter(name) {
+      return function() {
+        var inlineEventHandlers = eventHandlersTable.get(this);
+        return inlineEventHandlers && inlineEventHandlers[name] && inlineEventHandlers[name].value || null;
+      };
+    }
+    function getEventHandlerSetter(name) {
+      var eventType = name.slice(2);
+      return function(value) {
+        var inlineEventHandlers = eventHandlersTable.get(this);
+        if (!inlineEventHandlers) {
+          inlineEventHandlers = Object.create(null);
+          eventHandlersTable.set(this, inlineEventHandlers);
+        }
+        var old = inlineEventHandlers[name];
+        if (old) this.removeEventListener(eventType, old.wrapped, false);
+        if (typeof value === "function") {
+          var wrapped = function(e) {
+            var rv = value.call(this, e);
+            if (rv === false) e.preventDefault(); else if (name === "onbeforeunload" && typeof rv === "string") e.returnValue = rv;
+          };
+          this.addEventListener(eventType, wrapped, false);
+          inlineEventHandlers[name] = {
+            value: value,
+            wrapped: wrapped
+          };
+        }
+      };
+    }
+    scope.elementFromPoint = elementFromPoint;
+    scope.getEventHandlerGetter = getEventHandlerGetter;
+    scope.getEventHandlerSetter = getEventHandlerSetter;
+    scope.wrapEventTargetMethods = wrapEventTargetMethods;
+    scope.wrappers.BeforeUnloadEvent = BeforeUnloadEvent;
+    scope.wrappers.CustomEvent = CustomEvent;
+    scope.wrappers.Event = Event;
+    scope.wrappers.EventTarget = EventTarget;
+    scope.wrappers.FocusEvent = FocusEvent;
+    scope.wrappers.MouseEvent = MouseEvent;
+    scope.wrappers.UIEvent = UIEvent;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var UIEvent = scope.wrappers.UIEvent;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var setWrapper = scope.setWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var wrap = scope.wrap;
+    var OriginalTouchEvent = window.TouchEvent;
+    if (!OriginalTouchEvent) return;
+    var nativeEvent;
+    try {
+      nativeEvent = document.createEvent("TouchEvent");
+    } catch (ex) {
+      return;
+    }
+    var nonEnumDescriptor = {
+      enumerable: false
+    };
+    function nonEnum(obj, prop) {
+      Object.defineProperty(obj, prop, nonEnumDescriptor);
+    }
+    function Touch(impl) {
+      setWrapper(impl, this);
+    }
+    Touch.prototype = {
+      get target() {
+        return wrap(unsafeUnwrap(this).target);
+      }
+    };
+    var descr = {
+      configurable: true,
+      enumerable: true,
+      get: null
+    };
+    [ "clientX", "clientY", "screenX", "screenY", "pageX", "pageY", "identifier", "webkitRadiusX", "webkitRadiusY", "webkitRotationAngle", "webkitForce" ].forEach(function(name) {
+      descr.get = function() {
+        return unsafeUnwrap(this)[name];
+      };
+      Object.defineProperty(Touch.prototype, name, descr);
+    });
+    function TouchList() {
+      this.length = 0;
+      nonEnum(this, "length");
+    }
+    TouchList.prototype = {
+      item: function(index) {
+        return this[index];
+      }
+    };
+    function wrapTouchList(nativeTouchList) {
+      var list = new TouchList();
+      for (var i = 0; i < nativeTouchList.length; i++) {
+        list[i] = new Touch(nativeTouchList[i]);
+      }
+      list.length = i;
+      return list;
+    }
+    function TouchEvent(impl) {
+      UIEvent.call(this, impl);
+    }
+    TouchEvent.prototype = Object.create(UIEvent.prototype);
+    mixin(TouchEvent.prototype, {
+      get touches() {
+        return wrapTouchList(unsafeUnwrap(this).touches);
+      },
+      get targetTouches() {
+        return wrapTouchList(unsafeUnwrap(this).targetTouches);
+      },
+      get changedTouches() {
+        return wrapTouchList(unsafeUnwrap(this).changedTouches);
+      },
+      initTouchEvent: function() {
+        throw new Error("Not implemented");
+      }
+    });
+    registerWrapper(OriginalTouchEvent, TouchEvent, nativeEvent);
+    scope.wrappers.Touch = Touch;
+    scope.wrappers.TouchEvent = TouchEvent;
+    scope.wrappers.TouchList = TouchList;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var wrap = scope.wrap;
+    var nonEnumDescriptor = {
+      enumerable: false
+    };
+    function nonEnum(obj, prop) {
+      Object.defineProperty(obj, prop, nonEnumDescriptor);
+    }
+    function NodeList() {
+      this.length = 0;
+      nonEnum(this, "length");
+    }
+    NodeList.prototype = {
+      item: function(index) {
+        return this[index];
+      }
+    };
+    nonEnum(NodeList.prototype, "item");
+    function wrapNodeList(list) {
+      if (list == null) return list;
+      var wrapperList = new NodeList();
+      for (var i = 0, length = list.length; i < length; i++) {
+        wrapperList[i] = wrap(list[i]);
+      }
+      wrapperList.length = length;
+      return wrapperList;
+    }
+    function addWrapNodeListMethod(wrapperConstructor, name) {
+      wrapperConstructor.prototype[name] = function() {
+        return wrapNodeList(unsafeUnwrap(this)[name].apply(unsafeUnwrap(this), arguments));
+      };
+    }
+    scope.wrappers.NodeList = NodeList;
+    scope.addWrapNodeListMethod = addWrapNodeListMethod;
+    scope.wrapNodeList = wrapNodeList;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    scope.wrapHTMLCollection = scope.wrapNodeList;
+    scope.wrappers.HTMLCollection = scope.wrappers.NodeList;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var EventTarget = scope.wrappers.EventTarget;
+    var NodeList = scope.wrappers.NodeList;
+    var TreeScope = scope.TreeScope;
+    var assert = scope.assert;
+    var defineWrapGetter = scope.defineWrapGetter;
+    var enqueueMutation = scope.enqueueMutation;
+    var getTreeScope = scope.getTreeScope;
+    var isWrapper = scope.isWrapper;
+    var mixin = scope.mixin;
+    var registerTransientObservers = scope.registerTransientObservers;
+    var registerWrapper = scope.registerWrapper;
+    var setTreeScope = scope.setTreeScope;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var unwrap = scope.unwrap;
+    var unwrapIfNeeded = scope.unwrapIfNeeded;
+    var wrap = scope.wrap;
+    var wrapIfNeeded = scope.wrapIfNeeded;
+    var wrappers = scope.wrappers;
+    function assertIsNodeWrapper(node) {
+      assert(node instanceof Node);
+    }
+    function createOneElementNodeList(node) {
+      var nodes = new NodeList();
+      nodes[0] = node;
+      nodes.length = 1;
+      return nodes;
+    }
+    var surpressMutations = false;
+    function enqueueRemovalForInsertedNodes(node, parent, nodes) {
+      enqueueMutation(parent, "childList", {
+        removedNodes: nodes,
+        previousSibling: node.previousSibling,
+        nextSibling: node.nextSibling
+      });
+    }
+    function enqueueRemovalForInsertedDocumentFragment(df, nodes) {
+      enqueueMutation(df, "childList", {
+        removedNodes: nodes
+      });
+    }
+    function collectNodes(node, parentNode, previousNode, nextNode) {
+      if (node instanceof DocumentFragment) {
+        var nodes = collectNodesForDocumentFragment(node);
+        surpressMutations = true;
+        for (var i = nodes.length - 1; i >= 0; i--) {
+          node.removeChild(nodes[i]);
+          nodes[i].parentNode_ = parentNode;
+        }
+        surpressMutations = false;
+        for (var i = 0; i < nodes.length; i++) {
+          nodes[i].previousSibling_ = nodes[i - 1] || previousNode;
+          nodes[i].nextSibling_ = nodes[i + 1] || nextNode;
+        }
+        if (previousNode) previousNode.nextSibling_ = nodes[0];
+        if (nextNode) nextNode.previousSibling_ = nodes[nodes.length - 1];
+        return nodes;
+      }
+      var nodes = createOneElementNodeList(node);
+      var oldParent = node.parentNode;
+      if (oldParent) {
+        oldParent.removeChild(node);
+      }
+      node.parentNode_ = parentNode;
+      node.previousSibling_ = previousNode;
+      node.nextSibling_ = nextNode;
+      if (previousNode) previousNode.nextSibling_ = node;
+      if (nextNode) nextNode.previousSibling_ = node;
+      return nodes;
+    }
+    function collectNodesNative(node) {
+      if (node instanceof DocumentFragment) return collectNodesForDocumentFragment(node);
+      var nodes = createOneElementNodeList(node);
+      var oldParent = node.parentNode;
+      if (oldParent) enqueueRemovalForInsertedNodes(node, oldParent, nodes);
+      return nodes;
+    }
+    function collectNodesForDocumentFragment(node) {
+      var nodes = new NodeList();
+      var i = 0;
+      for (var child = node.firstChild; child; child = child.nextSibling) {
+        nodes[i++] = child;
+      }
+      nodes.length = i;
+      enqueueRemovalForInsertedDocumentFragment(node, nodes);
+      return nodes;
+    }
+    function snapshotNodeList(nodeList) {
+      return nodeList;
+    }
+    function nodeWasAdded(node, treeScope) {
+      setTreeScope(node, treeScope);
+      node.nodeIsInserted_();
+    }
+    function nodesWereAdded(nodes, parent) {
+      var treeScope = getTreeScope(parent);
+      for (var i = 0; i < nodes.length; i++) {
+        nodeWasAdded(nodes[i], treeScope);
+      }
+    }
+    function nodeWasRemoved(node) {
+      setTreeScope(node, new TreeScope(node, null));
+    }
+    function nodesWereRemoved(nodes) {
+      for (var i = 0; i < nodes.length; i++) {
+        nodeWasRemoved(nodes[i]);
+      }
+    }
+    function ensureSameOwnerDocument(parent, child) {
+      var ownerDoc = parent.nodeType === Node.DOCUMENT_NODE ? parent : parent.ownerDocument;
+      if (ownerDoc !== child.ownerDocument) ownerDoc.adoptNode(child);
+    }
+    function adoptNodesIfNeeded(owner, nodes) {
+      if (!nodes.length) return;
+      var ownerDoc = owner.ownerDocument;
+      if (ownerDoc === nodes[0].ownerDocument) return;
+      for (var i = 0; i < nodes.length; i++) {
+        scope.adoptNodeNoRemove(nodes[i], ownerDoc);
+      }
+    }
+    function unwrapNodesForInsertion(owner, nodes) {
+      adoptNodesIfNeeded(owner, nodes);
+      var length = nodes.length;
+      if (length === 1) return unwrap(nodes[0]);
+      var df = unwrap(owner.ownerDocument.createDocumentFragment());
+      for (var i = 0; i < length; i++) {
+        df.appendChild(unwrap(nodes[i]));
+      }
+      return df;
+    }
+    function clearChildNodes(wrapper) {
+      if (wrapper.firstChild_ !== undefined) {
+        var child = wrapper.firstChild_;
+        while (child) {
+          var tmp = child;
+          child = child.nextSibling_;
+          tmp.parentNode_ = tmp.previousSibling_ = tmp.nextSibling_ = undefined;
+        }
+      }
+      wrapper.firstChild_ = wrapper.lastChild_ = undefined;
+    }
+    function removeAllChildNodes(wrapper) {
+      if (wrapper.invalidateShadowRenderer()) {
+        var childWrapper = wrapper.firstChild;
+        while (childWrapper) {
+          assert(childWrapper.parentNode === wrapper);
+          var nextSibling = childWrapper.nextSibling;
+          var childNode = unwrap(childWrapper);
+          var parentNode = childNode.parentNode;
+          if (parentNode) originalRemoveChild.call(parentNode, childNode);
+          childWrapper.previousSibling_ = childWrapper.nextSibling_ = childWrapper.parentNode_ = null;
+          childWrapper = nextSibling;
+        }
+        wrapper.firstChild_ = wrapper.lastChild_ = null;
+      } else {
+        var node = unwrap(wrapper);
+        var child = node.firstChild;
+        var nextSibling;
+        while (child) {
+          nextSibling = child.nextSibling;
+          originalRemoveChild.call(node, child);
+          child = nextSibling;
+        }
+      }
+    }
+    function invalidateParent(node) {
+      var p = node.parentNode;
+      return p && p.invalidateShadowRenderer();
+    }
+    function cleanupNodes(nodes) {
+      for (var i = 0, n; i < nodes.length; i++) {
+        n = nodes[i];
+        n.parentNode.removeChild(n);
+      }
+    }
+    var originalImportNode = document.importNode;
+    var originalCloneNode = window.Node.prototype.cloneNode;
+    function cloneNode(node, deep, opt_doc) {
+      var clone;
+      if (opt_doc) clone = wrap(originalImportNode.call(opt_doc, unsafeUnwrap(node), false)); else clone = wrap(originalCloneNode.call(unsafeUnwrap(node), false));
+      if (deep) {
+        for (var child = node.firstChild; child; child = child.nextSibling) {
+          clone.appendChild(cloneNode(child, true, opt_doc));
+        }
+        if (node instanceof wrappers.HTMLTemplateElement) {
+          var cloneContent = clone.content;
+          for (var child = node.content.firstChild; child; child = child.nextSibling) {
+            cloneContent.appendChild(cloneNode(child, true, opt_doc));
+          }
+        }
+      }
+      return clone;
+    }
+    function contains(self, child) {
+      if (!child || getTreeScope(self) !== getTreeScope(child)) return false;
+      for (var node = child; node; node = node.parentNode) {
+        if (node === self) return true;
+      }
+      return false;
+    }
+    var OriginalNode = window.Node;
+    function Node(original) {
+      assert(original instanceof OriginalNode);
+      EventTarget.call(this, original);
+      this.parentNode_ = undefined;
+      this.firstChild_ = undefined;
+      this.lastChild_ = undefined;
+      this.nextSibling_ = undefined;
+      this.previousSibling_ = undefined;
+      this.treeScope_ = undefined;
+    }
+    var OriginalDocumentFragment = window.DocumentFragment;
+    var originalAppendChild = OriginalNode.prototype.appendChild;
+    var originalCompareDocumentPosition = OriginalNode.prototype.compareDocumentPosition;
+    var originalInsertBefore = OriginalNode.prototype.insertBefore;
+    var originalRemoveChild = OriginalNode.prototype.removeChild;
+    var originalReplaceChild = OriginalNode.prototype.replaceChild;
+    var isIe = /Trident/.test(navigator.userAgent);
+    var removeChildOriginalHelper = isIe ? function(parent, child) {
+      try {
+        originalRemoveChild.call(parent, child);
+      } catch (ex) {
+        if (!(parent instanceof OriginalDocumentFragment)) throw ex;
+      }
+    } : function(parent, child) {
+      originalRemoveChild.call(parent, child);
+    };
+    Node.prototype = Object.create(EventTarget.prototype);
+    mixin(Node.prototype, {
+      appendChild: function(childWrapper) {
+        return this.insertBefore(childWrapper, null);
+      },
+      insertBefore: function(childWrapper, refWrapper) {
+        assertIsNodeWrapper(childWrapper);
+        var refNode;
+        if (refWrapper) {
+          if (isWrapper(refWrapper)) {
+            refNode = unwrap(refWrapper);
+          } else {
+            refNode = refWrapper;
+            refWrapper = wrap(refNode);
+          }
+        } else {
+          refWrapper = null;
+          refNode = null;
+        }
+        refWrapper && assert(refWrapper.parentNode === this);
+        var nodes;
+        var previousNode = refWrapper ? refWrapper.previousSibling : this.lastChild;
+        var useNative = !this.invalidateShadowRenderer() && !invalidateParent(childWrapper);
+        if (useNative) nodes = collectNodesNative(childWrapper); else nodes = collectNodes(childWrapper, this, previousNode, refWrapper);
+        if (useNative) {
+          ensureSameOwnerDocument(this, childWrapper);
+          clearChildNodes(this);
+          originalInsertBefore.call(unsafeUnwrap(this), unwrap(childWrapper), refNode);
+        } else {
+          if (!previousNode) this.firstChild_ = nodes[0];
+          if (!refWrapper) {
+            this.lastChild_ = nodes[nodes.length - 1];
+            if (this.firstChild_ === undefined) this.firstChild_ = this.firstChild;
+          }
+          var parentNode = refNode ? refNode.parentNode : unsafeUnwrap(this);
+          if (parentNode) {
+            originalInsertBefore.call(parentNode, unwrapNodesForInsertion(this, nodes), refNode);
+          } else {
+            adoptNodesIfNeeded(this, nodes);
+          }
+        }
+        enqueueMutation(this, "childList", {
+          addedNodes: nodes,
+          nextSibling: refWrapper,
+          previousSibling: previousNode
+        });
+        nodesWereAdded(nodes, this);
+        return childWrapper;
+      },
+      removeChild: function(childWrapper) {
+        assertIsNodeWrapper(childWrapper);
+        if (childWrapper.parentNode !== this) {
+          var found = false;
+          var childNodes = this.childNodes;
+          for (var ieChild = this.firstChild; ieChild; ieChild = ieChild.nextSibling) {
+            if (ieChild === childWrapper) {
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            throw new Error("NotFoundError");
+          }
+        }
+        var childNode = unwrap(childWrapper);
+        var childWrapperNextSibling = childWrapper.nextSibling;
+        var childWrapperPreviousSibling = childWrapper.previousSibling;
+        if (this.invalidateShadowRenderer()) {
+          var thisFirstChild = this.firstChild;
+          var thisLastChild = this.lastChild;
+          var parentNode = childNode.parentNode;
+          if (parentNode) removeChildOriginalHelper(parentNode, childNode);
+          if (thisFirstChild === childWrapper) this.firstChild_ = childWrapperNextSibling;
+          if (thisLastChild === childWrapper) this.lastChild_ = childWrapperPreviousSibling;
+          if (childWrapperPreviousSibling) childWrapperPreviousSibling.nextSibling_ = childWrapperNextSibling;
+          if (childWrapperNextSibling) {
+            childWrapperNextSibling.previousSibling_ = childWrapperPreviousSibling;
+          }
+          childWrapper.previousSibling_ = childWrapper.nextSibling_ = childWrapper.parentNode_ = undefined;
+        } else {
+          clearChildNodes(this);
+          removeChildOriginalHelper(unsafeUnwrap(this), childNode);
+        }
+        if (!surpressMutations) {
+          enqueueMutation(this, "childList", {
+            removedNodes: createOneElementNodeList(childWrapper),
+            nextSibling: childWrapperNextSibling,
+            previousSibling: childWrapperPreviousSibling
+          });
+        }
+        registerTransientObservers(this, childWrapper);
+        return childWrapper;
+      },
+      replaceChild: function(newChildWrapper, oldChildWrapper) {
+        assertIsNodeWrapper(newChildWrapper);
+        var oldChildNode;
+        if (isWrapper(oldChildWrapper)) {
+          oldChildNode = unwrap(oldChildWrapper);
+        } else {
+          oldChildNode = oldChildWrapper;
+          oldChildWrapper = wrap(oldChildNode);
+        }
+        if (oldChildWrapper.parentNode !== this) {
+          throw new Error("NotFoundError");
+        }
+        var nextNode = oldChildWrapper.nextSibling;
+        var previousNode = oldChildWrapper.previousSibling;
+        var nodes;
+        var useNative = !this.invalidateShadowRenderer() && !invalidateParent(newChildWrapper);
+        if (useNative) {
+          nodes = collectNodesNative(newChildWrapper);
+        } else {
+          if (nextNode === newChildWrapper) nextNode = newChildWrapper.nextSibling;
+          nodes = collectNodes(newChildWrapper, this, previousNode, nextNode);
+        }
+        if (!useNative) {
+          if (this.firstChild === oldChildWrapper) this.firstChild_ = nodes[0];
+          if (this.lastChild === oldChildWrapper) this.lastChild_ = nodes[nodes.length - 1];
+          oldChildWrapper.previousSibling_ = oldChildWrapper.nextSibling_ = oldChildWrapper.parentNode_ = undefined;
+          if (oldChildNode.parentNode) {
+            originalReplaceChild.call(oldChildNode.parentNode, unwrapNodesForInsertion(this, nodes), oldChildNode);
+          }
+        } else {
+          ensureSameOwnerDocument(this, newChildWrapper);
+          clearChildNodes(this);
+          originalReplaceChild.call(unsafeUnwrap(this), unwrap(newChildWrapper), oldChildNode);
+        }
+        enqueueMutation(this, "childList", {
+          addedNodes: nodes,
+          removedNodes: createOneElementNodeList(oldChildWrapper),
+          nextSibling: nextNode,
+          previousSibling: previousNode
+        });
+        nodeWasRemoved(oldChildWrapper);
+        nodesWereAdded(nodes, this);
+        return oldChildWrapper;
+      },
+      nodeIsInserted_: function() {
+        for (var child = this.firstChild; child; child = child.nextSibling) {
+          child.nodeIsInserted_();
+        }
+      },
+      hasChildNodes: function() {
+        return this.firstChild !== null;
+      },
+      get parentNode() {
+        return this.parentNode_ !== undefined ? this.parentNode_ : wrap(unsafeUnwrap(this).parentNode);
+      },
+      get firstChild() {
+        return this.firstChild_ !== undefined ? this.firstChild_ : wrap(unsafeUnwrap(this).firstChild);
+      },
+      get lastChild() {
+        return this.lastChild_ !== undefined ? this.lastChild_ : wrap(unsafeUnwrap(this).lastChild);
+      },
+      get nextSibling() {
+        return this.nextSibling_ !== undefined ? this.nextSibling_ : wrap(unsafeUnwrap(this).nextSibling);
+      },
+      get previousSibling() {
+        return this.previousSibling_ !== undefined ? this.previousSibling_ : wrap(unsafeUnwrap(this).previousSibling);
+      },
+      get parentElement() {
+        var p = this.parentNode;
+        while (p && p.nodeType !== Node.ELEMENT_NODE) {
+          p = p.parentNode;
+        }
+        return p;
+      },
+      get textContent() {
+        var s = "";
+        for (var child = this.firstChild; child; child = child.nextSibling) {
+          if (child.nodeType != Node.COMMENT_NODE) {
+            s += child.textContent;
+          }
+        }
+        return s;
+      },
+      set textContent(textContent) {
+        if (textContent == null) textContent = "";
+        var removedNodes = snapshotNodeList(this.childNodes);
+        if (this.invalidateShadowRenderer()) {
+          removeAllChildNodes(this);
+          if (textContent !== "") {
+            var textNode = unsafeUnwrap(this).ownerDocument.createTextNode(textContent);
+            this.appendChild(textNode);
+          }
+        } else {
+          clearChildNodes(this);
+          unsafeUnwrap(this).textContent = textContent;
+        }
+        var addedNodes = snapshotNodeList(this.childNodes);
+        enqueueMutation(this, "childList", {
+          addedNodes: addedNodes,
+          removedNodes: removedNodes
+        });
+        nodesWereRemoved(removedNodes);
+        nodesWereAdded(addedNodes, this);
+      },
+      get childNodes() {
+        var wrapperList = new NodeList();
+        var i = 0;
+        for (var child = this.firstChild; child; child = child.nextSibling) {
+          wrapperList[i++] = child;
+        }
+        wrapperList.length = i;
+        return wrapperList;
+      },
+      cloneNode: function(deep) {
+        return cloneNode(this, deep);
+      },
+      contains: function(child) {
+        return contains(this, wrapIfNeeded(child));
+      },
+      compareDocumentPosition: function(otherNode) {
+        return originalCompareDocumentPosition.call(unsafeUnwrap(this), unwrapIfNeeded(otherNode));
+      },
+      normalize: function() {
+        var nodes = snapshotNodeList(this.childNodes);
+        var remNodes = [];
+        var s = "";
+        var modNode;
+        for (var i = 0, n; i < nodes.length; i++) {
+          n = nodes[i];
+          if (n.nodeType === Node.TEXT_NODE) {
+            if (!modNode && !n.data.length) this.removeNode(n); else if (!modNode) modNode = n; else {
+              s += n.data;
+              remNodes.push(n);
+            }
+          } else {
+            if (modNode && remNodes.length) {
+              modNode.data += s;
+              cleanupNodes(remNodes);
+            }
+            remNodes = [];
+            s = "";
+            modNode = null;
+            if (n.childNodes.length) n.normalize();
+          }
+        }
+        if (modNode && remNodes.length) {
+          modNode.data += s;
+          cleanupNodes(remNodes);
+        }
+      }
+    });
+    defineWrapGetter(Node, "ownerDocument");
+    registerWrapper(OriginalNode, Node, document.createDocumentFragment());
+    delete Node.prototype.querySelector;
+    delete Node.prototype.querySelectorAll;
+    Node.prototype = mixin(Object.create(EventTarget.prototype), Node.prototype);
+    scope.cloneNode = cloneNode;
+    scope.nodeWasAdded = nodeWasAdded;
+    scope.nodeWasRemoved = nodeWasRemoved;
+    scope.nodesWereAdded = nodesWereAdded;
+    scope.nodesWereRemoved = nodesWereRemoved;
+    scope.originalInsertBefore = originalInsertBefore;
+    scope.originalRemoveChild = originalRemoveChild;
+    scope.snapshotNodeList = snapshotNodeList;
+    scope.wrappers.Node = Node;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLCollection = scope.wrappers.HTMLCollection;
+    var NodeList = scope.wrappers.NodeList;
+    var getTreeScope = scope.getTreeScope;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var wrap = scope.wrap;
+    var originalDocumentQuerySelector = document.querySelector;
+    var originalElementQuerySelector = document.documentElement.querySelector;
+    var originalDocumentQuerySelectorAll = document.querySelectorAll;
+    var originalElementQuerySelectorAll = document.documentElement.querySelectorAll;
+    var originalDocumentGetElementsByTagName = document.getElementsByTagName;
+    var originalElementGetElementsByTagName = document.documentElement.getElementsByTagName;
+    var originalDocumentGetElementsByTagNameNS = document.getElementsByTagNameNS;
+    var originalElementGetElementsByTagNameNS = document.documentElement.getElementsByTagNameNS;
+    var OriginalElement = window.Element;
+    var OriginalDocument = window.HTMLDocument || window.Document;
+    function filterNodeList(list, index, result, deep) {
+      var wrappedItem = null;
+      var root = null;
+      for (var i = 0, length = list.length; i < length; i++) {
+        wrappedItem = wrap(list[i]);
+        if (!deep && (root = getTreeScope(wrappedItem).root)) {
+          if (root instanceof scope.wrappers.ShadowRoot) {
+            continue;
+          }
+        }
+        result[index++] = wrappedItem;
+      }
+      return index;
+    }
+    function shimSelector(selector) {
+      return String(selector).replace(/\/deep\//g, " ");
+    }
+    function findOne(node, selector) {
+      var m, el = node.firstElementChild;
+      while (el) {
+        if (el.matches(selector)) return el;
+        m = findOne(el, selector);
+        if (m) return m;
+        el = el.nextElementSibling;
+      }
+      return null;
+    }
+    function matchesSelector(el, selector) {
+      return el.matches(selector);
+    }
+    var XHTML_NS = "http://www.w3.org/1999/xhtml";
+    function matchesTagName(el, localName, localNameLowerCase) {
+      var ln = el.localName;
+      return ln === localName || ln === localNameLowerCase && el.namespaceURI === XHTML_NS;
+    }
+    function matchesEveryThing() {
+      return true;
+    }
+    function matchesLocalNameOnly(el, ns, localName) {
+      return el.localName === localName;
+    }
+    function matchesNameSpace(el, ns) {
+      return el.namespaceURI === ns;
+    }
+    function matchesLocalNameNS(el, ns, localName) {
+      return el.namespaceURI === ns && el.localName === localName;
+    }
+    function findElements(node, index, result, p, arg0, arg1) {
+      var el = node.firstElementChild;
+      while (el) {
+        if (p(el, arg0, arg1)) result[index++] = el;
+        index = findElements(el, index, result, p, arg0, arg1);
+        el = el.nextElementSibling;
+      }
+      return index;
+    }
+    function querySelectorAllFiltered(p, index, result, selector, deep) {
+      var target = unsafeUnwrap(this);
+      var list;
+      var root = getTreeScope(this).root;
+      if (root instanceof scope.wrappers.ShadowRoot) {
+        return findElements(this, index, result, p, selector, null);
+      } else if (target instanceof OriginalElement) {
+        list = originalElementQuerySelectorAll.call(target, selector);
+      } else if (target instanceof OriginalDocument) {
+        list = originalDocumentQuerySelectorAll.call(target, selector);
+      } else {
+        return findElements(this, index, result, p, selector, null);
+      }
+      return filterNodeList(list, index, result, deep);
+    }
+    var SelectorsInterface = {
+      querySelector: function(selector) {
+        var shimmed = shimSelector(selector);
+        var deep = shimmed !== selector;
+        selector = shimmed;
+        var target = unsafeUnwrap(this);
+        var wrappedItem;
+        var root = getTreeScope(this).root;
+        if (root instanceof scope.wrappers.ShadowRoot) {
+          return findOne(this, selector);
+        } else if (target instanceof OriginalElement) {
+          wrappedItem = wrap(originalElementQuerySelector.call(target, selector));
+        } else if (target instanceof OriginalDocument) {
+          wrappedItem = wrap(originalDocumentQuerySelector.call(target, selector));
+        } else {
+          return findOne(this, selector);
+        }
+        if (!wrappedItem) {
+          return wrappedItem;
+        } else if (!deep && (root = getTreeScope(wrappedItem).root)) {
+          if (root instanceof scope.wrappers.ShadowRoot) {
+            return findOne(this, selector);
+          }
+        }
+        return wrappedItem;
+      },
+      querySelectorAll: function(selector) {
+        var shimmed = shimSelector(selector);
+        var deep = shimmed !== selector;
+        selector = shimmed;
+        var result = new NodeList();
+        result.length = querySelectorAllFiltered.call(this, matchesSelector, 0, result, selector, deep);
+        return result;
+      }
+    };
+    function getElementsByTagNameFiltered(p, index, result, localName, lowercase) {
+      var target = unsafeUnwrap(this);
+      var list;
+      var root = getTreeScope(this).root;
+      if (root instanceof scope.wrappers.ShadowRoot) {
+        return findElements(this, index, result, p, localName, lowercase);
+      } else if (target instanceof OriginalElement) {
+        list = originalElementGetElementsByTagName.call(target, localName, lowercase);
+      } else if (target instanceof OriginalDocument) {
+        list = originalDocumentGetElementsByTagName.call(target, localName, lowercase);
+      } else {
+        return findElements(this, index, result, p, localName, lowercase);
+      }
+      return filterNodeList(list, index, result, false);
+    }
+    function getElementsByTagNameNSFiltered(p, index, result, ns, localName) {
+      var target = unsafeUnwrap(this);
+      var list;
+      var root = getTreeScope(this).root;
+      if (root instanceof scope.wrappers.ShadowRoot) {
+        return findElements(this, index, result, p, ns, localName);
+      } else if (target instanceof OriginalElement) {
+        list = originalElementGetElementsByTagNameNS.call(target, ns, localName);
+      } else if (target instanceof OriginalDocument) {
+        list = originalDocumentGetElementsByTagNameNS.call(target, ns, localName);
+      } else {
+        return findElements(this, index, result, p, ns, localName);
+      }
+      return filterNodeList(list, index, result, false);
+    }
+    var GetElementsByInterface = {
+      getElementsByTagName: function(localName) {
+        var result = new HTMLCollection();
+        var match = localName === "*" ? matchesEveryThing : matchesTagName;
+        result.length = getElementsByTagNameFiltered.call(this, match, 0, result, localName, localName.toLowerCase());
+        return result;
+      },
+      getElementsByClassName: function(className) {
+        return this.querySelectorAll("." + className);
+      },
+      getElementsByTagNameNS: function(ns, localName) {
+        var result = new HTMLCollection();
+        var match = null;
+        if (ns === "*") {
+          match = localName === "*" ? matchesEveryThing : matchesLocalNameOnly;
+        } else {
+          match = localName === "*" ? matchesNameSpace : matchesLocalNameNS;
+        }
+        result.length = getElementsByTagNameNSFiltered.call(this, match, 0, result, ns || null, localName);
+        return result;
+      }
+    };
+    scope.GetElementsByInterface = GetElementsByInterface;
+    scope.SelectorsInterface = SelectorsInterface;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var NodeList = scope.wrappers.NodeList;
+    function forwardElement(node) {
+      while (node && node.nodeType !== Node.ELEMENT_NODE) {
+        node = node.nextSibling;
+      }
+      return node;
+    }
+    function backwardsElement(node) {
+      while (node && node.nodeType !== Node.ELEMENT_NODE) {
+        node = node.previousSibling;
+      }
+      return node;
+    }
+    var ParentNodeInterface = {
+      get firstElementChild() {
+        return forwardElement(this.firstChild);
+      },
+      get lastElementChild() {
+        return backwardsElement(this.lastChild);
+      },
+      get childElementCount() {
+        var count = 0;
+        for (var child = this.firstElementChild; child; child = child.nextElementSibling) {
+          count++;
+        }
+        return count;
+      },
+      get children() {
+        var wrapperList = new NodeList();
+        var i = 0;
+        for (var child = this.firstElementChild; child; child = child.nextElementSibling) {
+          wrapperList[i++] = child;
+        }
+        wrapperList.length = i;
+        return wrapperList;
+      },
+      remove: function() {
+        var p = this.parentNode;
+        if (p) p.removeChild(this);
+      }
+    };
+    var ChildNodeInterface = {
+      get nextElementSibling() {
+        return forwardElement(this.nextSibling);
+      },
+      get previousElementSibling() {
+        return backwardsElement(this.previousSibling);
+      }
+    };
+    scope.ChildNodeInterface = ChildNodeInterface;
+    scope.ParentNodeInterface = ParentNodeInterface;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var ChildNodeInterface = scope.ChildNodeInterface;
+    var Node = scope.wrappers.Node;
+    var enqueueMutation = scope.enqueueMutation;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var OriginalCharacterData = window.CharacterData;
+    function CharacterData(node) {
+      Node.call(this, node);
+    }
+    CharacterData.prototype = Object.create(Node.prototype);
+    mixin(CharacterData.prototype, {
+      get textContent() {
+        return this.data;
+      },
+      set textContent(value) {
+        this.data = value;
+      },
+      get data() {
+        return unsafeUnwrap(this).data;
+      },
+      set data(value) {
+        var oldValue = unsafeUnwrap(this).data;
+        enqueueMutation(this, "characterData", {
+          oldValue: oldValue
+        });
+        unsafeUnwrap(this).data = value;
+      }
+    });
+    mixin(CharacterData.prototype, ChildNodeInterface);
+    registerWrapper(OriginalCharacterData, CharacterData, document.createTextNode(""));
+    scope.wrappers.CharacterData = CharacterData;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var CharacterData = scope.wrappers.CharacterData;
+    var enqueueMutation = scope.enqueueMutation;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    function toUInt32(x) {
+      return x >>> 0;
+    }
+    var OriginalText = window.Text;
+    function Text(node) {
+      CharacterData.call(this, node);
+    }
+    Text.prototype = Object.create(CharacterData.prototype);
+    mixin(Text.prototype, {
+      splitText: function(offset) {
+        offset = toUInt32(offset);
+        var s = this.data;
+        if (offset > s.length) throw new Error("IndexSizeError");
+        var head = s.slice(0, offset);
+        var tail = s.slice(offset);
+        this.data = head;
+        var newTextNode = this.ownerDocument.createTextNode(tail);
+        if (this.parentNode) this.parentNode.insertBefore(newTextNode, this.nextSibling);
+        return newTextNode;
+      }
+    });
+    registerWrapper(OriginalText, Text, document.createTextNode(""));
+    scope.wrappers.Text = Text;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var setWrapper = scope.setWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    function invalidateClass(el) {
+      scope.invalidateRendererBasedOnAttribute(el, "class");
+    }
+    function DOMTokenList(impl, ownerElement) {
+      setWrapper(impl, this);
+      this.ownerElement_ = ownerElement;
+    }
+    DOMTokenList.prototype = {
+      constructor: DOMTokenList,
+      get length() {
+        return unsafeUnwrap(this).length;
+      },
+      item: function(index) {
+        return unsafeUnwrap(this).item(index);
+      },
+      contains: function(token) {
+        return unsafeUnwrap(this).contains(token);
+      },
+      add: function() {
+        unsafeUnwrap(this).add.apply(unsafeUnwrap(this), arguments);
+        invalidateClass(this.ownerElement_);
+      },
+      remove: function() {
+        unsafeUnwrap(this).remove.apply(unsafeUnwrap(this), arguments);
+        invalidateClass(this.ownerElement_);
+      },
+      toggle: function(token) {
+        var rv = unsafeUnwrap(this).toggle.apply(unsafeUnwrap(this), arguments);
+        invalidateClass(this.ownerElement_);
+        return rv;
+      },
+      toString: function() {
+        return unsafeUnwrap(this).toString();
+      }
+    };
+    scope.wrappers.DOMTokenList = DOMTokenList;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var ChildNodeInterface = scope.ChildNodeInterface;
+    var GetElementsByInterface = scope.GetElementsByInterface;
+    var Node = scope.wrappers.Node;
+    var DOMTokenList = scope.wrappers.DOMTokenList;
+    var ParentNodeInterface = scope.ParentNodeInterface;
+    var SelectorsInterface = scope.SelectorsInterface;
+    var addWrapNodeListMethod = scope.addWrapNodeListMethod;
+    var enqueueMutation = scope.enqueueMutation;
+    var mixin = scope.mixin;
+    var oneOf = scope.oneOf;
+    var registerWrapper = scope.registerWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var wrappers = scope.wrappers;
+    var OriginalElement = window.Element;
+    var matchesNames = [ "matches", "mozMatchesSelector", "msMatchesSelector", "webkitMatchesSelector" ].filter(function(name) {
+      return OriginalElement.prototype[name];
+    });
+    var matchesName = matchesNames[0];
+    var originalMatches = OriginalElement.prototype[matchesName];
+    function invalidateRendererBasedOnAttribute(element, name) {
+      var p = element.parentNode;
+      if (!p || !p.shadowRoot) return;
+      var renderer = scope.getRendererForHost(p);
+      if (renderer.dependsOnAttribute(name)) renderer.invalidate();
+    }
+    function enqueAttributeChange(element, name, oldValue) {
+      enqueueMutation(element, "attributes", {
+        name: name,
+        namespace: null,
+        oldValue: oldValue
+      });
+    }
+    var classListTable = new WeakMap();
+    function Element(node) {
+      Node.call(this, node);
+    }
+    Element.prototype = Object.create(Node.prototype);
+    mixin(Element.prototype, {
+      createShadowRoot: function() {
+        var newShadowRoot = new wrappers.ShadowRoot(this);
+        unsafeUnwrap(this).polymerShadowRoot_ = newShadowRoot;
+        var renderer = scope.getRendererForHost(this);
+        renderer.invalidate();
+        return newShadowRoot;
+      },
+      get shadowRoot() {
+        return unsafeUnwrap(this).polymerShadowRoot_ || null;
+      },
+      setAttribute: function(name, value) {
+        var oldValue = unsafeUnwrap(this).getAttribute(name);
+        unsafeUnwrap(this).setAttribute(name, value);
+        enqueAttributeChange(this, name, oldValue);
+        invalidateRendererBasedOnAttribute(this, name);
+      },
+      removeAttribute: function(name) {
+        var oldValue = unsafeUnwrap(this).getAttribute(name);
+        unsafeUnwrap(this).removeAttribute(name);
+        enqueAttributeChange(this, name, oldValue);
+        invalidateRendererBasedOnAttribute(this, name);
+      },
+      matches: function(selector) {
+        return originalMatches.call(unsafeUnwrap(this), selector);
+      },
+      get classList() {
+        var list = classListTable.get(this);
+        if (!list) {
+          classListTable.set(this, list = new DOMTokenList(unsafeUnwrap(this).classList, this));
+        }
+        return list;
+      },
+      get className() {
+        return unsafeUnwrap(this).className;
+      },
+      set className(v) {
+        this.setAttribute("class", v);
+      },
+      get id() {
+        return unsafeUnwrap(this).id;
+      },
+      set id(v) {
+        this.setAttribute("id", v);
+      }
+    });
+    matchesNames.forEach(function(name) {
+      if (name !== "matches") {
+        Element.prototype[name] = function(selector) {
+          return this.matches(selector);
+        };
+      }
+    });
+    if (OriginalElement.prototype.webkitCreateShadowRoot) {
+      Element.prototype.webkitCreateShadowRoot = Element.prototype.createShadowRoot;
+    }
+    mixin(Element.prototype, ChildNodeInterface);
+    mixin(Element.prototype, GetElementsByInterface);
+    mixin(Element.prototype, ParentNodeInterface);
+    mixin(Element.prototype, SelectorsInterface);
+    registerWrapper(OriginalElement, Element, document.createElementNS(null, "x"));
+    scope.invalidateRendererBasedOnAttribute = invalidateRendererBasedOnAttribute;
+    scope.matchesNames = matchesNames;
+    scope.wrappers.Element = Element;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var Element = scope.wrappers.Element;
+    var defineGetter = scope.defineGetter;
+    var enqueueMutation = scope.enqueueMutation;
+    var mixin = scope.mixin;
+    var nodesWereAdded = scope.nodesWereAdded;
+    var nodesWereRemoved = scope.nodesWereRemoved;
+    var registerWrapper = scope.registerWrapper;
+    var snapshotNodeList = scope.snapshotNodeList;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var unwrap = scope.unwrap;
+    var wrap = scope.wrap;
+    var wrappers = scope.wrappers;
+    var escapeAttrRegExp = /[&\u00A0"]/g;
+    var escapeDataRegExp = /[&\u00A0<>]/g;
+    function escapeReplace(c) {
+      switch (c) {
+       case "&":
+        return "&amp;";
+
+       case "<":
+        return "&lt;";
+
+       case ">":
+        return "&gt;";
+
+       case '"':
+        return "&quot;";
+
+       case " ":
+        return "&nbsp;";
+      }
+    }
+    function escapeAttr(s) {
+      return s.replace(escapeAttrRegExp, escapeReplace);
+    }
+    function escapeData(s) {
+      return s.replace(escapeDataRegExp, escapeReplace);
+    }
+    function makeSet(arr) {
+      var set = {};
+      for (var i = 0; i < arr.length; i++) {
+        set[arr[i]] = true;
+      }
+      return set;
+    }
+    var voidElements = makeSet([ "area", "base", "br", "col", "command", "embed", "hr", "img", "input", "keygen", "link", "meta", "param", "source", "track", "wbr" ]);
+    var plaintextParents = makeSet([ "style", "script", "xmp", "iframe", "noembed", "noframes", "plaintext", "noscript" ]);
+    function getOuterHTML(node, parentNode) {
+      switch (node.nodeType) {
+       case Node.ELEMENT_NODE:
+        var tagName = node.tagName.toLowerCase();
+        var s = "<" + tagName;
+        var attrs = node.attributes;
+        for (var i = 0, attr; attr = attrs[i]; i++) {
+          s += " " + attr.name + '="' + escapeAttr(attr.value) + '"';
+        }
+        s += ">";
+        if (voidElements[tagName]) return s;
+        return s + getInnerHTML(node) + "</" + tagName + ">";
+
+       case Node.TEXT_NODE:
+        var data = node.data;
+        if (parentNode && plaintextParents[parentNode.localName]) return data;
+        return escapeData(data);
+
+       case Node.COMMENT_NODE:
+        return "<!--" + node.data + "-->";
+
+       default:
+        console.error(node);
+        throw new Error("not implemented");
+      }
+    }
+    function getInnerHTML(node) {
+      if (node instanceof wrappers.HTMLTemplateElement) node = node.content;
+      var s = "";
+      for (var child = node.firstChild; child; child = child.nextSibling) {
+        s += getOuterHTML(child, node);
+      }
+      return s;
+    }
+    function setInnerHTML(node, value, opt_tagName) {
+      var tagName = opt_tagName || "div";
+      node.textContent = "";
+      var tempElement = unwrap(node.ownerDocument.createElement(tagName));
+      tempElement.innerHTML = value;
+      var firstChild;
+      while (firstChild = tempElement.firstChild) {
+        node.appendChild(wrap(firstChild));
+      }
+    }
+    var oldIe = /MSIE/.test(navigator.userAgent);
+    var OriginalHTMLElement = window.HTMLElement;
+    var OriginalHTMLTemplateElement = window.HTMLTemplateElement;
+    function HTMLElement(node) {
+      Element.call(this, node);
+    }
+    HTMLElement.prototype = Object.create(Element.prototype);
+    mixin(HTMLElement.prototype, {
+      get innerHTML() {
+        return getInnerHTML(this);
+      },
+      set innerHTML(value) {
+        if (oldIe && plaintextParents[this.localName]) {
+          this.textContent = value;
+          return;
+        }
+        var removedNodes = snapshotNodeList(this.childNodes);
+        if (this.invalidateShadowRenderer()) {
+          if (this instanceof wrappers.HTMLTemplateElement) setInnerHTML(this.content, value); else setInnerHTML(this, value, this.tagName);
+        } else if (!OriginalHTMLTemplateElement && this instanceof wrappers.HTMLTemplateElement) {
+          setInnerHTML(this.content, value);
+        } else {
+          unsafeUnwrap(this).innerHTML = value;
+        }
+        var addedNodes = snapshotNodeList(this.childNodes);
+        enqueueMutation(this, "childList", {
+          addedNodes: addedNodes,
+          removedNodes: removedNodes
+        });
+        nodesWereRemoved(removedNodes);
+        nodesWereAdded(addedNodes, this);
+      },
+      get outerHTML() {
+        return getOuterHTML(this, this.parentNode);
+      },
+      set outerHTML(value) {
+        var p = this.parentNode;
+        if (p) {
+          p.invalidateShadowRenderer();
+          var df = frag(p, value);
+          p.replaceChild(df, this);
+        }
+      },
+      insertAdjacentHTML: function(position, text) {
+        var contextElement, refNode;
+        switch (String(position).toLowerCase()) {
+         case "beforebegin":
+          contextElement = this.parentNode;
+          refNode = this;
+          break;
+
+         case "afterend":
+          contextElement = this.parentNode;
+          refNode = this.nextSibling;
+          break;
+
+         case "afterbegin":
+          contextElement = this;
+          refNode = this.firstChild;
+          break;
+
+         case "beforeend":
+          contextElement = this;
+          refNode = null;
+          break;
+
+         default:
+          return;
+        }
+        var df = frag(contextElement, text);
+        contextElement.insertBefore(df, refNode);
+      },
+      get hidden() {
+        return this.hasAttribute("hidden");
+      },
+      set hidden(v) {
+        if (v) {
+          this.setAttribute("hidden", "");
+        } else {
+          this.removeAttribute("hidden");
+        }
+      }
+    });
+    function frag(contextElement, html) {
+      var p = unwrap(contextElement.cloneNode(false));
+      p.innerHTML = html;
+      var df = unwrap(document.createDocumentFragment());
+      var c;
+      while (c = p.firstChild) {
+        df.appendChild(c);
+      }
+      return wrap(df);
+    }
+    function getter(name) {
+      return function() {
+        scope.renderAllPending();
+        return unsafeUnwrap(this)[name];
+      };
+    }
+    function getterRequiresRendering(name) {
+      defineGetter(HTMLElement, name, getter(name));
+    }
+    [ "clientHeight", "clientLeft", "clientTop", "clientWidth", "offsetHeight", "offsetLeft", "offsetTop", "offsetWidth", "scrollHeight", "scrollWidth" ].forEach(getterRequiresRendering);
+    function getterAndSetterRequiresRendering(name) {
+      Object.defineProperty(HTMLElement.prototype, name, {
+        get: getter(name),
+        set: function(v) {
+          scope.renderAllPending();
+          unsafeUnwrap(this)[name] = v;
+        },
+        configurable: true,
+        enumerable: true
+      });
+    }
+    [ "scrollLeft", "scrollTop" ].forEach(getterAndSetterRequiresRendering);
+    function methodRequiresRendering(name) {
+      Object.defineProperty(HTMLElement.prototype, name, {
+        value: function() {
+          scope.renderAllPending();
+          return unsafeUnwrap(this)[name].apply(unsafeUnwrap(this), arguments);
+        },
+        configurable: true,
+        enumerable: true
+      });
+    }
+    [ "getBoundingClientRect", "getClientRects", "scrollIntoView" ].forEach(methodRequiresRendering);
+    registerWrapper(OriginalHTMLElement, HTMLElement, document.createElement("b"));
+    scope.wrappers.HTMLElement = HTMLElement;
+    scope.getInnerHTML = getInnerHTML;
+    scope.setInnerHTML = setInnerHTML;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var wrap = scope.wrap;
+    var OriginalHTMLCanvasElement = window.HTMLCanvasElement;
+    function HTMLCanvasElement(node) {
+      HTMLElement.call(this, node);
+    }
+    HTMLCanvasElement.prototype = Object.create(HTMLElement.prototype);
+    mixin(HTMLCanvasElement.prototype, {
+      getContext: function() {
+        var context = unsafeUnwrap(this).getContext.apply(unsafeUnwrap(this), arguments);
+        return context && wrap(context);
+      }
+    });
+    registerWrapper(OriginalHTMLCanvasElement, HTMLCanvasElement, document.createElement("canvas"));
+    scope.wrappers.HTMLCanvasElement = HTMLCanvasElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var OriginalHTMLContentElement = window.HTMLContentElement;
+    function HTMLContentElement(node) {
+      HTMLElement.call(this, node);
+    }
+    HTMLContentElement.prototype = Object.create(HTMLElement.prototype);
+    mixin(HTMLContentElement.prototype, {
+      constructor: HTMLContentElement,
+      get select() {
+        return this.getAttribute("select");
+      },
+      set select(value) {
+        this.setAttribute("select", value);
+      },
+      setAttribute: function(n, v) {
+        HTMLElement.prototype.setAttribute.call(this, n, v);
+        if (String(n).toLowerCase() === "select") this.invalidateShadowRenderer(true);
+      }
+    });
+    if (OriginalHTMLContentElement) registerWrapper(OriginalHTMLContentElement, HTMLContentElement);
+    scope.wrappers.HTMLContentElement = HTMLContentElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var wrapHTMLCollection = scope.wrapHTMLCollection;
+    var unwrap = scope.unwrap;
+    var OriginalHTMLFormElement = window.HTMLFormElement;
+    function HTMLFormElement(node) {
+      HTMLElement.call(this, node);
+    }
+    HTMLFormElement.prototype = Object.create(HTMLElement.prototype);
+    mixin(HTMLFormElement.prototype, {
+      get elements() {
+        return wrapHTMLCollection(unwrap(this).elements);
+      }
+    });
+    registerWrapper(OriginalHTMLFormElement, HTMLFormElement, document.createElement("form"));
+    scope.wrappers.HTMLFormElement = HTMLFormElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var registerWrapper = scope.registerWrapper;
+    var unwrap = scope.unwrap;
+    var rewrap = scope.rewrap;
+    var OriginalHTMLImageElement = window.HTMLImageElement;
+    function HTMLImageElement(node) {
+      HTMLElement.call(this, node);
+    }
+    HTMLImageElement.prototype = Object.create(HTMLElement.prototype);
+    registerWrapper(OriginalHTMLImageElement, HTMLImageElement, document.createElement("img"));
+    function Image(width, height) {
+      if (!(this instanceof Image)) {
+        throw new TypeError("DOM object constructor cannot be called as a function.");
+      }
+      var node = unwrap(document.createElement("img"));
+      HTMLElement.call(this, node);
+      rewrap(node, this);
+      if (width !== undefined) node.width = width;
+      if (height !== undefined) node.height = height;
+    }
+    Image.prototype = HTMLImageElement.prototype;
+    scope.wrappers.HTMLImageElement = HTMLImageElement;
+    scope.wrappers.Image = Image;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var mixin = scope.mixin;
+    var NodeList = scope.wrappers.NodeList;
+    var registerWrapper = scope.registerWrapper;
+    var OriginalHTMLShadowElement = window.HTMLShadowElement;
+    function HTMLShadowElement(node) {
+      HTMLElement.call(this, node);
+    }
+    HTMLShadowElement.prototype = Object.create(HTMLElement.prototype);
+    HTMLShadowElement.prototype.constructor = HTMLShadowElement;
+    if (OriginalHTMLShadowElement) registerWrapper(OriginalHTMLShadowElement, HTMLShadowElement);
+    scope.wrappers.HTMLShadowElement = HTMLShadowElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var unwrap = scope.unwrap;
+    var wrap = scope.wrap;
+    var contentTable = new WeakMap();
+    var templateContentsOwnerTable = new WeakMap();
+    function getTemplateContentsOwner(doc) {
+      if (!doc.defaultView) return doc;
+      var d = templateContentsOwnerTable.get(doc);
+      if (!d) {
+        d = doc.implementation.createHTMLDocument("");
+        while (d.lastChild) {
+          d.removeChild(d.lastChild);
+        }
+        templateContentsOwnerTable.set(doc, d);
+      }
+      return d;
+    }
+    function extractContent(templateElement) {
+      var doc = getTemplateContentsOwner(templateElement.ownerDocument);
+      var df = unwrap(doc.createDocumentFragment());
+      var child;
+      while (child = templateElement.firstChild) {
+        df.appendChild(child);
+      }
+      return df;
+    }
+    var OriginalHTMLTemplateElement = window.HTMLTemplateElement;
+    function HTMLTemplateElement(node) {
+      HTMLElement.call(this, node);
+      if (!OriginalHTMLTemplateElement) {
+        var content = extractContent(node);
+        contentTable.set(this, wrap(content));
+      }
+    }
+    HTMLTemplateElement.prototype = Object.create(HTMLElement.prototype);
+    mixin(HTMLTemplateElement.prototype, {
+      constructor: HTMLTemplateElement,
+      get content() {
+        if (OriginalHTMLTemplateElement) return wrap(unsafeUnwrap(this).content);
+        return contentTable.get(this);
+      }
+    });
+    if (OriginalHTMLTemplateElement) registerWrapper(OriginalHTMLTemplateElement, HTMLTemplateElement);
+    scope.wrappers.HTMLTemplateElement = HTMLTemplateElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var registerWrapper = scope.registerWrapper;
+    var OriginalHTMLMediaElement = window.HTMLMediaElement;
+    if (!OriginalHTMLMediaElement) return;
+    function HTMLMediaElement(node) {
+      HTMLElement.call(this, node);
+    }
+    HTMLMediaElement.prototype = Object.create(HTMLElement.prototype);
+    registerWrapper(OriginalHTMLMediaElement, HTMLMediaElement, document.createElement("audio"));
+    scope.wrappers.HTMLMediaElement = HTMLMediaElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLMediaElement = scope.wrappers.HTMLMediaElement;
+    var registerWrapper = scope.registerWrapper;
+    var unwrap = scope.unwrap;
+    var rewrap = scope.rewrap;
+    var OriginalHTMLAudioElement = window.HTMLAudioElement;
+    if (!OriginalHTMLAudioElement) return;
+    function HTMLAudioElement(node) {
+      HTMLMediaElement.call(this, node);
+    }
+    HTMLAudioElement.prototype = Object.create(HTMLMediaElement.prototype);
+    registerWrapper(OriginalHTMLAudioElement, HTMLAudioElement, document.createElement("audio"));
+    function Audio(src) {
+      if (!(this instanceof Audio)) {
+        throw new TypeError("DOM object constructor cannot be called as a function.");
+      }
+      var node = unwrap(document.createElement("audio"));
+      HTMLMediaElement.call(this, node);
+      rewrap(node, this);
+      node.setAttribute("preload", "auto");
+      if (src !== undefined) node.setAttribute("src", src);
+    }
+    Audio.prototype = HTMLAudioElement.prototype;
+    scope.wrappers.HTMLAudioElement = HTMLAudioElement;
+    scope.wrappers.Audio = Audio;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var rewrap = scope.rewrap;
+    var unwrap = scope.unwrap;
+    var wrap = scope.wrap;
+    var OriginalHTMLOptionElement = window.HTMLOptionElement;
+    function trimText(s) {
+      return s.replace(/\s+/g, " ").trim();
+    }
+    function HTMLOptionElement(node) {
+      HTMLElement.call(this, node);
+    }
+    HTMLOptionElement.prototype = Object.create(HTMLElement.prototype);
+    mixin(HTMLOptionElement.prototype, {
+      get text() {
+        return trimText(this.textContent);
+      },
+      set text(value) {
+        this.textContent = trimText(String(value));
+      },
+      get form() {
+        return wrap(unwrap(this).form);
+      }
+    });
+    registerWrapper(OriginalHTMLOptionElement, HTMLOptionElement, document.createElement("option"));
+    function Option(text, value, defaultSelected, selected) {
+      if (!(this instanceof Option)) {
+        throw new TypeError("DOM object constructor cannot be called as a function.");
+      }
+      var node = unwrap(document.createElement("option"));
+      HTMLElement.call(this, node);
+      rewrap(node, this);
+      if (text !== undefined) node.text = text;
+      if (value !== undefined) node.setAttribute("value", value);
+      if (defaultSelected === true) node.setAttribute("selected", "");
+      node.selected = selected === true;
+    }
+    Option.prototype = HTMLOptionElement.prototype;
+    scope.wrappers.HTMLOptionElement = HTMLOptionElement;
+    scope.wrappers.Option = Option;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var unwrap = scope.unwrap;
+    var wrap = scope.wrap;
+    var OriginalHTMLSelectElement = window.HTMLSelectElement;
+    function HTMLSelectElement(node) {
+      HTMLElement.call(this, node);
+    }
+    HTMLSelectElement.prototype = Object.create(HTMLElement.prototype);
+    mixin(HTMLSelectElement.prototype, {
+      add: function(element, before) {
+        if (typeof before === "object") before = unwrap(before);
+        unwrap(this).add(unwrap(element), before);
+      },
+      remove: function(indexOrNode) {
+        if (indexOrNode === undefined) {
+          HTMLElement.prototype.remove.call(this);
+          return;
+        }
+        if (typeof indexOrNode === "object") indexOrNode = unwrap(indexOrNode);
+        unwrap(this).remove(indexOrNode);
+      },
+      get form() {
+        return wrap(unwrap(this).form);
+      }
+    });
+    registerWrapper(OriginalHTMLSelectElement, HTMLSelectElement, document.createElement("select"));
+    scope.wrappers.HTMLSelectElement = HTMLSelectElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var unwrap = scope.unwrap;
+    var wrap = scope.wrap;
+    var wrapHTMLCollection = scope.wrapHTMLCollection;
+    var OriginalHTMLTableElement = window.HTMLTableElement;
+    function HTMLTableElement(node) {
+      HTMLElement.call(this, node);
+    }
+    HTMLTableElement.prototype = Object.create(HTMLElement.prototype);
+    mixin(HTMLTableElement.prototype, {
+      get caption() {
+        return wrap(unwrap(this).caption);
+      },
+      createCaption: function() {
+        return wrap(unwrap(this).createCaption());
+      },
+      get tHead() {
+        return wrap(unwrap(this).tHead);
+      },
+      createTHead: function() {
+        return wrap(unwrap(this).createTHead());
+      },
+      createTFoot: function() {
+        return wrap(unwrap(this).createTFoot());
+      },
+      get tFoot() {
+        return wrap(unwrap(this).tFoot);
+      },
+      get tBodies() {
+        return wrapHTMLCollection(unwrap(this).tBodies);
+      },
+      createTBody: function() {
+        return wrap(unwrap(this).createTBody());
+      },
+      get rows() {
+        return wrapHTMLCollection(unwrap(this).rows);
+      },
+      insertRow: function(index) {
+        return wrap(unwrap(this).insertRow(index));
+      }
+    });
+    registerWrapper(OriginalHTMLTableElement, HTMLTableElement, document.createElement("table"));
+    scope.wrappers.HTMLTableElement = HTMLTableElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var wrapHTMLCollection = scope.wrapHTMLCollection;
+    var unwrap = scope.unwrap;
+    var wrap = scope.wrap;
+    var OriginalHTMLTableSectionElement = window.HTMLTableSectionElement;
+    function HTMLTableSectionElement(node) {
+      HTMLElement.call(this, node);
+    }
+    HTMLTableSectionElement.prototype = Object.create(HTMLElement.prototype);
+    mixin(HTMLTableSectionElement.prototype, {
+      constructor: HTMLTableSectionElement,
+      get rows() {
+        return wrapHTMLCollection(unwrap(this).rows);
+      },
+      insertRow: function(index) {
+        return wrap(unwrap(this).insertRow(index));
+      }
+    });
+    registerWrapper(OriginalHTMLTableSectionElement, HTMLTableSectionElement, document.createElement("thead"));
+    scope.wrappers.HTMLTableSectionElement = HTMLTableSectionElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var wrapHTMLCollection = scope.wrapHTMLCollection;
+    var unwrap = scope.unwrap;
+    var wrap = scope.wrap;
+    var OriginalHTMLTableRowElement = window.HTMLTableRowElement;
+    function HTMLTableRowElement(node) {
+      HTMLElement.call(this, node);
+    }
+    HTMLTableRowElement.prototype = Object.create(HTMLElement.prototype);
+    mixin(HTMLTableRowElement.prototype, {
+      get cells() {
+        return wrapHTMLCollection(unwrap(this).cells);
+      },
+      insertCell: function(index) {
+        return wrap(unwrap(this).insertCell(index));
+      }
+    });
+    registerWrapper(OriginalHTMLTableRowElement, HTMLTableRowElement, document.createElement("tr"));
+    scope.wrappers.HTMLTableRowElement = HTMLTableRowElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLContentElement = scope.wrappers.HTMLContentElement;
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var HTMLShadowElement = scope.wrappers.HTMLShadowElement;
+    var HTMLTemplateElement = scope.wrappers.HTMLTemplateElement;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var OriginalHTMLUnknownElement = window.HTMLUnknownElement;
+    function HTMLUnknownElement(node) {
+      switch (node.localName) {
+       case "content":
+        return new HTMLContentElement(node);
+
+       case "shadow":
+        return new HTMLShadowElement(node);
+
+       case "template":
+        return new HTMLTemplateElement(node);
+      }
+      HTMLElement.call(this, node);
+    }
+    HTMLUnknownElement.prototype = Object.create(HTMLElement.prototype);
+    registerWrapper(OriginalHTMLUnknownElement, HTMLUnknownElement);
+    scope.wrappers.HTMLUnknownElement = HTMLUnknownElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var Element = scope.wrappers.Element;
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var registerObject = scope.registerObject;
+    var SVG_NS = "http://www.w3.org/2000/svg";
+    var svgTitleElement = document.createElementNS(SVG_NS, "title");
+    var SVGTitleElement = registerObject(svgTitleElement);
+    var SVGElement = Object.getPrototypeOf(SVGTitleElement.prototype).constructor;
+    if (!("classList" in svgTitleElement)) {
+      var descr = Object.getOwnPropertyDescriptor(Element.prototype, "classList");
+      Object.defineProperty(HTMLElement.prototype, "classList", descr);
+      delete Element.prototype.classList;
+    }
+    scope.wrappers.SVGElement = SVGElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var unwrap = scope.unwrap;
+    var wrap = scope.wrap;
+    var OriginalSVGUseElement = window.SVGUseElement;
+    var SVG_NS = "http://www.w3.org/2000/svg";
+    var gWrapper = wrap(document.createElementNS(SVG_NS, "g"));
+    var useElement = document.createElementNS(SVG_NS, "use");
+    var SVGGElement = gWrapper.constructor;
+    var parentInterfacePrototype = Object.getPrototypeOf(SVGGElement.prototype);
+    var parentInterface = parentInterfacePrototype.constructor;
+    function SVGUseElement(impl) {
+      parentInterface.call(this, impl);
+    }
+    SVGUseElement.prototype = Object.create(parentInterfacePrototype);
+    if ("instanceRoot" in useElement) {
+      mixin(SVGUseElement.prototype, {
+        get instanceRoot() {
+          return wrap(unwrap(this).instanceRoot);
+        },
+        get animatedInstanceRoot() {
+          return wrap(unwrap(this).animatedInstanceRoot);
+        }
+      });
+    }
+    registerWrapper(OriginalSVGUseElement, SVGUseElement, useElement);
+    scope.wrappers.SVGUseElement = SVGUseElement;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var EventTarget = scope.wrappers.EventTarget;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var wrap = scope.wrap;
+    var OriginalSVGElementInstance = window.SVGElementInstance;
+    if (!OriginalSVGElementInstance) return;
+    function SVGElementInstance(impl) {
+      EventTarget.call(this, impl);
+    }
+    SVGElementInstance.prototype = Object.create(EventTarget.prototype);
+    mixin(SVGElementInstance.prototype, {
+      get correspondingElement() {
+        return wrap(unsafeUnwrap(this).correspondingElement);
+      },
+      get correspondingUseElement() {
+        return wrap(unsafeUnwrap(this).correspondingUseElement);
+      },
+      get parentNode() {
+        return wrap(unsafeUnwrap(this).parentNode);
+      },
+      get childNodes() {
+        throw new Error("Not implemented");
+      },
+      get firstChild() {
+        return wrap(unsafeUnwrap(this).firstChild);
+      },
+      get lastChild() {
+        return wrap(unsafeUnwrap(this).lastChild);
+      },
+      get previousSibling() {
+        return wrap(unsafeUnwrap(this).previousSibling);
+      },
+      get nextSibling() {
+        return wrap(unsafeUnwrap(this).nextSibling);
+      }
+    });
+    registerWrapper(OriginalSVGElementInstance, SVGElementInstance);
+    scope.wrappers.SVGElementInstance = SVGElementInstance;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var setWrapper = scope.setWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var unwrap = scope.unwrap;
+    var unwrapIfNeeded = scope.unwrapIfNeeded;
+    var wrap = scope.wrap;
+    var OriginalCanvasRenderingContext2D = window.CanvasRenderingContext2D;
+    function CanvasRenderingContext2D(impl) {
+      setWrapper(impl, this);
+    }
+    mixin(CanvasRenderingContext2D.prototype, {
+      get canvas() {
+        return wrap(unsafeUnwrap(this).canvas);
+      },
+      drawImage: function() {
+        arguments[0] = unwrapIfNeeded(arguments[0]);
+        unsafeUnwrap(this).drawImage.apply(unsafeUnwrap(this), arguments);
+      },
+      createPattern: function() {
+        arguments[0] = unwrap(arguments[0]);
+        return unsafeUnwrap(this).createPattern.apply(unsafeUnwrap(this), arguments);
+      }
+    });
+    registerWrapper(OriginalCanvasRenderingContext2D, CanvasRenderingContext2D, document.createElement("canvas").getContext("2d"));
+    scope.wrappers.CanvasRenderingContext2D = CanvasRenderingContext2D;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var setWrapper = scope.setWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var unwrapIfNeeded = scope.unwrapIfNeeded;
+    var wrap = scope.wrap;
+    var OriginalWebGLRenderingContext = window.WebGLRenderingContext;
+    if (!OriginalWebGLRenderingContext) return;
+    function WebGLRenderingContext(impl) {
+      setWrapper(impl, this);
+    }
+    mixin(WebGLRenderingContext.prototype, {
+      get canvas() {
+        return wrap(unsafeUnwrap(this).canvas);
+      },
+      texImage2D: function() {
+        arguments[5] = unwrapIfNeeded(arguments[5]);
+        unsafeUnwrap(this).texImage2D.apply(unsafeUnwrap(this), arguments);
+      },
+      texSubImage2D: function() {
+        arguments[6] = unwrapIfNeeded(arguments[6]);
+        unsafeUnwrap(this).texSubImage2D.apply(unsafeUnwrap(this), arguments);
+      }
+    });
+    var instanceProperties = /WebKit/.test(navigator.userAgent) ? {
+      drawingBufferHeight: null,
+      drawingBufferWidth: null
+    } : {};
+    registerWrapper(OriginalWebGLRenderingContext, WebGLRenderingContext, instanceProperties);
+    scope.wrappers.WebGLRenderingContext = WebGLRenderingContext;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var registerWrapper = scope.registerWrapper;
+    var setWrapper = scope.setWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var unwrap = scope.unwrap;
+    var unwrapIfNeeded = scope.unwrapIfNeeded;
+    var wrap = scope.wrap;
+    var OriginalRange = window.Range;
+    function Range(impl) {
+      setWrapper(impl, this);
+    }
+    Range.prototype = {
+      get startContainer() {
+        return wrap(unsafeUnwrap(this).startContainer);
+      },
+      get endContainer() {
+        return wrap(unsafeUnwrap(this).endContainer);
+      },
+      get commonAncestorContainer() {
+        return wrap(unsafeUnwrap(this).commonAncestorContainer);
+      },
+      setStart: function(refNode, offset) {
+        unsafeUnwrap(this).setStart(unwrapIfNeeded(refNode), offset);
+      },
+      setEnd: function(refNode, offset) {
+        unsafeUnwrap(this).setEnd(unwrapIfNeeded(refNode), offset);
+      },
+      setStartBefore: function(refNode) {
+        unsafeUnwrap(this).setStartBefore(unwrapIfNeeded(refNode));
+      },
+      setStartAfter: function(refNode) {
+        unsafeUnwrap(this).setStartAfter(unwrapIfNeeded(refNode));
+      },
+      setEndBefore: function(refNode) {
+        unsafeUnwrap(this).setEndBefore(unwrapIfNeeded(refNode));
+      },
+      setEndAfter: function(refNode) {
+        unsafeUnwrap(this).setEndAfter(unwrapIfNeeded(refNode));
+      },
+      selectNode: function(refNode) {
+        unsafeUnwrap(this).selectNode(unwrapIfNeeded(refNode));
+      },
+      selectNodeContents: function(refNode) {
+        unsafeUnwrap(this).selectNodeContents(unwrapIfNeeded(refNode));
+      },
+      compareBoundaryPoints: function(how, sourceRange) {
+        return unsafeUnwrap(this).compareBoundaryPoints(how, unwrap(sourceRange));
+      },
+      extractContents: function() {
+        return wrap(unsafeUnwrap(this).extractContents());
+      },
+      cloneContents: function() {
+        return wrap(unsafeUnwrap(this).cloneContents());
+      },
+      insertNode: function(node) {
+        unsafeUnwrap(this).insertNode(unwrapIfNeeded(node));
+      },
+      surroundContents: function(newParent) {
+        unsafeUnwrap(this).surroundContents(unwrapIfNeeded(newParent));
+      },
+      cloneRange: function() {
+        return wrap(unsafeUnwrap(this).cloneRange());
+      },
+      isPointInRange: function(node, offset) {
+        return unsafeUnwrap(this).isPointInRange(unwrapIfNeeded(node), offset);
+      },
+      comparePoint: function(node, offset) {
+        return unsafeUnwrap(this).comparePoint(unwrapIfNeeded(node), offset);
+      },
+      intersectsNode: function(node) {
+        return unsafeUnwrap(this).intersectsNode(unwrapIfNeeded(node));
+      },
+      toString: function() {
+        return unsafeUnwrap(this).toString();
+      }
+    };
+    if (OriginalRange.prototype.createContextualFragment) {
+      Range.prototype.createContextualFragment = function(html) {
+        return wrap(unsafeUnwrap(this).createContextualFragment(html));
+      };
+    }
+    registerWrapper(window.Range, Range, document.createRange());
+    scope.wrappers.Range = Range;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var GetElementsByInterface = scope.GetElementsByInterface;
+    var ParentNodeInterface = scope.ParentNodeInterface;
+    var SelectorsInterface = scope.SelectorsInterface;
+    var mixin = scope.mixin;
+    var registerObject = scope.registerObject;
+    var DocumentFragment = registerObject(document.createDocumentFragment());
+    mixin(DocumentFragment.prototype, ParentNodeInterface);
+    mixin(DocumentFragment.prototype, SelectorsInterface);
+    mixin(DocumentFragment.prototype, GetElementsByInterface);
+    var Comment = registerObject(document.createComment(""));
+    scope.wrappers.Comment = Comment;
+    scope.wrappers.DocumentFragment = DocumentFragment;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var DocumentFragment = scope.wrappers.DocumentFragment;
+    var TreeScope = scope.TreeScope;
+    var elementFromPoint = scope.elementFromPoint;
+    var getInnerHTML = scope.getInnerHTML;
+    var getTreeScope = scope.getTreeScope;
+    var mixin = scope.mixin;
+    var rewrap = scope.rewrap;
+    var setInnerHTML = scope.setInnerHTML;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var unwrap = scope.unwrap;
+    var shadowHostTable = new WeakMap();
+    var nextOlderShadowTreeTable = new WeakMap();
+    var spaceCharRe = /[ \t\n\r\f]/;
+    function ShadowRoot(hostWrapper) {
+      var node = unwrap(unsafeUnwrap(hostWrapper).ownerDocument.createDocumentFragment());
+      DocumentFragment.call(this, node);
+      rewrap(node, this);
+      var oldShadowRoot = hostWrapper.shadowRoot;
+      nextOlderShadowTreeTable.set(this, oldShadowRoot);
+      this.treeScope_ = new TreeScope(this, getTreeScope(oldShadowRoot || hostWrapper));
+      shadowHostTable.set(this, hostWrapper);
+    }
+    ShadowRoot.prototype = Object.create(DocumentFragment.prototype);
+    mixin(ShadowRoot.prototype, {
+      constructor: ShadowRoot,
+      get innerHTML() {
+        return getInnerHTML(this);
+      },
+      set innerHTML(value) {
+        setInnerHTML(this, value);
+        this.invalidateShadowRenderer();
+      },
+      get olderShadowRoot() {
+        return nextOlderShadowTreeTable.get(this) || null;
+      },
+      get host() {
+        return shadowHostTable.get(this) || null;
+      },
+      invalidateShadowRenderer: function() {
+        return shadowHostTable.get(this).invalidateShadowRenderer();
+      },
+      elementFromPoint: function(x, y) {
+        return elementFromPoint(this, this.ownerDocument, x, y);
+      },
+      getElementById: function(id) {
+        if (spaceCharRe.test(id)) return null;
+        return this.querySelector('[id="' + id + '"]');
+      }
+    });
+    scope.wrappers.ShadowRoot = ShadowRoot;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var Element = scope.wrappers.Element;
+    var HTMLContentElement = scope.wrappers.HTMLContentElement;
+    var HTMLShadowElement = scope.wrappers.HTMLShadowElement;
+    var Node = scope.wrappers.Node;
+    var ShadowRoot = scope.wrappers.ShadowRoot;
+    var assert = scope.assert;
+    var getTreeScope = scope.getTreeScope;
+    var mixin = scope.mixin;
+    var oneOf = scope.oneOf;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var unwrap = scope.unwrap;
+    var wrap = scope.wrap;
+    var ArraySplice = scope.ArraySplice;
+    function updateWrapperUpAndSideways(wrapper) {
+      wrapper.previousSibling_ = wrapper.previousSibling;
+      wrapper.nextSibling_ = wrapper.nextSibling;
+      wrapper.parentNode_ = wrapper.parentNode;
+    }
+    function updateWrapperDown(wrapper) {
+      wrapper.firstChild_ = wrapper.firstChild;
+      wrapper.lastChild_ = wrapper.lastChild;
+    }
+    function updateAllChildNodes(parentNodeWrapper) {
+      assert(parentNodeWrapper instanceof Node);
+      for (var childWrapper = parentNodeWrapper.firstChild; childWrapper; childWrapper = childWrapper.nextSibling) {
+        updateWrapperUpAndSideways(childWrapper);
+      }
+      updateWrapperDown(parentNodeWrapper);
+    }
+    function insertBefore(parentNodeWrapper, newChildWrapper, refChildWrapper) {
+      var parentNode = unwrap(parentNodeWrapper);
+      var newChild = unwrap(newChildWrapper);
+      var refChild = refChildWrapper ? unwrap(refChildWrapper) : null;
+      remove(newChildWrapper);
+      updateWrapperUpAndSideways(newChildWrapper);
+      if (!refChildWrapper) {
+        parentNodeWrapper.lastChild_ = parentNodeWrapper.lastChild;
+        if (parentNodeWrapper.lastChild === parentNodeWrapper.firstChild) parentNodeWrapper.firstChild_ = parentNodeWrapper.firstChild;
+        var lastChildWrapper = wrap(parentNode.lastChild);
+        if (lastChildWrapper) lastChildWrapper.nextSibling_ = lastChildWrapper.nextSibling;
+      } else {
+        if (parentNodeWrapper.firstChild === refChildWrapper) parentNodeWrapper.firstChild_ = refChildWrapper;
+        refChildWrapper.previousSibling_ = refChildWrapper.previousSibling;
+      }
+      scope.originalInsertBefore.call(parentNode, newChild, refChild);
+    }
+    function remove(nodeWrapper) {
+      var node = unwrap(nodeWrapper);
+      var parentNode = node.parentNode;
+      if (!parentNode) return;
+      var parentNodeWrapper = wrap(parentNode);
+      updateWrapperUpAndSideways(nodeWrapper);
+      if (nodeWrapper.previousSibling) nodeWrapper.previousSibling.nextSibling_ = nodeWrapper;
+      if (nodeWrapper.nextSibling) nodeWrapper.nextSibling.previousSibling_ = nodeWrapper;
+      if (parentNodeWrapper.lastChild === nodeWrapper) parentNodeWrapper.lastChild_ = nodeWrapper;
+      if (parentNodeWrapper.firstChild === nodeWrapper) parentNodeWrapper.firstChild_ = nodeWrapper;
+      scope.originalRemoveChild.call(parentNode, node);
+    }
+    var distributedNodesTable = new WeakMap();
+    var destinationInsertionPointsTable = new WeakMap();
+    var rendererForHostTable = new WeakMap();
+    function resetDistributedNodes(insertionPoint) {
+      distributedNodesTable.set(insertionPoint, []);
+    }
+    function getDistributedNodes(insertionPoint) {
+      var rv = distributedNodesTable.get(insertionPoint);
+      if (!rv) distributedNodesTable.set(insertionPoint, rv = []);
+      return rv;
+    }
+    function getChildNodesSnapshot(node) {
+      var result = [], i = 0;
+      for (var child = node.firstChild; child; child = child.nextSibling) {
+        result[i++] = child;
+      }
+      return result;
+    }
+    var request = oneOf(window, [ "requestAnimationFrame", "mozRequestAnimationFrame", "webkitRequestAnimationFrame", "setTimeout" ]);
+    var pendingDirtyRenderers = [];
+    var renderTimer;
+    function renderAllPending() {
+      for (var i = 0; i < pendingDirtyRenderers.length; i++) {
+        var renderer = pendingDirtyRenderers[i];
+        var parentRenderer = renderer.parentRenderer;
+        if (parentRenderer && parentRenderer.dirty) continue;
+        renderer.render();
+      }
+      pendingDirtyRenderers = [];
+    }
+    function handleRequestAnimationFrame() {
+      renderTimer = null;
+      renderAllPending();
+    }
+    function getRendererForHost(host) {
+      var renderer = rendererForHostTable.get(host);
+      if (!renderer) {
+        renderer = new ShadowRenderer(host);
+        rendererForHostTable.set(host, renderer);
+      }
+      return renderer;
+    }
+    function getShadowRootAncestor(node) {
+      var root = getTreeScope(node).root;
+      if (root instanceof ShadowRoot) return root;
+      return null;
+    }
+    function getRendererForShadowRoot(shadowRoot) {
+      return getRendererForHost(shadowRoot.host);
+    }
+    var spliceDiff = new ArraySplice();
+    spliceDiff.equals = function(renderNode, rawNode) {
+      return unwrap(renderNode.node) === rawNode;
+    };
+    function RenderNode(node) {
+      this.skip = false;
+      this.node = node;
+      this.childNodes = [];
+    }
+    RenderNode.prototype = {
+      append: function(node) {
+        var rv = new RenderNode(node);
+        this.childNodes.push(rv);
+        return rv;
+      },
+      sync: function(opt_added) {
+        if (this.skip) return;
+        var nodeWrapper = this.node;
+        var newChildren = this.childNodes;
+        var oldChildren = getChildNodesSnapshot(unwrap(nodeWrapper));
+        var added = opt_added || new WeakMap();
+        var splices = spliceDiff.calculateSplices(newChildren, oldChildren);
+        var newIndex = 0, oldIndex = 0;
+        var lastIndex = 0;
+        for (var i = 0; i < splices.length; i++) {
+          var splice = splices[i];
+          for (;lastIndex < splice.index; lastIndex++) {
+            oldIndex++;
+            newChildren[newIndex++].sync(added);
+          }
+          var removedCount = splice.removed.length;
+          for (var j = 0; j < removedCount; j++) {
+            var wrapper = wrap(oldChildren[oldIndex++]);
+            if (!added.get(wrapper)) remove(wrapper);
+          }
+          var addedCount = splice.addedCount;
+          var refNode = oldChildren[oldIndex] && wrap(oldChildren[oldIndex]);
+          for (var j = 0; j < addedCount; j++) {
+            var newChildRenderNode = newChildren[newIndex++];
+            var newChildWrapper = newChildRenderNode.node;
+            insertBefore(nodeWrapper, newChildWrapper, refNode);
+            added.set(newChildWrapper, true);
+            newChildRenderNode.sync(added);
+          }
+          lastIndex += addedCount;
+        }
+        for (var i = lastIndex; i < newChildren.length; i++) {
+          newChildren[i].sync(added);
+        }
+      }
+    };
+    function ShadowRenderer(host) {
+      this.host = host;
+      this.dirty = false;
+      this.invalidateAttributes();
+      this.associateNode(host);
+    }
+    ShadowRenderer.prototype = {
+      render: function(opt_renderNode) {
+        if (!this.dirty) return;
+        this.invalidateAttributes();
+        var host = this.host;
+        this.distribution(host);
+        var renderNode = opt_renderNode || new RenderNode(host);
+        this.buildRenderTree(renderNode, host);
+        var topMostRenderer = !opt_renderNode;
+        if (topMostRenderer) renderNode.sync();
+        this.dirty = false;
+      },
+      get parentRenderer() {
+        return getTreeScope(this.host).renderer;
+      },
+      invalidate: function() {
+        if (!this.dirty) {
+          this.dirty = true;
+          var parentRenderer = this.parentRenderer;
+          if (parentRenderer) parentRenderer.invalidate();
+          pendingDirtyRenderers.push(this);
+          if (renderTimer) return;
+          renderTimer = window[request](handleRequestAnimationFrame, 0);
+        }
+      },
+      distribution: function(root) {
+        this.resetAllSubtrees(root);
+        this.distributionResolution(root);
+      },
+      resetAll: function(node) {
+        if (isInsertionPoint(node)) resetDistributedNodes(node); else resetDestinationInsertionPoints(node);
+        this.resetAllSubtrees(node);
+      },
+      resetAllSubtrees: function(node) {
+        for (var child = node.firstChild; child; child = child.nextSibling) {
+          this.resetAll(child);
+        }
+        if (node.shadowRoot) this.resetAll(node.shadowRoot);
+        if (node.olderShadowRoot) this.resetAll(node.olderShadowRoot);
+      },
+      distributionResolution: function(node) {
+        if (isShadowHost(node)) {
+          var shadowHost = node;
+          var pool = poolPopulation(shadowHost);
+          var shadowTrees = getShadowTrees(shadowHost);
+          for (var i = 0; i < shadowTrees.length; i++) {
+            this.poolDistribution(shadowTrees[i], pool);
+          }
+          for (var i = shadowTrees.length - 1; i >= 0; i--) {
+            var shadowTree = shadowTrees[i];
+            var shadow = getShadowInsertionPoint(shadowTree);
+            if (shadow) {
+              var olderShadowRoot = shadowTree.olderShadowRoot;
+              if (olderShadowRoot) {
+                pool = poolPopulation(olderShadowRoot);
+              }
+              for (var j = 0; j < pool.length; j++) {
+                destributeNodeInto(pool[j], shadow);
+              }
+            }
+            this.distributionResolution(shadowTree);
+          }
+        }
+        for (var child = node.firstChild; child; child = child.nextSibling) {
+          this.distributionResolution(child);
+        }
+      },
+      poolDistribution: function(node, pool) {
+        if (node instanceof HTMLShadowElement) return;
+        if (node instanceof HTMLContentElement) {
+          var content = node;
+          this.updateDependentAttributes(content.getAttribute("select"));
+          var anyDistributed = false;
+          for (var i = 0; i < pool.length; i++) {
+            var node = pool[i];
+            if (!node) continue;
+            if (matches(node, content)) {
+              destributeNodeInto(node, content);
+              pool[i] = undefined;
+              anyDistributed = true;
+            }
+          }
+          if (!anyDistributed) {
+            for (var child = content.firstChild; child; child = child.nextSibling) {
+              destributeNodeInto(child, content);
+            }
+          }
+          return;
+        }
+        for (var child = node.firstChild; child; child = child.nextSibling) {
+          this.poolDistribution(child, pool);
+        }
+      },
+      buildRenderTree: function(renderNode, node) {
+        var children = this.compose(node);
+        for (var i = 0; i < children.length; i++) {
+          var child = children[i];
+          var childRenderNode = renderNode.append(child);
+          this.buildRenderTree(childRenderNode, child);
+        }
+        if (isShadowHost(node)) {
+          var renderer = getRendererForHost(node);
+          renderer.dirty = false;
+        }
+      },
+      compose: function(node) {
+        var children = [];
+        var p = node.shadowRoot || node;
+        for (var child = p.firstChild; child; child = child.nextSibling) {
+          if (isInsertionPoint(child)) {
+            this.associateNode(p);
+            var distributedNodes = getDistributedNodes(child);
+            for (var j = 0; j < distributedNodes.length; j++) {
+              var distributedNode = distributedNodes[j];
+              if (isFinalDestination(child, distributedNode)) children.push(distributedNode);
+            }
+          } else {
+            children.push(child);
+          }
+        }
+        return children;
+      },
+      invalidateAttributes: function() {
+        this.attributes = Object.create(null);
+      },
+      updateDependentAttributes: function(selector) {
+        if (!selector) return;
+        var attributes = this.attributes;
+        if (/\.\w+/.test(selector)) attributes["class"] = true;
+        if (/#\w+/.test(selector)) attributes["id"] = true;
+        selector.replace(/\[\s*([^\s=\|~\]]+)/g, function(_, name) {
+          attributes[name] = true;
+        });
+      },
+      dependsOnAttribute: function(name) {
+        return this.attributes[name];
+      },
+      associateNode: function(node) {
+        unsafeUnwrap(node).polymerShadowRenderer_ = this;
+      }
+    };
+    function poolPopulation(node) {
+      var pool = [];
+      for (var child = node.firstChild; child; child = child.nextSibling) {
+        if (isInsertionPoint(child)) {
+          pool.push.apply(pool, getDistributedNodes(child));
+        } else {
+          pool.push(child);
+        }
+      }
+      return pool;
+    }
+    function getShadowInsertionPoint(node) {
+      if (node instanceof HTMLShadowElement) return node;
+      if (node instanceof HTMLContentElement) return null;
+      for (var child = node.firstChild; child; child = child.nextSibling) {
+        var res = getShadowInsertionPoint(child);
+        if (res) return res;
+      }
+      return null;
+    }
+    function destributeNodeInto(child, insertionPoint) {
+      getDistributedNodes(insertionPoint).push(child);
+      var points = destinationInsertionPointsTable.get(child);
+      if (!points) destinationInsertionPointsTable.set(child, [ insertionPoint ]); else points.push(insertionPoint);
+    }
+    function getDestinationInsertionPoints(node) {
+      return destinationInsertionPointsTable.get(node);
+    }
+    function resetDestinationInsertionPoints(node) {
+      destinationInsertionPointsTable.set(node, undefined);
+    }
+    var selectorStartCharRe = /^(:not\()?[*.#[a-zA-Z_|]/;
+    function matches(node, contentElement) {
+      var select = contentElement.getAttribute("select");
+      if (!select) return true;
+      select = select.trim();
+      if (!select) return true;
+      if (!(node instanceof Element)) return false;
+      if (!selectorStartCharRe.test(select)) return false;
+      try {
+        return node.matches(select);
+      } catch (ex) {
+        return false;
+      }
+    }
+    function isFinalDestination(insertionPoint, node) {
+      var points = getDestinationInsertionPoints(node);
+      return points && points[points.length - 1] === insertionPoint;
+    }
+    function isInsertionPoint(node) {
+      return node instanceof HTMLContentElement || node instanceof HTMLShadowElement;
+    }
+    function isShadowHost(shadowHost) {
+      return shadowHost.shadowRoot;
+    }
+    function getShadowTrees(host) {
+      var trees = [];
+      for (var tree = host.shadowRoot; tree; tree = tree.olderShadowRoot) {
+        trees.push(tree);
+      }
+      return trees;
+    }
+    function render(host) {
+      new ShadowRenderer(host).render();
+    }
+    Node.prototype.invalidateShadowRenderer = function(force) {
+      var renderer = unsafeUnwrap(this).polymerShadowRenderer_;
+      if (renderer) {
+        renderer.invalidate();
+        return true;
+      }
+      return false;
+    };
+    HTMLContentElement.prototype.getDistributedNodes = HTMLShadowElement.prototype.getDistributedNodes = function() {
+      renderAllPending();
+      return getDistributedNodes(this);
+    };
+    Element.prototype.getDestinationInsertionPoints = function() {
+      renderAllPending();
+      return getDestinationInsertionPoints(this) || [];
+    };
+    HTMLContentElement.prototype.nodeIsInserted_ = HTMLShadowElement.prototype.nodeIsInserted_ = function() {
+      this.invalidateShadowRenderer();
+      var shadowRoot = getShadowRootAncestor(this);
+      var renderer;
+      if (shadowRoot) renderer = getRendererForShadowRoot(shadowRoot);
+      unsafeUnwrap(this).polymerShadowRenderer_ = renderer;
+      if (renderer) renderer.invalidate();
+    };
+    scope.getRendererForHost = getRendererForHost;
+    scope.getShadowTrees = getShadowTrees;
+    scope.renderAllPending = renderAllPending;
+    scope.getDestinationInsertionPoints = getDestinationInsertionPoints;
+    scope.visual = {
+      insertBefore: insertBefore,
+      remove: remove
+    };
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var HTMLElement = scope.wrappers.HTMLElement;
+    var assert = scope.assert;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var unwrap = scope.unwrap;
+    var wrap = scope.wrap;
+    var elementsWithFormProperty = [ "HTMLButtonElement", "HTMLFieldSetElement", "HTMLInputElement", "HTMLKeygenElement", "HTMLLabelElement", "HTMLLegendElement", "HTMLObjectElement", "HTMLOutputElement", "HTMLTextAreaElement" ];
+    function createWrapperConstructor(name) {
+      if (!window[name]) return;
+      assert(!scope.wrappers[name]);
+      var GeneratedWrapper = function(node) {
+        HTMLElement.call(this, node);
+      };
+      GeneratedWrapper.prototype = Object.create(HTMLElement.prototype);
+      mixin(GeneratedWrapper.prototype, {
+        get form() {
+          return wrap(unwrap(this).form);
+        }
+      });
+      registerWrapper(window[name], GeneratedWrapper, document.createElement(name.slice(4, -7)));
+      scope.wrappers[name] = GeneratedWrapper;
+    }
+    elementsWithFormProperty.forEach(createWrapperConstructor);
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var registerWrapper = scope.registerWrapper;
+    var setWrapper = scope.setWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var unwrap = scope.unwrap;
+    var unwrapIfNeeded = scope.unwrapIfNeeded;
+    var wrap = scope.wrap;
+    var OriginalSelection = window.Selection;
+    function Selection(impl) {
+      setWrapper(impl, this);
+    }
+    Selection.prototype = {
+      get anchorNode() {
+        return wrap(unsafeUnwrap(this).anchorNode);
+      },
+      get focusNode() {
+        return wrap(unsafeUnwrap(this).focusNode);
+      },
+      addRange: function(range) {
+        unsafeUnwrap(this).addRange(unwrap(range));
+      },
+      collapse: function(node, index) {
+        unsafeUnwrap(this).collapse(unwrapIfNeeded(node), index);
+      },
+      containsNode: function(node, allowPartial) {
+        return unsafeUnwrap(this).containsNode(unwrapIfNeeded(node), allowPartial);
+      },
+      extend: function(node, offset) {
+        unsafeUnwrap(this).extend(unwrapIfNeeded(node), offset);
+      },
+      getRangeAt: function(index) {
+        return wrap(unsafeUnwrap(this).getRangeAt(index));
+      },
+      removeRange: function(range) {
+        unsafeUnwrap(this).removeRange(unwrap(range));
+      },
+      selectAllChildren: function(node) {
+        unsafeUnwrap(this).selectAllChildren(unwrapIfNeeded(node));
+      },
+      toString: function() {
+        return unsafeUnwrap(this).toString();
+      }
+    };
+    registerWrapper(window.Selection, Selection, window.getSelection());
+    scope.wrappers.Selection = Selection;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var GetElementsByInterface = scope.GetElementsByInterface;
+    var Node = scope.wrappers.Node;
+    var ParentNodeInterface = scope.ParentNodeInterface;
+    var Selection = scope.wrappers.Selection;
+    var SelectorsInterface = scope.SelectorsInterface;
+    var ShadowRoot = scope.wrappers.ShadowRoot;
+    var TreeScope = scope.TreeScope;
+    var cloneNode = scope.cloneNode;
+    var defineWrapGetter = scope.defineWrapGetter;
+    var elementFromPoint = scope.elementFromPoint;
+    var forwardMethodsToWrapper = scope.forwardMethodsToWrapper;
+    var matchesNames = scope.matchesNames;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var renderAllPending = scope.renderAllPending;
+    var rewrap = scope.rewrap;
+    var setWrapper = scope.setWrapper;
+    var unsafeUnwrap = scope.unsafeUnwrap;
+    var unwrap = scope.unwrap;
+    var wrap = scope.wrap;
+    var wrapEventTargetMethods = scope.wrapEventTargetMethods;
+    var wrapNodeList = scope.wrapNodeList;
+    var implementationTable = new WeakMap();
+    function Document(node) {
+      Node.call(this, node);
+      this.treeScope_ = new TreeScope(this, null);
+    }
+    Document.prototype = Object.create(Node.prototype);
+    defineWrapGetter(Document, "documentElement");
+    defineWrapGetter(Document, "body");
+    defineWrapGetter(Document, "head");
+    function wrapMethod(name) {
+      var original = document[name];
+      Document.prototype[name] = function() {
+        return wrap(original.apply(unsafeUnwrap(this), arguments));
+      };
+    }
+    [ "createComment", "createDocumentFragment", "createElement", "createElementNS", "createEvent", "createEventNS", "createRange", "createTextNode", "getElementById" ].forEach(wrapMethod);
+    var originalAdoptNode = document.adoptNode;
+    function adoptNodeNoRemove(node, doc) {
+      originalAdoptNode.call(unsafeUnwrap(doc), unwrap(node));
+      adoptSubtree(node, doc);
+    }
+    function adoptSubtree(node, doc) {
+      if (node.shadowRoot) doc.adoptNode(node.shadowRoot);
+      if (node instanceof ShadowRoot) adoptOlderShadowRoots(node, doc);
+      for (var child = node.firstChild; child; child = child.nextSibling) {
+        adoptSubtree(child, doc);
+      }
+    }
+    function adoptOlderShadowRoots(shadowRoot, doc) {
+      var oldShadowRoot = shadowRoot.olderShadowRoot;
+      if (oldShadowRoot) doc.adoptNode(oldShadowRoot);
+    }
+    var originalGetSelection = document.getSelection;
+    mixin(Document.prototype, {
+      adoptNode: function(node) {
+        if (node.parentNode) node.parentNode.removeChild(node);
+        adoptNodeNoRemove(node, this);
+        return node;
+      },
+      elementFromPoint: function(x, y) {
+        return elementFromPoint(this, this, x, y);
+      },
+      importNode: function(node, deep) {
+        return cloneNode(node, deep, unsafeUnwrap(this));
+      },
+      getSelection: function() {
+        renderAllPending();
+        return new Selection(originalGetSelection.call(unwrap(this)));
+      },
+      getElementsByName: function(name) {
+        return SelectorsInterface.querySelectorAll.call(this, "[name=" + JSON.stringify(String(name)) + "]");
+      }
+    });
+    if (document.registerElement) {
+      var originalRegisterElement = document.registerElement;
+      Document.prototype.registerElement = function(tagName, object) {
+        var prototype, extendsOption;
+        if (object !== undefined) {
+          prototype = object.prototype;
+          extendsOption = object.extends;
+        }
+        if (!prototype) prototype = Object.create(HTMLElement.prototype);
+        if (scope.nativePrototypeTable.get(prototype)) {
+          throw new Error("NotSupportedError");
+        }
+        var proto = Object.getPrototypeOf(prototype);
+        var nativePrototype;
+        var prototypes = [];
+        while (proto) {
+          nativePrototype = scope.nativePrototypeTable.get(proto);
+          if (nativePrototype) break;
+          prototypes.push(proto);
+          proto = Object.getPrototypeOf(proto);
+        }
+        if (!nativePrototype) {
+          throw new Error("NotSupportedError");
+        }
+        var newPrototype = Object.create(nativePrototype);
+        for (var i = prototypes.length - 1; i >= 0; i--) {
+          newPrototype = Object.create(newPrototype);
+        }
+        [ "createdCallback", "attachedCallback", "detachedCallback", "attributeChangedCallback" ].forEach(function(name) {
+          var f = prototype[name];
+          if (!f) return;
+          newPrototype[name] = function() {
+            if (!(wrap(this) instanceof CustomElementConstructor)) {
+              rewrap(this);
+            }
+            f.apply(wrap(this), arguments);
+          };
+        });
+        var p = {
+          prototype: newPrototype
+        };
+        if (extendsOption) p.extends = extendsOption;
+        function CustomElementConstructor(node) {
+          if (!node) {
+            if (extendsOption) {
+              return document.createElement(extendsOption, tagName);
+            } else {
+              return document.createElement(tagName);
+            }
+          }
+          setWrapper(node, this);
+        }
+        CustomElementConstructor.prototype = prototype;
+        CustomElementConstructor.prototype.constructor = CustomElementConstructor;
+        scope.constructorTable.set(newPrototype, CustomElementConstructor);
+        scope.nativePrototypeTable.set(prototype, newPrototype);
+        var nativeConstructor = originalRegisterElement.call(unwrap(this), tagName, p);
+        return CustomElementConstructor;
+      };
+      forwardMethodsToWrapper([ window.HTMLDocument || window.Document ], [ "registerElement" ]);
+    }
+    forwardMethodsToWrapper([ window.HTMLBodyElement, window.HTMLDocument || window.Document, window.HTMLHeadElement, window.HTMLHtmlElement ], [ "appendChild", "compareDocumentPosition", "contains", "getElementsByClassName", "getElementsByTagName", "getElementsByTagNameNS", "insertBefore", "querySelector", "querySelectorAll", "removeChild", "replaceChild" ].concat(matchesNames));
+    forwardMethodsToWrapper([ window.HTMLDocument || window.Document ], [ "adoptNode", "importNode", "contains", "createComment", "createDocumentFragment", "createElement", "createElementNS", "createEvent", "createEventNS", "createRange", "createTextNode", "elementFromPoint", "getElementById", "getElementsByName", "getSelection" ]);
+    mixin(Document.prototype, GetElementsByInterface);
+    mixin(Document.prototype, ParentNodeInterface);
+    mixin(Document.prototype, SelectorsInterface);
+    mixin(Document.prototype, {
+      get implementation() {
+        var implementation = implementationTable.get(this);
+        if (implementation) return implementation;
+        implementation = new DOMImplementation(unwrap(this).implementation);
+        implementationTable.set(this, implementation);
+        return implementation;
+      },
+      get defaultView() {
+        return wrap(unwrap(this).defaultView);
+      }
+    });
+    registerWrapper(window.Document, Document, document.implementation.createHTMLDocument(""));
+    if (window.HTMLDocument) registerWrapper(window.HTMLDocument, Document);
+    wrapEventTargetMethods([ window.HTMLBodyElement, window.HTMLDocument || window.Document, window.HTMLHeadElement ]);
+    function DOMImplementation(impl) {
+      setWrapper(impl, this);
+    }
+    function wrapImplMethod(constructor, name) {
+      var original = document.implementation[name];
+      constructor.prototype[name] = function() {
+        return wrap(original.apply(unsafeUnwrap(this), arguments));
+      };
+    }
+    function forwardImplMethod(constructor, name) {
+      var original = document.implementation[name];
+      constructor.prototype[name] = function() {
+        return original.apply(unsafeUnwrap(this), arguments);
+      };
+    }
+    wrapImplMethod(DOMImplementation, "createDocumentType");
+    wrapImplMethod(DOMImplementation, "createDocument");
+    wrapImplMethod(DOMImplementation, "createHTMLDocument");
+    forwardImplMethod(DOMImplementation, "hasFeature");
+    registerWrapper(window.DOMImplementation, DOMImplementation);
+    forwardMethodsToWrapper([ window.DOMImplementation ], [ "createDocumentType", "createDocument", "createHTMLDocument", "hasFeature" ]);
+    scope.adoptNodeNoRemove = adoptNodeNoRemove;
+    scope.wrappers.DOMImplementation = DOMImplementation;
+    scope.wrappers.Document = Document;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var EventTarget = scope.wrappers.EventTarget;
+    var Selection = scope.wrappers.Selection;
+    var mixin = scope.mixin;
+    var registerWrapper = scope.registerWrapper;
+    var renderAllPending = scope.renderAllPending;
+    var unwrap = scope.unwrap;
+    var unwrapIfNeeded = scope.unwrapIfNeeded;
+    var wrap = scope.wrap;
+    var OriginalWindow = window.Window;
+    var originalGetComputedStyle = window.getComputedStyle;
+    var originalGetDefaultComputedStyle = window.getDefaultComputedStyle;
+    var originalGetSelection = window.getSelection;
+    function Window(impl) {
+      EventTarget.call(this, impl);
+    }
+    Window.prototype = Object.create(EventTarget.prototype);
+    OriginalWindow.prototype.getComputedStyle = function(el, pseudo) {
+      return wrap(this || window).getComputedStyle(unwrapIfNeeded(el), pseudo);
+    };
+    if (originalGetDefaultComputedStyle) {
+      OriginalWindow.prototype.getDefaultComputedStyle = function(el, pseudo) {
+        return wrap(this || window).getDefaultComputedStyle(unwrapIfNeeded(el), pseudo);
+      };
+    }
+    OriginalWindow.prototype.getSelection = function() {
+      return wrap(this || window).getSelection();
+    };
+    delete window.getComputedStyle;
+    delete window.getDefaultComputedStyle;
+    delete window.getSelection;
+    [ "addEventListener", "removeEventListener", "dispatchEvent" ].forEach(function(name) {
+      OriginalWindow.prototype[name] = function() {
+        var w = wrap(this || window);
+        return w[name].apply(w, arguments);
+      };
+      delete window[name];
+    });
+    mixin(Window.prototype, {
+      getComputedStyle: function(el, pseudo) {
+        renderAllPending();
+        return originalGetComputedStyle.call(unwrap(this), unwrapIfNeeded(el), pseudo);
+      },
+      getSelection: function() {
+        renderAllPending();
+        return new Selection(originalGetSelection.call(unwrap(this)));
+      },
+      get document() {
+        return wrap(unwrap(this).document);
+      }
+    });
+    if (originalGetDefaultComputedStyle) {
+      Window.prototype.getDefaultComputedStyle = function(el, pseudo) {
+        renderAllPending();
+        return originalGetDefaultComputedStyle.call(unwrap(this), unwrapIfNeeded(el), pseudo);
+      };
+    }
+    registerWrapper(OriginalWindow, Window, window);
+    scope.wrappers.Window = Window;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var unwrap = scope.unwrap;
+    var OriginalDataTransfer = window.DataTransfer || window.Clipboard;
+    var OriginalDataTransferSetDragImage = OriginalDataTransfer.prototype.setDragImage;
+    if (OriginalDataTransferSetDragImage) {
+      OriginalDataTransfer.prototype.setDragImage = function(image, x, y) {
+        OriginalDataTransferSetDragImage.call(this, unwrap(image), x, y);
+      };
+    }
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var registerWrapper = scope.registerWrapper;
+    var setWrapper = scope.setWrapper;
+    var unwrap = scope.unwrap;
+    var OriginalFormData = window.FormData;
+    if (!OriginalFormData) return;
+    function FormData(formElement) {
+      var impl;
+      if (formElement instanceof OriginalFormData) {
+        impl = formElement;
+      } else {
+        impl = new OriginalFormData(formElement && unwrap(formElement));
+      }
+      setWrapper(impl, this);
+    }
+    registerWrapper(OriginalFormData, FormData, new OriginalFormData());
+    scope.wrappers.FormData = FormData;
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var unwrapIfNeeded = scope.unwrapIfNeeded;
+    var originalSend = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.send = function(obj) {
+      return originalSend.call(this, unwrapIfNeeded(obj));
+    };
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    "use strict";
+    var isWrapperFor = scope.isWrapperFor;
+    var elements = {
+      a: "HTMLAnchorElement",
+      area: "HTMLAreaElement",
+      audio: "HTMLAudioElement",
+      base: "HTMLBaseElement",
+      body: "HTMLBodyElement",
+      br: "HTMLBRElement",
+      button: "HTMLButtonElement",
+      canvas: "HTMLCanvasElement",
+      caption: "HTMLTableCaptionElement",
+      col: "HTMLTableColElement",
+      content: "HTMLContentElement",
+      data: "HTMLDataElement",
+      datalist: "HTMLDataListElement",
+      del: "HTMLModElement",
+      dir: "HTMLDirectoryElement",
+      div: "HTMLDivElement",
+      dl: "HTMLDListElement",
+      embed: "HTMLEmbedElement",
+      fieldset: "HTMLFieldSetElement",
+      font: "HTMLFontElement",
+      form: "HTMLFormElement",
+      frame: "HTMLFrameElement",
+      frameset: "HTMLFrameSetElement",
+      h1: "HTMLHeadingElement",
+      head: "HTMLHeadElement",
+      hr: "HTMLHRElement",
+      html: "HTMLHtmlElement",
+      iframe: "HTMLIFrameElement",
+      img: "HTMLImageElement",
+      input: "HTMLInputElement",
+      keygen: "HTMLKeygenElement",
+      label: "HTMLLabelElement",
+      legend: "HTMLLegendElement",
+      li: "HTMLLIElement",
+      link: "HTMLLinkElement",
+      map: "HTMLMapElement",
+      marquee: "HTMLMarqueeElement",
+      menu: "HTMLMenuElement",
+      menuitem: "HTMLMenuItemElement",
+      meta: "HTMLMetaElement",
+      meter: "HTMLMeterElement",
+      object: "HTMLObjectElement",
+      ol: "HTMLOListElement",
+      optgroup: "HTMLOptGroupElement",
+      option: "HTMLOptionElement",
+      output: "HTMLOutputElement",
+      p: "HTMLParagraphElement",
+      param: "HTMLParamElement",
+      pre: "HTMLPreElement",
+      progress: "HTMLProgressElement",
+      q: "HTMLQuoteElement",
+      script: "HTMLScriptElement",
+      select: "HTMLSelectElement",
+      shadow: "HTMLShadowElement",
+      source: "HTMLSourceElement",
+      span: "HTMLSpanElement",
+      style: "HTMLStyleElement",
+      table: "HTMLTableElement",
+      tbody: "HTMLTableSectionElement",
+      template: "HTMLTemplateElement",
+      textarea: "HTMLTextAreaElement",
+      thead: "HTMLTableSectionElement",
+      time: "HTMLTimeElement",
+      title: "HTMLTitleElement",
+      tr: "HTMLTableRowElement",
+      track: "HTMLTrackElement",
+      ul: "HTMLUListElement",
+      video: "HTMLVideoElement"
+    };
+    function overrideConstructor(tagName) {
+      var nativeConstructorName = elements[tagName];
+      var nativeConstructor = window[nativeConstructorName];
+      if (!nativeConstructor) return;
+      var element = document.createElement(tagName);
+      var wrapperConstructor = element.constructor;
+      window[nativeConstructorName] = wrapperConstructor;
+    }
+    Object.keys(elements).forEach(overrideConstructor);
+    Object.getOwnPropertyNames(scope.wrappers).forEach(function(name) {
+      window[name] = scope.wrappers[name];
+    });
+  })(window.ShadowDOMPolyfill);
+  (function(scope) {
+    var ShadowCSS = {
+      strictStyling: false,
+      registry: {},
+      shimStyling: function(root, name, extendsName) {
+        var scopeStyles = this.prepareRoot(root, name, extendsName);
+        var typeExtension = this.isTypeExtension(extendsName);
+        var scopeSelector = this.makeScopeSelector(name, typeExtension);
+        var cssText = stylesToCssText(scopeStyles, true);
+        cssText = this.scopeCssText(cssText, scopeSelector);
+        if (root) {
+          root.shimmedStyle = cssText;
+        }
+        this.addCssToDocument(cssText, name);
+      },
+      shimStyle: function(style, selector) {
+        return this.shimCssText(style.textContent, selector);
+      },
+      shimCssText: function(cssText, selector) {
+        cssText = this.insertDirectives(cssText);
+        return this.scopeCssText(cssText, selector);
+      },
+      makeScopeSelector: function(name, typeExtension) {
+        if (name) {
+          return typeExtension ? "[is=" + name + "]" : name;
+        }
+        return "";
+      },
+      isTypeExtension: function(extendsName) {
+        return extendsName && extendsName.indexOf("-") < 0;
+      },
+      prepareRoot: function(root, name, extendsName) {
+        var def = this.registerRoot(root, name, extendsName);
+        this.replaceTextInStyles(def.rootStyles, this.insertDirectives);
+        this.removeStyles(root, def.rootStyles);
+        if (this.strictStyling) {
+          this.applyScopeToContent(root, name);
+        }
+        return def.scopeStyles;
+      },
+      removeStyles: function(root, styles) {
+        for (var i = 0, l = styles.length, s; i < l && (s = styles[i]); i++) {
+          s.parentNode.removeChild(s);
+        }
+      },
+      registerRoot: function(root, name, extendsName) {
+        var def = this.registry[name] = {
+          root: root,
+          name: name,
+          extendsName: extendsName
+        };
+        var styles = this.findStyles(root);
+        def.rootStyles = styles;
+        def.scopeStyles = def.rootStyles;
+        var extendee = this.registry[def.extendsName];
+        if (extendee) {
+          def.scopeStyles = extendee.scopeStyles.concat(def.scopeStyles);
+        }
+        return def;
+      },
+      findStyles: function(root) {
+        if (!root) {
+          return [];
+        }
+        var styles = root.querySelectorAll("style");
+        return Array.prototype.filter.call(styles, function(s) {
+          return !s.hasAttribute(NO_SHIM_ATTRIBUTE);
+        });
+      },
+      applyScopeToContent: function(root, name) {
+        if (root) {
+          Array.prototype.forEach.call(root.querySelectorAll("*"), function(node) {
+            node.setAttribute(name, "");
+          });
+          Array.prototype.forEach.call(root.querySelectorAll("template"), function(template) {
+            this.applyScopeToContent(template.content, name);
+          }, this);
+        }
+      },
+      insertDirectives: function(cssText) {
+        cssText = this.insertPolyfillDirectivesInCssText(cssText);
+        return this.insertPolyfillRulesInCssText(cssText);
+      },
+      insertPolyfillDirectivesInCssText: function(cssText) {
+        cssText = cssText.replace(cssCommentNextSelectorRe, function(match, p1) {
+          return p1.slice(0, -2) + "{";
+        });
+        return cssText.replace(cssContentNextSelectorRe, function(match, p1) {
+          return p1 + " {";
+        });
+      },
+      insertPolyfillRulesInCssText: function(cssText) {
+        cssText = cssText.replace(cssCommentRuleRe, function(match, p1) {
+          return p1.slice(0, -1);
+        });
+        return cssText.replace(cssContentRuleRe, function(match, p1, p2, p3) {
+          var rule = match.replace(p1, "").replace(p2, "");
+          return p3 + rule;
+        });
+      },
+      scopeCssText: function(cssText, scopeSelector) {
+        var unscoped = this.extractUnscopedRulesFromCssText(cssText);
+        cssText = this.insertPolyfillHostInCssText(cssText);
+        cssText = this.convertColonHost(cssText);
+        cssText = this.convertColonHostContext(cssText);
+        cssText = this.convertShadowDOMSelectors(cssText);
+        if (scopeSelector) {
+          var self = this, cssText;
+          withCssRules(cssText, function(rules) {
+            cssText = self.scopeRules(rules, scopeSelector);
+          });
+        }
+        cssText = cssText + "\n" + unscoped;
+        return cssText.trim();
+      },
+      extractUnscopedRulesFromCssText: function(cssText) {
+        var r = "", m;
+        while (m = cssCommentUnscopedRuleRe.exec(cssText)) {
+          r += m[1].slice(0, -1) + "\n\n";
+        }
+        while (m = cssContentUnscopedRuleRe.exec(cssText)) {
+          r += m[0].replace(m[2], "").replace(m[1], m[3]) + "\n\n";
+        }
+        return r;
+      },
+      convertColonHost: function(cssText) {
+        return this.convertColonRule(cssText, cssColonHostRe, this.colonHostPartReplacer);
+      },
+      convertColonHostContext: function(cssText) {
+        return this.convertColonRule(cssText, cssColonHostContextRe, this.colonHostContextPartReplacer);
+      },
+      convertColonRule: function(cssText, regExp, partReplacer) {
+        return cssText.replace(regExp, function(m, p1, p2, p3) {
+          p1 = polyfillHostNoCombinator;
+          if (p2) {
+            var parts = p2.split(","), r = [];
+            for (var i = 0, l = parts.length, p; i < l && (p = parts[i]); i++) {
+              p = p.trim();
+              r.push(partReplacer(p1, p, p3));
+            }
+            return r.join(",");
+          } else {
+            return p1 + p3;
+          }
+        });
+      },
+      colonHostContextPartReplacer: function(host, part, suffix) {
+        if (part.match(polyfillHost)) {
+          return this.colonHostPartReplacer(host, part, suffix);
+        } else {
+          return host + part + suffix + ", " + part + " " + host + suffix;
+        }
+      },
+      colonHostPartReplacer: function(host, part, suffix) {
+        return host + part.replace(polyfillHost, "") + suffix;
+      },
+      convertShadowDOMSelectors: function(cssText) {
+        for (var i = 0; i < shadowDOMSelectorsRe.length; i++) {
+          cssText = cssText.replace(shadowDOMSelectorsRe[i], " ");
+        }
+        return cssText;
+      },
+      scopeRules: function(cssRules, scopeSelector) {
+        var cssText = "";
+        if (cssRules) {
+          Array.prototype.forEach.call(cssRules, function(rule) {
+            if (rule.selectorText && (rule.style && rule.style.cssText !== undefined)) {
+              cssText += this.scopeSelector(rule.selectorText, scopeSelector, this.strictStyling) + " {\n	";
+              cssText += this.propertiesFromRule(rule) + "\n}\n\n";
+            } else if (rule.type === CSSRule.MEDIA_RULE) {
+              cssText += "@media " + rule.media.mediaText + " {\n";
+              cssText += this.scopeRules(rule.cssRules, scopeSelector);
+              cssText += "\n}\n\n";
+            } else {
+              try {
+                if (rule.cssText) {
+                  cssText += rule.cssText + "\n\n";
+                }
+              } catch (x) {
+                if (rule.type === CSSRule.KEYFRAMES_RULE && rule.cssRules) {
+                  cssText += this.ieSafeCssTextFromKeyFrameRule(rule);
+                }
+              }
+            }
+          }, this);
+        }
+        return cssText;
+      },
+      ieSafeCssTextFromKeyFrameRule: function(rule) {
+        var cssText = "@keyframes " + rule.name + " {";
+        Array.prototype.forEach.call(rule.cssRules, function(rule) {
+          cssText += " " + rule.keyText + " {" + rule.style.cssText + "}";
+        });
+        cssText += " }";
+        return cssText;
+      },
+      scopeSelector: function(selector, scopeSelector, strict) {
+        var r = [], parts = selector.split(",");
+        parts.forEach(function(p) {
+          p = p.trim();
+          if (this.selectorNeedsScoping(p, scopeSelector)) {
+            p = strict && !p.match(polyfillHostNoCombinator) ? this.applyStrictSelectorScope(p, scopeSelector) : this.applySelectorScope(p, scopeSelector);
+          }
+          r.push(p);
+        }, this);
+        return r.join(", ");
+      },
+      selectorNeedsScoping: function(selector, scopeSelector) {
+        if (Array.isArray(scopeSelector)) {
+          return true;
+        }
+        var re = this.makeScopeMatcher(scopeSelector);
+        return !selector.match(re);
+      },
+      makeScopeMatcher: function(scopeSelector) {
+        scopeSelector = scopeSelector.replace(/\[/g, "\\[").replace(/\[/g, "\\]");
+        return new RegExp("^(" + scopeSelector + ")" + selectorReSuffix, "m");
+      },
+      applySelectorScope: function(selector, selectorScope) {
+        return Array.isArray(selectorScope) ? this.applySelectorScopeList(selector, selectorScope) : this.applySimpleSelectorScope(selector, selectorScope);
+      },
+      applySelectorScopeList: function(selector, scopeSelectorList) {
+        var r = [];
+        for (var i = 0, s; s = scopeSelectorList[i]; i++) {
+          r.push(this.applySimpleSelectorScope(selector, s));
+        }
+        return r.join(", ");
+      },
+      applySimpleSelectorScope: function(selector, scopeSelector) {
+        if (selector.match(polyfillHostRe)) {
+          selector = selector.replace(polyfillHostNoCombinator, scopeSelector);
+          return selector.replace(polyfillHostRe, scopeSelector + " ");
+        } else {
+          return scopeSelector + " " + selector;
+        }
+      },
+      applyStrictSelectorScope: function(selector, scopeSelector) {
+        scopeSelector = scopeSelector.replace(/\[is=([^\]]*)\]/g, "$1");
+        var splits = [ " ", ">", "+", "~" ], scoped = selector, attrName = "[" + scopeSelector + "]";
+        splits.forEach(function(sep) {
+          var parts = scoped.split(sep);
+          scoped = parts.map(function(p) {
+            var t = p.trim().replace(polyfillHostRe, "");
+            if (t && splits.indexOf(t) < 0 && t.indexOf(attrName) < 0) {
+              p = t.replace(/([^:]*)(:*)(.*)/, "$1" + attrName + "$2$3");
+            }
+            return p;
+          }).join(sep);
+        });
+        return scoped;
+      },
+      insertPolyfillHostInCssText: function(selector) {
+        return selector.replace(colonHostContextRe, polyfillHostContext).replace(colonHostRe, polyfillHost);
+      },
+      propertiesFromRule: function(rule) {
+        var cssText = rule.style.cssText;
+        if (rule.style.content && !rule.style.content.match(/['"]+|attr/)) {
+          cssText = cssText.replace(/content:[^;]*;/g, "content: '" + rule.style.content + "';");
+        }
+        var style = rule.style;
+        for (var i in style) {
+          if (style[i] === "initial") {
+            cssText += i + ": initial; ";
+          }
+        }
+        return cssText;
+      },
+      replaceTextInStyles: function(styles, action) {
+        if (styles && action) {
+          if (!(styles instanceof Array)) {
+            styles = [ styles ];
+          }
+          Array.prototype.forEach.call(styles, function(s) {
+            s.textContent = action.call(this, s.textContent);
+          }, this);
+        }
+      },
+      addCssToDocument: function(cssText, name) {
+        if (cssText.match("@import")) {
+          addOwnSheet(cssText, name);
+        } else {
+          addCssToDocument(cssText);
+        }
+      }
+    };
+    var selectorRe = /([^{]*)({[\s\S]*?})/gim, cssCommentRe = /\/\*[^*]*\*+([^/*][^*]*\*+)*\//gim, cssCommentNextSelectorRe = /\/\*\s*@polyfill ([^*]*\*+([^/*][^*]*\*+)*\/)([^{]*?){/gim, cssContentNextSelectorRe = /polyfill-next-selector[^}]*content\:[\s]*?['"](.*?)['"][;\s]*}([^{]*?){/gim, cssCommentRuleRe = /\/\*\s@polyfill-rule([^*]*\*+([^/*][^*]*\*+)*)\//gim, cssContentRuleRe = /(polyfill-rule)[^}]*(content\:[\s]*['"](.*?)['"])[;\s]*[^}]*}/gim, cssCommentUnscopedRuleRe = /\/\*\s@polyfill-unscoped-rule([^*]*\*+([^/*][^*]*\*+)*)\//gim, cssContentUnscopedRuleRe = /(polyfill-unscoped-rule)[^}]*(content\:[\s]*['"](.*?)['"])[;\s]*[^}]*}/gim, cssPseudoRe = /::(x-[^\s{,(]*)/gim, cssPartRe = /::part\(([^)]*)\)/gim, polyfillHost = "-shadowcsshost", polyfillHostContext = "-shadowcsscontext", parenSuffix = ")(?:\\((" + "(?:\\([^)(]*\\)|[^)(]*)+?" + ")\\))?([^,{]*)";
+    cssColonHostRe = new RegExp("(" + polyfillHost + parenSuffix, "gim"), cssColonHostContextRe = new RegExp("(" + polyfillHostContext + parenSuffix, "gim"), 
+    selectorReSuffix = "([>\\s~+[.,{:][\\s\\S]*)?$", colonHostRe = /\:host/gim, colonHostContextRe = /\:host-context/gim, 
+    polyfillHostNoCombinator = polyfillHost + "-no-combinator", polyfillHostRe = new RegExp(polyfillHost, "gim"), 
+    polyfillHostContextRe = new RegExp(polyfillHostContext, "gim"), shadowDOMSelectorsRe = [ /\^\^/g, /\^/g, /\/shadow\//g, /\/shadow-deep\//g, /::shadow/g, /\/deep\//g, /::content/g ];
+    function stylesToCssText(styles, preserveComments) {
+      var cssText = "";
+      Array.prototype.forEach.call(styles, function(s) {
+        cssText += s.textContent + "\n\n";
+      });
+      if (!preserveComments) {
+        cssText = cssText.replace(cssCommentRe, "");
+      }
+      return cssText;
+    }
+    function cssTextToStyle(cssText) {
+      var style = document.createElement("style");
+      style.textContent = cssText;
+      return style;
+    }
+    function cssToRules(cssText) {
+      var style = cssTextToStyle(cssText);
+      document.head.appendChild(style);
+      var rules = [];
+      if (style.sheet) {
+        try {
+          rules = style.sheet.cssRules;
+        } catch (e) {}
+      } else {
+        console.warn("sheet not found", style);
+      }
+      style.parentNode.removeChild(style);
+      return rules;
+    }
+    var frame = document.createElement("iframe");
+    frame.style.display = "none";
+    function initFrame() {
+      frame.initialized = true;
+      document.body.appendChild(frame);
+      var doc = frame.contentDocument;
+      var base = doc.createElement("base");
+      base.href = document.baseURI;
+      doc.head.appendChild(base);
+    }
+    function inFrame(fn) {
+      if (!frame.initialized) {
+        initFrame();
+      }
+      document.body.appendChild(frame);
+      fn(frame.contentDocument);
+      document.body.removeChild(frame);
+    }
+    var isChrome = navigator.userAgent.match("Chrome");
+    function withCssRules(cssText, callback) {
+      if (!callback) {
+        return;
+      }
+      var rules;
+      if (cssText.match("@import") && isChrome) {
+        var style = cssTextToStyle(cssText);
+        inFrame(function(doc) {
+          doc.head.appendChild(style.impl);
+          rules = Array.prototype.slice.call(style.sheet.cssRules, 0);
+          callback(rules);
+        });
+      } else {
+        rules = cssToRules(cssText);
+        callback(rules);
+      }
+    }
+    function rulesToCss(cssRules) {
+      for (var i = 0, css = []; i < cssRules.length; i++) {
+        css.push(cssRules[i].cssText);
+      }
+      return css.join("\n\n");
+    }
+    function addCssToDocument(cssText) {
+      if (cssText) {
+        getSheet().appendChild(document.createTextNode(cssText));
+      }
+    }
+    function addOwnSheet(cssText, name) {
+      var style = cssTextToStyle(cssText);
+      style.setAttribute(name, "");
+      style.setAttribute(SHIMMED_ATTRIBUTE, "");
+      document.head.appendChild(style);
+    }
+    var SHIM_ATTRIBUTE = "shim-shadowdom";
+    var SHIMMED_ATTRIBUTE = "shim-shadowdom-css";
+    var NO_SHIM_ATTRIBUTE = "no-shim";
+    var sheet;
+    function getSheet() {
+      if (!sheet) {
+        sheet = document.createElement("style");
+        sheet.setAttribute(SHIMMED_ATTRIBUTE, "");
+        sheet[SHIMMED_ATTRIBUTE] = true;
+      }
+      return sheet;
+    }
+    if (window.ShadowDOMPolyfill) {
+      addCssToDocument("style { display: none !important; }\n");
+      var doc = ShadowDOMPolyfill.wrap(document);
+      var head = doc.querySelector("head");
+      head.insertBefore(getSheet(), head.childNodes[0]);
+      document.addEventListener("DOMContentLoaded", function() {
+        var urlResolver = scope.urlResolver;
+        if (window.HTMLImports && !HTMLImports.useNative) {
+          var SHIM_SHEET_SELECTOR = "link[rel=stylesheet]" + "[" + SHIM_ATTRIBUTE + "]";
+          var SHIM_STYLE_SELECTOR = "style[" + SHIM_ATTRIBUTE + "]";
+          HTMLImports.importer.documentPreloadSelectors += "," + SHIM_SHEET_SELECTOR;
+          HTMLImports.importer.importsPreloadSelectors += "," + SHIM_SHEET_SELECTOR;
+          HTMLImports.parser.documentSelectors = [ HTMLImports.parser.documentSelectors, SHIM_SHEET_SELECTOR, SHIM_STYLE_SELECTOR ].join(",");
+          var originalParseGeneric = HTMLImports.parser.parseGeneric;
+          HTMLImports.parser.parseGeneric = function(elt) {
+            if (elt[SHIMMED_ATTRIBUTE]) {
+              return;
+            }
+            var style = elt.__importElement || elt;
+            if (!style.hasAttribute(SHIM_ATTRIBUTE)) {
+              originalParseGeneric.call(this, elt);
+              return;
+            }
+            if (elt.__resource) {
+              style = elt.ownerDocument.createElement("style");
+              style.textContent = elt.__resource;
+            }
+            HTMLImports.path.resolveUrlsInStyle(style);
+            style.textContent = ShadowCSS.shimStyle(style);
+            style.removeAttribute(SHIM_ATTRIBUTE, "");
+            style.setAttribute(SHIMMED_ATTRIBUTE, "");
+            style[SHIMMED_ATTRIBUTE] = true;
+            if (style.parentNode !== head) {
+              if (elt.parentNode === head) {
+                head.replaceChild(style, elt);
+              } else {
+                this.addElementToDocument(style);
+              }
+            }
+            style.__importParsed = true;
+            this.markParsingComplete(elt);
+            this.parseNext();
+          };
+          var hasResource = HTMLImports.parser.hasResource;
+          HTMLImports.parser.hasResource = function(node) {
+            if (node.localName === "link" && node.rel === "stylesheet" && node.hasAttribute(SHIM_ATTRIBUTE)) {
+              return node.__resource;
+            } else {
+              return hasResource.call(this, node);
+            }
+          };
+        }
+      });
+    }
+    scope.ShadowCSS = ShadowCSS;
+  })(window.WebComponents);
+}
+
+(function(scope) {
+  if (window.ShadowDOMPolyfill) {
+    window.wrap = ShadowDOMPolyfill.wrapIfNeeded;
+    window.unwrap = ShadowDOMPolyfill.unwrapIfNeeded;
+  } else {
+    window.wrap = window.unwrap = function(n) {
+      return n;
+    };
+  }
+})(window.WebComponents);
+
+(function(global) {
+  var registrationsTable = new WeakMap();
+  var setImmediate = window.msSetImmediate;
+  if (!setImmediate) {
+    var setImmediateQueue = [];
+    var sentinel = String(Math.random());
+    window.addEventListener("message", function(e) {
+      if (e.data === sentinel) {
+        var queue = setImmediateQueue;
+        setImmediateQueue = [];
+        queue.forEach(function(func) {
+          func();
+        });
+      }
+    });
+    setImmediate = function(func) {
+      setImmediateQueue.push(func);
+      window.postMessage(sentinel, "*");
+    };
+  }
+  var isScheduled = false;
+  var scheduledObservers = [];
+  function scheduleCallback(observer) {
+    scheduledObservers.push(observer);
+    if (!isScheduled) {
+      isScheduled = true;
+      setImmediate(dispatchCallbacks);
+    }
+  }
+  function wrapIfNeeded(node) {
+    return window.ShadowDOMPolyfill && window.ShadowDOMPolyfill.wrapIfNeeded(node) || node;
+  }
+  function dispatchCallbacks() {
+    isScheduled = false;
+    var observers = scheduledObservers;
+    scheduledObservers = [];
+    observers.sort(function(o1, o2) {
+      return o1.uid_ - o2.uid_;
+    });
+    var anyNonEmpty = false;
+    observers.forEach(function(observer) {
+      var queue = observer.takeRecords();
+      removeTransientObserversFor(observer);
+      if (queue.length) {
+        observer.callback_(queue, observer);
+        anyNonEmpty = true;
+      }
+    });
+    if (anyNonEmpty) dispatchCallbacks();
+  }
+  function removeTransientObserversFor(observer) {
+    observer.nodes_.forEach(function(node) {
+      var registrations = registrationsTable.get(node);
+      if (!registrations) return;
+      registrations.forEach(function(registration) {
+        if (registration.observer === observer) registration.removeTransientObservers();
+      });
+    });
+  }
+  function forEachAncestorAndObserverEnqueueRecord(target, callback) {
+    for (var node = target; node; node = node.parentNode) {
+      var registrations = registrationsTable.get(node);
+      if (registrations) {
+        for (var j = 0; j < registrations.length; j++) {
+          var registration = registrations[j];
+          var options = registration.options;
+          if (node !== target && !options.subtree) continue;
+          var record = callback(options);
+          if (record) registration.enqueue(record);
+        }
+      }
+    }
+  }
+  var uidCounter = 0;
+  function JsMutationObserver(callback) {
+    this.callback_ = callback;
+    this.nodes_ = [];
+    this.records_ = [];
+    this.uid_ = ++uidCounter;
+  }
+  JsMutationObserver.prototype = {
+    observe: function(target, options) {
+      target = wrapIfNeeded(target);
+      if (!options.childList && !options.attributes && !options.characterData || options.attributeOldValue && !options.attributes || options.attributeFilter && options.attributeFilter.length && !options.attributes || options.characterDataOldValue && !options.characterData) {
+        throw new SyntaxError();
+      }
+      var registrations = registrationsTable.get(target);
+      if (!registrations) registrationsTable.set(target, registrations = []);
+      var registration;
+      for (var i = 0; i < registrations.length; i++) {
+        if (registrations[i].observer === this) {
+          registration = registrations[i];
+          registration.removeListeners();
+          registration.options = options;
+          break;
+        }
+      }
+      if (!registration) {
+        registration = new Registration(this, target, options);
+        registrations.push(registration);
+        this.nodes_.push(target);
+      }
+      registration.addListeners();
+    },
+    disconnect: function() {
+      this.nodes_.forEach(function(node) {
+        var registrations = registrationsTable.get(node);
+        for (var i = 0; i < registrations.length; i++) {
+          var registration = registrations[i];
+          if (registration.observer === this) {
+            registration.removeListeners();
+            registrations.splice(i, 1);
+            break;
+          }
+        }
+      }, this);
+      this.records_ = [];
+    },
+    takeRecords: function() {
+      var copyOfRecords = this.records_;
+      this.records_ = [];
+      return copyOfRecords;
+    }
+  };
+  function MutationRecord(type, target) {
+    this.type = type;
+    this.target = target;
+    this.addedNodes = [];
+    this.removedNodes = [];
+    this.previousSibling = null;
+    this.nextSibling = null;
+    this.attributeName = null;
+    this.attributeNamespace = null;
+    this.oldValue = null;
+  }
+  function copyMutationRecord(original) {
+    var record = new MutationRecord(original.type, original.target);
+    record.addedNodes = original.addedNodes.slice();
+    record.removedNodes = original.removedNodes.slice();
+    record.previousSibling = original.previousSibling;
+    record.nextSibling = original.nextSibling;
+    record.attributeName = original.attributeName;
+    record.attributeNamespace = original.attributeNamespace;
+    record.oldValue = original.oldValue;
+    return record;
+  }
+  var currentRecord, recordWithOldValue;
+  function getRecord(type, target) {
+    return currentRecord = new MutationRecord(type, target);
+  }
+  function getRecordWithOldValue(oldValue) {
+    if (recordWithOldValue) return recordWithOldValue;
+    recordWithOldValue = copyMutationRecord(currentRecord);
+    recordWithOldValue.oldValue = oldValue;
+    return recordWithOldValue;
+  }
+  function clearRecords() {
+    currentRecord = recordWithOldValue = undefined;
+  }
+  function recordRepresentsCurrentMutation(record) {
+    return record === recordWithOldValue || record === currentRecord;
+  }
+  function selectRecord(lastRecord, newRecord) {
+    if (lastRecord === newRecord) return lastRecord;
+    if (recordWithOldValue && recordRepresentsCurrentMutation(lastRecord)) return recordWithOldValue;
+    return null;
+  }
+  function Registration(observer, target, options) {
+    this.observer = observer;
+    this.target = target;
+    this.options = options;
+    this.transientObservedNodes = [];
+  }
+  Registration.prototype = {
+    enqueue: function(record) {
+      var records = this.observer.records_;
+      var length = records.length;
+      if (records.length > 0) {
+        var lastRecord = records[length - 1];
+        var recordToReplaceLast = selectRecord(lastRecord, record);
+        if (recordToReplaceLast) {
+          records[length - 1] = recordToReplaceLast;
+          return;
+        }
+      } else {
+        scheduleCallback(this.observer);
+      }
+      records[length] = record;
+    },
+    addListeners: function() {
+      this.addListeners_(this.target);
+    },
+    addListeners_: function(node) {
+      var options = this.options;
+      if (options.attributes) node.addEventListener("DOMAttrModified", this, true);
+      if (options.characterData) node.addEventListener("DOMCharacterDataModified", this, true);
+      if (options.childList) node.addEventListener("DOMNodeInserted", this, true);
+      if (options.childList || options.subtree) node.addEventListener("DOMNodeRemoved", this, true);
+    },
+    removeListeners: function() {
+      this.removeListeners_(this.target);
+    },
+    removeListeners_: function(node) {
+      var options = this.options;
+      if (options.attributes) node.removeEventListener("DOMAttrModified", this, true);
+      if (options.characterData) node.removeEventListener("DOMCharacterDataModified", this, true);
+      if (options.childList) node.removeEventListener("DOMNodeInserted", this, true);
+      if (options.childList || options.subtree) node.removeEventListener("DOMNodeRemoved", this, true);
+    },
+    addTransientObserver: function(node) {
+      if (node === this.target) return;
+      this.addListeners_(node);
+      this.transientObservedNodes.push(node);
+      var registrations = registrationsTable.get(node);
+      if (!registrations) registrationsTable.set(node, registrations = []);
+      registrations.push(this);
+    },
+    removeTransientObservers: function() {
+      var transientObservedNodes = this.transientObservedNodes;
+      this.transientObservedNodes = [];
+      transientObservedNodes.forEach(function(node) {
+        this.removeListeners_(node);
+        var registrations = registrationsTable.get(node);
+        for (var i = 0; i < registrations.length; i++) {
+          if (registrations[i] === this) {
+            registrations.splice(i, 1);
+            break;
+          }
+        }
+      }, this);
+    },
+    handleEvent: function(e) {
+      e.stopImmediatePropagation();
+      switch (e.type) {
+       case "DOMAttrModified":
+        var name = e.attrName;
+        var namespace = e.relatedNode.namespaceURI;
+        var target = e.target;
+        var record = new getRecord("attributes", target);
+        record.attributeName = name;
+        record.attributeNamespace = namespace;
+        var oldValue = e.attrChange === MutationEvent.ADDITION ? null : e.prevValue;
+        forEachAncestorAndObserverEnqueueRecord(target, function(options) {
+          if (!options.attributes) return;
+          if (options.attributeFilter && options.attributeFilter.length && options.attributeFilter.indexOf(name) === -1 && options.attributeFilter.indexOf(namespace) === -1) {
+            return;
+          }
+          if (options.attributeOldValue) return getRecordWithOldValue(oldValue);
+          return record;
+        });
+        break;
+
+       case "DOMCharacterDataModified":
+        var target = e.target;
+        var record = getRecord("characterData", target);
+        var oldValue = e.prevValue;
+        forEachAncestorAndObserverEnqueueRecord(target, function(options) {
+          if (!options.characterData) return;
+          if (options.characterDataOldValue) return getRecordWithOldValue(oldValue);
+          return record;
+        });
+        break;
+
+       case "DOMNodeRemoved":
+        this.addTransientObserver(e.target);
+
+       case "DOMNodeInserted":
+        var target = e.relatedNode;
+        var changedNode = e.target;
+        var addedNodes, removedNodes;
+        if (e.type === "DOMNodeInserted") {
+          addedNodes = [ changedNode ];
+          removedNodes = [];
+        } else {
+          addedNodes = [];
+          removedNodes = [ changedNode ];
+        }
+        var previousSibling = changedNode.previousSibling;
+        var nextSibling = changedNode.nextSibling;
+        var record = getRecord("childList", target);
+        record.addedNodes = addedNodes;
+        record.removedNodes = removedNodes;
+        record.previousSibling = previousSibling;
+        record.nextSibling = nextSibling;
+        forEachAncestorAndObserverEnqueueRecord(target, function(options) {
+          if (!options.childList) return;
+          return record;
+        });
+      }
+      clearRecords();
+    }
+  };
+  global.JsMutationObserver = JsMutationObserver;
+  if (!global.MutationObserver) global.MutationObserver = JsMutationObserver;
+})(this);
+
+window.HTMLImports = window.HTMLImports || {
+  flags: {}
+};
+
+(function(scope) {
+  var IMPORT_LINK_TYPE = "import";
+  var useNative = Boolean(IMPORT_LINK_TYPE in document.createElement("link"));
+  var modules = [];
+  var addModule = function(module) {
+    modules.push(module);
+  };
+  var initializeModules = function() {
+    modules.forEach(function(module) {
+      module(scope);
+    });
+  };
+  var hasShadowDOMPolyfill = Boolean(window.ShadowDOMPolyfill);
+  var wrap = function(node) {
+    return hasShadowDOMPolyfill ? ShadowDOMPolyfill.wrapIfNeeded(node) : node;
+  };
+  var rootDocument = wrap(document);
+  var currentScriptDescriptor = {
+    get: function() {
+      var script = HTMLImports.currentScript || document.currentScript || (document.readyState !== "complete" ? document.scripts[document.scripts.length - 1] : null);
+      return wrap(script);
+    },
+    configurable: true
+  };
+  Object.defineProperty(document, "_currentScript", currentScriptDescriptor);
+  Object.defineProperty(rootDocument, "_currentScript", currentScriptDescriptor);
+  var isIE = /Trident/.test(navigator.userAgent);
+  function whenReady(callback, doc) {
+    doc = doc || rootDocument;
+    whenDocumentReady(function() {
+      watchImportsLoad(callback, doc);
+    }, doc);
+  }
+  var requiredReadyState = isIE ? "complete" : "interactive";
+  var READY_EVENT = "readystatechange";
+  function isDocumentReady(doc) {
+    return doc.readyState === "complete" || doc.readyState === requiredReadyState;
+  }
+  function whenDocumentReady(callback, doc) {
+    if (!isDocumentReady(doc)) {
+      var checkReady = function() {
+        if (doc.readyState === "complete" || doc.readyState === requiredReadyState) {
+          doc.removeEventListener(READY_EVENT, checkReady);
+          whenDocumentReady(callback, doc);
+        }
+      };
+      doc.addEventListener(READY_EVENT, checkReady);
+    } else if (callback) {
+      callback();
+    }
+  }
+  function markTargetLoaded(event) {
+    event.target.__loaded = true;
+  }
+  function watchImportsLoad(callback, doc) {
+    var imports = doc.querySelectorAll("link[rel=import]");
+    var loaded = 0, l = imports.length;
+    function checkDone(d) {
+      if (loaded == l && callback) {
+        callback();
+      }
+    }
+    function loadedImport(e) {
+      markTargetLoaded(e);
+      loaded++;
+      checkDone();
+    }
+    if (l) {
+      for (var i = 0, imp; i < l && (imp = imports[i]); i++) {
+        if (isImportLoaded(imp)) {
+          loadedImport.call(imp, {
+            target: imp
+          });
+        } else {
+          imp.addEventListener("load", loadedImport);
+          imp.addEventListener("error", loadedImport);
+        }
+      }
+    } else {
+      checkDone();
+    }
+  }
+  function isImportLoaded(link) {
+    return useNative ? link.__loaded || link.import && link.import.readyState !== "loading" : link.__importParsed;
+  }
+  if (useNative) {
+    new MutationObserver(function(mxns) {
+      for (var i = 0, l = mxns.length, m; i < l && (m = mxns[i]); i++) {
+        if (m.addedNodes) {
+          handleImports(m.addedNodes);
+        }
+      }
+    }).observe(document.head, {
+      childList: true
+    });
+    function handleImports(nodes) {
+      for (var i = 0, l = nodes.length, n; i < l && (n = nodes[i]); i++) {
+        if (isImport(n)) {
+          handleImport(n);
+        }
+      }
+    }
+    function isImport(element) {
+      return element.localName === "link" && element.rel === "import";
+    }
+    function handleImport(element) {
+      var loaded = element.import;
+      if (loaded) {
+        markTargetLoaded({
+          target: element
+        });
+      } else {
+        element.addEventListener("load", markTargetLoaded);
+        element.addEventListener("error", markTargetLoaded);
+      }
+    }
+    (function() {
+      if (document.readyState === "loading") {
+        var imports = document.querySelectorAll("link[rel=import]");
+        for (var i = 0, l = imports.length, imp; i < l && (imp = imports[i]); i++) {
+          handleImport(imp);
+        }
+      }
+    })();
+  }
+  if (typeof window.CustomEvent !== "function") {
+    window.CustomEvent = function(inType, dictionary) {
+      var e = document.createEvent("HTMLEvents");
+      e.initEvent(inType, dictionary.bubbles === false ? false : true, dictionary.cancelable === false ? false : true, dictionary.detail);
+      return e;
+    };
+  }
+  whenReady(function() {
+    HTMLImports.ready = true;
+    HTMLImports.readyTime = new Date().getTime();
+    rootDocument.dispatchEvent(new CustomEvent("HTMLImportsLoaded", {
+      bubbles: true
+    }));
+  });
+  scope.IMPORT_LINK_TYPE = IMPORT_LINK_TYPE;
+  scope.useNative = useNative;
+  scope.addModule = addModule;
+  scope.initializeModules = initializeModules;
+  scope.rootDocument = rootDocument;
+  scope.whenReady = whenReady;
+  scope.isIE = isIE;
+})(window.HTMLImports);
+
+HTMLImports.addModule(function(scope) {
+  var CSS_URL_REGEXP = /(url\()([^)]*)(\))/g;
+  var CSS_IMPORT_REGEXP = /(@import[\s]+(?!url\())([^;]*)(;)/g;
+  var path = {
+    resolveUrlsInStyle: function(style) {
+      var doc = style.ownerDocument;
+      var resolver = doc.createElement("a");
+      style.textContent = this.resolveUrlsInCssText(style.textContent, resolver);
+      return style;
+    },
+    resolveUrlsInCssText: function(cssText, urlObj) {
+      var r = this.replaceUrls(cssText, urlObj, CSS_URL_REGEXP);
+      r = this.replaceUrls(r, urlObj, CSS_IMPORT_REGEXP);
+      return r;
+    },
+    replaceUrls: function(text, urlObj, regexp) {
+      return text.replace(regexp, function(m, pre, url, post) {
+        var urlPath = url.replace(/["']/g, "");
+        urlObj.href = urlPath;
+        urlPath = urlObj.href;
+        return pre + "'" + urlPath + "'" + post;
+      });
+    }
+  };
+  scope.path = path;
+});
+
+HTMLImports.addModule(function(scope) {
+  xhr = {
+    async: true,
+    ok: function(request) {
+      return request.status >= 200 && request.status < 300 || request.status === 304 || request.status === 0;
+    },
+    load: function(url, next, nextContext) {
+      var request = new XMLHttpRequest();
+      if (scope.flags.debug || scope.flags.bust) {
+        url += "?" + Math.random();
+      }
+      request.open("GET", url, xhr.async);
+      request.addEventListener("readystatechange", function(e) {
+        if (request.readyState === 4) {
+          var locationHeader = request.getResponseHeader("Location");
+          var redirectedUrl = null;
+          if (locationHeader) {
+            var redirectedUrl = locationHeader.substr(0, 1) === "/" ? location.origin + locationHeader : locationHeader;
+          }
+          next.call(nextContext, !xhr.ok(request) && request, request.response || request.responseText, redirectedUrl);
+        }
+      });
+      request.send();
+      return request;
+    },
+    loadDocument: function(url, next, nextContext) {
+      this.load(url, next, nextContext).responseType = "document";
+    }
+  };
+  scope.xhr = xhr;
+});
+
+HTMLImports.addModule(function(scope) {
+  var xhr = scope.xhr;
+  var flags = scope.flags;
+  var Loader = function(onLoad, onComplete) {
+    this.cache = {};
+    this.onload = onLoad;
+    this.oncomplete = onComplete;
+    this.inflight = 0;
+    this.pending = {};
+  };
+  Loader.prototype = {
+    addNodes: function(nodes) {
+      this.inflight += nodes.length;
+      for (var i = 0, l = nodes.length, n; i < l && (n = nodes[i]); i++) {
+        this.require(n);
+      }
+      this.checkDone();
+    },
+    addNode: function(node) {
+      this.inflight++;
+      this.require(node);
+      this.checkDone();
+    },
+    require: function(elt) {
+      var url = elt.src || elt.href;
+      elt.__nodeUrl = url;
+      if (!this.dedupe(url, elt)) {
+        this.fetch(url, elt);
+      }
+    },
+    dedupe: function(url, elt) {
+      if (this.pending[url]) {
+        this.pending[url].push(elt);
+        return true;
+      }
+      var resource;
+      if (this.cache[url]) {
+        this.onload(url, elt, this.cache[url]);
+        this.tail();
+        return true;
+      }
+      this.pending[url] = [ elt ];
+      return false;
+    },
+    fetch: function(url, elt) {
+      flags.load && console.log("fetch", url, elt);
+      if (url.match(/^data:/)) {
+        var pieces = url.split(",");
+        var header = pieces[0];
+        var body = pieces[1];
+        if (header.indexOf(";base64") > -1) {
+          body = atob(body);
+        } else {
+          body = decodeURIComponent(body);
+        }
+        setTimeout(function() {
+          this.receive(url, elt, null, body);
+        }.bind(this), 0);
+      } else {
+        var receiveXhr = function(err, resource, redirectedUrl) {
+          this.receive(url, elt, err, resource, redirectedUrl);
+        }.bind(this);
+        xhr.load(url, receiveXhr);
+      }
+    },
+    receive: function(url, elt, err, resource, redirectedUrl) {
+      this.cache[url] = resource;
+      var $p = this.pending[url];
+      for (var i = 0, l = $p.length, p; i < l && (p = $p[i]); i++) {
+        this.onload(url, p, resource, err, redirectedUrl);
+        this.tail();
+      }
+      this.pending[url] = null;
+    },
+    tail: function() {
+      --this.inflight;
+      this.checkDone();
+    },
+    checkDone: function() {
+      if (!this.inflight) {
+        this.oncomplete();
+      }
+    }
+  };
+  scope.Loader = Loader;
+});
+
+HTMLImports.addModule(function(scope) {
+  var Observer = function(addCallback) {
+    this.addCallback = addCallback;
+    this.mo = new MutationObserver(this.handler.bind(this));
+  };
+  Observer.prototype = {
+    handler: function(mutations) {
+      for (var i = 0, l = mutations.length, m; i < l && (m = mutations[i]); i++) {
+        if (m.type === "childList" && m.addedNodes.length) {
+          this.addedNodes(m.addedNodes);
+        }
+      }
+    },
+    addedNodes: function(nodes) {
+      if (this.addCallback) {
+        this.addCallback(nodes);
+      }
+      for (var i = 0, l = nodes.length, n, loading; i < l && (n = nodes[i]); i++) {
+        if (n.children && n.children.length) {
+          this.addedNodes(n.children);
+        }
+      }
+    },
+    observe: function(root) {
+      this.mo.observe(root, {
+        childList: true,
+        subtree: true
+      });
+    }
+  };
+  scope.Observer = Observer;
+});
+
+HTMLImports.addModule(function(scope) {
+  var path = scope.path;
+  var rootDocument = scope.rootDocument;
+  var flags = scope.flags;
+  var isIE = scope.isIE;
+  var IMPORT_LINK_TYPE = scope.IMPORT_LINK_TYPE;
+  var IMPORT_SELECTOR = "link[rel=" + IMPORT_LINK_TYPE + "]";
+  var importParser = {
+    documentSelectors: IMPORT_SELECTOR,
+    importsSelectors: [ IMPORT_SELECTOR, "link[rel=stylesheet]", "style", "script:not([type])", 'script[type="text/javascript"]' ].join(","),
+    map: {
+      link: "parseLink",
+      script: "parseScript",
+      style: "parseStyle"
+    },
+    dynamicElements: [],
+    parseNext: function() {
+      var next = this.nextToParse();
+      if (next) {
+        this.parse(next);
+      }
+    },
+    parse: function(elt) {
+      if (this.isParsed(elt)) {
+        flags.parse && console.log("[%s] is already parsed", elt.localName);
+        return;
+      }
+      var fn = this[this.map[elt.localName]];
+      if (fn) {
+        this.markParsing(elt);
+        fn.call(this, elt);
+      }
+    },
+    parseDynamic: function(elt, quiet) {
+      this.dynamicElements.push(elt);
+      if (!quiet) {
+        this.parseNext();
+      }
+    },
+    markParsing: function(elt) {
+      flags.parse && console.log("parsing", elt);
+      this.parsingElement = elt;
+    },
+    markParsingComplete: function(elt) {
+      elt.__importParsed = true;
+      this.markDynamicParsingComplete(elt);
+      if (elt.__importElement) {
+        elt.__importElement.__importParsed = true;
+        this.markDynamicParsingComplete(elt.__importElement);
+      }
+      this.parsingElement = null;
+      flags.parse && console.log("completed", elt);
+    },
+    markDynamicParsingComplete: function(elt) {
+      var i = this.dynamicElements.indexOf(elt);
+      if (i >= 0) {
+        this.dynamicElements.splice(i, 1);
+      }
+    },
+    parseImport: function(elt) {
+      if (HTMLImports.__importsParsingHook) {
+        HTMLImports.__importsParsingHook(elt);
+      }
+      if (elt.import) {
+        elt.import.__importParsed = true;
+      }
+      this.markParsingComplete(elt);
+      if (elt.__resource && !elt.__error) {
+        elt.dispatchEvent(new CustomEvent("load", {
+          bubbles: false
+        }));
+      } else {
+        elt.dispatchEvent(new CustomEvent("error", {
+          bubbles: false
+        }));
+      }
+      if (elt.__pending) {
+        var fn;
+        while (elt.__pending.length) {
+          fn = elt.__pending.shift();
+          if (fn) {
+            fn({
+              target: elt
+            });
+          }
+        }
+      }
+      this.parseNext();
+    },
+    parseLink: function(linkElt) {
+      if (nodeIsImport(linkElt)) {
+        this.parseImport(linkElt);
+      } else {
+        linkElt.href = linkElt.href;
+        this.parseGeneric(linkElt);
+      }
+    },
+    parseStyle: function(elt) {
+      var src = elt;
+      elt = cloneStyle(elt);
+      elt.__importElement = src;
+      this.parseGeneric(elt);
+    },
+    parseGeneric: function(elt) {
+      this.trackElement(elt);
+      this.addElementToDocument(elt);
+    },
+    rootImportForElement: function(elt) {
+      var n = elt;
+      while (n.ownerDocument.__importLink) {
+        n = n.ownerDocument.__importLink;
+      }
+      return n;
+    },
+    addElementToDocument: function(elt) {
+      var port = this.rootImportForElement(elt.__importElement || elt);
+      var l = port.__insertedElements = port.__insertedElements || 0;
+      var refNode = port.nextElementSibling;
+      for (var i = 0; i < l; i++) {
+        refNode = refNode && refNode.nextElementSibling;
+      }
+      port.parentNode.insertBefore(elt, refNode);
+    },
+    trackElement: function(elt, callback) {
+      var self = this;
+      var done = function(e) {
+        if (callback) {
+          callback(e);
+        }
+        self.markParsingComplete(elt);
+        self.parseNext();
+      };
+      elt.addEventListener("load", done);
+      elt.addEventListener("error", done);
+      if (isIE && elt.localName === "style") {
+        var fakeLoad = false;
+        if (elt.textContent.indexOf("@import") == -1) {
+          fakeLoad = true;
+        } else if (elt.sheet) {
+          fakeLoad = true;
+          var csr = elt.sheet.cssRules;
+          var len = csr ? csr.length : 0;
+          for (var i = 0, r; i < len && (r = csr[i]); i++) {
+            if (r.type === CSSRule.IMPORT_RULE) {
+              fakeLoad = fakeLoad && Boolean(r.styleSheet);
+            }
+          }
+        }
+        if (fakeLoad) {
+          elt.dispatchEvent(new CustomEvent("load", {
+            bubbles: false
+          }));
+        }
+      }
+    },
+    parseScript: function(scriptElt) {
+      var script = document.createElement("script");
+      script.__importElement = scriptElt;
+      script.src = scriptElt.src ? scriptElt.src : generateScriptDataUrl(scriptElt);
+      scope.currentScript = scriptElt;
+      this.trackElement(script, function(e) {
+        script.parentNode.removeChild(script);
+        scope.currentScript = null;
+      });
+      this.addElementToDocument(script);
+    },
+    nextToParse: function() {
+      this._mayParse = [];
+      return !this.parsingElement && (this.nextToParseInDoc(rootDocument) || this.nextToParseDynamic());
+    },
+    nextToParseInDoc: function(doc, link) {
+      if (doc && this._mayParse.indexOf(doc) < 0) {
+        this._mayParse.push(doc);
+        var nodes = doc.querySelectorAll(this.parseSelectorsForNode(doc));
+        for (var i = 0, l = nodes.length, p = 0, n; i < l && (n = nodes[i]); i++) {
+          if (!this.isParsed(n)) {
+            if (this.hasResource(n)) {
+              return nodeIsImport(n) ? this.nextToParseInDoc(n.import, n) : n;
+            } else {
+              return;
+            }
+          }
+        }
+      }
+      return link;
+    },
+    nextToParseDynamic: function() {
+      return this.dynamicElements[0];
+    },
+    parseSelectorsForNode: function(node) {
+      var doc = node.ownerDocument || node;
+      return doc === rootDocument ? this.documentSelectors : this.importsSelectors;
+    },
+    isParsed: function(node) {
+      return node.__importParsed;
+    },
+    needsDynamicParsing: function(elt) {
+      return this.dynamicElements.indexOf(elt) >= 0;
+    },
+    hasResource: function(node) {
+      if (nodeIsImport(node) && node.import === undefined) {
+        return false;
+      }
+      return true;
+    }
+  };
+  function nodeIsImport(elt) {
+    return elt.localName === "link" && elt.rel === IMPORT_LINK_TYPE;
+  }
+  function generateScriptDataUrl(script) {
+    var scriptContent = generateScriptContent(script);
+    return "data:text/javascript;charset=utf-8," + encodeURIComponent(scriptContent);
+  }
+  function generateScriptContent(script) {
+    return script.textContent + generateSourceMapHint(script);
+  }
+  function generateSourceMapHint(script) {
+    var owner = script.ownerDocument;
+    owner.__importedScripts = owner.__importedScripts || 0;
+    var moniker = script.ownerDocument.baseURI;
+    var num = owner.__importedScripts ? "-" + owner.__importedScripts : "";
+    owner.__importedScripts++;
+    return "\n//# sourceURL=" + moniker + num + ".js\n";
+  }
+  function cloneStyle(style) {
+    var clone = style.ownerDocument.createElement("style");
+    clone.textContent = style.textContent;
+    path.resolveUrlsInStyle(clone);
+    return clone;
+  }
+  scope.parser = importParser;
+  scope.IMPORT_SELECTOR = IMPORT_SELECTOR;
+});
+
+HTMLImports.addModule(function(scope) {
+  var flags = scope.flags;
+  var IMPORT_LINK_TYPE = scope.IMPORT_LINK_TYPE;
+  var IMPORT_SELECTOR = scope.IMPORT_SELECTOR;
+  var rootDocument = scope.rootDocument;
+  var Loader = scope.Loader;
+  var Observer = scope.Observer;
+  var parser = scope.parser;
+  var importer = {
+    documents: {},
+    documentPreloadSelectors: IMPORT_SELECTOR,
+    importsPreloadSelectors: [ IMPORT_SELECTOR ].join(","),
+    loadNode: function(node) {
+      importLoader.addNode(node);
+    },
+    loadSubtree: function(parent) {
+      var nodes = this.marshalNodes(parent);
+      importLoader.addNodes(nodes);
+    },
+    marshalNodes: function(parent) {
+      return parent.querySelectorAll(this.loadSelectorsForNode(parent));
+    },
+    loadSelectorsForNode: function(node) {
+      var doc = node.ownerDocument || node;
+      return doc === rootDocument ? this.documentPreloadSelectors : this.importsPreloadSelectors;
+    },
+    loaded: function(url, elt, resource, err, redirectedUrl) {
+      flags.load && console.log("loaded", url, elt);
+      elt.__resource = resource;
+      elt.__error = err;
+      if (isImportLink(elt)) {
+        var doc = this.documents[url];
+        if (doc === undefined) {
+          doc = err ? null : makeDocument(resource, redirectedUrl || url);
+          if (doc) {
+            doc.__importLink = elt;
+            this.bootDocument(doc);
+          }
+          this.documents[url] = doc;
+        }
+        elt.import = doc;
+      }
+      parser.parseNext();
+    },
+    bootDocument: function(doc) {
+      this.loadSubtree(doc);
+      this.observer.observe(doc);
+      parser.parseNext();
+    },
+    loadedAll: function() {
+      parser.parseNext();
+    }
+  };
+  var importLoader = new Loader(importer.loaded.bind(importer), importer.loadedAll.bind(importer));
+  importer.observer = new Observer();
+  function isImportLink(elt) {
+    return isLinkRel(elt, IMPORT_LINK_TYPE);
+  }
+  function isLinkRel(elt, rel) {
+    return elt.localName === "link" && elt.getAttribute("rel") === rel;
+  }
+  function makeDocument(resource, url) {
+    var doc = document.implementation.createHTMLDocument(IMPORT_LINK_TYPE);
+    doc._URL = url;
+    var base = doc.createElement("base");
+    base.setAttribute("href", url);
+    if (!doc.baseURI) {
+      doc.baseURI = url;
+    }
+    var meta = doc.createElement("meta");
+    meta.setAttribute("charset", "utf-8");
+    doc.head.appendChild(meta);
+    doc.head.appendChild(base);
+    doc.body.innerHTML = resource;
+    if (window.HTMLTemplateElement && HTMLTemplateElement.bootstrap) {
+      HTMLTemplateElement.bootstrap(doc);
+    }
+    return doc;
+  }
+  if (!document.baseURI) {
+    var baseURIDescriptor = {
+      get: function() {
+        var base = document.querySelector("base");
+        return base ? base.href : window.location.href;
+      },
+      configurable: true
+    };
+    Object.defineProperty(document, "baseURI", baseURIDescriptor);
+    Object.defineProperty(rootDocument, "baseURI", baseURIDescriptor);
+  }
+  scope.importer = importer;
+  scope.importLoader = importLoader;
+});
+
+HTMLImports.addModule(function(scope) {
+  var parser = scope.parser;
+  var importer = scope.importer;
+  var dynamic = {
+    added: function(nodes) {
+      var owner, parsed;
+      for (var i = 0, l = nodes.length, n; i < l && (n = nodes[i]); i++) {
+        if (!owner) {
+          owner = n.ownerDocument;
+          parsed = parser.isParsed(owner);
+        }
+        loading = this.shouldLoadNode(n);
+        if (loading) {
+          importer.loadNode(n);
+        }
+        if (this.shouldParseNode(n) && parsed) {
+          parser.parseDynamic(n, loading);
+        }
+      }
+    },
+    shouldLoadNode: function(node) {
+      return node.nodeType === 1 && matches.call(node, importer.loadSelectorsForNode(node));
+    },
+    shouldParseNode: function(node) {
+      return node.nodeType === 1 && matches.call(node, parser.parseSelectorsForNode(node));
+    }
+  };
+  importer.observer.addCallback = dynamic.added.bind(dynamic);
+  var matches = HTMLElement.prototype.matches || HTMLElement.prototype.matchesSelector || HTMLElement.prototype.webkitMatchesSelector || HTMLElement.prototype.mozMatchesSelector || HTMLElement.prototype.msMatchesSelector;
+});
+
+(function(scope) {
+  initializeModules = scope.initializeModules;
+  if (scope.useNative) {
+    return;
+  }
+  initializeModules();
+  var rootDocument = scope.rootDocument;
+  function bootstrap() {
+    HTMLImports.importer.bootDocument(rootDocument);
+  }
+  if (document.readyState === "complete" || document.readyState === "interactive" && !window.attachEvent) {
+    bootstrap();
+  } else {
+    document.addEventListener("DOMContentLoaded", bootstrap);
+  }
+})(HTMLImports);
+
+window.CustomElements = window.CustomElements || {
+  flags: {}
+};
+
+(function(scope) {
+  var flags = scope.flags;
+  var modules = [];
+  var addModule = function(module) {
+    modules.push(module);
+  };
+  var initializeModules = function() {
+    modules.forEach(function(module) {
+      module(scope);
+    });
+  };
+  scope.addModule = addModule;
+  scope.initializeModules = initializeModules;
+  scope.hasNative = Boolean(document.registerElement);
+  scope.useNative = !flags.register && scope.hasNative && !window.ShadowDOMPolyfill && (!window.HTMLImports || HTMLImports.useNative);
+})(CustomElements);
+
+CustomElements.addModule(function(scope) {
+  var IMPORT_LINK_TYPE = window.HTMLImports ? HTMLImports.IMPORT_LINK_TYPE : "none";
+  function forSubtree(node, cb) {
+    findAllElements(node, function(e) {
+      if (cb(e)) {
+        return true;
+      }
+      forRoots(e, cb);
+    });
+    forRoots(node, cb);
+  }
+  function findAllElements(node, find, data) {
+    var e = node.firstElementChild;
+    if (!e) {
+      e = node.firstChild;
+      while (e && e.nodeType !== Node.ELEMENT_NODE) {
+        e = e.nextSibling;
+      }
+    }
+    while (e) {
+      if (find(e, data) !== true) {
+        findAllElements(e, find, data);
+      }
+      e = e.nextElementSibling;
+    }
+    return null;
+  }
+  function forRoots(node, cb) {
+    var root = node.shadowRoot;
+    while (root) {
+      forSubtree(root, cb);
+      root = root.olderShadowRoot;
+    }
+  }
+  var processingDocuments;
+  function forDocumentTree(doc, cb) {
+    processingDocuments = [];
+    _forDocumentTree(doc, cb);
+    processingDocuments = null;
+  }
+  function _forDocumentTree(doc, cb) {
+    doc = wrap(doc);
+    if (processingDocuments.indexOf(doc) >= 0) {
+      return;
+    }
+    processingDocuments.push(doc);
+    var imports = doc.querySelectorAll("link[rel=" + IMPORT_LINK_TYPE + "]");
+    for (var i = 0, l = imports.length, n; i < l && (n = imports[i]); i++) {
+      if (n.import) {
+        _forDocumentTree(n.import, cb);
+      }
+    }
+    cb(doc);
+  }
+  scope.forDocumentTree = forDocumentTree;
+  scope.forSubtree = forSubtree;
+});
+
+CustomElements.addModule(function(scope) {
+  var flags = scope.flags;
+  var forSubtree = scope.forSubtree;
+  var forDocumentTree = scope.forDocumentTree;
+  function addedNode(node) {
+    return added(node) || addedSubtree(node);
+  }
+  function added(node) {
+    if (scope.upgrade(node)) {
+      return true;
+    }
+    attached(node);
+  }
+  function addedSubtree(node) {
+    forSubtree(node, function(e) {
+      if (added(e)) {
+        return true;
+      }
+    });
+  }
+  function attachedNode(node) {
+    attached(node);
+    if (inDocument(node)) {
+      forSubtree(node, function(e) {
+        attached(e);
+      });
+    }
+  }
+  var hasPolyfillMutations = !window.MutationObserver || window.MutationObserver === window.JsMutationObserver;
+  scope.hasPolyfillMutations = hasPolyfillMutations;
+  var isPendingMutations = false;
+  var pendingMutations = [];
+  function deferMutation(fn) {
+    pendingMutations.push(fn);
+    if (!isPendingMutations) {
+      isPendingMutations = true;
+      setTimeout(takeMutations);
+    }
+  }
+  function takeMutations() {
+    isPendingMutations = false;
+    var $p = pendingMutations;
+    for (var i = 0, l = $p.length, p; i < l && (p = $p[i]); i++) {
+      p();
+    }
+    pendingMutations = [];
+  }
+  function attached(element) {
+    if (hasPolyfillMutations) {
+      deferMutation(function() {
+        _attached(element);
+      });
+    } else {
+      _attached(element);
+    }
+  }
+  function _attached(element) {
+    if (element.__upgraded__ && (element.attachedCallback || element.detachedCallback)) {
+      if (!element.__attached && inDocument(element)) {
+        element.__attached = true;
+        if (element.attachedCallback) {
+          element.attachedCallback();
+        }
+      }
+    }
+  }
+  function detachedNode(node) {
+    detached(node);
+    forSubtree(node, function(e) {
+      detached(e);
+    });
+  }
+  function detached(element) {
+    if (hasPolyfillMutations) {
+      deferMutation(function() {
+        _detached(element);
+      });
+    } else {
+      _detached(element);
+    }
+  }
+  function _detached(element) {
+    if (element.__upgraded__ && (element.attachedCallback || element.detachedCallback)) {
+      if (element.__attached && !inDocument(element)) {
+        element.__attached = false;
+        if (element.detachedCallback) {
+          element.detachedCallback();
+        }
+      }
+    }
+  }
+  function inDocument(element) {
+    var p = element;
+    var doc = wrap(document);
+    while (p) {
+      if (p == doc) {
+        return true;
+      }
+      p = p.parentNode || p.host;
+    }
+  }
+  function watchShadow(node) {
+    if (node.shadowRoot && !node.shadowRoot.__watched) {
+      flags.dom && console.log("watching shadow-root for: ", node.localName);
+      var root = node.shadowRoot;
+      while (root) {
+        observe(root);
+        root = root.olderShadowRoot;
+      }
+    }
+  }
+  function handler(mutations) {
+    if (flags.dom) {
+      var mx = mutations[0];
+      if (mx && mx.type === "childList" && mx.addedNodes) {
+        if (mx.addedNodes) {
+          var d = mx.addedNodes[0];
+          while (d && d !== document && !d.host) {
+            d = d.parentNode;
+          }
+          var u = d && (d.URL || d._URL || d.host && d.host.localName) || "";
+          u = u.split("/?").shift().split("/").pop();
+        }
+      }
+      console.group("mutations (%d) [%s]", mutations.length, u || "");
+    }
+    mutations.forEach(function(mx) {
+      if (mx.type === "childList") {
+        forEach(mx.addedNodes, function(n) {
+          if (!n.localName) {
+            return;
+          }
+          addedNode(n);
+        });
+        forEach(mx.removedNodes, function(n) {
+          if (!n.localName) {
+            return;
+          }
+          detachedNode(n);
+        });
+      }
+    });
+    flags.dom && console.groupEnd();
+  }
+  function takeRecords(node) {
+    node = wrap(node);
+    if (!node) {
+      node = wrap(document);
+    }
+    while (node.parentNode) {
+      node = node.parentNode;
+    }
+    var observer = node.__observer;
+    if (observer) {
+      handler(observer.takeRecords());
+      takeMutations();
+    }
+  }
+  var forEach = Array.prototype.forEach.call.bind(Array.prototype.forEach);
+  function observe(inRoot) {
+    if (inRoot.__observer) {
+      return;
+    }
+    var observer = new MutationObserver(handler);
+    observer.observe(inRoot, {
+      childList: true,
+      subtree: true
+    });
+    inRoot.__observer = observer;
+  }
+  function upgradeDocument(doc) {
+    doc = wrap(doc);
+    flags.dom && console.group("upgradeDocument: ", doc.baseURI.split("/").pop());
+    addedNode(doc);
+    observe(doc);
+    flags.dom && console.groupEnd();
+  }
+  function upgradeDocumentTree(doc) {
+    forDocumentTree(doc, upgradeDocument);
+  }
+  var originalCreateShadowRoot = Element.prototype.createShadowRoot;
+  Element.prototype.createShadowRoot = function() {
+    var root = originalCreateShadowRoot.call(this);
+    CustomElements.watchShadow(this);
+    return root;
+  };
+  scope.watchShadow = watchShadow;
+  scope.upgradeDocumentTree = upgradeDocumentTree;
+  scope.upgradeSubtree = addedSubtree;
+  scope.upgradeAll = addedNode;
+  scope.attachedNode = attachedNode;
+  scope.takeRecords = takeRecords;
+});
+
+CustomElements.addModule(function(scope) {
+  var flags = scope.flags;
+  function upgrade(node) {
+    if (!node.__upgraded__ && node.nodeType === Node.ELEMENT_NODE) {
+      var is = node.getAttribute("is");
+      var definition = scope.getRegisteredDefinition(is || node.localName);
+      if (definition) {
+        if (is && definition.tag == node.localName) {
+          return upgradeWithDefinition(node, definition);
+        } else if (!is && !definition.extends) {
+          return upgradeWithDefinition(node, definition);
+        }
+      }
+    }
+  }
+  function upgradeWithDefinition(element, definition) {
+    flags.upgrade && console.group("upgrade:", element.localName);
+    if (definition.is) {
+      element.setAttribute("is", definition.is);
+    }
+    implementPrototype(element, definition);
+    element.__upgraded__ = true;
+    created(element);
+    scope.attachedNode(element);
+    scope.upgradeSubtree(element);
+    flags.upgrade && console.groupEnd();
+    return element;
+  }
+  function implementPrototype(element, definition) {
+    if (Object.__proto__) {
+      element.__proto__ = definition.prototype;
+    } else {
+      customMixin(element, definition.prototype, definition.native);
+      element.__proto__ = definition.prototype;
+    }
+  }
+  function customMixin(inTarget, inSrc, inNative) {
+    var used = {};
+    var p = inSrc;
+    while (p !== inNative && p !== HTMLElement.prototype) {
+      var keys = Object.getOwnPropertyNames(p);
+      for (var i = 0, k; k = keys[i]; i++) {
+        if (!used[k]) {
+          Object.defineProperty(inTarget, k, Object.getOwnPropertyDescriptor(p, k));
+          used[k] = 1;
+        }
+      }
+      p = Object.getPrototypeOf(p);
+    }
+  }
+  function created(element) {
+    if (element.createdCallback) {
+      element.createdCallback();
+    }
+  }
+  scope.upgrade = upgrade;
+  scope.upgradeWithDefinition = upgradeWithDefinition;
+  scope.implementPrototype = implementPrototype;
+});
+
+CustomElements.addModule(function(scope) {
+  var upgradeDocumentTree = scope.upgradeDocumentTree;
+  var upgrade = scope.upgrade;
+  var upgradeWithDefinition = scope.upgradeWithDefinition;
+  var implementPrototype = scope.implementPrototype;
+  var useNative = scope.useNative;
+  function register(name, options) {
+    var definition = options || {};
+    if (!name) {
+      throw new Error("document.registerElement: first argument `name` must not be empty");
+    }
+    if (name.indexOf("-") < 0) {
+      throw new Error("document.registerElement: first argument ('name') must contain a dash ('-'). Argument provided was '" + String(name) + "'.");
+    }
+    if (isReservedTag(name)) {
+      throw new Error("Failed to execute 'registerElement' on 'Document': Registration failed for type '" + String(name) + "'. The type name is invalid.");
+    }
+    if (getRegisteredDefinition(name)) {
+      throw new Error("DuplicateDefinitionError: a type with name '" + String(name) + "' is already registered");
+    }
+    if (!definition.prototype) {
+      definition.prototype = Object.create(HTMLElement.prototype);
+    }
+    definition.__name = name.toLowerCase();
+    definition.lifecycle = definition.lifecycle || {};
+    definition.ancestry = ancestry(definition.extends);
+    resolveTagName(definition);
+    resolvePrototypeChain(definition);
+    overrideAttributeApi(definition.prototype);
+    registerDefinition(definition.__name, definition);
+    definition.ctor = generateConstructor(definition);
+    definition.ctor.prototype = definition.prototype;
+    definition.prototype.constructor = definition.ctor;
+    if (scope.ready) {
+      upgradeDocumentTree(document);
+    }
+    return definition.ctor;
+  }
+  function overrideAttributeApi(prototype) {
+    if (prototype.setAttribute._polyfilled) {
+      return;
+    }
+    var setAttribute = prototype.setAttribute;
+    prototype.setAttribute = function(name, value) {
+      changeAttribute.call(this, name, value, setAttribute);
+    };
+    var removeAttribute = prototype.removeAttribute;
+    prototype.removeAttribute = function(name) {
+      changeAttribute.call(this, name, null, removeAttribute);
+    };
+    prototype.setAttribute._polyfilled = true;
+  }
+  function changeAttribute(name, value, operation) {
+    name = name.toLowerCase();
+    var oldValue = this.getAttribute(name);
+    operation.apply(this, arguments);
+    var newValue = this.getAttribute(name);
+    if (this.attributeChangedCallback && newValue !== oldValue) {
+      this.attributeChangedCallback(name, oldValue, newValue);
+    }
+  }
+  function isReservedTag(name) {
+    for (var i = 0; i < reservedTagList.length; i++) {
+      if (name === reservedTagList[i]) {
+        return true;
+      }
+    }
+  }
+  var reservedTagList = [ "annotation-xml", "color-profile", "font-face", "font-face-src", "font-face-uri", "font-face-format", "font-face-name", "missing-glyph" ];
+  function ancestry(extnds) {
+    var extendee = getRegisteredDefinition(extnds);
+    if (extendee) {
+      return ancestry(extendee.extends).concat([ extendee ]);
+    }
+    return [];
+  }
+  function resolveTagName(definition) {
+    var baseTag = definition.extends;
+    for (var i = 0, a; a = definition.ancestry[i]; i++) {
+      baseTag = a.is && a.tag;
+    }
+    definition.tag = baseTag || definition.__name;
+    if (baseTag) {
+      definition.is = definition.__name;
+    }
+  }
+  function resolvePrototypeChain(definition) {
+    if (!Object.__proto__) {
+      var nativePrototype = HTMLElement.prototype;
+      if (definition.is) {
+        var inst = document.createElement(definition.tag);
+        var expectedPrototype = Object.getPrototypeOf(inst);
+        if (expectedPrototype === definition.prototype) {
+          nativePrototype = expectedPrototype;
+        }
+      }
+      var proto = definition.prototype, ancestor;
+      while (proto && proto !== nativePrototype) {
+        ancestor = Object.getPrototypeOf(proto);
+        proto.__proto__ = ancestor;
+        proto = ancestor;
+      }
+      definition.native = nativePrototype;
+    }
+  }
+  function instantiate(definition) {
+    return upgradeWithDefinition(domCreateElement(definition.tag), definition);
+  }
+  var registry = {};
+  function getRegisteredDefinition(name) {
+    if (name) {
+      return registry[name.toLowerCase()];
+    }
+  }
+  function registerDefinition(name, definition) {
+    registry[name] = definition;
+  }
+  function generateConstructor(definition) {
+    return function() {
+      return instantiate(definition);
+    };
+  }
+  var HTML_NAMESPACE = "http://www.w3.org/1999/xhtml";
+  function createElementNS(namespace, tag, typeExtension) {
+    if (namespace === HTML_NAMESPACE) {
+      return createElement(tag, typeExtension);
+    } else {
+      return domCreateElementNS(namespace, tag);
+    }
+  }
+  function createElement(tag, typeExtension) {
+    var definition = getRegisteredDefinition(typeExtension || tag);
+    if (definition) {
+      if (tag == definition.tag && typeExtension == definition.is) {
+        return new definition.ctor();
+      }
+      if (!typeExtension && !definition.is) {
+        return new definition.ctor();
+      }
+    }
+    var element;
+    if (typeExtension) {
+      element = createElement(tag);
+      element.setAttribute("is", typeExtension);
+      return element;
+    }
+    element = domCreateElement(tag);
+    if (tag.indexOf("-") >= 0) {
+      implementPrototype(element, HTMLElement);
+    }
+    return element;
+  }
+  function cloneNode(deep) {
+    var n = domCloneNode.call(this, deep);
+    upgrade(n);
+    return n;
+  }
+  var domCreateElement = document.createElement.bind(document);
+  var domCreateElementNS = document.createElementNS.bind(document);
+  var domCloneNode = Node.prototype.cloneNode;
+  var isInstance;
+  if (!Object.__proto__ && !useNative) {
+    isInstance = function(obj, ctor) {
+      var p = obj;
+      while (p) {
+        if (p === ctor.prototype) {
+          return true;
+        }
+        p = p.__proto__;
+      }
+      return false;
+    };
+  } else {
+    isInstance = function(obj, base) {
+      return obj instanceof base;
+    };
+  }
+  document.registerElement = register;
+  document.createElement = createElement;
+  document.createElementNS = createElementNS;
+  Node.prototype.cloneNode = cloneNode;
+  scope.registry = registry;
+  scope.instanceof = isInstance;
+  scope.reservedTagList = reservedTagList;
+  scope.getRegisteredDefinition = getRegisteredDefinition;
+  document.register = document.registerElement;
+});
+
+(function(scope) {
+  var useNative = scope.useNative;
+  var initializeModules = scope.initializeModules;
+  if (useNative) {
+    var nop = function() {};
+    scope.watchShadow = nop;
+    scope.upgrade = nop;
+    scope.upgradeAll = nop;
+    scope.upgradeDocumentTree = nop;
+    scope.upgradeSubtree = nop;
+    scope.takeRecords = nop;
+    scope.instanceof = function(obj, base) {
+      return obj instanceof base;
+    };
+  } else {
+    initializeModules();
+  }
+  var upgradeDocumentTree = scope.upgradeDocumentTree;
+  if (!window.wrap) {
+    if (window.ShadowDOMPolyfill) {
+      window.wrap = ShadowDOMPolyfill.wrapIfNeeded;
+      window.unwrap = ShadowDOMPolyfill.unwrapIfNeeded;
+    } else {
+      window.wrap = window.unwrap = function(node) {
+        return node;
+      };
+    }
+  }
+  function bootstrap() {
+    upgradeDocumentTree(wrap(document));
+    if (window.HTMLImports) {
+      HTMLImports.__importsParsingHook = function(elt) {
+        upgradeDocumentTree(wrap(elt.import));
+      };
+    }
+    CustomElements.ready = true;
+    setTimeout(function() {
+      CustomElements.readyTime = Date.now();
+      if (window.HTMLImports) {
+        CustomElements.elapsed = CustomElements.readyTime - HTMLImports.readyTime;
+      }
+      document.dispatchEvent(new CustomEvent("WebComponentsReady", {
+        bubbles: true
+      }));
+    });
+  }
+  if (typeof window.CustomEvent !== "function") {
+    window.CustomEvent = function(inType, params) {
+      params = params || {};
+      var e = document.createEvent("CustomEvent");
+      e.initCustomEvent(inType, Boolean(params.bubbles), Boolean(params.cancelable), params.detail);
+      return e;
+    };
+    window.CustomEvent.prototype = window.Event.prototype;
+  }
+  if (document.readyState === "complete" || scope.flags.eager) {
+    bootstrap();
+  } else if (document.readyState === "interactive" && !window.attachEvent && (!window.HTMLImports || window.HTMLImports.ready)) {
+    bootstrap();
+  } else {
+    var loadEvent = window.HTMLImports && !HTMLImports.ready ? "HTMLImportsLoaded" : "DOMContentLoaded";
+    window.addEventListener(loadEvent, bootstrap);
+  }
+})(window.CustomElements);
+
+(function(scope) {
+  if (!Function.prototype.bind) {
+    Function.prototype.bind = function(scope) {
+      var self = this;
+      var args = Array.prototype.slice.call(arguments, 1);
+      return function() {
+        var args2 = args.slice();
+        args2.push.apply(args2, arguments);
+        return self.apply(scope, args2);
+      };
+    };
+  }
+})(window.WebComponents);
+
+(function(scope) {
+  "use strict";
+  if (!window.performance) {
+    var start = Date.now();
+    window.performance = {
+      now: function() {
+        return Date.now() - start;
+      }
+    };
+  }
+  if (!window.requestAnimationFrame) {
+    window.requestAnimationFrame = function() {
+      var nativeRaf = window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame;
+      return nativeRaf ? function(callback) {
+        return nativeRaf(function() {
+          callback(performance.now());
+        });
+      } : function(callback) {
+        return window.setTimeout(callback, 1e3 / 60);
+      };
+    }();
+  }
+  if (!window.cancelAnimationFrame) {
+    window.cancelAnimationFrame = function() {
+      return window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || function(id) {
+        clearTimeout(id);
+      };
+    }();
+  }
+  var elementDeclarations = [];
+  var polymerStub = function(name, dictionary) {
+    if (typeof name !== "string" && arguments.length === 1) {
+      Array.prototype.push.call(arguments, document._currentScript);
+    }
+    elementDeclarations.push(arguments);
+  };
+  window.Polymer = polymerStub;
+  scope.consumeDeclarations = function(callback) {
+    scope.consumeDeclarations = function() {
+      throw "Possible attempt to load Polymer twice";
+    };
+    if (callback) {
+      callback(elementDeclarations);
+    }
+    elementDeclarations = null;
+  };
+  function installPolymerWarning() {
+    if (window.Polymer === polymerStub) {
+      window.Polymer = function() {
+        throw new Error("You tried to use polymer without loading it first. To " + 'load polymer, <link rel="import" href="' + 'components/polymer/polymer.html">');
+      };
+    }
+  }
+  if (HTMLImports.useNative) {
+    installPolymerWarning();
+  } else {
+    addEventListener("DOMContentLoaded", installPolymerWarning);
+  }
+})(window.WebComponents);
+
+(function(scope) {
+  var style = document.createElement("style");
+  style.textContent = "" + "body {" + "transition: opacity ease-in 0.2s;" + " } \n" + "body[unresolved] {" + "opacity: 0; display: block; overflow: hidden; position: relative;" + " } \n";
+  var head = document.querySelector("head");
+  head.insertBefore(style, head.firstChild);
+})(window.WebComponents);
+
+(function(scope) {
+  window.Platform = scope;
+})(window.WebComponents);
