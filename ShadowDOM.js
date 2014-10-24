@@ -7,7 +7,7 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
-// @version 0.5.0-b6cf8b1
+// @version 0.5.0-49f383f
 if (typeof WeakMap === "undefined") {
   (function() {
     var defineProperty = Object.defineProperty;
@@ -495,7 +495,7 @@ window.ShadowDOMPolyfill = {};
       textNode.data = counter;
     };
   } else {
-    timerFunc = window.setImmediate || window.setTimeout;
+    timerFunc = window.setTimeout;
   }
   function setEndOfMicrotask(func) {
     callbacks.push(func);

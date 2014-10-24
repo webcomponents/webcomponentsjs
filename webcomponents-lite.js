@@ -7,7 +7,7 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
-// @version 0.5.0-b6cf8b1
+// @version 0.5.0-49f383f
 window.WebComponents = window.WebComponents || {};
 
 (function(scope) {
@@ -91,8 +91,12 @@ if (typeof WeakMap === "undefined") {
 
 (function(global) {
   var registrationsTable = new WeakMap();
-  var setImmediate = window.msSetImmediate;
-  if (!setImmediate) {
+  var setImmediate;
+  if (/Trident/.test(navigator.userAgent)) {
+    setImmediate = setTimeout;
+  } else if (window.setImmediate) {
+    setImmediate = window.setImmediate;
+  } else {
     var setImmediateQueue = [];
     var sentinel = String(Math.random());
     window.addEventListener("message", function(e) {
