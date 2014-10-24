@@ -33,7 +33,7 @@
     };
 
   } else {
-    timerFunc = window.setImmediate || window.setTimeout;
+    timerFunc = window.setTimeout;
   }
 
   function setEndOfMicrotask(func) {

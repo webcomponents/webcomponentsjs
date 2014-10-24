@@ -1,0 +1,62 @@
+<!doctype html>
+<!--
+Test setup borrowed from Code for Hire's research into this subject:
+http://codeforhire.com/2013/09/21/setimmediate-and-messagechannel-broken-on-internet-explorer-10/
+-->
+<html>
+<head>
+  <title>MutationObserver</title>
+  <script src="../src/WeakMap/WeakMap.js"></script>
+  <script src="../src/MutationObserver/MutationObserver.js"></script>
+</head>
+<body style="font-family: sans-serif">
+
+<h3>MutationObserver test page</h3>
+
+<p>Clicking start will schedule two self-restarting functions:</p>
+<ul>
+<li><strong>runSetTimeout</strong> uses setTimeout(fn, 0) for queueing itself</li>
+<li><strong>runMutation</strong> uses a MutationObserver for queueing itself</li>
+</ul>
+
+<p>
+After starting the test, move your mouse so that it is hovering over the top line of output.
+<p>
+
+<p>
+If the browser is behaving, you should see runSetTimeout calls interleaved with runMutation calls (either 2:1 or 1:1, depending).
+</p>
+
+<p>
+On IE10, if our MutationObserver polyfill uses setImmediate, postMessage, or MessageQueue, the runMutation line will become erratic, and eventually not fire at all.
+</p>
+
+<input type="button" value="Start" onclick="doStart(); return false;">
+<div id="log"></div>
+
+<script>
+var logElement = document.getElementById('log');
+
+var iterations = 0;
+var twiddle = document.createTextNode('');
+var observer = new MutationObserver(runMutation).observe(twiddle, {characterData: true});
+function runMutation() {
+  setTimeout(function() {
+    twiddle.textContent = iterations++;
+  }, 0);
+  logElement.innerHTML = "<p>runMutation called: " + Date.now() + "</p>" + logElement.innerHTML;
+}
+
+function runSetTimeout() {
+  setTimeout(runSetTimeout, 0);
+  logElement.innerHTML = "<p>runSetTimeout called: " + Date.now() + "</p>" + logElement.innerHTML;
+}
+
+function doStart() {
+  setTimeout(runSetTimeout, 0);
+  twiddle.textContent = iterations++;
+}
+</script>
+
+</body>
+</html>

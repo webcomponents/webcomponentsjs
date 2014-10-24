@@ -8,11 +8,30 @@
 
   var registrationsTable = new WeakMap();
 
-  // We use setImmediate or postMessage for our future callback.
-  var setImmediate = window.msSetImmediate;
+  var setImmediate;
 
-  // Use post message to emulate setImmediate.
-  if (!setImmediate) {
+  // As much as we would like to use the native implementation, IE
+  // (all versions) suffers a rather annoying bug where it will drop or defer
+  // callbacks when heavy DOM operations are being performed concurrently.
+  //
+  // For a thorough discussion on this, see:
+  // http://codeforhire.com/2013/09/21/setimmediate-and-messagechannel-broken-on-internet-explorer-10/
+  if (/Trident/.test(navigator.userAgent)) {
+    // Sadly, this bug also affects postMessage and MessageQueues.
+    //
+    // We would like to use the onreadystatechange hack for IE <= 10, but it is
+    // dangerous in the polyfilled environment due to requiring that the
+    // observed script element be in the document.
+    setImmediate = setTimeout;
+
+  // If some other browser ever implements it, let's prefer their native
+  // implementation:
+  } else if (window.setImmediate) {
+    setImmediate = window.setImmediate;
+
+  // Otherwise, we fall back to postMessage as a means of emulating the next
+  // task semantics of setImmediate.
+  } else {
     var setImmediateQueue = [];
     var sentinel = String(Math.random());
     window.addEventListener('message', function(e) {
