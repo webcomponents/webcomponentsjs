@@ -567,7 +567,7 @@ var selectorRe = /([^{]*)({[\s\S]*?})/gim,
     parenSuffix = ')(?:\\((' +
         '(?:\\([^)(]*\\)|[^)(]*)+?' +
         ')\\))?([^,{]*)';
-    cssColonHostRe = new RegExp('(' + polyfillHost + parenSuffix, 'gim'),
+    var cssColonHostRe = new RegExp('(' + polyfillHost + parenSuffix, 'gim'),
     cssColonHostContextRe = new RegExp('(' + polyfillHostContext + parenSuffix, 'gim'),
     selectorReSuffix = '([>\\s~+\[.,{:][\\s\\S]*)?$',
     colonHostRe = /\:host/gim,
