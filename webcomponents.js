@@ -60,7 +60,7 @@
   var ShadowDOMPolyfill = [
     'ShadowDOM/ShadowDOM.js',
     'WebComponents/shadowdom.js',
-    'ShadowCSS/ShadowCSS.js'
+    'ShadowCss/ShadowCSS.js'
   ];
 
   // select ShadowDOM impl
