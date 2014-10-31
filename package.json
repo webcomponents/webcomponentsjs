@@ -1,7 +1,7 @@
 {
-  "name": "webcomponents.js-dev",
+  "name": "webcomponents.js",
   "version": "0.5.0",
-  "description": "webcomponents.js-dev",
+  "description": "webcomponents.js",
   "main": "gulpfile.js",
   "directories": {
     "test": "tests"
@@ -14,18 +14,17 @@
     "gulp-uglify": "^1.0.1",
     "run-sequence": "^1.0.1"
   },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Polymer/webcomponents.js-dev.git"
+    "url": "https://github.com/Polymer/webcomponentsjs.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "The Polymer Authors",
+  "license": {
+    "type": "BSD-3-Clause",
+    "url": "http://polymer.github.io/LICENSE.txt"
+  },
   "bugs": {
-    "url": "https://github.com/Polymer/webcomponents.js-dev/issues"
+    "url": "https://github.com/Polymer/webcomponentsjs/issues"
   },
-  "homepage": "https://github.com/Polymer/webcomponents.js-dev"
+  "homepage": "http://webcomponents.org"
 }
