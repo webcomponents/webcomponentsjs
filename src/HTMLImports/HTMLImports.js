@@ -25,9 +25,10 @@ if (!flags.noOpts) {
 var file = 'HTMLImports.js';
 
 var modules = [
-  'base.js',
   '../WeakMap/WeakMap.js',
   '../MutationObserver/MutationObserver.js',
+  'base.js',
+  'module.js',
   'path.js',
   'xhr.js',
   'Loader.js',

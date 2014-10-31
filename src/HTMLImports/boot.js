@@ -24,6 +24,18 @@ if (scope.useNative) {
   return;
 }
 
+// IE shim for CustomEvent
+if (typeof window.CustomEvent !== 'function') {
+  window.CustomEvent = function(inType, dictionary) {
+    var e = document.createEvent('HTMLEvents');
+    e.initEvent(inType,
+      dictionary.bubbles === false ? false : true,
+      dictionary.cancelable === false ? false : true,
+      dictionary.detail);
+    return e;
+  };
+}
+
 // Initialize polyfill modules. Note, polyfill modules are loaded but not 
 // executed; this is a convenient way to control which modules run when 
 // the polyfill is required and allows the polyfill to load even when it's
