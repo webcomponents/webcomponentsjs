@@ -12,9 +12,7 @@ A suite of polyfills supporting the HTML web components specs:
 This also folds in polyfills for `MutationObserver` and `WeakMap`.
 
 
-# Builds
-
-There are two builds of these polyfills:
+## Builds
 
 `webcomponents.js` includes all of the polyfills.
 
