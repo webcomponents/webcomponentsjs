@@ -17,3 +17,8 @@ This also folds in polyfills for `MutationObserver` and `WeakMap`.
 `webcomponents.js` includes all of the polyfills.
 
 `webcomponents-lite.js` includes all polyfills except for shadow DOM.
+
+
+## Releases
+
+[Release (tagged) versions](https://github.com/Polymer/webcomponentsjs/releases) of webcomponents.js include concatenated and minified sources for your convenience.
