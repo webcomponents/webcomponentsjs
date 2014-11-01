@@ -2,7 +2,7 @@
   "build/boot.js",
   "build/if-poly.js",
   "../ShadowDOM/build.json",
-  "../ShadowCss/ShadowCss.js",
+  "../ShadowCSS/ShadowCSS.js",
   "build/end-if.js",
   "shadowdom.js",
   "../HTMLImports/build.json",

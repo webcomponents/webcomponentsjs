@@ -7,7 +7,7 @@
 (function() {
 
   // Establish scope.
-  window.WebComponents = window.WebComponents || {flags:{}};  
+  window.WebComponents = window.WebComponents || {flags:{}};
 
   // loading script
   var file = 'webcomponents.js';
@@ -44,7 +44,7 @@
   // Determine default settings.
   // If any of these flags match 'native', then force native ShadowDOM; any
   // other truthy value, or failure to detect native
-  // ShadowDOM, results in polyfill 
+  // ShadowDOM, results in polyfill
   flags.shadow = (flags.shadow || flags.shadowdom || flags.polyfill);
   if (flags.shadow === 'native') {
     flags.shadow = false;
@@ -60,7 +60,7 @@
   var ShadowDOMPolyfill = [
     'ShadowDOM/ShadowDOM.js',
     'WebComponents/shadowdom.js',
-    'ShadowCss/ShadowCSS.js'
+    'ShadowCSS/ShadowCSS.js'
   ];
 
   // select ShadowDOM impl
@@ -83,12 +83,12 @@
 
   var src = script.getAttribute('src');
   var path = src.slice(0, src.lastIndexOf(file));
-  
+
   modules.forEach(function(f) {
     document.write('<script src="' + path + 'src/' + f + '"></script>');
   });
 
-  // exports 
+  // exports
   WebComponents.flags = flags;
 
 })();
