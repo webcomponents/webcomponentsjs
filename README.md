@@ -16,14 +16,16 @@ This also folds in polyfills for `MutationObserver` and `WeakMap`.
 
 To build the concatenated and minified polyfills, you need `node` and `gulp` on your system:
 
- * install [NodeJS](http://nodejs.org/) using the instructions on their website
+ * install [node.js](http://nodejs.org/) using the instructions on their website
  * use `npm` to install [gulp.js](http://gulpjs.com/):
+
+<!-- code block after list -->
 
     npm install -g gulp
 
-Now you are able to build the polyfills with:
+Now you are ready to build the polyfills with:
 
-    # install dependecies
+    # install dependencies
     npm install
     # build
     gulp
