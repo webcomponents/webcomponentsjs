@@ -21,7 +21,7 @@ Pre-built (concatenated & minified) versions of the polyfills are maintained in 
 `webcomponents-lite.js` includes all polyfills except for shadow DOM.
 
 
-## Manually Building
+### Manually Building
 
 If you wish to build the polyfills yourself, you'll need `node` and `gulp` on your system:
 
