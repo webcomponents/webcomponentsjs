@@ -12,6 +12,25 @@ A suite of polyfills supporting the HTML web components specs:
 This also folds in polyfills for `MutationObserver` and `WeakMap`.
 
 
+## Building
+
+To build the concatenated and minified polyfills, you need `node` and `gulp` on your system:
+
+ * install [node.js](http://nodejs.org/) using the instructions on their website
+ * use `npm` to install [gulp.js](http://gulpjs.com/):
+
+<!-- code block after list -->
+
+    npm install -g gulp
+
+Now you are ready to build the polyfills with:
+
+    # install dependencies
+    npm install
+    # build
+    gulp
+
+
 ## Builds
 
 `webcomponents.js` includes all of the polyfills.
