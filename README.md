@@ -26,9 +26,7 @@ Pre-built (concatenated & minified) versions of the polyfills are maintained in 
 If you wish to build the polyfills yourself, you'll need `node` and `gulp` on your system:
 
  * install [node.js](http://nodejs.org/) using the instructions on their website
- * use `npm` to install [gulp.js](http://gulpjs.com/):
-
-    npm install -g gulp
+ * use `npm` to install [gulp.js](http://gulpjs.com/): `npm install -g gulp`
 
 Now you are ready to build the polyfills with:
 
