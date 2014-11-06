@@ -115,6 +115,10 @@ function readManifest(filename, modules) {
   return modules;
 }
 
+gulp.task('copy-bower', function() {
+  return gulp.src('bower.json').pipe(gulp.dest('dist/'));
+});
+
 defineBuildTask('webcomponents', './src/WebComponents/build.json');
 defineBuildTask('webcomponents-lite', './src/WebComponents/build-lite.json');
 defineBuildTask('CustomElements');
@@ -122,7 +126,7 @@ defineBuildTask('HTMLImports');
 defineBuildTask('ShadowDOM');
 
 gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements', 
-  'HTMLImports', 'ShadowDOM']);
+  'HTMLImports', 'ShadowDOM', 'copy-bower']);
 
 gulp.task('release', function(cb) {
   isRelease = true;
