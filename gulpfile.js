@@ -12,17 +12,12 @@
 
 'use strict';
 
-var
-  audit = require('gulp-audit'),
-  concat = require('gulp-concat'),
-  exec = require('child_process').exec,
-  fs = require('fs'),
-  gulp = require('gulp'),
-  header = require('gulp-header'),
-  path = require('path'),
-  runseq = require('run-sequence'),
-  uglify = require('gulp-uglify')
-;
+var $ = require('gulp-load-plugins')();
+var gulp = require('gulp');
+var exec = require('child_process').exec;
+var fs = require('fs');
+var path = require('path');
+var runseq = require('run-sequence');
 
 var isRelease = process.env.RELEASE !== undefined;
 
@@ -38,8 +33,8 @@ function defineBuildTask(name, manifest) {
     var list = readManifest(manifest);
     gulp.task(name + '-debug', ['version'], function() {
       return gulp.src(list)
-      .pipe(concat(output + '.js'))
-      .pipe(uglify({
+      .pipe($.concat(output + '.js'))
+      .pipe($.uglify({
         mangle: false,
         compress: false,
         output: {
@@ -47,16 +42,16 @@ function defineBuildTask(name, manifest) {
           indent_level: 2
         }
       }))
-      .pipe(header(banner, {pkg: pkg}))
+      .pipe($.header(banner, {pkg: pkg}))
       .pipe(gulp.dest('dist/'))
       ;
     });
 
     gulp.task(name, ['version', name + '-debug'], function() {
       return gulp.src(list)
-      .pipe(concat(output + '.min.js'))
-      .pipe(uglify())
-      .pipe(header(banner, {pkg: pkg}))
+      .pipe($.concat(output + '.min.js'))
+      .pipe($.uglify())
+      .pipe($.header(banner, {pkg: pkg}))
       .pipe(gulp.dest('dist/'))
       ;
     });
@@ -71,7 +66,7 @@ function readJSON(filename) {
 
 gulp.task('audit', function() {
   return gulp.src('dist/*.js')
-  .pipe(audit('build.log', {repos:['.']}))
+  .pipe($.audit('build.log', {repos:['.']}))
   .pipe(gulp.dest('dist/'));
 });
 
@@ -121,7 +116,7 @@ defineBuildTask('CustomElements');
 defineBuildTask('HTMLImports');
 defineBuildTask('ShadowDOM');
 
-gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements', 
+gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements',
   'HTMLImports', 'ShadowDOM']);
 
 gulp.task('release', function(cb) {
