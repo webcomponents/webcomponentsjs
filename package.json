@@ -26,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/Polymer/webcomponentsjs/issues"
   },
-  "homepage": "http://webcomponents.org"
+  "homepage": "http://webcomponents.org",
+  "devDependencies": {
+    "gulp-load-plugins": "^0.7.1"
+  }
 }
