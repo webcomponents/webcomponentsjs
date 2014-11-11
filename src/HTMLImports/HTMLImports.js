@@ -8,9 +8,9 @@
  */
 (function() {
 
-// Estblish polyfill scope. We do this here to store flags. Flags are not 
+// Estblish polyfill scope. We do this here to store flags. Flags are not
 // supported in the build.
-window.HTMLImports = window.HTMLImports || {flags:{}};  
+window.HTMLImports = window.HTMLImports || {flags:{}};
 
 // Flags. Convert url arguments to flags
 var flags = {};
@@ -26,7 +26,6 @@ var file = 'HTMLImports.js';
 
 var modules = [
   '../WeakMap/WeakMap.js',
-  '../MutationObserver/MutationObserver.js',
   'base.js',
   'module.js',
   'path.js',
@@ -39,7 +38,7 @@ var modules = [
   'boot.js'
 ];
 
-var src = 
+var src =
   document.querySelector('script[src*="' + file + '"]').getAttribute('src');
 var basePath = src.slice(0, src.indexOf(file));
 
@@ -47,7 +46,7 @@ modules.forEach(function(f) {
   document.write('<script src="' + basePath + f + '"></script>');
 });
 
-// exports 
+// exports
 HTMLImports.flags = flags;
 
 })();
