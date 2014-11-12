@@ -7,10 +7,10 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 (function() {
-  
-// Estblish polyfill scope. We do this here to store flags. Flags are not 
+
+// Establish polyfill scope. We do this here to store flags. Flags are not
 // supported in the build.
-window.CustomElements = window.CustomElements || {flags:{}};  
+window.CustomElements = window.CustomElements || {flags:{}};
 
 // Flags. Convert url arguments to flags
 var flags = {};
@@ -36,7 +36,7 @@ var modules = [
   'boot.js'
 ];
 
-var src = 
+var src =
   document.querySelector('script[src*="' + file + '"]').getAttribute('src');
 var basePath = src.slice(0, src.indexOf(file));
 
@@ -44,7 +44,7 @@ modules.forEach(function(f) {
   document.write('<script src="' + basePath + f + '"></script>');
 });
 
-// exports 
+// exports
 CustomElements.flags = flags;
 
 })();
