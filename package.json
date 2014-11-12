@@ -1,6 +1,6 @@
 {
   "name": "webcomponents.js",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "webcomponents.js",
   "main": "gulpfile.js",
   "directories": {
