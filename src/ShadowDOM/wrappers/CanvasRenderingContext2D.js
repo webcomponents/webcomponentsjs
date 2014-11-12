@@ -3,8 +3,6 @@
 // license that can be found in the LICENSE file.
 
 (function(scope) {
-  'use strict';
-
   var mixin = scope.mixin;
   var registerWrapper = scope.registerWrapper;
   var setWrapper = scope.setWrapper;
