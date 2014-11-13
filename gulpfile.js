@@ -116,7 +116,7 @@ function readManifest(filename, modules) {
 }
 
 gulp.task('copy-bower', function() {
-  return gulp.src(['bower.json','README.md']).pipe(gulp.dest('dist/'));
+  return gulp.src(['bower.json', 'package.json', 'README.md']).pipe(gulp.dest('dist/'));
 });
 
 defineBuildTask('webcomponents', './src/WebComponents/build.json');
