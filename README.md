@@ -36,3 +36,9 @@ Now you are ready to build the polyfills with:
     gulp build
 
 The builds will be placed into the `dist/` directory.
+
+## Contribute
+
+See the [contributing guide](CONTRIBUTING.md)
+
+
