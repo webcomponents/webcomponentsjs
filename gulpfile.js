@@ -24,6 +24,9 @@ var
   uglify = require('gulp-uglify')
 ;
 
+// init tests with gulp
+require('web-component-tester').gulp.init(gulp);
+
 var isRelease = process.env.RELEASE !== undefined;
 
 var banner = fs.readFileSync('banner.txt', 'utf8');
