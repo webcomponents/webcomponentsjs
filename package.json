@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "gulp": "^3.8.8",
-    "gulp-audit": "git://github.com/Polymer/gulp-audit#master",
+    "gulp-audit": "^1.0.0",
     "gulp-concat": "^2.4.1",
     "gulp-header": "^1.1.1",
     "gulp-uglify": "^1.0.1",
