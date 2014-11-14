@@ -3,8 +3,6 @@
 // license that can be found in the LICENSE file.
 
 (function(scope) {
-  'use strict';
-
   var forwardMethodsToWrapper = scope.forwardMethodsToWrapper;
   var getTreeScope = scope.getTreeScope;
   var mixin = scope.mixin;
