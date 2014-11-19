@@ -9,7 +9,8 @@
 (function(scope){
 
 // imports
-initializeModules = scope.initializeModules;
+var initializeModules = scope.initializeModules;
+var isIE = scope.isIE;
 
 /*
 NOTE: Even when native HTMLImports exists, the following api is available by
@@ -25,7 +26,8 @@ if (scope.useNative) {
 }
 
 // CustomEvent shim for IE
-if (typeof window.CustomEvent !== 'function') {
+// NOTE: we explicitly test for IE since Safari has an type `object` CustomEvent
+if (isIE && (typeof window.CustomEvent !== 'function')) {
   window.CustomEvent = function(inType, params) {
     params = params || {};
     var e = document.createEvent('CustomEvent');

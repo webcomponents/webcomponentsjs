@@ -12,6 +12,8 @@
 var useNative = scope.useNative;
 var initializeModules = scope.initializeModules;
 
+var isIE = /Trident/.test(navigator.userAgent);
+
 // If native, setup stub api and bail.
 // NOTE: we fire `WebComponentsReady` under native for api compatibility
 if (useNative) {
@@ -85,7 +87,8 @@ function bootstrap() {
 }
 
 // CustomEvent shim for IE
-if (typeof window.CustomEvent !== 'function') {
+// NOTE: we explicitly test for IE since Safari has an type `object` CustomEvent
+if (isIE && (typeof window.CustomEvent !== 'function')) {
   window.CustomEvent = function(inType, params) {
     params = params || {};
     var e = document.createEvent('CustomEvent');
