@@ -515,7 +515,7 @@ var ShadowCSS = {
           rule.style.content + '\';');
     }
     // TODO(sorvell): we can workaround this issue here, but we need a list
-    // of troublesome properties to fix https://github.com/Polymer/platform/issues/53
+    // of troublesome properties to fix https://github.com/webcomponents/webcomponentsjs/issues/9
     //
     // inherit rules can be omitted from cssText
     // TODO(sorvell): remove when Blink bug is fixed:
