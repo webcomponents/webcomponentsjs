@@ -24,16 +24,15 @@ if (scope.useNative) {
   return;
 }
 
-// IE shim for CustomEvent
+// CustomEvent shim for IE
 if (typeof window.CustomEvent !== 'function') {
-  window.CustomEvent = function(inType, dictionary) {
-    var e = document.createEvent('HTMLEvents');
-    e.initEvent(inType,
-      dictionary.bubbles === false ? false : true,
-      dictionary.cancelable === false ? false : true,
-      dictionary.detail);
+  window.CustomEvent = function(inType, params) {
+    params = params || {};
+    var e = document.createEvent('CustomEvent');
+    e.initCustomEvent(inType, Boolean(params.bubbles), Boolean(params.cancelable), params.detail);
     return e;
   };
+  window.CustomEvent.prototype = window.Event.prototype;
 }
 
 // Initialize polyfill modules. Note, polyfill modules are loaded but not 
