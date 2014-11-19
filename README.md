@@ -14,7 +14,7 @@ This also folds in polyfills for `MutationObserver` and `WeakMap`.
 
 ## Releases
 
-Pre-built (concatenated & minified) versions of the polyfills are maintained in the [tagged versions](https://github.com/Polymer/webcomponentsjs/releases) of this repo. There are two variants:
+Pre-built (concatenated & minified) versions of the polyfills are maintained in the [tagged versions](https://github.com/webcomponents/webcomponentsjs/releases) of this repo. There are two variants:
 
 `webcomponents.js` includes all of the polyfills.
 
