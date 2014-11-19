@@ -1,6 +1,6 @@
 {
   "name": "webcomponents.js",
-  "version": "0.5.1",
+  "version": "0.5.1-1",
   "description": "webcomponents.js",
   "main": "gulpfile.js",
   "directories": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Polymer/webcomponentsjs.git"
+    "url": "https://github.com/webcomponents/webcomponentsjs.git"
   },
   "author": "The Polymer Authors",
   "license": {
@@ -16,7 +16,7 @@
     "url": "http://polymer.github.io/LICENSE.txt"
   },
   "bugs": {
-    "url": "https://github.com/Polymer/webcomponentsjs/issues"
+    "url": "https://github.com/webcomponents/webcomponentsjs/issues"
   },
   "homepage": "http://webcomponents.org",
   "devDependencies": {
