@@ -2,5 +2,6 @@
   "build/boot.js",
   "../HTMLImports/build.json",
   "../CustomElements/build.json",
+  "../Template/Template.js",
   "unresolved.js"
 ]

@@ -56,6 +56,7 @@
   var modules = [
     'HTMLImports/HTMLImports.js',
     'CustomElements/CustomElements.js',
+    'Template/Template.js',
     // these scripts are loaded here due to polyfill timing issues
     'WebComponents/unresolved.js'
   ];
