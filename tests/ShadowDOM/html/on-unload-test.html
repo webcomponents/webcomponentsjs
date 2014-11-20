@@ -18,7 +18,7 @@ function runTest() {
   // current spec is target should be window for beforeunload, but is overridden
   // to be document for unload. Both events are dispatched on window:
   // http://www.whatwg.org/specs/web-apps/current-work/multipage/browsers.html#unloading-documents
-  var expectedTarget = /Trident/.test(navigator.userAgent) ? win : doc;
+  var expectedTarget = /Trident|Edge/.test(navigator.userAgent) ? win : doc;
 
   var beforeunloadCalled = 0;
   window.addEventListener('beforeunload', function(e) {

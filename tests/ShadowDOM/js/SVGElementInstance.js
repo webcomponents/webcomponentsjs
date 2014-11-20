@@ -107,7 +107,7 @@ suite('SVGElementInstance', function() {
     assert.equal('line', instanceRoot.lastChild.correspondingElement.localName);
 
     // IE always returns new wrappers for all the accessors.
-    if (/Trident/.test(navigator.userAgent))
+    if (/Trident|Edge/.test(navigator.userAgent))
       return;
 
     assert.equal(instanceRoot.firstChild, instanceRoot.lastChild);
