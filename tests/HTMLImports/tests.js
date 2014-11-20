@@ -18,6 +18,7 @@ htmlSuite('HTMLImports', function() {
   htmlTest('html/dedupe.html');
   htmlTest('html/dynamic.html');
   htmlTest('html/csp.html');
+  htmlTest('html/customevent-detail.html');
   htmlTest('html/encoding.html');
   htmlTest('html/HTMLImportsLoaded-native.html');
   // NOTE: The MO polyfill does not function on disconnected documents
