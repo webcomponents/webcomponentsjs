@@ -509,6 +509,7 @@ suite('customElements', function() {
 
 htmlSuite('customElements (html)', function() {
   htmlTest('../html/attributes.html');
+  htmlTest('../html/customevent-detail.html');
   htmlTest('../html/upgrade-order.html');
   htmlTest('../html/upgrade-dcl.html');
   htmlTest('../html/imports.html');
