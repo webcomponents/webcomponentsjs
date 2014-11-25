@@ -1,4 +1,5 @@
-/*
+/**
+ * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -33,8 +34,8 @@ if (useNative) {
   };
 
 } else {
-  // Initialize polyfill modules. Note, polyfill modules are loaded but not 
-  // executed; this is a convenient way to control which modules run when 
+  // Initialize polyfill modules. Note, polyfill modules are loaded but not
+  // executed; this is a convenient way to control which modules run when
   // the polyfill is required and allows the polyfill to load even when it's
   // not needed.
   initializeModules();
@@ -67,7 +68,7 @@ function bootstrap() {
       //CustomElements.parser.parse(elt.import);
     };
   }
-  // set internal 'ready' flag, now document.registerElement will trigger 
+  // set internal 'ready' flag, now document.registerElement will trigger
   // synchronous upgrades
   CustomElements.ready = true;
   // async to ensure *native* custom elements upgrade prior to this
@@ -108,7 +109,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
 } else if (document.readyState === 'interactive' && !window.attachEvent &&
     (!window.HTMLImports || window.HTMLImports.ready)) {
   bootstrap();
-// When loading at other readyStates, wait for the appropriate DOM event to 
+// When loading at other readyStates, wait for the appropriate DOM event to
 // bootstrap.
 } else {
   var loadEvent = window.HTMLImports && !HTMLImports.ready ?

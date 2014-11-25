@@ -1,4 +1,5 @@
-/*
+/**
+ * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -11,7 +12,7 @@ HTMLImports.addModule(function(scope) {
 var CSS_URL_REGEXP = /(url\()([^)]*)(\))/g;
 var CSS_IMPORT_REGEXP = /(@import[\s]+(?!url\())([^;]*)(;)/g;
 
-// path fixup: style elements in imports must be made relative to the main 
+// path fixup: style elements in imports must be made relative to the main
 // document. We fixup url's in url() and @import.
 var path = {
 
@@ -19,7 +20,7 @@ var path = {
     var doc = style.ownerDocument;
     var resolver = doc.createElement('a');
     style.textContent = this.resolveUrlsInCssText(style.textContent, resolver);
-    return style;  
+    return style;
   },
 
   resolveUrlsInCssText: function(cssText, urlObj) {
@@ -34,7 +35,7 @@ var path = {
       urlObj.href = urlPath;
       urlPath = urlObj.href;
       return pre + '\'' + urlPath + '\'' + post;
-    });    
+    });
   }
 
 };

@@ -1,4 +1,5 @@
-/*
+/**
+ * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -45,9 +46,9 @@ var currentScriptDescriptor = {
   get: function() {
     var script = HTMLImports.currentScript || document.currentScript ||
         // NOTE: only works when called in synchronously executing code.
-        // readyState should check if `loading` but IE10 is 
+        // readyState should check if `loading` but IE10 is
         // interactive when scripts run so we cheat.
-        (document.readyState !== 'complete' ? 
+        (document.readyState !== 'complete' ?
         document.scripts[document.scripts.length - 1] : null);
     return wrap(script);
   },
@@ -64,16 +65,16 @@ Object.defineProperty(rootDocument, '_currentScript', currentScriptDescriptor);
   code in either an `HTMLImportsLoaded` hander or after load time in an
   `HTMLImports.whenReady(callback)` call.
 
-  NOTE: This module also supports these apis under the native implementation. 
-  Therefore, if this file is loaded, the same code can be used under both 
+  NOTE: This module also supports these apis under the native implementation.
+  Therefore, if this file is loaded, the same code can be used under both
   the polyfill and native implementation.
  */
 
 var isIE = /Trident/.test(navigator.userAgent);
 
-// call a callback when all HTMLImports in the document at call time 
+// call a callback when all HTMLImports in the document at call time
 // (or at least document ready) have loaded.
-// 1. ensure the document is in a ready state (has dom), then 
+// 1. ensure the document is in a ready state (has dom), then
 // 2. watch for loading of imports and call callback when done
 function whenReady(callback, doc) {
   doc = doc || rootDocument;
@@ -95,7 +96,7 @@ function isDocumentReady(doc) {
 function whenDocumentReady(callback, doc) {
   if (!isDocumentReady(doc)) {
     var checkReady = function() {
-      if (doc.readyState === 'complete' || 
+      if (doc.readyState === 'complete' ||
           doc.readyState === requiredReadyState) {
         doc.removeEventListener(READY_EVENT, checkReady);
         whenDocumentReady(callback, doc);
@@ -115,7 +116,7 @@ function markTargetLoaded(event) {
 function watchImportsLoad(callback, doc) {
   var imports = doc.querySelectorAll('link[rel=import]');
   var loaded = 0, l = imports.length;
-  function checkDone(d) { 
+  function checkDone(d) {
     if ((loaded == l) && callback) {
        callback();
     }
@@ -143,15 +144,15 @@ function watchImportsLoad(callback, doc) {
 // all imports (see below).
 // However, we cannot rely on this entirely without watching the entire document
 // for import links. For perf reasons, currently only head is watched.
-// Instead, we fallback to checking if the import property is available 
-// and the document is not itself loading. 
+// Instead, we fallback to checking if the import property is available
+// and the document is not itself loading.
 function isImportLoaded(link) {
-  return useNative ? link.__loaded || 
+  return useNative ? link.__loaded ||
       (link.import && link.import.readyState !== 'loading') :
       link.__importParsed;
 }
 
-// TODO(sorvell): Workaround for 
+// TODO(sorvell): Workaround for
 // https://www.w3.org/Bugs/Public/show_bug.cgi?id=25007, should be removed when
 // this bug is addressed.
 // (1) Install a mutation observer to see when HTMLImports have loaded
@@ -159,7 +160,7 @@ function isImportLoaded(link) {
 // imports for loading.
 //
 // NOTE: The workaround has restricted functionality: (1) it's only compatible
-// with imports that are added to document.head since the mutation observer 
+// with imports that are added to document.head since the mutation observer
 // watches only head for perf reasons, (2) it requires this script
 // to run before any imports have completed loading.
 if (useNative) {
@@ -174,7 +175,7 @@ if (useNative) {
   function handleImports(nodes) {
     for (var i=0, l=nodes.length, n; (i<l) && (n=nodes[i]); i++) {
       if (isImport(n)) {
-        handleImport(n);  
+        handleImport(n);
       }
     }
   }
@@ -206,8 +207,8 @@ if (useNative) {
 
 }
 
-// Fire the 'HTMLImportsLoaded' event when imports in document at load time 
-// have loaded. This event is required to simulate the script blocking 
+// Fire the 'HTMLImportsLoaded' event when imports in document at load time
+// have loaded. This event is required to simulate the script blocking
 // behavior of native imports. A main document script that needs to be sure
 // imports have loaded should wait for this event.
 whenReady(function() {

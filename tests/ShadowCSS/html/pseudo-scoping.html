@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <html>
 <head>
@@ -40,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background: green;
       }
 
-      div::before { 
+      div::before {
         background: blue;
         content: 'zonk';
       }
@@ -49,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         div {
           font-size: 50px;
         }
-      } 
+      }
     </style>
     <div>20px / 50px</div>
   </template>
@@ -72,7 +73,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     register('x-foo', '', HTMLElement.prototype);
     register('x-button', 'button', HTMLButtonElement.prototype, ['x-button']);
-    
+
     document.addEventListener('WebComponentsReady', function() {
       setTimeout(function() {
         var foo = document.querySelector('x-foo');
@@ -88,15 +89,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .shadowRoot.querySelector('div');
         var xButtonDivStyle = getComputedStyle(xButtonDiv);
         chai.assert.equal(xButtonDivStyle.backgroundColor, 'rgb(255, 0, 0)',
-          'type extension is properly shimmed');        
+          'type extension is properly shimmed');
         chai.assert.equal(xButtonDivStyle.fontSize, '50px',
-          'media query for type extension is properly shimmed');        
+          'media query for type extension is properly shimmed');
 
         done();
       });
     });
   </script>
-  
-  
+
+
 </body>
 </html>

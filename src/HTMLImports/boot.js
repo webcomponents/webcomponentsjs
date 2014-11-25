@@ -1,4 +1,5 @@
-/*
+/**
+ * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -37,8 +38,8 @@ if (isIE && (typeof window.CustomEvent !== 'function')) {
   window.CustomEvent.prototype = window.Event.prototype;
 }
 
-// Initialize polyfill modules. Note, polyfill modules are loaded but not 
-// executed; this is a convenient way to control which modules run when 
+// Initialize polyfill modules. Note, polyfill modules are loaded but not
+// executed; this is a convenient way to control which modules run when
 // the polyfill is required and allows the polyfill to load even when it's
 // not needed.
 initializeModules();
@@ -52,9 +53,9 @@ var rootDocument = scope.rootDocument;
 function bootstrap() {
   HTMLImports.importer.bootDocument(rootDocument);
 }
-  
+
 // TODO(sorvell): SD polyfill does *not* generate mutations for nodes added
-// by the parser. For this reason, we must wait until the dom exists to 
+// by the parser. For this reason, we must wait until the dom exists to
 // bootstrap.
 if (document.readyState === 'complete' ||
     (document.readyState === 'interactive' && !window.attachEvent)) {

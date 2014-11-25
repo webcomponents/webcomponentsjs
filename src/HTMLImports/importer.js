@@ -1,4 +1,5 @@
-/*
+/**
+ * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -22,43 +23,43 @@ var parser = scope.parser;
 // for any document, importer:
 // - loads any linked import documents (with deduping)
 // - whenever an import is loaded, prompts the parser to try to parse
-// - observes imported documents for new elements (these are handled via the 
+// - observes imported documents for new elements (these are handled via the
 // dynamic importer)
 var importer = {
 
   documents: {},
-  
+
   // nodes to load in the mian document
   documentPreloadSelectors: IMPORT_SELECTOR,
-  
+
   // nodes to load in imports
   importsPreloadSelectors: [
     IMPORT_SELECTOR
   ].join(','),
-  
+
   loadNode: function(node) {
     importLoader.addNode(node);
   },
-  
+
   // load all loadable elements within the parent element
   loadSubtree: function(parent) {
     var nodes = this.marshalNodes(parent);
     // add these nodes to loader's queue
     importLoader.addNodes(nodes);
   },
-  
+
   marshalNodes: function(parent) {
     // all preloadable nodes in inDocument
     return parent.querySelectorAll(this.loadSelectorsForNode(parent));
   },
-  
+
   // find the proper set of load selectors for a given node
   loadSelectorsForNode: function(node) {
     var doc = node.ownerDocument || node;
     return doc === rootDocument ? this.documentPreloadSelectors :
         this.importsPreloadSelectors;
   },
-  
+
   loaded: function(url, elt, resource, err, redirectedUrl) {
     flags.load && console.log('loaded', url, elt);
     // store generic resource
@@ -87,7 +88,7 @@ var importer = {
     }
     parser.parseNext();
   },
-  
+
   bootDocument: function(doc) {
     this.loadSubtree(doc);
     // observe documents for new elements being added
@@ -102,11 +103,11 @@ var importer = {
 };
 
 // loader singleton to handle loading imports
-var importLoader = new Loader(importer.loaded.bind(importer), 
+var importLoader = new Loader(importer.loaded.bind(importer),
     importer.loadedAll.bind(importer));
 
 // observer singleton to handle observing elements in imports
-// NOTE: the observer has a node added callback and this is set 
+// NOTE: the observer has a node added callback and this is set
 // by the dynamic importer module.
 importer.observer = new Observer();
 

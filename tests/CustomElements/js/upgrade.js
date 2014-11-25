@@ -1,7 +1,11 @@
-/*
- * Copyright 2013 The Polymer Authors. All rights reserved.
- * Use of this source code is governed by a BSD-style
- * license that can be found in the LICENSE file.
+/**
+ * @license
+ * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+ * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+ * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+ * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+ * Code distributed by Google as part of the polymer project is also
+ * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
 suite('upgradeElements', function() {
@@ -16,7 +20,7 @@ suite('upgradeElements', function() {
   teardown(function() {
     document.body.removeChild(work);
   });
-  
+
   function registerTestComponent(inName, inValue) {
     var proto = Object.create(HTMLElement.prototype);
     proto.value = inValue || 'value';
@@ -24,7 +28,7 @@ suite('upgradeElements', function() {
       prototype: proto
     });
   }
-  
+
   test('CustomElements.upgrade upgrades custom element syntax', function() {
     registerTestComponent('x-foo31', 'foo');
     work.innerHTML = '<x-foo31>Foo</x-foo31>';
@@ -41,14 +45,14 @@ suite('upgradeElements', function() {
     assert.equal(xfoo.value, 'foo');
     done();
   });
-  
+
   test('document.register upgrades custom element syntax', function() {
     work.innerHTML = '<x-foo33>Foo</x-foo33>';
     registerTestComponent('x-foo33', 'foo');
     var xfoo = work.firstChild;
     assert.equal(xfoo.value, 'foo');
   });
-  
+
   test('CustomElements.upgrade upgrades custom element syntax', function() {
     registerTestComponent('x-zot', 'zot');
     registerTestComponent('x-zim', 'zim');
@@ -58,7 +62,7 @@ suite('upgradeElements', function() {
     assert.equal(xzot.value, 'zot');
     assert.equal(xzim.value, 'zim');
   });
-  
+
   test('CustomElements.upgrade upgrades native extendor', function() {
     var XButtonProto = Object.create(HTMLButtonElement.prototype);
     XButtonProto.test = 'xbutton';
@@ -66,14 +70,14 @@ suite('upgradeElements', function() {
       extends: 'button',
       prototype: XButtonProto
     });
-    
+
     work.innerHTML = '<button is="x-button"></button>';
     var xbutton = work.firstChild;
     CustomElements.upgradeAll(xbutton);
     assert.equal(xbutton.test, 'xbutton');
   });
-  
-  
+
+
   test('CustomElements.upgrade upgrades extendor of native extendor', function() {
     var XInputProto = Object.create(HTMLInputElement.prototype);
     XInputProto.xInput = 'xInput';
@@ -93,8 +97,8 @@ suite('upgradeElements', function() {
     assert.equal(x.xInput, 'xInput');
     assert.equal(x.xSpecialInput, 'xSpecialInput');
   });
-  
-  
+
+
   test('CustomElements.upgrade upgrades native extendor', function() {
     var YButtonProto = Object.create(HTMLButtonElement.prototype);
     YButtonProto.test = 'ybutton';
@@ -102,7 +106,7 @@ suite('upgradeElements', function() {
       extends: 'button',
       prototype: YButtonProto
     });
-    
+
     work.innerHTML = '<button is="y-button">0</button>' +
       '<div><button is="y-button">1</button></div>' +
       '<div><div><button is="y-button">2</button></div></div>';

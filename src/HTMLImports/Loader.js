@@ -1,4 +1,5 @@
-/*
+/**
+ * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -14,8 +15,8 @@ var flags = scope.flags;
 
 // This loader supports a dynamic list of urls
 // and an oncomplete callback that is called when the loader is done.
-// NOTE: The polyfill currently does *not* need this dynamism or the 
-// onComplete concept. Because of this, the loader could be simplified 
+// NOTE: The polyfill currently does *not* need this dynamism or the
+// onComplete concept. Because of this, the loader could be simplified
 // quite a bit.
 var Loader = function(onLoad, onComplete) {
   this.cache = {};

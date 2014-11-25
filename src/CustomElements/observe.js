@@ -1,4 +1,5 @@
-/*
+/**
+ * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -101,9 +102,9 @@ function attached(element) {
 // multiple times so we protect against extra processing here.
 function _attached(element) {
   // track element for insertion if it's upgraded and cares about insertion
-  if (element.__upgraded__ && 
+  if (element.__upgraded__ &&
     (element.attachedCallback || element.detachedCallback)) {
-    // bail if the element is already marked as attached and proceed only 
+    // bail if the element is already marked as attached and proceed only
     // if it's actually in the document at this moment.
     if (!element.__attached && inDocument(element)) {
       element.__attached = true;
@@ -118,7 +119,7 @@ function _attached(element) {
   Manage nodes detached from document trees
 */
 
-// manage lifecycle on detached node and it's subtree; process detached 
+// manage lifecycle on detached node and it's subtree; process detached
 // for the node and entire subtree
 function detachedNode(node) {
   detached(node);
@@ -141,9 +142,9 @@ function detached(element) {
 // multiple times so we protect against extra processing here.
 function _detached(element) {
   // track element for removal if it's upgraded and cares about removal
-  if (element.__upgraded__ && 
+  if (element.__upgraded__ &&
     (element.attachedCallback || element.detachedCallback)) {
-    // bail if the element is already marked as not attached and proceed only 
+    // bail if the element is already marked as not attached and proceed only
     // if it's actually *not* in the document at this moment.
     if (element.__attached && !inDocument(element)) {
       element.__attached = false;
@@ -187,7 +188,7 @@ function watchShadow(node) {
 
   Here's an example:
 
-  (1) In this case, recursion is required to see `child`: 
+  (1) In this case, recursion is required to see `child`:
 
       node.innerHTML = '<div><child></child></div>'
 
@@ -233,7 +234,7 @@ function handler(mutations) {
 
 
 /*
-  When elements are added to the dom, upgrade and attached/detached may be 
+  When elements are added to the dom, upgrade and attached/detached may be
   asynchronous. `CustomElements.takeRecords` can be called to process any
   pending upgrades and attached/detached callbacks synchronously.
 */
@@ -280,7 +281,7 @@ function upgradeDocument(doc) {
 
 /*
 This method is intended to be called when the document tree (including imports)
-has pending custom elements to upgrade. It can be called multiple times and 
+has pending custom elements to upgrade. It can be called multiple times and
 should do nothing if no elements are in need of upgrade.
 */
 function upgradeDocumentTree(doc) {

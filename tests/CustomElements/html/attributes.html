@@ -1,3 +1,4 @@
+<!doctype html>
 <!--
     @license
     Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -7,7 +8,6 @@
     Code distributed by Google as part of the polymer project is also
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<!doctype html>
 <html>
   <head>
     <title>Custom Elements: attributes</title>
@@ -30,7 +30,7 @@
         HTMLElement.prototype.setAttribute.call(this, name, value);
       };
       prototype.attributeChangedCallback = function(name, oldValue, newValue) {
-        this.attributeChangedOk = (name === 'squid') && (oldValue === null) 
+        this.attributeChangedOk = (name === 'squid') && (oldValue === null)
             && (newValue === 'tentacles');
       };
       document.registerElement('x-foo', {prototype: prototype});
