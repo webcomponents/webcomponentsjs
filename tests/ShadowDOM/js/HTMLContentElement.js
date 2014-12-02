@@ -56,7 +56,8 @@ suite('HTMLContentElement', function() {
     df.appendChild(document.createTextNode(' '));
     root.appendChild(df);
 
-    assertArrayEqual(content.getDistributedNodes().length, 3);
+    assert.equal(content.getDistributedNodes().length, 7);
+    assertArrayEqual(content.getDistributedNodes(), host.childNodes);
   });
 
   test('getDistributedNodes add content deep inside tree', function() {
