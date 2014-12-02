@@ -279,6 +279,37 @@ suite('MutationObserver', function() {
       });
     });
 
+    test('should notify changes by target\'s classList property', function() {
+      var div = document.createElement('div');
+      var observer = new MutationObserver(function() {});
+      observer.observe(div, {
+        attributes: true,
+        attributeOldValue: true
+      });
+      div.classList.add('A');
+      div.classList.add('A'); //< Should be ignored
+      div.classList.remove('A');
+      div.classList.remove('A'); //< Should be ignored
+
+      var records = observer.takeRecords();
+      assert.equal(records.length, 2);
+
+      expectMutationRecord(records[0], {
+        type: 'attributes',
+        target: div,
+        attributeName: 'class',
+        attributeNamespace: null,
+        oldValue: null
+      });
+      expectMutationRecord(records[1], {
+        type: 'attributes',
+        target: div,
+        attributeName: 'class',
+        attributeNamespace: null,
+        oldValue: 'A'
+      });
+    });
+
   });
 
 });

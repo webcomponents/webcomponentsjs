@@ -13,9 +13,29 @@
 
   var setWrapper = scope.setWrapper;
   var unsafeUnwrap = scope.unsafeUnwrap;
+  var enqueueMutation = scope.enqueueMutation;
 
   function invalidateClass(el) {
     scope.invalidateRendererBasedOnAttribute(el, 'class');
+  }
+
+  function enqueueClassAttributeChange(element, oldValue) {
+    enqueueMutation(element, 'attributes', {
+      name: 'class',
+      namespace: null,
+      oldValue: oldValue
+    });
+  }
+
+  function changeClass(tokenList, method, args) {
+    var oldValue = unsafeUnwrap(tokenList.ownerElement_).getAttribute('class');
+    var retv = method.apply(unsafeUnwrap(tokenList), args);
+
+    if (unsafeUnwrap(tokenList.ownerElement_).getAttribute('class') !== oldValue) {
+      enqueueClassAttributeChange(tokenList.ownerElement_, oldValue);
+      invalidateClass(tokenList.ownerElement_);
+    }
+    return retv;
   }
 
   function DOMTokenList(impl, ownerElement) {
@@ -35,17 +55,13 @@
       return unsafeUnwrap(this).contains(token);
     },
     add: function() {
-      unsafeUnwrap(this).add.apply(unsafeUnwrap(this), arguments);
-      invalidateClass(this.ownerElement_);
+      changeClass(this, unsafeUnwrap(this).add, arguments);
     },
     remove: function() {
-      unsafeUnwrap(this).remove.apply(unsafeUnwrap(this), arguments);
-      invalidateClass(this.ownerElement_);
+      changeClass(this, unsafeUnwrap(this).remove, arguments);
     },
-    toggle: function(token) {
-      var rv = unsafeUnwrap(this).toggle.apply(unsafeUnwrap(this), arguments);
-      invalidateClass(this.ownerElement_);
-      return rv;
+    toggle: function() {
+      return changeClass(this, unsafeUnwrap(this).toggle, arguments);
     },
     toString: function() {
       return unsafeUnwrap(this).toString();
