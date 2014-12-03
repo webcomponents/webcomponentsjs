@@ -7,7 +7,10 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
-
+ 
+// NOTE: Set the 'ownerElement_' property on a DOMTokenList to make invalidation
+// happen. This is pretty hacky but we only have to do it in one place
+// (Element.js) currently so it seems like the least bad option.
 (function(scope) {
   'use strict';
 
@@ -34,8 +37,4 @@
     return rv;
   };
 
-  // Set this property to make invalidation happen. This is pretty hacky but we
-  // only have to do it in one place (Element.js) currently so it seems like the
-  // least bad option.
-  DOMTokenList.prototype.ownerElement_;
 })(window.ShadowDOMPolyfill);
