@@ -129,7 +129,8 @@ function makeDocument(resource, url) {
   base.setAttribute('href', url);
   // add baseURI support to browsers (IE) that lack it.
   if (!doc.baseURI) {
-    doc.baseURI = url;
+    // Use defineProperty since Safari throws an exception when using assignment.
+    Object.defineProperty(doc, 'baseURI', {value:url});
   }
   // ensure UTF-8 charset
   var meta = doc.createElement('meta');
