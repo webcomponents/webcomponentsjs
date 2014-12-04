@@ -1,4 +1,5 @@
-/*
+/**
+ * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -21,7 +22,7 @@ var IMPORT_SELECTOR = 'link[rel=' + IMPORT_LINK_TYPE + ']';
 // parses import related elements and ensures proper parse order
 // parse order is enforced by crawling the tree and monitoring which elements
 // have been parsed;
-// elements can be dynamically added to imports. These are maintained in a 
+// elements can be dynamically added to imports. These are maintained in a
 // separate queue and parsed after all other elements.
 var importParser = {
 
@@ -79,7 +80,7 @@ var importParser = {
   // To prompt the system to parse the next element, parseNext should then be
   // called.
   // Note, parseNext used to be included at the end of markParsingComplete, but
-  // we must not do this so that, for example, we can (1) mark parsing complete 
+  // we must not do this so that, for example, we can (1) mark parsing complete
   // then (2) fire an import load event, and then (3) parse the next resource.
   markParsing: function(elt) {
     flags.parse && console.log('parsing', elt);
@@ -117,7 +118,7 @@ var importParser = {
     this.markParsingComplete(elt);
     // fire load event
     if (elt.__resource && !elt.__error) {
-      elt.dispatchEvent(new CustomEvent('load', {bubbles: false}));    
+      elt.dispatchEvent(new CustomEvent('load', {bubbles: false}));
     } else {
       elt.dispatchEvent(new CustomEvent('error', {bubbles: false}));
     }
@@ -168,12 +169,7 @@ var importParser = {
 
   addElementToDocument: function(elt) {
     var port = this.rootImportForElement(elt.__importElement || elt);
-    var l = port.__insertedElements = port.__insertedElements || 0;
-    var refNode = port.nextElementSibling;
-    for (var i=0; i < l; i++) {
-      refNode = refNode && refNode.nextElementSibling;
-    }
-    port.parentNode.insertBefore(elt, refNode);
+    port.parentNode.insertBefore(elt, port);
   },
 
   // tracks when a loadable element has loaded
@@ -223,13 +219,13 @@ var importParser = {
   parseScript: function(scriptElt) {
     var script = document.createElement('script');
     script.__importElement = scriptElt;
-    script.src = scriptElt.src ? scriptElt.src : 
+    script.src = scriptElt.src ? scriptElt.src :
         generateScriptDataUrl(scriptElt);
     // keep track of executing script to help polyfill `document.currentScript`
     scope.currentScript = scriptElt;
     this.trackElement(script, function(e) {
       script.parentNode.removeChild(script);
-      scope.currentScript = null;  
+      scope.currentScript = null;
     });
     this.addElementToDocument(script);
   },
@@ -240,7 +236,7 @@ var importParser = {
   // order.
   nextToParse: function() {
     this._mayParse = [];
-    return !this.parsingElement && (this.nextToParseInDoc(rootDocument) || 
+    return !this.parsingElement && (this.nextToParseInDoc(rootDocument) ||
         this.nextToParseDynamic());
   },
 

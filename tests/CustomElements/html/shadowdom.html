@@ -1,3 +1,4 @@
+<!doctype html>
 <!--
     @license
     Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -7,7 +8,6 @@
     Code distributed by Google as part of the polymer project is also
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<!doctype html>
 <html>
 <head>
   <title>Custom Elements: shadowdom integration</title>
@@ -33,17 +33,17 @@
         var hostProto = Object.create(proto);
         hostProto.createdCallback = function() {
           proto.createdCallback.call(this);
-          chai.assert.equal(elementsCreated, 1, 'upgraded element');  
+          chai.assert.equal(elementsCreated, 1, 'upgraded element');
           var root = this.createShadowRoot();
           // create element via innerHTML
           root.innerHTML = '<x-foo></x-foo>';
           CustomElements.takeRecords(root);
-          chai.assert.equal(elementsCreated, 2, 'upgraded element inside shadowRoot');  
+          chai.assert.equal(elementsCreated, 2, 'upgraded element inside shadowRoot');
           // now create async to test if the shadowRoot MutationObserver sees
           setTimeout(function() {
             root.innerHTML = '<x-foo></x-foo>';
             CustomElements.takeRecords(root);
-            chai.assert.equal(elementsCreated, 3, 'upgraded element created async inside shadowRoot');  
+            chai.assert.equal(elementsCreated, 3, 'upgraded element created async inside shadowRoot');
             done();
           }, 50);
 

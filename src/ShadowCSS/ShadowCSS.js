@@ -1,4 +1,5 @@
-/*
+/**
+ * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -10,10 +11,10 @@
 /*
   This is a limited shim for ShadowDOM css styling.
   https://dvcs.w3.org/hg/webcomponents/raw-file/tip/spec/shadow/index.html#styles
-  
-  The intention here is to support only the styling features which can be 
-  relatively simply implemented. The goal is to allow users to avoid the 
-  most obvious pitfalls and do so without compromising performance significantly. 
+
+  The intention here is to support only the styling features which can be
+  relatively simply implemented. The goal is to allow users to avoid the
+  most obvious pitfalls and do so without compromising performance significantly.
   For ShadowDOM styling that's not covered here, a set of best practices
   can be provided that should allow users to accomplish more complex styling.
 
@@ -23,56 +24,56 @@
   Shimmed features:
 
   * :host, :host-context: ShadowDOM allows styling of the shadowRoot's host
-  element using the :host rule. To shim this feature, the :host styles are 
-  reformatted and prefixed with a given scope name and promoted to a 
+  element using the :host rule. To shim this feature, the :host styles are
+  reformatted and prefixed with a given scope name and promoted to a
   document level stylesheet.
   For example, given a scope name of .foo, a rule like this:
-  
+
     :host {
         background: red;
       }
     }
-  
+
   becomes:
-  
+
     .foo {
       background: red;
     }
-  
-  * encapsultion: Styles defined within ShadowDOM, apply only to 
+
+  * encapsultion: Styles defined within ShadowDOM, apply only to
   dom inside the ShadowDOM. Polymer uses one of two techniques to imlement
   this feature.
-  
-  By default, rules are prefixed with the host element tag name 
+
+  By default, rules are prefixed with the host element tag name
   as a descendant selector. This ensures styling does not leak out of the 'top'
   of the element's ShadowDOM. For example,
 
   div {
       font-weight: bold;
     }
-  
+
   becomes:
 
   x-foo div {
       font-weight: bold;
     }
-  
+
   becomes:
 
 
-  Alternatively, if WebComponents.ShadowCSS.strictStyling is set to true then 
+  Alternatively, if WebComponents.ShadowCSS.strictStyling is set to true then
   selectors are scoped by adding an attribute selector suffix to each
-  simple selector that contains the host element tag name. Each element 
-  in the element's ShadowDOM template is also given the scope attribute. 
+  simple selector that contains the host element tag name. Each element
+  in the element's ShadowDOM template is also given the scope attribute.
   Thus, these rules match only elements that have the scope attribute.
   For example, given a scope name of x-foo, a rule like this:
-  
+
     div {
       font-weight: bold;
     }
-  
+
   becomes:
-  
+
     div[x-foo] {
       font-weight: bold;
     }
@@ -84,31 +85,31 @@
   shadowRoot should not cross the ShadowDOM boundary and should not apply
   inside a shadowRoot.
 
-  This styling behavior is not emulated. Some possible ways to do this that 
+  This styling behavior is not emulated. Some possible ways to do this that
   were rejected due to complexity and/or performance concerns include: (1) reset
   every possible property for every possible selector for a given scope name;
   (2) re-implement css in javascript.
-  
+
   As an alternative, users should make sure to use selectors
   specific to the scope in which they are working.
-  
+
   * ::distributed: This behavior is not emulated. It's often not necessary
   to style the contents of a specific insertion point and instead, descendants
-  of the host element can be styled selectively. Users can also create an 
+  of the host element can be styled selectively. Users can also create an
   extra node around an insertion point and style that node's contents
   via descendent selectors. For example, with a shadowRoot like this:
-  
+
     <style>
       ::content(div) {
         background: red;
       }
     </style>
     <content></content>
-  
+
   could become:
-  
+
     <style>
-      / *@polyfill .content-container div * / 
+      / *@polyfill .content-container div * /
       ::content(div) {
         background: red;
       }
@@ -116,9 +117,9 @@
     <div class="content-container">
       <content></content>
     </div>
-  
+
   Note the use of @polyfill in the comment above a ShadowDOM specific style
-  declaration. This is a directive to the styling shim to use the selector 
+  declaration. This is a directive to the styling shim to use the selector
   in comments in lieu of the next selector when running under polyfill.
 */
 (function(scope) {
@@ -232,14 +233,14 @@ var ShadowCSS = {
   /*
    * Process styles to convert native ShadowDOM rules that will trip
    * up the css parser; we rely on decorating the stylesheet with inert rules.
-   * 
+   *
    * For example, we convert this rule:
-   * 
+   *
    * polyfill-next-selector { content: ':host menu-item'; }
    * ::content menu-item {
-   * 
+   *
    * to this:
-   * 
+   *
    * scopeName menu-item {
    *
   **/
@@ -255,16 +256,16 @@ var ShadowCSS = {
   },
   /*
    * Process styles to add rules which will only apply under the polyfill
-   * 
+   *
    * For example, we convert this rule:
-   * 
+   *
    * polyfill-rule {
    *   content: ':host menu-item';
    * ...
    * }
-   * 
+   *
    * to this:
-   * 
+   *
    * scopeName menu-item {...}
    *
   **/
@@ -280,11 +281,11 @@ var ShadowCSS = {
     });
   },
   /* Ensure styles are scoped. Pseudo-scoping takes a rule like:
-   * 
-   *  .foo {... } 
-   *  
+   *
+   *  .foo {... }
+   *
    *  and converts this to
-   *  
+   *
    *  scopeName .foo { ... }
   */
   scopeCssText: function(cssText, scopeSelector) {
@@ -305,15 +306,15 @@ var ShadowCSS = {
   },
   /*
    * Process styles to add rules which will only apply under the polyfill
-   * and do not process via CSSOM. (CSSOM is destructive to rules on rare 
+   * and do not process via CSSOM. (CSSOM is destructive to rules on rare
    * occasions, e.g. -webkit-calc on Safari.)
    * For example, we convert this rule:
-   * 
-   * (comment start) @polyfill-unscoped-rule menu-item { 
+   *
+   * (comment start) @polyfill-unscoped-rule menu-item {
    * ... } (comment end)
-   * 
+   *
    * to this:
-   * 
+   *
    * menu-item {...}
    *
   **/
@@ -345,13 +346,13 @@ var ShadowCSS = {
    * to
    *
    * scopeName.foo > .bar, .foo scopeName > .bar { }
-   * 
+   *
    * and
    *
    * :host-context(.foo:host) .bar { ... }
-   * 
+   *
    * to
-   * 
+   *
    * scopeName.foo .bar { ... }
   */
   convertColonHostContext: function(cssText) {
@@ -400,7 +401,7 @@ var ShadowCSS = {
     if (cssRules) {
       Array.prototype.forEach.call(cssRules, function(rule) {
         if (rule.selectorText && (rule.style && rule.style.cssText !== undefined)) {
-          cssText += this.scopeSelector(rule.selectorText, scopeSelector, 
+          cssText += this.scopeSelector(rule.selectorText, scopeSelector,
             this.strictStyling) + ' {\n\t';
           cssText += this.propertiesFromRule(rule) + '\n}\n\n';
         } else if (rule.type === CSSRule.MEDIA_RULE) {
@@ -440,7 +441,7 @@ var ShadowCSS = {
     parts.forEach(function(p) {
       p = p.trim();
       if (this.selectorNeedsScoping(p, scopeSelector)) {
-        p = (strict && !p.match(polyfillHostNoCombinator)) ? 
+        p = (strict && !p.match(polyfillHostNoCombinator)) ?
             this.applyStrictSelectorScope(p, scopeSelector) :
             this.applySelectorScope(p, scopeSelector);
       }
@@ -511,7 +512,7 @@ var ShadowCSS = {
     // property. (https://bugs.webkit.org/show_bug.cgi?id=118045)
     // don't replace attr rules
     if (rule.style.content && !rule.style.content.match(/['"]+|attr/)) {
-      cssText = cssText.replace(/content:[^;]*;/g, 'content: \'' + 
+      cssText = cssText.replace(/content:[^;]*;/g, 'content: \'' +
           rule.style.content + '\';');
     }
     // TODO(sorvell): we can workaround this issue here, but we need a list
@@ -551,7 +552,7 @@ var selectorRe = /([^{]*)({[\s\S]*?})/gim,
     cssCommentRe = /\/\*[^*]*\*+([^/*][^*]*\*+)*\//gim,
     // TODO(sorvell): remove either content or comment
     cssCommentNextSelectorRe = /\/\*\s*@polyfill ([^*]*\*+([^/*][^*]*\*+)*\/)([^{]*?){/gim,
-    cssContentNextSelectorRe = /polyfill-next-selector[^}]*content\:[\s]*?['"](.*?)['"][;\s]*}([^{]*?){/gim,  
+    cssContentNextSelectorRe = /polyfill-next-selector[^}]*content\:[\s]*?['"](.*?)['"][;\s]*}([^{]*?){/gim,
     // TODO(sorvell): remove either content or comment
     cssCommentRuleRe = /\/\*\s@polyfill-rule([^*]*\*+([^/*][^*]*\*+)*)\//gim,
     cssContentRuleRe = /(polyfill-rule)[^}]*(content\:[\s]*['"](.*?)['"])[;\s]*[^}]*}/gim,
@@ -711,7 +712,7 @@ if (window.ShadowDOMPolyfill) {
   // consider a better solution.
   document.addEventListener('DOMContentLoaded', function() {
     var urlResolver = scope.urlResolver;
-    
+
     if (window.HTMLImports && !HTMLImports.useNative) {
       var SHIM_SHEET_SELECTOR = 'link[rel=stylesheet]' +
           '[' + SHIM_ATTRIBUTE + ']';
@@ -724,7 +725,7 @@ if (window.ShadowDOMPolyfill) {
         SHIM_SHEET_SELECTOR,
         SHIM_STYLE_SELECTOR
       ].join(',');
-  
+
       var originalParseGeneric = HTMLImports.parser.parseGeneric;
 
       HTMLImports.parser.parseGeneric = function(elt) {

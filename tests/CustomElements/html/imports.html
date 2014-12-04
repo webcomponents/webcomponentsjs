@@ -1,3 +1,4 @@
+<!doctype html>
 <!--
     @license
     Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -7,7 +8,6 @@
     Code distributed by Google as part of the polymer project is also
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<!doctype html>
 <html>
   <head>
     <title>Custom Elements: imports integration</title>
@@ -23,15 +23,15 @@
           document.dispatchEvent(new CustomEvent('HTMLImportsLoaded', {bubbles: true}));
           // parsing hook available
           chai.assert.ok(HTMLImports.__importsParsingHook, 'imports parsing hook installed');
-          //          
+          //
           var doc = document.implementation.createHTMLDocument('Foo');
           doc.body.innerHTML = '<x-foo></x-foo>';
           var link = document.createElement('mock-link');
           link.import = doc;
           HTMLImports.__importsParsingHook(link);
-          //          
+          //
           addEventListener('WebComponentsReady', function() {
-            chai.assert.equal(2, elementsCreated, 'HTML hook allows main document and import document to upgrade');  
+            chai.assert.equal(2, elementsCreated, 'HTML hook allows main document and import document to upgrade');
             done();
           })
         }, 1);

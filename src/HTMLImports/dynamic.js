@@ -1,4 +1,5 @@
-/*
+/**
+ * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -46,17 +47,17 @@ var dynamic = {
 
   shouldParseNode: function(node) {
     return (node.nodeType === 1) && matches.call(node,
-        parser.parseSelectorsForNode(node));  
+        parser.parseSelectorsForNode(node));
   }
-  
+
 };
 
 // let the dynamic element helper tie into the import observer.
 importer.observer.addCallback = dynamic.added.bind(dynamic);
 
 // x-plat matches
-var matches = HTMLElement.prototype.matches || 
-    HTMLElement.prototype.matchesSelector || 
+var matches = HTMLElement.prototype.matches ||
+    HTMLElement.prototype.matchesSelector ||
     HTMLElement.prototype.webkitMatchesSelector ||
     HTMLElement.prototype.mozMatchesSelector ||
     HTMLElement.prototype.msMatchesSelector;

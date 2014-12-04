@@ -1,7 +1,11 @@
-/*
- * Copyright 2013 The Polymer Authors. All rights reserved.
- * Use of this source code is governed by a BSD-style
- * license that can be found in the LICENSE file.
+/**
+ * @license
+ * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+ * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+ * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+ * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+ * Code distributed by Google as part of the polymer project is also
+ * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 (function() {
 
@@ -18,6 +22,7 @@ htmlSuite('HTMLImports', function() {
   htmlTest('html/dedupe.html');
   htmlTest('html/dynamic.html');
   htmlTest('html/csp.html');
+  htmlTest('html/customevent-detail.html');
   htmlTest('html/encoding.html');
   htmlTest('html/HTMLImportsLoaded-native.html');
   // NOTE: The MO polyfill does not function on disconnected documents

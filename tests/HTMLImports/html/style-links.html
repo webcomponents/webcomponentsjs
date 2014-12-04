@@ -1,3 +1,4 @@
+<!doctype html>
 <!--
     @license
     Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -7,7 +8,6 @@
     Code distributed by Google as part of the polymer project is also
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<!doctype html>
 <html>
 <head>
   <title>Style Links Test</title>
@@ -40,12 +40,12 @@
 
   <script>
     addEventListener('HTMLImportsLoaded', function() {
-    
+
       // NOTE: IE requires asynchrony here
-      setTimeout(function() {  
+      setTimeout(function() {
         var imp = document.head.querySelector('link[rel=import]');
         chai.assert.ok(imp.import, 'import has content');
-        
+
         function computedStyle(selector) {
           return getComputedStyle(document.querySelector(selector));
         }
@@ -59,8 +59,8 @@
         chai.assert.equal(computedStyle('.styled').backgroundColor, 'rgb(255, 0, 0)');
         // styles in style are applied in the correct order and overriddable
         chai.assert.equal(computedStyle('.overridden-style').backgroundColor, 'rgb(0, 0, 0)');
-        
-        
+
+
         done();
       });
     });
