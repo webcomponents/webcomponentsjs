@@ -107,7 +107,7 @@ suite('Selection', function() {
   });
 
   test('extend', function() {
-    // IE does not have extend.
+    // IE legacy document modes do not have extend.
     if (/Trident/.test(navigator.userAgent))
       return;
 
@@ -159,7 +159,7 @@ suite('Selection', function() {
   });
 
   test('containsNode', function() {
-    // IE does not have containsNode.
+    // IE legacy document modes do not have containsNode.
     if (/Trident/.test(navigator.userAgent))
       return;
 
