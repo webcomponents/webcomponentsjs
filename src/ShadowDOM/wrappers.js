@@ -156,7 +156,7 @@ window.ShadowDOMPolyfill = {};
   function getSetter(name) {
     return hasEval && isIdentifierName(name) ?
         new Function('v', 'this.__impl4cf1e782hg__.' + name + ' = v') :
-        function(v) { this.__impl4cf1e782hg__[name] = v; };
+        function(v) { if( !(this instanceof Event) ) this.__impl4cf1e782hg__[name] = v; };
   }
 
   function getMethod(name) {
