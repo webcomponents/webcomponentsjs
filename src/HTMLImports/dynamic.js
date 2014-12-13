@@ -22,7 +22,7 @@ var importer = scope.importer;
 var dynamic = {
   // process (load/parse) any nodes added to imported documents.
   added: function(nodes) {
-    var owner, parsed;
+    var owner, parsed, loading;
     for (var i=0, l=nodes.length, n; (i<l) && (n=nodes[i]); i++) {
       if (!owner) {
         owner = n.ownerDocument;
