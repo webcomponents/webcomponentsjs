@@ -58,7 +58,6 @@ suite('DOMTokenList', function() {
   test('contains', function() {
     var div = document.createElement('div');
     var classList = div.classList;
-    assert.isFalse(classList.contains());
     assert.isFalse(classList.contains('a'));
     div.className = 'a';
     assert.isTrue(classList.contains('a'));
@@ -109,5 +108,14 @@ suite('DOMTokenList', function() {
     assert.equal(classList.toString(), 'a');
     div.className = 'b a';
     assert.equal(classList.toString(), 'b a');
+  });
+
+  test('index', function() {
+    var div = document.createElement('div');
+    var classList = div.classList;
+    classList.add('a');
+    classList.add('b');
+    assert.equal(classList[0], 'a');
+    assert.equal(classList[1], 'b');
   });
 });
