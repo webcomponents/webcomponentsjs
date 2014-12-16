@@ -27,6 +27,18 @@ var xhr = {
       url += '?' + Math.random();
     }
     request.open('GET', url, xhr.async);
+
+    // Safari caches cross-origin resources in a ridiculous way.
+    // We'll work around this annoyance by monkeypatching,
+    // to ensure that we never ask for cached data.
+    // https://bugs.webkit.org/show_bug.cgi?id=82672
+    var isChromium = !!window.chrome; //http://browserhacks.com/#hack-dee2c3ab477a0324b6a2283c434108c8
+    var isFF = !!navigator.userAgent.match(/firefox/i); //http://browserhacks.com/#hack-b3c30c5aee06b9717eda9a5266f0eb07
+    var isIE = window.navigator.msPointerEnabled; //http://browserhacks.com/#hack-2f32c95ac8c021c463de0fdf685acb29
+    if (!isChromium && !isFF && !isIE) {
+      request.setRequestHeader("Cache-Control", "max-age=0, no-cache, no-store");
+    }
+
     request.addEventListener('readystatechange', function(e) {
       if (request.readyState === 4) {
         // Servers redirecting an import can add a Location header to help us
