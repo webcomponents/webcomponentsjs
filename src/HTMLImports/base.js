@@ -98,11 +98,11 @@ function whenDocumentReady(callback, doc) {
     var checkReady = function() {
       if (doc.readyState === 'complete' ||
           doc.readyState === requiredReadyState) {
-        doc.removeEventListener(READY_EVENT, checkReady);
+        doc.removeEventListener(READY_EVENT, checkReady, false);
         whenDocumentReady(callback, doc);
       }
     };
-    doc.addEventListener(READY_EVENT, checkReady);
+    doc.addEventListener(READY_EVENT, checkReady, false);
   } else if (callback) {
     callback();
   }
@@ -131,8 +131,8 @@ function watchImportsLoad(callback, doc) {
       if (isImportLoaded(imp)) {
         loadedImport.call(imp, {target: imp});
       } else {
-        imp.addEventListener('load', loadedImport);
-        imp.addEventListener('error', loadedImport);
+        imp.addEventListener('load', loadedImport, false);
+        imp.addEventListener('error', loadedImport, false);
       }
     }
   } else {
@@ -189,8 +189,8 @@ if (useNative) {
     if (loaded) {
       markTargetLoaded({target: element});
     } else {
-      element.addEventListener('load', markTargetLoaded);
-      element.addEventListener('error', markTargetLoaded);
+      element.addEventListener('load', markTargetLoaded, false);
+      element.addEventListener('error', markTargetLoaded, false);
     }
   }
 

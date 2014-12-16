@@ -182,8 +182,8 @@ var importParser = {
       self.markParsingComplete(elt);
       self.parseNext();
     };
-    elt.addEventListener('load', done);
-    elt.addEventListener('error', done);
+    elt.addEventListener('load', done, false);
+    elt.addEventListener('error', done, false);
 
     // NOTE: IE does not fire "load" event for styles that have already loaded
     // This is in violation of the spec, so we try our hardest to work around it

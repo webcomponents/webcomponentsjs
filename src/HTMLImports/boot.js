@@ -61,7 +61,7 @@ if (document.readyState === 'complete' ||
     (document.readyState === 'interactive' && !window.attachEvent)) {
   bootstrap();
 } else {
-  document.addEventListener('DOMContentLoaded', bootstrap);
+  document.addEventListener('DOMContentLoaded', bootstrap, false);
 }
 
 })(HTMLImports);

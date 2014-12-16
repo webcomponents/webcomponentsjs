@@ -114,7 +114,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
 } else {
   var loadEvent = window.HTMLImports && !HTMLImports.ready ?
       'HTMLImportsLoaded' : 'DOMContentLoaded';
-  window.addEventListener(loadEvent, bootstrap);
+  window.addEventListener(loadEvent, bootstrap, false);
 }
 
 })(window.CustomElements);
