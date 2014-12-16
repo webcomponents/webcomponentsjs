@@ -36,6 +36,7 @@
     <link rel="import" href="imports/load-1.html" onload="importLoaded(event)">
     <link rel="import" href="imports/load-2.html" onload="importLoaded(event)">
     <link rel="import" id="willError" href="imports/404.html" onerror="importError(event)">
+    <link rel="import" id="nohref" onerror="importError(event)">
   </head>
   <body>
     <div id="test1" class="red">Test</div>
@@ -43,7 +44,7 @@
     <div id="test3" class="image"></div>
     <script>
       document.addEventListener('HTMLImportsLoaded', function() {
-        chai.assert.equal(loadEvents, 3, 'expected # of load events');
+        chai.assert.equal(loadEvents, 4, 'expected # of load events');
         var test1 = getComputedStyle(document.querySelector('#test1')).backgroundColor;
         chai.assert.equal(test1, 'rgb(255, 0, 0)');
         var test2 = getComputedStyle(document.querySelector('#test2')).backgroundColor;

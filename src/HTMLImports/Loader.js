@@ -84,7 +84,11 @@ Loader.prototype = {
 
   fetch: function(url, elt) {
     flags.load && console.log('fetch', url, elt);
-    if (url.match(/^data:/)) {
+    if (!url) {
+      setTimeout(function() {
+        this.receive(url, elt, {error: 'href must be specified'}, null);
+      }.bind(this), 0);
+    } else if (url.match(/^data:/)) {
       // Handle Data URI Scheme
       var pieces = url.split(',');
       var header = pieces[0];
