@@ -214,8 +214,8 @@ if (useNative) {
 whenReady(function() {
   HTMLImports.ready = true;
   HTMLImports.readyTime = new Date().getTime();
-  var evt = rootDocument.createEvent('CustomEvent');
-  evt.initEvent("HTMLImportsLoaded", true, true);
+  var evt = rootDocument.createEvent("CustomEvent");
+  evt.initCustomEvent("HTMLImportsLoaded", true, true, {});
   rootDocument.dispatchEvent(evt);
 });
 
