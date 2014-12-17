@@ -214,9 +214,9 @@ if (useNative) {
 whenReady(function() {
   HTMLImports.ready = true;
   HTMLImports.readyTime = new Date().getTime();
-  rootDocument.dispatchEvent(
-    new CustomEvent('HTMLImportsLoaded', {bubbles: true})
-  );
+  var evt = rootDocument.createEvent('CustomEvent');
+  evt.initEvent("HTMLImportsLoaded", true, true);
+  rootDocument.dispatchEvent(evt);
 });
 
 // exports
