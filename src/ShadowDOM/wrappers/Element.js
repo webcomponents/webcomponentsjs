@@ -14,7 +14,6 @@
   var ChildNodeInterface = scope.ChildNodeInterface;
   var GetElementsByInterface = scope.GetElementsByInterface;
   var Node = scope.wrappers.Node;
-  var DOMTokenList = scope.wrappers.DOMTokenList;
   var ParentNodeInterface = scope.ParentNodeInterface;
   var SelectorsInterface = scope.SelectorsInterface;
   var addWrapNodeListMethod = scope.addWrapNodeListMethod;
@@ -106,8 +105,9 @@
     get classList() {
       var list = classListTable.get(this);
       if (!list) {
-        classListTable.set(this,
-            list = new DOMTokenList(unsafeUnwrap(this).classList, this));
+        list = unsafeUnwrap(this).classList;
+        list.ownerElement_ = this;
+        classListTable.set(this, list);
       }
       return list;
     },

@@ -8,65 +8,60 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
+// NOTE: Set the 'ownerElement_' property on a DOMTokenList to make invalidation
+// happen. This is pretty hacky but we only have to do it in one place
+// (Element.js) currently so it seems like the least bad option.
 (function(scope) {
   'use strict';
 
-  var setWrapper = scope.setWrapper;
   var unsafeUnwrap = scope.unsafeUnwrap;
   var enqueueMutation = scope.enqueueMutation;
 
-  function invalidateClass(el) {
-    scope.invalidateRendererBasedOnAttribute(el, 'class');
+  function getClass (el) {
+    return unsafeUnwrap(el).getAttribute('class');
   }
 
-  function enqueueClassAttributeChange(element, oldValue) {
-    enqueueMutation(element, 'attributes', {
+  function enqueueClassAttributeChange(el, oldValue) {
+    enqueueMutation(el, 'attributes', {
       name: 'class',
       namespace: null,
       oldValue: oldValue
     });
   }
 
-  function changeClass(tokenList, method, args) {
-    var oldValue = unsafeUnwrap(tokenList.ownerElement_).getAttribute('class');
-    var retv = method.apply(unsafeUnwrap(tokenList), args);
+  function invalidateClass(el) {
+    scope.invalidateRendererBasedOnAttribute(el, 'class');
+  }
 
-    if (unsafeUnwrap(tokenList.ownerElement_).getAttribute('class') !== oldValue) {
-      enqueueClassAttributeChange(tokenList.ownerElement_, oldValue);
-      invalidateClass(tokenList.ownerElement_);
+  function changeClass(tokenList, method, args) {
+    var ownerElement = tokenList.ownerElement_;
+    if (ownerElement == null) {
+      return method.apply(tokenList, args);
     }
+
+    var oldValue = getClass(ownerElement);
+    var retv = method.apply(tokenList, args);
+    if (getClass(ownerElement) !== oldValue) {
+      enqueueClassAttributeChange(ownerElement, oldValue);
+      invalidateClass(ownerElement);
+    }
+
     return retv;
   }
 
-  function DOMTokenList(impl, ownerElement) {
-    setWrapper(impl, this);
-    this.ownerElement_ = ownerElement;
-  }
-
-  DOMTokenList.prototype = {
-    constructor: DOMTokenList,
-    get length() {
-      return unsafeUnwrap(this).length;
-    },
-    item: function(index) {
-      return unsafeUnwrap(this).item(index);
-    },
-    contains: function(token) {
-      return unsafeUnwrap(this).contains(token);
-    },
-    add: function() {
-      changeClass(this, unsafeUnwrap(this).add, arguments);
-    },
-    remove: function() {
-      changeClass(this, unsafeUnwrap(this).remove, arguments);
-    },
-    toggle: function() {
-      return changeClass(this, unsafeUnwrap(this).toggle, arguments);
-    },
-    toString: function() {
-      return unsafeUnwrap(this).toString();
-    }
+  var oldAdd = DOMTokenList.prototype.add;
+  DOMTokenList.prototype.add = function() {
+    changeClass(this, oldAdd, arguments);
   };
 
-  scope.wrappers.DOMTokenList = DOMTokenList;
+  var oldRemove = DOMTokenList.prototype.remove;
+  DOMTokenList.prototype.remove = function() {
+    changeClass(this, oldRemove, arguments);
+  };
+
+  var oldToggle = DOMTokenList.prototype.toggle;
+  DOMTokenList.prototype.toggle = function() {
+    return changeClass(this, oldToggle, arguments);
+  };
+
 })(window.ShadowDOMPolyfill);

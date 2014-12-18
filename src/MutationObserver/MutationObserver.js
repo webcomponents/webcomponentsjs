@@ -20,7 +20,7 @@
   //
   // For a thorough discussion on this, see:
   // http://codeforhire.com/2013/09/21/setimmediate-and-messagechannel-broken-on-internet-explorer-10/
-  if (/Trident/.test(navigator.userAgent)) {
+  if (/Trident|Edge/.test(navigator.userAgent)) {
     // Sadly, this bug also affects postMessage and MessageQueues.
     //
     // We would like to use the onreadystatechange hack for IE <= 10, but it is

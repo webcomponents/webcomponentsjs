@@ -70,7 +70,7 @@ Object.defineProperty(rootDocument, '_currentScript', currentScriptDescriptor);
   the polyfill and native implementation.
  */
 
-var isIE = /Trident/.test(navigator.userAgent);
+var isIE = /Trident|Edge/.test(navigator.userAgent);
 
 // call a callback when all HTMLImports in the document at call time
 // (or at least document ready) have loaded.
@@ -214,9 +214,9 @@ if (useNative) {
 whenReady(function() {
   HTMLImports.ready = true;
   HTMLImports.readyTime = new Date().getTime();
-  rootDocument.dispatchEvent(
-    new CustomEvent('HTMLImportsLoaded', {bubbles: true})
-  );
+  var evt = rootDocument.createEvent("CustomEvent");
+  evt.initCustomEvent("HTMLImportsLoaded", true, true, {});
+  rootDocument.dispatchEvent(evt);
 });
 
 // exports
