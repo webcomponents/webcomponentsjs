@@ -742,7 +742,7 @@ if (window.ShadowDOMPolyfill) {
           style.textContent = elt.__resource;
         }
         // relay on HTMLImports for path fixup
-        HTMLImports.path.resolveUrlsInStyle(style);
+        HTMLImports.path.resolveUrlsInStyle(style, elt.href);
         style.textContent = ShadowCSS.shimStyle(style);
         style.removeAttribute(SHIM_ATTRIBUTE, '');
         style.setAttribute(SHIMMED_ATTRIBUTE, '');

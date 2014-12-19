@@ -16,22 +16,25 @@ var CSS_IMPORT_REGEXP = /(@import[\s]+(?!url\())([^;]*)(;)/g;
 // document. We fixup url's in url() and @import.
 var path = {
 
-  resolveUrlsInStyle: function(style) {
+  resolveUrlsInStyle: function(style, linkUrl) {
     var doc = style.ownerDocument;
     var resolver = doc.createElement('a');
-    style.textContent = this.resolveUrlsInCssText(style.textContent, resolver);
+    style.textContent = this.resolveUrlsInCssText(style.textContent, linkUrl, resolver);
     return style;
   },
 
-  resolveUrlsInCssText: function(cssText, urlObj) {
-    var r = this.replaceUrls(cssText, urlObj, CSS_URL_REGEXP);
-    r = this.replaceUrls(r, urlObj, CSS_IMPORT_REGEXP);
+  resolveUrlsInCssText: function(cssText, linkUrl, urlObj) {
+    var r = this.replaceUrls(cssText, urlObj, linkUrl, CSS_URL_REGEXP);
+    r = this.replaceUrls(r, urlObj, linkUrl, CSS_IMPORT_REGEXP);
     return r;
   },
 
-  replaceUrls: function(text, urlObj, regexp) {
+  replaceUrls: function(text, urlObj, linkUrl, regexp) {
     return text.replace(regexp, function(m, pre, url, post) {
       var urlPath = url.replace(/["']/g, '');
+      if (urlPath.substr(0, 3) === '../') {
+        urlPath = linkUrl.match(/(.*\/)[^\/]+$/)[1] + urlPath;
+      }
       urlObj.href = urlPath;
       urlPath = urlObj.href;
       return pre + '\'' + urlPath + '\'' + post;
