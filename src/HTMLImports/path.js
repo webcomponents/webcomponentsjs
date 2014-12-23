@@ -11,6 +11,7 @@ HTMLImports.addModule(function(scope) {
 
 var CSS_URL_REGEXP = /(url\()([^)]*)(\))/g;
 var CSS_IMPORT_REGEXP = /(@import[\s]+(?!url\())([^;]*)(;)/g;
+var CSS_ABSOLUTE_URL_REGEXP = /(http[s]?:)?\/\//i
 
 // path fixup: style elements in imports must be made relative to the main
 // document. We fixup url's in url() and @import.
@@ -32,7 +33,7 @@ var path = {
   replaceUrls: function(text, urlObj, linkUrl, regexp) {
     return text.replace(regexp, function(m, pre, url, post) {
       var urlPath = url.replace(/["']/g, '');
-      if (urlPath.substr(0, 3) === '../') {
+      if (!CSS_ABSOLUTE_URL_REGEXP.test(urlPath)) {
         urlPath = linkUrl.match(/(.*\/)[^\/]+$/)[1] + urlPath;
       }
       urlObj.href = urlPath;
