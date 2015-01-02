@@ -62,7 +62,7 @@ Object.defineProperty(rootDocument, '_currentScript', currentScriptDescriptor);
   Add support for the `HTMLImportsLoaded` event and the `HTMLImports.whenReady`
   method. This api is necessary because unlike the native implementation,
   script elements do not force imports to resolve. Instead, users should wrap
-  code in either an `HTMLImportsLoaded` hander or after load time in an
+  code in either an `HTMLImportsLoaded` handler or after load time in an
   `HTMLImports.whenReady(callback)` call.
 
   NOTE: This module also supports these apis under the native implementation.
