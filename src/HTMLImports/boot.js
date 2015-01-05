@@ -15,7 +15,7 @@ var isIE = scope.isIE;
 
 /*
 NOTE: Even when native HTMLImports exists, the following api is available by
-loading the polyfill. This provides api compabitility where the polyfill
+loading the polyfill. This provides api compatibility where the polyfill
 cannot be "correct":
 
   * `document._currentScript`
