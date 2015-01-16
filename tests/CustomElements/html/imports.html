@@ -26,9 +26,7 @@
           //
           var doc = document.implementation.createHTMLDocument('Foo');
           doc.body.innerHTML = '<x-foo></x-foo>';
-          var link = document.createElement('mock-link');
-          link.import = doc;
-          HTMLImports.__importsParsingHook(link);
+          HTMLImports.__importsParsingHook(doc);
           //
           addEventListener('WebComponentsReady', function() {
             chai.assert.equal(2, elementsCreated, 'HTML hook allows main document and import document to upgrade');

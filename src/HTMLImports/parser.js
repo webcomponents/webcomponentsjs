@@ -106,12 +106,6 @@ var importParser = {
   },
 
   parseImport: function(elt) {
-    // TODO(sorvell): consider if there's a better way to do this;
-    // expose an imports parsing hook; this is needed, for example, by the
-    // CustomElements polyfill.
-    if (HTMLImports.__importsParsingHook) {
-      HTMLImports.__importsParsingHook(elt);
-    }
     if (elt.import) {
       elt.import.__importParsed = true;
     }
@@ -241,6 +235,7 @@ var importParser = {
   },
 
   nextToParseInDoc: function(doc, link) {
+    this.beginParse(doc);
     // use `marParse` list to avoid looping into the same document again
     // since it could cause an iloop.
     if (doc && this._mayParse.indexOf(doc) < 0) {
@@ -258,6 +253,17 @@ var importParser = {
     }
     // all nodes have been parsed, ready to parse import, if any
     return link;
+  },
+
+  beginParse: function(doc) {
+    if (doc && !doc.__importsParsingStarted) {
+      doc.__importsParsingStarted = true;
+      // expose an imports parsing hook; this is needed, for example, by the
+      // CustomElements polyfill.
+      if (HTMLImports.__importsParsingHook) {
+        HTMLImports.__importsParsingHook(doc);
+      }
+    }
   },
 
   // note dynamically added elements are stored in a separate queue
