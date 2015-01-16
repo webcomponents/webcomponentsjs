@@ -53,6 +53,11 @@ htmlSuite('Document', function() {
     assert.equal(doc.head.parentNode, doc.documentElement);
   });
 
+  test('document.matches', function() {
+    var doc = wrap(document);
+    assert.isTrue(doc.matches === undefined);
+  });
+
   test('getElementsByTagName', function() {
     var elements = document.getElementsByTagName('body');
     assert.isTrue(elements instanceof HTMLCollection);
