@@ -242,7 +242,13 @@
     'querySelectorAll',
     'removeChild',
     'replaceChild',
-  ].concat(matchesNames));
+  ]);
+
+  forwardMethodsToWrapper([
+    window.HTMLBodyElement,
+    window.HTMLHeadElement,
+    window.HTMLHtmlElement,
+  ], matchesNames);
 
   forwardMethodsToWrapper([
     window.HTMLDocument || window.Document,  // Gecko adds these to HTMLDocument
