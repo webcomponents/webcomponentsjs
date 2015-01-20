@@ -416,6 +416,25 @@ suite('Node', function() {
     assert.equal(div.childNodes.length, 3);
   });
 
+  test('normalize - issue 145', function() {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(''));
+    div.appendChild(document.createTextNode(''));
+    div.appendChild(document.createTextNode(''));
+    var childDiv = document.createElement('div');
+    childDiv.appendChild(document.createTextNode(''));
+    childDiv.appendChild(document.createTextNode(''));
+    div.appendChild(childDiv);
+
+    assert.equal(div.childNodes.length, 4);
+    assert.equal(childDiv.childNodes.length, 2);
+
+    div.normalize();
+
+    assert.equal(div.childNodes.length, 1);
+    assert.equal(childDiv.childNodes.length, 0);
+  });
+
   test('appendChild last and first', function() {
     var a = document.createElement('a');
     a.innerHTML = '<b></b>';
