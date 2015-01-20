@@ -692,7 +692,7 @@
         n = nodes[i];
         if (n.nodeType === Node.TEXT_NODE) {
           if (!modNode && !n.data.length)
-            this.removeNode(n);
+            this.removeChild(n);
           else if (!modNode)
             modNode = n;
           else {
