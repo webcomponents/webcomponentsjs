@@ -1992,7 +1992,7 @@ if (WebComponents.flags.shadow) {
         for (var i = 0, n; i < nodes.length; i++) {
           n = nodes[i];
           if (n.nodeType === Node.TEXT_NODE) {
-            if (!modNode && !n.data.length) this.removeNode(n); else if (!modNode) modNode = n; else {
+            if (!modNode && !n.data.length) this.removeChild(n); else if (!modNode) modNode = n; else {
               s += n.data;
               remNodes.push(n);
             }
@@ -4014,7 +4014,8 @@ if (WebComponents.flags.shadow) {
       };
       forwardMethodsToWrapper([ window.HTMLDocument || window.Document ], [ "registerElement" ]);
     }
-    forwardMethodsToWrapper([ window.HTMLBodyElement, window.HTMLDocument || window.Document, window.HTMLHeadElement, window.HTMLHtmlElement ], [ "appendChild", "compareDocumentPosition", "contains", "getElementsByClassName", "getElementsByTagName", "getElementsByTagNameNS", "insertBefore", "querySelector", "querySelectorAll", "removeChild", "replaceChild" ].concat(matchesNames));
+    forwardMethodsToWrapper([ window.HTMLBodyElement, window.HTMLDocument || window.Document, window.HTMLHeadElement, window.HTMLHtmlElement ], [ "appendChild", "compareDocumentPosition", "contains", "getElementsByClassName", "getElementsByTagName", "getElementsByTagNameNS", "insertBefore", "querySelector", "querySelectorAll", "removeChild", "replaceChild" ]);
+    forwardMethodsToWrapper([ window.HTMLBodyElement, window.HTMLHeadElement, window.HTMLHtmlElement ], matchesNames);
     forwardMethodsToWrapper([ window.HTMLDocument || window.Document ], [ "adoptNode", "importNode", "contains", "createComment", "createDocumentFragment", "createElement", "createElementNS", "createEvent", "createEventNS", "createRange", "createTextNode", "elementFromPoint", "getElementById", "getElementsByName", "getSelection" ]);
     mixin(Document.prototype, GetElementsByInterface);
     mixin(Document.prototype, ParentNodeInterface);
