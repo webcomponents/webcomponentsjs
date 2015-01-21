@@ -3099,6 +3099,7 @@ if (WebComponents.flags.shadow) {
     var Element = scope.wrappers.Element;
     var HTMLElement = scope.wrappers.HTMLElement;
     var registerObject = scope.registerObject;
+    var defineWrapGetter = scope.defineWrapGetter;
     var SVG_NS = "http://www.w3.org/2000/svg";
     var svgTitleElement = document.createElementNS(SVG_NS, "title");
     var SVGTitleElement = registerObject(svgTitleElement);
@@ -3108,6 +3109,7 @@ if (WebComponents.flags.shadow) {
       Object.defineProperty(HTMLElement.prototype, "classList", descr);
       delete Element.prototype.classList;
     }
+    defineWrapGetter(SVGElement, "ownerSVGElement");
     scope.wrappers.SVGElement = SVGElement;
   })(window.ShadowDOMPolyfill);
   (function(scope) {

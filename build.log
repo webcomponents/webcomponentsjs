@@ -1,6 +1,6 @@
 BUILD LOG
 ---------
-Build Time: 2015-01-21T10:37:20-0800
+Build Time: 2015-01-21T13:50:06-0800
 
 NODEJS INFORMATION
 ==================
@@ -15,7 +15,7 @@ web-component-tester: 2.0.5
 
 REPO REVISIONS
 ==============
-webcomponentsjs: 37c2e94f2eac1165c9ab225ef636e079b3a1f8a3
+webcomponentsjs: 7d1e0d8992aacd5da419b33ec50eff30a593201a
 
 BUILD HASHES
 ============
@@ -23,9 +23,9 @@ CustomElements.js: cececf83819efff7f8cbf8d92556e85bca8ae27f
 CustomElements.min.js: 1d5f36a95855270a3eec9617f876c1c17426729b
 HTMLImports.js: c4d6ea5a14d3ac7078f40d66c328371a33e4ca45
 HTMLImports.min.js: 3904bd79f7b19358670da3b844bf5be182290f81
-ShadowDOM.js: 522f121c50a59cb785631920c5a3e67f158baa0b
-ShadowDOM.min.js: 2ca1804e00c16c4b275b4eba9c683ed9a62924e8
+ShadowDOM.js: 968a9f115eb711e0f650d9e16a0f7ed09c52261f
+ShadowDOM.min.js: c7017b9eb1fdfa0501cc7a6c64f52dae57a635a6
 webcomponents-lite.js: 888d996e0418b05e6deac8cb78a9ff8c441cb7a6
 webcomponents-lite.min.js: f40e1c63b445081e4029cd9bcb9f735d7d4fd343
-webcomponents.js: 42fe075dbd43eadd9ec8e2ac8f3dd2c6f1eacea0
-webcomponents.min.js: 80d01e1a0c8942b3d07affe20e07b493cbcf8c9f
+webcomponents.js: a474573f4d75f49d76643e6aa6076d61e91dd49d
+webcomponents.min.js: be8382854b1fa7138b84904e59faf085b8d63c54
