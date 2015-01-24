@@ -1,6 +1,6 @@
 BUILD LOG
 ---------
-Build Time: 2015-01-21T10:37:20-0800
+Build Time: 2015-01-23T16:15:30-0800
 
 NODEJS INFORMATION
 ==================
@@ -15,17 +15,17 @@ web-component-tester: 2.0.5
 
 REPO REVISIONS
 ==============
-webcomponentsjs: 37c2e94f2eac1165c9ab225ef636e079b3a1f8a3
+webcomponentsjs: 9f91fd5d9d68a96821283869efac008535446218
 
 BUILD HASHES
 ============
-CustomElements.js: cececf83819efff7f8cbf8d92556e85bca8ae27f
-CustomElements.min.js: 1d5f36a95855270a3eec9617f876c1c17426729b
-HTMLImports.js: c4d6ea5a14d3ac7078f40d66c328371a33e4ca45
-HTMLImports.min.js: 3904bd79f7b19358670da3b844bf5be182290f81
-ShadowDOM.js: 522f121c50a59cb785631920c5a3e67f158baa0b
-ShadowDOM.min.js: 2ca1804e00c16c4b275b4eba9c683ed9a62924e8
-webcomponents-lite.js: 888d996e0418b05e6deac8cb78a9ff8c441cb7a6
-webcomponents-lite.min.js: f40e1c63b445081e4029cd9bcb9f735d7d4fd343
-webcomponents.js: 42fe075dbd43eadd9ec8e2ac8f3dd2c6f1eacea0
-webcomponents.min.js: 80d01e1a0c8942b3d07affe20e07b493cbcf8c9f
+CustomElements.js: 4580193ee75072cb380d439fbf75a62deb9ca233
+CustomElements.min.js: 4b2c4f065126f25cfdf5f6c23f12169c9c18baa2
+HTMLImports.js: 736763ab217d150ccb625f42362fc03158fcaeb1
+HTMLImports.min.js: 7df544b9a6ac9f93dcdefa3eb6eaaea68c228967
+ShadowDOM.js: 1f6f01526cbc098563bf5b2d217090bf210a42f3
+ShadowDOM.min.js: 06f2ab5b486297bc9e3ce2a8b5cfe2130aa6ccbb
+webcomponents-lite.js: 644f816326e29842a8fb7cb0fa82636540d46257
+webcomponents-lite.min.js: 3f54f511045bd45d89df2c5bbcade19a242e2a64
+webcomponents.js: 9ea79ac36b5875de59b8277c5867bff72e3dab6c
+webcomponents.min.js: 97774057dcb06111606cf1b48623b7441a1d3f6a
