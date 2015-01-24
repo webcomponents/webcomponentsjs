@@ -60,6 +60,30 @@
       oldValue: oldValue
     });
   }
+  function shimMatchesSelector (selector) {
+    selector = selector
+      // Transform `:host(selector)` to `selector`
+      .replace(
+        /:host\(([^\s]+)\)/g,
+        '$1'
+      )
+      // Transform `selector:host` to `selector`
+      .replace(
+        /([^\s]):host/g,
+        '$1'
+      )
+      // Transform `:host` to `*`
+      .replace(
+        ':host',
+        '*'
+      );
+    // From ShadowCSS, will be replaced by space
+    selector = selector.replace(
+      /\^|\/shadow\/|\/shadow-deep\/|::shadow|\/deep\/|::content/g,
+      ' '
+    );
+    return selector;
+  }
 
   var classListTable = new WeakMap();
 
@@ -99,6 +123,7 @@
     },
 
     matches: function(selector) {
+      selector = shimMatchesSelector(selector);
       return originalMatches.call(unsafeUnwrap(this), selector);
     },
 
