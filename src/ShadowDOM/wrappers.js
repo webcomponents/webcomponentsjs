@@ -226,10 +226,13 @@ window.ShadowDOMPolyfill = {};
           setter = getSetter(name);
       }
 
+      // make all descriptors configurable on broken safari
+      var configurable = isBrokenSafari || descriptor.configurable;
+
       defineProperty(target, name, {
         get: getter,
         set: setter,
-        configurable: descriptor.configurable,
+        configurable: configurable,
         enumerable: descriptor.enumerable
       });
     }
