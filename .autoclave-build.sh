@@ -15,6 +15,7 @@ lasttag=`git tag -l | sort -t. -k1,1n -k2,2n -k3,3n | tail -n 1`
 git checkout --detach ${lasttag}
 git merge -s ours master --no-commit
 
+files=(`ls dist | sed -e 's/\/dist//'`)
 mv dist/* .
 
-git add *.js *.json README.md build.log
+git add -f "${files[@]}"
