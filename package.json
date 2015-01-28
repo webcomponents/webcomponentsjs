@@ -2,7 +2,7 @@
   "name": "webcomponents.js",
   "version": "0.5.4",
   "description": "webcomponents.js",
-  "main": "gulpfile.js",
+  "main": "webcomponents.js",
   "directories": {
     "test": "tests"
   },
