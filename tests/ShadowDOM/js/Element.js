@@ -125,6 +125,18 @@ suite('Element', function() {
     assert.equal(bb, list[0]);
   });
 
+  test('matches', function() {
+    var div = document.createElement('div');
+    div.classList.add('host-class');
+    document.body.appendChild(div);
+    var p = document.createElement('p');
+    p.classList.add('child-class');
+    div.appendChild(p);
+    assert.isTrue(p.matches(':host(.host-class) *'));
+    assert.isTrue(p.matches(':host::shadow .child-class'));
+    assert.isTrue(p.matches('.host-class /deep/ p.child-class'));
+  });
+
   skipTest('getElementsByTagName', function() {
     var div = document.createElement('div');
     div.innerHTML = '<a>0</a><a>1</a>';
@@ -388,17 +400,4 @@ suite('Element', function() {
     assert.instanceOf(abb, HTMLElement);
     assert.equal(abb, sbb);
   });
-
-  test('matches', function() {
-    var div = document.createElement('div');
-    div.classList.add('host-class');
-    document.body.appendChild(div);
-    var p = document.createElement('p');
-    p.classList.add('child-class');
-    div.appendChild(p);
-    assert.isTrue(p.matches(':host(.host-class) *'));
-    assert.isTrue(p.matches(':host::shadow .child-class'));
-    assert.isTrue(p.matches('.host-class /deep/ p.child-class'));
-  });
-
 });
