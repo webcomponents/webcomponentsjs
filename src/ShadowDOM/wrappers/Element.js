@@ -16,6 +16,7 @@
   var Node = scope.wrappers.Node;
   var ParentNodeInterface = scope.ParentNodeInterface;
   var SelectorsInterface = scope.SelectorsInterface;
+  var MatchesInterface = scope.MatchesInterface;
   var addWrapNodeListMethod = scope.addWrapNodeListMethod;
   var enqueueMutation = scope.enqueueMutation;
   var mixin = scope.mixin;
@@ -60,30 +61,6 @@
       oldValue: oldValue
     });
   }
-  function shimMatchesSelector (selector) {
-    selector = selector
-      // Transform `:host(selector)` to `selector`
-      .replace(
-        /:host\(([^\s]+)\)/g,
-        '$1'
-      )
-      // Transform `selector:host` to `selector`
-      .replace(
-        /([^\s]):host/g,
-        '$1'
-      )
-      // Transform `:host` to `*`
-      .replace(
-        ':host',
-        '*'
-      );
-    // From ShadowCSS, will be replaced by space
-    selector = selector.replace(
-      /\^|\/shadow\/|\/shadow-deep\/|::shadow|\/deep\/|::content/g,
-      ' '
-    );
-    return selector;
-  }
 
   var classListTable = new WeakMap();
 
@@ -120,11 +97,6 @@
       unsafeUnwrap(this).removeAttribute(name);
       enqueAttributeChange(this, name, oldValue);
       invalidateRendererBasedOnAttribute(this, name);
-    },
-
-    matches: function(selector) {
-      selector = shimMatchesSelector(selector);
-      return originalMatches.call(unsafeUnwrap(this), selector);
     },
 
     get classList() {
@@ -171,11 +143,13 @@
   mixin(Element.prototype, GetElementsByInterface);
   mixin(Element.prototype, ParentNodeInterface);
   mixin(Element.prototype, SelectorsInterface);
+  mixin(Element.prototype, MatchesInterface);
 
   registerWrapper(OriginalElement, Element,
                   document.createElementNS(null, 'x'));
 
   scope.invalidateRendererBasedOnAttribute = invalidateRendererBasedOnAttribute;
   scope.matchesNames = matchesNames;
+  scope.originalMatches = originalMatches;
   scope.wrappers.Element = Element;
 })(window.ShadowDOMPolyfill);

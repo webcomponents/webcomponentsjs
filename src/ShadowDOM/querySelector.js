@@ -49,7 +49,27 @@
   }
 
   function shimSelector(selector) {
-    return String(selector).replace(/\/deep\//g, ' ');
+    return String(selector)
+      // Transform `:host(selector)` to `selector`
+      .replace(
+        /:host\(([^\s]+)\)/g,
+        '$1'
+      )
+      // Transform `selector:host` to `selector`
+      .replace(
+        /([^\s]):host/g,
+        '$1'
+      )
+      // Transform `:host` to `*`
+      .replace(
+        ':host',
+        '*'
+      )
+      // From ShadowCSS, will be replaced by space
+      .replace(
+        /\^|\/shadow\/|\/shadow-deep\/|::shadow|\/deep\/|::content/g,
+        ' '
+      );
   }
 
   function findOne(node, selector) {
@@ -105,7 +125,7 @@
   }
 
   // find and findAll will only match Simple Selectors,
-  // Structural Pseudo Classes are not guarenteed to be correct
+  // Structural Pseudo Classes are not guaranteed to be correct
   // http://www.w3.org/TR/css3-selectors/#simple-selectors
 
   function querySelectorAllFiltered(p, index, result, selector, deep) {
@@ -181,6 +201,13 @@
           deep);
 
       return result;
+    }
+  };
+
+  var MatchesInterface = {
+    matches: function(selector) {
+      selector = shimSelector(selector);
+      return scope.originalMatches.call(unsafeUnwrap(this), selector);
     }
   };
 
@@ -272,5 +299,6 @@
 
   scope.GetElementsByInterface = GetElementsByInterface;
   scope.SelectorsInterface = SelectorsInterface;
+  scope.MatchesInterface = MatchesInterface;
 
 })(window.ShadowDOMPolyfill);
