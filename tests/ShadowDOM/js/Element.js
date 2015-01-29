@@ -103,6 +103,19 @@ suite('Element', function() {
     assert.equal(bb, div.querySelector('div /deep/ bb'));
   });
 
+  test('querySelector ::shadow', function() {
+    var div = document.createElement('div');
+    var div2 = document.createElement('div');
+    div.appendChild(div2);
+    var sr = div2.createShadowRoot();
+    sr.innerHTML = '<bb></bb>';
+    var bb = sr.firstChild;
+
+    div.offsetHeight;
+
+    assert.equal(bb, div.querySelector('div::shadow bb'));
+  });
+
   test('querySelectorAll deep', function() {
     var div = document.createElement('div');
     div.innerHTML = '<aa></aa><aa></aa>';
@@ -123,6 +136,33 @@ suite('Element', function() {
     list = div.querySelectorAll('div /deep/ bb');
     assert.equal(1, list.length);
     assert.equal(bb, list[0]);
+  });
+
+  test('querySelectorAll ::shadow', function() {
+    var div = document.createElement('div');
+    var div2 = document.createElement('div');
+    div.appendChild(div2);
+    var sr = div2.createShadowRoot();
+    sr.innerHTML = '<bb></bb><bb></bb>';
+    var bb = sr.firstChild;
+
+    div.offsetHeight;
+
+    var list = div.querySelectorAll('div::shadow bb');
+    assert.equal(2, list.length);
+    assert.equal(bb, list[0]);
+  });
+
+  test('matches', function() {
+    var div = document.createElement('div');
+    div.classList.add('host-class');
+    document.body.appendChild(div);
+    var p = document.createElement('p');
+    p.classList.add('child-class');
+    div.appendChild(p);
+    assert.isTrue(p.matches(':host(.host-class) *'));
+    assert.isTrue(p.matches(':host::shadow .child-class'));
+    assert.isTrue(p.matches('.host-class /deep/ p.child-class'));
   });
 
   skipTest('getElementsByTagName', function() {
