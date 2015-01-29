@@ -49,6 +49,10 @@
   }
 
   function shimSelector(selector) {
+    return String(selector).replace(/\/deep\/|::shadow/g, ' ');
+  }
+
+  function shimMatchesSelector(selector) {
     return String(selector)
       // Transform `:host(selector)` to `selector`
       .replace(
@@ -206,7 +210,7 @@
 
   var MatchesInterface = {
     matches: function(selector) {
-      selector = shimSelector(selector);
+      selector = shimMatchesSelector(selector);
       return scope.originalMatches.call(unsafeUnwrap(this), selector);
     }
   };
