@@ -3,5 +3,6 @@
   "../HTMLImports/build.json",
   "../CustomElements/build.json",
   "../Template/Template.js",
+  "../MutationObserver/MutationObserver.js"
   "unresolved.js"
 ]
