@@ -103,6 +103,7 @@
       var list = classListTable.get(this);
       if (!list) {
         list = unsafeUnwrap(this).classList;
+        if (!list) return;
         list.ownerElement_ = this;
         classListTable.set(this, list);
       }

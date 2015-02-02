@@ -9,6 +9,13 @@
  */
 
 suite('DOMTokenList', function() {
+  if (!window.DOMTokenList) {
+    test('classList returns undefined if not supported', function() {
+      var div = document.createElement('div');
+      assert.isUndefined(div.classList);
+    });
+    return;
+  }
 
   test('instanceof', function() {
     var div = document.createElement('div');
