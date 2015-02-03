@@ -14,6 +14,12 @@
 (function(scope) {
   'use strict';
 
+  if (!window.DOMTokenList) {
+    console.warn('Missing DOMTokenList prototype, please include a ' +
+        'compatible classList polyfill such as http://goo.gl/uTcepH.');
+    return;
+  }
+
   var unsafeUnwrap = scope.unsafeUnwrap;
   var enqueueMutation = scope.enqueueMutation;
 
