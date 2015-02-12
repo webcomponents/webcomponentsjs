@@ -23,6 +23,22 @@ Pre-built (concatenated & minified) versions of the polyfills are maintained in 
 `webcomponents-lite.js` includes all polyfills except for shadow DOM.
 
 
+## Browser Support
+
+Our polyfills are intended to work in the latest versions of evergreen browsers. See below
+for our complete browser support matrix:
+
+|   | IE10 | IE11+ | Chrome* | Firefox* | Safari 7+* | Chrome Android* | Mobile Safari* |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| __Custom Elements__ | ~ | x | x | x | x | x| x
+| __HTML Imports__ | ~ | x | x | x | x| x| x
+| __Shadow DOM__ | x | x | x | x | x | x | x
+| __Templates__ | x | x | x | x| x | x | x
+
+*Indicates the current version of the browser
+~Indicates support may be flaky
+
+
 ### Manually Building
 
 If you wish to build the polyfills yourself, you'll need `node` and `gulp` on your system:
