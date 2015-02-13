@@ -23,6 +23,28 @@ Pre-built (concatenated & minified) versions of the polyfills are maintained in 
 `webcomponents-lite.js` includes all polyfills except for shadow DOM.
 
 
+## Browser Support
+
+Our polyfills are intended to work in the latest versions of evergreen browsers. See below
+for our complete browser support matrix:
+
+|   | IE10 | IE11+ | Chrome* | Firefox* | Safari 7+* | Chrome Android* | Mobile Safari* |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| __Custom Elements__ | ~ | ✓ | ✓ | ✓ | ✓ | ✓| ✓
+| __HTML Imports__ | ~ | ✓ | ✓ | ✓ | ✓| ✓| ✓
+| __Shadow DOM__ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓
+| __Templates__ | ✓ | ✓ | ✓ | ✓| ✓ | ✓ | ✓
+
+
+*Indicates the current version of the browser
+
+~Indicates support may be flaky. If using Custom Elements or HTML Imports with Shadow DOM,
+you will get the non-flaky Mutation Observer polyfill that Shadow DOM includes.
+
+The polyfills may work in older browsers, however require additional polyfills (such as classList)
+to be used. We cannot guarantee support for browsers outside of our compatibility matrix.
+
+
 ### Manually Building
 
 If you wish to build the polyfills yourself, you'll need `node` and `gulp` on your system:
