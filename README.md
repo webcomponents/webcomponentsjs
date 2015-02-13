@@ -43,4 +43,9 @@ The builds will be placed into the `dist/` directory.
 
 See the [contributing guide](CONTRIBUTING.md)
 
+## License
+
+Everything in this repository is BSD style license unless otherwise specified.
+
+Copyright (c) 2015 The Polymer Authors. All rights reserved.
 
