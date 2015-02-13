@@ -30,13 +30,19 @@ for our complete browser support matrix:
 
 |   | IE10 | IE11+ | Chrome* | Firefox* | Safari 7+* | Chrome Android* | Mobile Safari* |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|
-| __Custom Elements__ | ~ | x | x | x | x | x| x
-| __HTML Imports__ | ~ | x | x | x | x| x| x
-| __Shadow DOM__ | x | x | x | x | x | x | x
-| __Templates__ | x | x | x | x| x | x | x
+| __Custom Elements__ | ~ | ✓ | ✓ | ✓ | ✓ | ✓| ✓
+| __HTML Imports__ | ~ | ✓ | ✓ | ✓ | ✓| ✓| ✓
+| __Shadow DOM__ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓
+| __Templates__ | ✓ | ✓ | ✓ | ✓| ✓ | ✓ | ✓
+
 
 *Indicates the current version of the browser
-~Indicates support may be flaky
+
+~Indicates support may be flaky. If using Custom Elements or HTML Imports with Shadow DOM,
+you will get the non-flaky Mutation Observer polyfill that Shadow DOM includes.
+
+The polyfills may work in older browsers, however require additional polyfills (such as classList)
+to be used. We cannot guarantee support for browsers outside of our compatibility matrix.
 
 
 ### Manually Building
