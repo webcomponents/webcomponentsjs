@@ -315,7 +315,6 @@ if (typeof WeakMap === "undefined") {
         this.addTransientObserver(e.target);
 
        case "DOMNodeInserted":
-        var target = e.relatedNode;
         var changedNode = e.target;
         var addedNodes, removedNodes;
         if (e.type === "DOMNodeInserted") {
@@ -327,12 +326,12 @@ if (typeof WeakMap === "undefined") {
         }
         var previousSibling = changedNode.previousSibling;
         var nextSibling = changedNode.nextSibling;
-        var record = getRecord("childList", target);
+        var record = getRecord("childList", e.target.parentNode);
         record.addedNodes = addedNodes;
         record.removedNodes = removedNodes;
         record.previousSibling = previousSibling;
         record.nextSibling = nextSibling;
-        forEachAncestorAndObserverEnqueueRecord(target, function(options) {
+        forEachAncestorAndObserverEnqueueRecord(e.relatedNode, function(options) {
           if (!options.childList) return;
           return record;
         });
@@ -604,11 +603,13 @@ CustomElements.addModule(function(scope) {
     forDocumentTree(doc, upgradeDocument);
   }
   var originalCreateShadowRoot = Element.prototype.createShadowRoot;
-  Element.prototype.createShadowRoot = function() {
-    var root = originalCreateShadowRoot.call(this);
-    CustomElements.watchShadow(this);
-    return root;
-  };
+  if (originalCreateShadowRoot) {
+    Element.prototype.createShadowRoot = function() {
+      var root = originalCreateShadowRoot.call(this);
+      CustomElements.watchShadow(this);
+      return root;
+    };
+  }
   scope.watchShadow = watchShadow;
   scope.upgradeDocumentTree = upgradeDocumentTree;
   scope.upgradeSubtree = addedSubtree;

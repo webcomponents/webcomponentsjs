@@ -157,6 +157,13 @@ if (WebComponents.flags.shadow) {
     getOwnPropertyNames(window);
     function getWrapperConstructor(node) {
       var nativePrototype = node.__proto__ || Object.getPrototypeOf(node);
+      if (isFirefox) {
+        try {
+          getOwnPropertyNames(nativePrototype);
+        } catch (error) {
+          nativePrototype = nativePrototype.__proto__;
+        }
+      }
       var wrapperConstructor = constructorTable.get(nativePrototype);
       if (wrapperConstructor) return wrapperConstructor;
       var parentWrapperConstructor = getWrapperConstructor(nativePrototype);
@@ -230,10 +237,11 @@ if (WebComponents.flags.shadow) {
         if (descriptor.writable || descriptor.set || isBrokenSafari) {
           if (isEvent) setter = scope.getEventHandlerSetter(name); else setter = getSetter(name);
         }
+        var configurable = isBrokenSafari || descriptor.configurable;
         defineProperty(target, name, {
           get: getter,
           set: setter,
-          configurable: descriptor.configurable,
+          configurable: configurable,
           enumerable: descriptor.enumerable
         });
       }
@@ -2060,7 +2068,10 @@ if (WebComponents.flags.shadow) {
       return index;
     }
     function shimSelector(selector) {
-      return String(selector).replace(/\/deep\//g, " ");
+      return String(selector).replace(/\/deep\/|::shadow/g, " ");
+    }
+    function shimMatchesSelector(selector) {
+      return String(selector).replace(/:host\(([^\s]+)\)/g, "$1").replace(/([^\s]):host/g, "$1").replace(":host", "*").replace(/\^|\/shadow\/|\/shadow-deep\/|::shadow|\/deep\/|::content/g, " ");
     }
     function findOne(node, selector) {
       var m, el = node.firstElementChild;
@@ -2151,6 +2162,12 @@ if (WebComponents.flags.shadow) {
         return result;
       }
     };
+    var MatchesInterface = {
+      matches: function(selector) {
+        selector = shimMatchesSelector(selector);
+        return scope.originalMatches.call(unsafeUnwrap(this), selector);
+      }
+    };
     function getElementsByTagNameFiltered(p, index, result, localName, lowercase) {
       var target = unsafeUnwrap(this);
       var list;
@@ -2205,6 +2222,7 @@ if (WebComponents.flags.shadow) {
     };
     scope.GetElementsByInterface = GetElementsByInterface;
     scope.SelectorsInterface = SelectorsInterface;
+    scope.MatchesInterface = MatchesInterface;
   })(window.ShadowDOMPolyfill);
   (function(scope) {
     "use strict";
@@ -2327,6 +2345,10 @@ if (WebComponents.flags.shadow) {
   })(window.ShadowDOMPolyfill);
   (function(scope) {
     "use strict";
+    if (!window.DOMTokenList) {
+      console.warn("Missing DOMTokenList prototype, please include a " + "compatible classList polyfill such as http://goo.gl/uTcepH.");
+      return;
+    }
     var unsafeUnwrap = scope.unsafeUnwrap;
     var enqueueMutation = scope.enqueueMutation;
     function getClass(el) {
@@ -2375,6 +2397,7 @@ if (WebComponents.flags.shadow) {
     var Node = scope.wrappers.Node;
     var ParentNodeInterface = scope.ParentNodeInterface;
     var SelectorsInterface = scope.SelectorsInterface;
+    var MatchesInterface = scope.MatchesInterface;
     var addWrapNodeListMethod = scope.addWrapNodeListMethod;
     var enqueueMutation = scope.enqueueMutation;
     var mixin = scope.mixin;
@@ -2429,13 +2452,11 @@ if (WebComponents.flags.shadow) {
         enqueAttributeChange(this, name, oldValue);
         invalidateRendererBasedOnAttribute(this, name);
       },
-      matches: function(selector) {
-        return originalMatches.call(unsafeUnwrap(this), selector);
-      },
       get classList() {
         var list = classListTable.get(this);
         if (!list) {
           list = unsafeUnwrap(this).classList;
+          if (!list) return;
           list.ownerElement_ = this;
           classListTable.set(this, list);
         }
@@ -2468,9 +2489,11 @@ if (WebComponents.flags.shadow) {
     mixin(Element.prototype, GetElementsByInterface);
     mixin(Element.prototype, ParentNodeInterface);
     mixin(Element.prototype, SelectorsInterface);
+    mixin(Element.prototype, MatchesInterface);
     registerWrapper(OriginalElement, Element, document.createElementNS(null, "x"));
     scope.invalidateRendererBasedOnAttribute = invalidateRendererBasedOnAttribute;
     scope.matchesNames = matchesNames;
+    scope.originalMatches = originalMatches;
     scope.wrappers.Element = Element;
   })(window.ShadowDOMPolyfill);
   (function(scope) {
@@ -3099,6 +3122,7 @@ if (WebComponents.flags.shadow) {
     var Element = scope.wrappers.Element;
     var HTMLElement = scope.wrappers.HTMLElement;
     var registerObject = scope.registerObject;
+    var defineWrapGetter = scope.defineWrapGetter;
     var SVG_NS = "http://www.w3.org/2000/svg";
     var svgTitleElement = document.createElementNS(SVG_NS, "title");
     var SVGTitleElement = registerObject(svgTitleElement);
@@ -3108,6 +3132,7 @@ if (WebComponents.flags.shadow) {
       Object.defineProperty(HTMLElement.prototype, "classList", descr);
       delete Element.prototype.classList;
     }
+    defineWrapGetter(SVGElement, "ownerSVGElement");
     scope.wrappers.SVGElement = SVGElement;
   })(window.ShadowDOMPolyfill);
   (function(scope) {
@@ -4966,7 +4991,6 @@ if (WebComponents.flags.shadow) {
         this.addTransientObserver(e.target);
 
        case "DOMNodeInserted":
-        var target = e.relatedNode;
         var changedNode = e.target;
         var addedNodes, removedNodes;
         if (e.type === "DOMNodeInserted") {
@@ -4978,12 +5002,12 @@ if (WebComponents.flags.shadow) {
         }
         var previousSibling = changedNode.previousSibling;
         var nextSibling = changedNode.nextSibling;
-        var record = getRecord("childList", target);
+        var record = getRecord("childList", e.target.parentNode);
         record.addedNodes = addedNodes;
         record.removedNodes = removedNodes;
         record.previousSibling = previousSibling;
         record.nextSibling = nextSibling;
-        forEachAncestorAndObserverEnqueueRecord(target, function(options) {
+        forEachAncestorAndObserverEnqueueRecord(e.relatedNode, function(options) {
           if (!options.childList) return;
           return record;
         });
@@ -5618,12 +5642,15 @@ HTMLImports.addModule(function(scope) {
   function isLinkRel(elt, rel) {
     return elt.localName === "link" && elt.getAttribute("rel") === rel;
   }
+  function hasBaseURIAccessor(doc) {
+    return !!Object.getOwnPropertyDescriptor(doc, "baseURI");
+  }
   function makeDocument(resource, url) {
     var doc = document.implementation.createHTMLDocument(IMPORT_LINK_TYPE);
     doc._URL = url;
     var base = doc.createElement("base");
     base.setAttribute("href", url);
-    if (!doc.baseURI) {
+    if (!doc.baseURI && !hasBaseURIAccessor(doc)) {
       Object.defineProperty(doc, "baseURI", {
         value: url
       });
@@ -5971,11 +5998,13 @@ CustomElements.addModule(function(scope) {
     forDocumentTree(doc, upgradeDocument);
   }
   var originalCreateShadowRoot = Element.prototype.createShadowRoot;
-  Element.prototype.createShadowRoot = function() {
-    var root = originalCreateShadowRoot.call(this);
-    CustomElements.watchShadow(this);
-    return root;
-  };
+  if (originalCreateShadowRoot) {
+    Element.prototype.createShadowRoot = function() {
+      var root = originalCreateShadowRoot.call(this);
+      CustomElements.watchShadow(this);
+      return root;
+    };
+  }
   scope.watchShadow = watchShadow;
   scope.upgradeDocumentTree = upgradeDocumentTree;
   scope.upgradeSubtree = addedSubtree;

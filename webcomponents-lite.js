@@ -358,7 +358,6 @@ if (typeof WeakMap === "undefined") {
         this.addTransientObserver(e.target);
 
        case "DOMNodeInserted":
-        var target = e.relatedNode;
         var changedNode = e.target;
         var addedNodes, removedNodes;
         if (e.type === "DOMNodeInserted") {
@@ -370,12 +369,12 @@ if (typeof WeakMap === "undefined") {
         }
         var previousSibling = changedNode.previousSibling;
         var nextSibling = changedNode.nextSibling;
-        var record = getRecord("childList", target);
+        var record = getRecord("childList", e.target.parentNode);
         record.addedNodes = addedNodes;
         record.removedNodes = removedNodes;
         record.previousSibling = previousSibling;
         record.nextSibling = nextSibling;
-        forEachAncestorAndObserverEnqueueRecord(target, function(options) {
+        forEachAncestorAndObserverEnqueueRecord(e.relatedNode, function(options) {
           if (!options.childList) return;
           return record;
         });
@@ -1010,12 +1009,15 @@ HTMLImports.addModule(function(scope) {
   function isLinkRel(elt, rel) {
     return elt.localName === "link" && elt.getAttribute("rel") === rel;
   }
+  function hasBaseURIAccessor(doc) {
+    return !!Object.getOwnPropertyDescriptor(doc, "baseURI");
+  }
   function makeDocument(resource, url) {
     var doc = document.implementation.createHTMLDocument(IMPORT_LINK_TYPE);
     doc._URL = url;
     var base = doc.createElement("base");
     base.setAttribute("href", url);
-    if (!doc.baseURI) {
+    if (!doc.baseURI && !hasBaseURIAccessor(doc)) {
       Object.defineProperty(doc, "baseURI", {
         value: url
       });
@@ -1363,11 +1365,13 @@ CustomElements.addModule(function(scope) {
     forDocumentTree(doc, upgradeDocument);
   }
   var originalCreateShadowRoot = Element.prototype.createShadowRoot;
-  Element.prototype.createShadowRoot = function() {
-    var root = originalCreateShadowRoot.call(this);
-    CustomElements.watchShadow(this);
-    return root;
-  };
+  if (originalCreateShadowRoot) {
+    Element.prototype.createShadowRoot = function() {
+      var root = originalCreateShadowRoot.call(this);
+      CustomElements.watchShadow(this);
+      return root;
+    };
+  }
   scope.watchShadow = watchShadow;
   scope.upgradeDocumentTree = upgradeDocumentTree;
   scope.upgradeSubtree = addedSubtree;
