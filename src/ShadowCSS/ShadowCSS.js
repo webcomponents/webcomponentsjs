@@ -457,7 +457,7 @@ var ShadowCSS = {
     return !selector.match(re);
   },
   makeScopeMatcher: function(scopeSelector) {
-    scopeSelector = scopeSelector.replace(/\[/g, '\\[').replace(/\[/g, '\\]');
+    scopeSelector = scopeSelector.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
     return new RegExp('^(' + scopeSelector + ')' + selectorReSuffix, 'm');
   },
   applySelectorScope: function(selector, selectorScope) {
