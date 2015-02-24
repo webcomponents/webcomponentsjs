@@ -10,7 +10,7 @@
 -->
 <html>
   <head>
-    <title>Imports style loading</title>
+    <title>Imports style loading with base tag</title>
     <base href="/">
     <script src="tests/tools/chai/chai.js"></script>
     <script src="tests/tools/htmltest.js"></script>
@@ -25,9 +25,15 @@
         function getComputed(selector) {
           return getComputedStyle(document.querySelector(selector));
         }
-
-        chai.assert.equal(getComputed('#test1').backgroundColor, 'rgb(255, 0, 0)', 'shimmed imported style is loaded');
-        done();
+        var link = document.querySelector('link[rel=stylesheet]');
+        //Tricky interval, because WebComponentsReady is fired before all link[rel=stylesheet] are processed
+        var interval = setInterval(function () {
+          if (link.__importParsed) {
+            clearInterval(interval);
+            chai.assert.equal(getComputed('#test1').backgroundColor, 'rgb(255, 0, 0)', 'shimmed imported style is loaded');
+            done();
+          }
+        }, 50);
       });
     </script>
   </body>
