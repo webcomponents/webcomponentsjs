@@ -84,5 +84,4 @@ suite('SVGElement', function() {
 
     assert.equal(g.ownerSVGElement, el2);
   });
-
 });
