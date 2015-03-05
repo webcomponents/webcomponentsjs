@@ -16,6 +16,7 @@
   var Node = scope.wrappers.Node;
   var ParentNodeInterface = scope.ParentNodeInterface;
   var SelectorsInterface = scope.SelectorsInterface;
+  var MatchesInterface = scope.MatchesInterface;
   var addWrapNodeListMethod = scope.addWrapNodeListMethod;
   var enqueueMutation = scope.enqueueMutation;
   var mixin = scope.mixin;
@@ -98,14 +99,11 @@
       invalidateRendererBasedOnAttribute(this, name);
     },
 
-    matches: function(selector) {
-      return originalMatches.call(unsafeUnwrap(this), selector);
-    },
-
     get classList() {
       var list = classListTable.get(this);
       if (!list) {
         list = unsafeUnwrap(this).classList;
+        if (!list) return;
         list.ownerElement_ = this;
         classListTable.set(this, list);
       }
@@ -146,11 +144,13 @@
   mixin(Element.prototype, GetElementsByInterface);
   mixin(Element.prototype, ParentNodeInterface);
   mixin(Element.prototype, SelectorsInterface);
+  mixin(Element.prototype, MatchesInterface);
 
   registerWrapper(OriginalElement, Element,
                   document.createElementNS(null, 'x'));
 
   scope.invalidateRendererBasedOnAttribute = invalidateRendererBasedOnAttribute;
   scope.matchesNames = matchesNames;
+  scope.originalMatches = originalMatches;
   scope.wrappers.Element = Element;
 })(window.ShadowDOMPolyfill);

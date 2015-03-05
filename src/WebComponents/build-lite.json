@@ -1,5 +1,6 @@
 [
   "build/boot.js",
+  "../MutationObserver/MutationObserver.js",
   "../HTMLImports/build.json",
   "../CustomElements/build.json",
   "../Template/Template.js",

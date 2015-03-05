@@ -115,24 +115,35 @@ function markTargetLoaded(event) {
 // call <callback> when we ensure all imports have loaded
 function watchImportsLoad(callback, doc) {
   var imports = doc.querySelectorAll('link[rel=import]');
-  var loaded = 0, l = imports.length;
-  function checkDone(d) {
-    if ((loaded == l) && callback) {
-       callback();
+  var parsedCount = 0, importCount = imports.length, newImports = [], errorImports = [];
+  function checkDone() {
+    if (parsedCount == importCount && callback) {
+      callback({
+        allImports: imports,
+        loadedImports: newImports,
+        errorImports: errorImports
+      });
     }
   }
   function loadedImport(e) {
     markTargetLoaded(e);
-    loaded++;
+    newImports.push(this);
+    parsedCount++;
     checkDone();
   }
-  if (l) {
-    for (var i=0, imp; (i<l) && (imp=imports[i]); i++) {
+  function errorLoadingImport(e) {
+    errorImports.push(this);
+    parsedCount++;
+    checkDone();
+  }
+  if (importCount) {
+    for (var i=0, imp; i<importCount && (imp=imports[i]); i++) {
       if (isImportLoaded(imp)) {
-        loadedImport.call(imp, {target: imp});
+        parsedCount++;
+        checkDone();
       } else {
         imp.addEventListener('load', loadedImport);
-        imp.addEventListener('error', loadedImport);
+        imp.addEventListener('error', errorLoadingImport);
       }
     }
   } else {
@@ -211,11 +222,11 @@ if (useNative) {
 // have loaded. This event is required to simulate the script blocking
 // behavior of native imports. A main document script that needs to be sure
 // imports have loaded should wait for this event.
-whenReady(function() {
+whenReady(function(detail) {
   HTMLImports.ready = true;
   HTMLImports.readyTime = new Date().getTime();
   var evt = rootDocument.createEvent("CustomEvent");
-  evt.initCustomEvent("HTMLImportsLoaded", true, true, {});
+  evt.initCustomEvent("HTMLImportsLoaded", true, true, detail);
   rootDocument.dispatchEvent(evt);
 });
 

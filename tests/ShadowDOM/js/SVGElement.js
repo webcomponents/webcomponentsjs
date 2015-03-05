@@ -72,4 +72,16 @@ suite('SVGElement', function() {
     }
   });
 
+  test('ownerSVGElement', function() {
+    var el = document.createElementNS(SVG_NS, 'svg');
+    var el2 = document.createElementNS(SVG_NS,'svg');
+    var g = document.createElementNS(SVG_NS, 'g');
+    el.appendChild(g);
+
+    assert.equal(g.ownerSVGElement, el);
+
+    el2.appendChild(g);
+
+    assert.equal(g.ownerSVGElement, el2);
+  });
 });

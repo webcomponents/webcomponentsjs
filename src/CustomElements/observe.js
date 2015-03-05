@@ -289,7 +289,8 @@ function upgradeDocumentTree(doc) {
 }
 
 
-// ensure that all ShadowRoots watch for CustomElements.
+// Patch `createShadowRoot()` if Shadow DOM is available, otherwise leave
+// undefined to aid feature detection of Shadow DOM.
 var originalCreateShadowRoot = Element.prototype.createShadowRoot;
 if (originalCreateShadowRoot) {
   Element.prototype.createShadowRoot = function() {
