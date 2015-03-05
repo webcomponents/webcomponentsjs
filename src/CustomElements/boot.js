@@ -42,6 +42,7 @@ if (useNative) {
 }
 
 // imports
+var upgradeDocument = scope.upgradeDocument;
 var upgradeDocumentTree = scope.upgradeDocumentTree;
 
 // ShadowDOM polyfill wraps elements but some elements like `document`
@@ -57,17 +58,17 @@ if (!window.wrap) {
   }
 }
 
+// install upgrade hook if HTMLImports are available
+  if (window.HTMLImports) {
+    HTMLImports.__importsParsingHook = function(doc) {
+      upgradeDocument(wrap(doc));
+    };
+  }
+
 // bootstrap parsing
 function bootstrap() {
   // parse document
   upgradeDocumentTree(wrap(document));
-  // install upgrade hook if HTMLImports are available
-  if (window.HTMLImports) {
-    HTMLImports.__importsParsingHook = function(elt) {
-      upgradeDocumentTree(wrap(elt.import));
-      //CustomElements.parser.parse(elt.import);
-    };
-  }
   // set internal 'ready' flag, now document.registerElement will trigger
   // synchronous upgrades
   CustomElements.ready = true;
