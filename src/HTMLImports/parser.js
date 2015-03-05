@@ -150,6 +150,7 @@ var importParser = {
     // TODO(sorvell): style element load event can just not fire so clone styles
     var src = elt;
     elt = cloneStyle(elt);
+    src.__appliedElement = elt;
     elt.__importElement = src;
     this.parseGeneric(elt);
   },
