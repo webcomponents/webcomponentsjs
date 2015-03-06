@@ -5,6 +5,7 @@
   "../ShadowCSS/ShadowCSS.js",
   "build/end-if.js",
   "shadowdom.js",
+  "../URL/URL.js",
   "../HTMLImports/build.json",
   "../CustomElements/build.json",
   "lang.js",
