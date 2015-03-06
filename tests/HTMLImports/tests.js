@@ -21,6 +21,9 @@ htmlSuite('HTMLImports', function() {
   htmlTest('html/currentScript.html');
   htmlTest('html/dedupe.html');
   htmlTest('html/dynamic.html');
+  htmlTest('html/dynamic-all-imports-detail.html');
+  htmlTest('html/dynamic-errors-detail.html');
+  htmlTest('html/dynamic-loaded-detail.html');
   htmlTest('html/csp.html');
   htmlTest('html/customevent-detail.html');
   htmlTest('html/encoding.html');

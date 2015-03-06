@@ -1,0 +1,40 @@
+<!doctype html>
+<!--
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <title>Imports style loading with base tag</title>
+    <base href="/">
+    <script src="tests/tools/chai/chai.js"></script>
+    <script src="tests/tools/htmltest.js"></script>
+
+    <script src="webcomponents.js" shadow></script>
+    <link rel="stylesheet" href="tests/ShadowCSS/html/imports/style-import-base-tag.css" shim-shadowdom>
+  </head>
+  <body>
+    <div id="test1" class="red">red</div>
+    <script>
+      document.addEventListener('WebComponentsReady', function() {
+        function getComputed(selector) {
+          return getComputedStyle(document.querySelector(selector));
+        }
+        var link = document.querySelector('link[rel=stylesheet]');
+        //Tricky interval, because WebComponentsReady is fired before all link[rel=stylesheet] are processed
+        var interval = setInterval(function () {
+          if (link.__importParsed) {
+            clearInterval(interval);
+            chai.assert.equal(getComputed('#test1').backgroundColor, 'rgb(255, 0, 0)', 'shimmed imported style is loaded');
+            done();
+          }
+        }, 50);
+      });
+    </script>
+  </body>
+</html>

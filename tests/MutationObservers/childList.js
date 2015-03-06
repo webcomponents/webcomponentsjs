@@ -378,4 +378,25 @@ suite('JsMutationObserver childList', function() {
     });
   });
 
+  test('Append child in child', function() {
+    var div = testDiv.appendChild(document.createElement('div'));
+
+    var observer = new JsMutationObserver(function() {});
+    observer.observe(div, {
+      childList: true,
+      subtree: true
+    });
+    var div2 = document.createElement('div')
+    var div3 = div2.appendChild(document.createElement('div'));
+    div.appendChild(div2);
+    var records = observer.takeRecords();
+
+    if(records.length == 1) {
+      assert.strictEqual(records[0].target, div);
+      assert.strictEqual(records[0].addedNodes[0].firstChild, div3);
+    } else {
+      assert.strictEqual(records[0].target, div);
+      assert.strictEqual(records[1].target, div2);
+    }
+  });
 });

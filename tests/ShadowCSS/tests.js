@@ -25,5 +25,6 @@ htmlSuite('ShadowCss', function() {
   htmlTest('html/before-content.html?shadow');
   htmlTest('html/before-content.html');
   htmlTest('html/style-import.html');
+  htmlTest('html/style-import-base-tag.html');
   htmlTest('html/css-animation.html');
 });

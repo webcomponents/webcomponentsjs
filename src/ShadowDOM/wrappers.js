@@ -103,6 +103,17 @@ window.ShadowDOMPolyfill = {};
 
   function getWrapperConstructor(node) {
     var nativePrototype = node.__proto__ || Object.getPrototypeOf(node);
+    if (isFirefox) {
+      // HTMLEmbedElements will sometimes be [NS Object wrapper class]
+      // which throws an error when getOwnPropertyNames is called on it.
+      // Mozilla handily includes a second HTMLEmbedElementPrototype in
+      // the chain, so we use that one if available.
+      try {
+        getOwnPropertyNames(nativePrototype);
+      } catch (error) {
+        nativePrototype = nativePrototype.__proto__;
+      }
+    }
     var wrapperConstructor = constructorTable.get(nativePrototype);
     if (wrapperConstructor)
       return wrapperConstructor;
