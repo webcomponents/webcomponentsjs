@@ -27,10 +27,7 @@ if (isIE11OrOlder) {
       // this one may be broken
       if (n.nodeType == n.DOCUMENT_FRAGMENT_NODE) {
         var f = document.createDocumentFragment();
-        var e;
-        while (e = n.firstChild) {
-          f.appendChild(e);
-        }
+        f.appendChild(n);
         return f;
       } else {
         return n;
