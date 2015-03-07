@@ -15,6 +15,30 @@ var initializeModules = scope.initializeModules;
 
 var isIE11OrOlder = /Trident/.test(navigator.userAgent);
 
+// Patch document.importNode to work around IE11 bug that
+// casues children of a document fragment imported while
+// there is a mutation observer to not have a parentNode (!?!)
+if (isIE11OrOlder) {
+  (function() {
+    var importNode = document.importNode;
+    document.importNode = function() {
+      var n = importNode.apply(document, arguments);
+      // Copy all children to a new document fragment since
+      // this one may be broken
+      if (n.nodeType == n.DOCUMENT_FRAGMENT_NODE) {
+        var f = document.createDocumentFragment();
+        var e;
+        while (e = n.firstChild) {
+          f.appendChild(e);
+        }
+        return f;
+      } else {
+        return n;
+      }
+    };
+  })();  
+}
+
 // If native, setup stub api and bail.
 // NOTE: we fire `WebComponentsReady` under native for api compatibility
 if (useNative) {
@@ -56,6 +80,7 @@ if (!window.wrap) {
     };
   }
 }
+
 
 // bootstrap parsing
 function bootstrap() {
