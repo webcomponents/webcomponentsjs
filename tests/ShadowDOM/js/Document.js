@@ -677,6 +677,19 @@ htmlSuite('Document', function() {
     assert.equal('<span is="x-a-span-2"></span>', a3.outerHTML);
   });
 
+  test('document.createTreeWalker', function() {
+    div = document.body.appendChild(document.createElement('div'));
+    div.innerHTML = '<div myattribute="a"></div>';
+    var treeWalker = document.createTreeWalker(div, NodeFilter.SHOW_ELEMENT, null, null);
+    var found;
+    while (treeWalker.nextNode()) {
+      if (treeWalker.currentNode.hasAttribute("myattribute")){
+        found=treeWalker.currentNode.getAttribute("myattribute")==='a';
+      }
+    }
+    assert.isTrue(found);
+  });
+
   htmlTest('../html/document-write.html');
 
   htmlTest('../html/head-then-body.html');

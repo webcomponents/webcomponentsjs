@@ -338,6 +338,13 @@
     'hasFeature',
   ]);
 
+  var originalCreateTreeWalker = document.createTreeWalker;
+  function createTreeWalker(root, whatToShow, filter, entityReferenceExpansion){
+    return originalCreateTreeWalker.call(document,unwrap(root), whatToShow, filter, entityReferenceExpansion);
+  }
+
+  document.createTreeWalker = createTreeWalker; // override
+
   scope.adoptNodeNoRemove = adoptNodeNoRemove;
   scope.wrappers.DOMImplementation = DOMImplementation;
   scope.wrappers.Document = Document;
