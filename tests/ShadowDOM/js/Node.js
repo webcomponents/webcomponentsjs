@@ -456,4 +456,14 @@ suite('Node', function() {
     assert.equal(cs.length, 1);
     assert.equal(cs[0], d);
   });
+
+  test('isEqualNode', function() {
+    var div = document.createElement('div');
+    div.innerHTML = '<div></div>';
+    var clone = div.cloneNode(true);
+    assert.isTrue(div.isEqualNode(clone));
+    clone.innerHTML = "<div>x</div>";
+    assert.isFalse(div.isEqualNode(clone));
+  });
+
 });
