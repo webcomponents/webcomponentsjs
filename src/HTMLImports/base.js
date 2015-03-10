@@ -25,6 +25,7 @@ window.HTMLImports = window.HTMLImports || {flags:{}};
   the code later, only if it's necessary for polyfilling.
 */
 var IMPORT_LINK_TYPE = 'import';
+var STYLESHEET_LINK_TYPE = 'stylesheet';
 var useNative = Boolean(IMPORT_LINK_TYPE in document.createElement('link'));
 
 /**
@@ -232,6 +233,7 @@ whenReady(function(detail) {
 
 // exports
 scope.IMPORT_LINK_TYPE = IMPORT_LINK_TYPE;
+scope.STYLESHEET_LINK_TYPE = STYLESHEET_LINK_TYPE;
 scope.useNative = useNative;
 scope.rootDocument = rootDocument;
 scope.whenReady = whenReady;

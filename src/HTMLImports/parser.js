@@ -15,7 +15,9 @@ var rootDocument = scope.rootDocument;
 var flags = scope.flags;
 var isIE = scope.isIE;
 var IMPORT_LINK_TYPE = scope.IMPORT_LINK_TYPE;
+var STYLESHEET_LINK_TYPE = scope.STYLESHEET_LINK_TYPE;
 var IMPORT_SELECTOR = 'link[rel=' + IMPORT_LINK_TYPE + ']';
+var STYLESHEET_SELECTOR = 'link[rel=' + STYLESHEET_LINK_TYPE + ']';
 
 // importParser
 // highlander object to manage parsing of imports
@@ -32,7 +34,7 @@ var importParser = {
   // parse selectors for import document elements
   importsSelectors: [
     IMPORT_SELECTOR,
-    'link[rel=stylesheet]',
+    STYLESHEET_SELECTOR,
     'style',
     'script:not([type])',
     'script[type="text/javascript"]'
@@ -140,16 +142,15 @@ var importParser = {
     if (nodeIsImport(linkElt)) {
       this.parseImport(linkElt);
     } else {
-      // make href absolute
-      linkElt.href = linkElt.href;
-      this.parseGeneric(linkElt);
+      // for simplicity, parse links as styles.
+      this.parseStyle(linkElt);
     }
   },
 
   parseStyle: function(elt) {
     // TODO(sorvell): style element load event can just not fire so clone styles
     var src = elt;
-    elt = cloneStyle(elt);
+    elt = prepareStyle(elt);
     src.__appliedElement = elt;
     elt.__importElement = src;
     this.parseGeneric(elt);
@@ -282,7 +283,8 @@ var importParser = {
   },
 
   hasResource: function(node) {
-    if (nodeIsImport(node) && (node.import === undefined)) {
+    if (nodeIsImport(node) && (node.import === undefined) ||
+      (nodeIsStylesheet(node) && (node.__resource === undefined))) {
       return false;
     }
     return true;
@@ -292,6 +294,10 @@ var importParser = {
 
 function nodeIsImport(elt) {
   return (elt.localName === 'link') && (elt.rel === IMPORT_LINK_TYPE);
+}
+
+function nodeIsStylesheet(elt) {
+  return (elt.localName === 'link') && (elt.rel === STYLESHEET_LINK_TYPE);
 }
 
 function generateScriptDataUrl(script) {
@@ -317,9 +323,10 @@ function generateSourceMapHint(script) {
 
 // clone style with proper path resolution for main document
 // NOTE: styles are the only elements that require direct path fixup.
-function cloneStyle(style) {
-  var clone = style.ownerDocument.createElement('style');
-  clone.textContent = style.textContent;
+function prepareStyle(element) {
+  var clone = element.ownerDocument.createElement('style');
+  clone.textContent = element.__resource || element.textContent;
+  //if (!clone.textContent) debugger;
   path.resolveUrlsInStyle(clone);
   return clone;
 }
@@ -327,5 +334,6 @@ function cloneStyle(style) {
 // exports
 scope.parser = importParser;
 scope.IMPORT_SELECTOR = IMPORT_SELECTOR;
+scope.STYLESHEET_SELECTOR = STYLESHEET_SELECTOR;
 
 });

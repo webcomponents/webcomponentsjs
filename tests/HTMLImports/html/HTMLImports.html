@@ -23,7 +23,7 @@
         done();
       } else {
         addEventListener('HTMLImportsLoaded', function() {
-          chai.assert.equal(5, Object.keys(HTMLImports.importLoader.cache).length,
+          chai.assert.equal(6, Object.keys(HTMLImports.importLoader.cache).length,
             'must cache exactly nine resources');
           chai.assert.equal(5, Object.keys(HTMLImports.importer.documents).length,
             'must cache exactly nine documents');
