@@ -1,5 +1,6 @@
 [
   "build/boot.js",
+  "../WeakMap/WeakMap.js",
   "build/if-poly.js",
   "../ShadowDOM/build.json",
   "../ShadowCSS/ShadowCSS.js",

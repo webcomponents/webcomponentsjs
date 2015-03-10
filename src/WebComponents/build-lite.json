@@ -1,5 +1,6 @@
 [
   "build/boot.js",
+  "../WeakMap/WeakMap.js",
   "../URL/URL.js",
   "../MutationObserver/MutationObserver.js",
   "../HTMLImports/build.json",
