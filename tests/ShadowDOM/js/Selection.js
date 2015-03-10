@@ -11,6 +11,7 @@
 suite('Selection', function() {
 
   var wrap = ShadowDOMPolyfill.wrap;
+  var unwrap = ShadowDOMPolyfill.unwrap;
   var div, a, b, c;
 
   teardown(function() {
@@ -106,12 +107,21 @@ suite('Selection', function() {
     }
   });
 
+  test('Make sure Selection.extend is not supported if browser does not support it.', function() {
+    var originalSelection = unwrap(window.getSelection());
+    var wrapperSelection = window.getSelection();
+    assert(!!originalSelection.extend === !!wrapperSelection.extend);
+  });
+
   test('extend', function() {
-    // IE legacy document modes do not have extend.
-    if (/Trident/.test(navigator.userAgent))
-      return;
 
     var selection = window.getSelection();
+    if (!selection.extend){
+      // Nothing to test if the selection does not support extend.
+      // do not fail. Code that uses browser with no extend in the selection knows how to handle it.
+      // Just do not fake the availability of extend.
+      return;
+    }
 
     for (var i = 0; i < 4; i++) {
       selection.selectAllChildren(div);

@@ -344,6 +344,7 @@
   var originalAppendChild = OriginalNode.prototype.appendChild;
   var originalCompareDocumentPosition =
       OriginalNode.prototype.compareDocumentPosition;
+  var originalIsEqualNode = OriginalNode.prototype.isEqualNode;
   var originalInsertBefore = OriginalNode.prototype.insertBefore;
   var originalRemoveChild = OriginalNode.prototype.removeChild;
   var originalReplaceChild = OriginalNode.prototype.replaceChild;
@@ -680,6 +681,10 @@
       // the logical DOM.
       return originalCompareDocumentPosition.call(unsafeUnwrap(this),
                                                   unwrapIfNeeded(otherNode));
+    },
+
+    isEqualNode: function(otherNode){
+      return originalIsEqualNode.call(unsafeUnwrap(this), unwrapIfNeeded(otherNode));
     },
 
     normalize: function() {

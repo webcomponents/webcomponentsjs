@@ -44,7 +44,7 @@
 
   defineWrapGetter(Document, 'documentElement');
 
-  // Conceptually both body and head can be in a shadow but suporting that seems
+  // Conceptually both body and head can be in a shadow but supporting that seems
   // overkill at this point.
   defineWrapGetter(Document, 'body');
   defineWrapGetter(Document, 'head');
@@ -118,6 +118,29 @@
           '[name=' + JSON.stringify(String(name)) + ']');
     }
   });
+
+  var originalCreateTreeWalker = document.createTreeWalker;
+  var TreeWalkerWrapper = scope.wrappers.TreeWalker;
+  Document.prototype.createTreeWalker = function(root,whatToShow,
+                                                 filter,expandEntityReferences ) {
+
+    var newFilter = null; // IE does not like undefined.
+
+    // Support filter as a function or object with function defined as acceptNode.
+    // IE supports filter as a function only. Chrome and FF support both formats.
+    if (filter){
+      if (filter.acceptNode && typeof filter.acceptNode === 'function'){
+        newFilter = {
+          acceptNode:function(node) { return filter.acceptNode(wrap(node)); }
+        };
+      }else if (typeof filter === 'function'){
+        newFilter = function(node) { return filter(wrap(node)); }
+      }
+    }
+
+    return new TreeWalkerWrapper(originalCreateTreeWalker.call(unwrap(this), unwrap(root),
+      whatToShow, newFilter, expandEntityReferences ));
+  };
 
   if (document.registerElement) {
     var originalRegisterElement = document.registerElement;
@@ -264,6 +287,7 @@
     'createEventNS',
     'createRange',
     'createTextNode',
+    'createTreeWalker',
     'elementFromPoint',
     'getElementById',
     'getElementsByName',

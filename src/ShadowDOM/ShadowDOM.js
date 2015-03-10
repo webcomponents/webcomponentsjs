@@ -65,6 +65,7 @@ Array.prototype.forEach.call(document.querySelectorAll('script[src]'), function(
   'ShadowRenderer.js',
   'wrappers/elements-with-form-property.js',
   'wrappers/Selection.js',
+  'wrappers/TreeWalker.js',
   'wrappers/Document.js',
   'wrappers/Window.js',
   'wrappers/DataTransfer.js',

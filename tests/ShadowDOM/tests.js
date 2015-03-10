@@ -123,6 +123,7 @@ var modules = [
   'SVGElement.js',
   'SVGElementInstance.js',
   'Selection.js',
+  'TreeWalker.js',
   'ShadowRoot.js',
   'Text.js',
   'TouchEvent.js',
