@@ -683,7 +683,7 @@
                                                   unwrapIfNeeded(otherNode));
     },
 
-    isEqualNode:function(otherNode){
+    isEqualNode: function(otherNode){
       return originalIsEqualNode.call(unsafeUnwrap(this), unwrapIfNeeded(otherNode));
     },
 
