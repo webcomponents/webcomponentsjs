@@ -142,9 +142,7 @@ var importParser = {
     if (nodeIsImport(linkElt)) {
       this.parseImport(linkElt);
     } else {
-      // make href absolute
-      // linkElt.href = linkElt.href;
-      // this.parseGeneric(linkElt);
+      // for simplicity, parse links as styles.
       this.parseStyle(linkElt);
     }
   },

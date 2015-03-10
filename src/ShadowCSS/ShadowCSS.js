@@ -718,7 +718,6 @@ if (window.ShadowDOMPolyfill) {
           '[' + SHIM_ATTRIBUTE + ']';
       var SHIM_STYLE_SELECTOR = 'style[' + SHIM_ATTRIBUTE + ']';
       HTMLImports.importer.documentPreloadSelectors += ',' + SHIM_SHEET_SELECTOR;
-      HTMLImports.importer.importsPreloadSelectors += ',' + SHIM_SHEET_SELECTOR;
 
       HTMLImports.parser.documentSelectors = [
         HTMLImports.parser.documentSelectors,
@@ -732,17 +731,12 @@ if (window.ShadowDOMPolyfill) {
         if (elt[SHIMMED_ATTRIBUTE]) {
           return;
         }
-        var style = elt.__importElement || elt;
-        if (!style.hasAttribute(SHIM_ATTRIBUTE)) {
+        var source = elt.__importElement || elt;
+        var style = elt;
+        if (!source.hasAttribute(SHIM_ATTRIBUTE)) {
           originalParseGeneric.call(this, elt);
           return;
         }
-        if (elt.__resource) {
-          style = elt.ownerDocument.createElement('style');
-          style.textContent = elt.__resource;
-        }
-        // relay on HTMLImports for path fixup
-        HTMLImports.path.resolveUrlsInStyle(style, elt.href);
         style.textContent = ShadowCSS.shimStyle(style);
         style.removeAttribute(SHIM_ATTRIBUTE, '');
         style.setAttribute(SHIMMED_ATTRIBUTE, '');
