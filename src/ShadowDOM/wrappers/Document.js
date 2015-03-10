@@ -44,7 +44,7 @@
 
   defineWrapGetter(Document, 'documentElement');
 
-  // Conceptually both body and head can be in a shadow but suporting that seems
+  // Conceptually both body and head can be in a shadow but supporting that seems
   // overkill at this point.
   defineWrapGetter(Document, 'body');
   defineWrapGetter(Document, 'head');
@@ -118,6 +118,19 @@
           '[name=' + JSON.stringify(String(name)) + ']');
     }
   });
+
+  var originalCreateTreeWalker = document.createTreeWalker;
+  var TreeWalkerWrapper = scope.wrappers.TreeWalker;
+  Document.prototype.createTreeWalker = function(root, whatToShow, filter, expandEntityReferences ) {
+
+    var newFilter;
+    if (filter && filter.acceptNode && typeof filter.acceptNode === 'function'){
+      newFilter = { acceptNode:function(node) { return filter.acceptNode(wrap(node)); }  }
+    }
+
+    return new TreeWalkerWrapper(originalCreateTreeWalker.call(unwrap(this), unwrap(root),
+      whatToShow, newFilter, expandEntityReferences ));
+  };
 
   if (document.registerElement) {
     var originalRegisterElement = document.registerElement;
@@ -264,6 +277,7 @@
     'createEventNS',
     'createRange',
     'createTextNode',
+    'createTreeWalker',
     'elementFromPoint',
     'getElementById',
     'getElementsByName',
@@ -337,13 +351,6 @@
     'createHTMLDocument',
     'hasFeature',
   ]);
-
-  var originalCreateTreeWalker = document.createTreeWalker;
-  function createTreeWalker(root, whatToShow, filter, entityReferenceExpansion){
-    return originalCreateTreeWalker.call(document,unwrap(root), whatToShow, filter, entityReferenceExpansion);
-  }
-
-  document.createTreeWalker = createTreeWalker; // override
 
   scope.adoptNodeNoRemove = adoptNodeNoRemove;
   scope.wrappers.DOMImplementation = DOMImplementation;

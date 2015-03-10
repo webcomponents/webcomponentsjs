@@ -42,6 +42,7 @@
   "ShadowRenderer.js",
   "wrappers/elements-with-form-property.js",
   "wrappers/Selection.js",
+  "wrappers/TreeWalker.js",
   "wrappers/Document.js",
   "wrappers/Window.js",
   "wrappers/DataTransfer.js",

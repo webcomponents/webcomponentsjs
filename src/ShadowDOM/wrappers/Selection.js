@@ -39,9 +39,6 @@
     containsNode: function(node, allowPartial) {
       return unsafeUnwrap(this).containsNode(unwrapIfNeeded(node), allowPartial);
     },
-    extend: function(node, offset) {
-      unsafeUnwrap(this).extend(unwrapIfNeeded(node), offset);
-    },
     getRangeAt: function(index) {
       return wrap(unsafeUnwrap(this).getRangeAt(index));
     },
@@ -55,6 +52,15 @@
       return unsafeUnwrap(this).toString();
     }
   };
+
+  // Not all browsers support Selection.extend. Some versions of IE do not support extend, code that checks
+  // if extend exists in the Selection would fail the test if we define extend on the wrapper and it does not exist in
+  // the browser Selection object.
+  if (window.getSelection().extend){
+    Selection.prototype.extend = function(node, offset) {
+      unsafeUnwrap(this).extend(unwrapIfNeeded(node), offset);
+    };
+  }
 
   // WebKit extensions. Not implemented.
   // readonly attribute Node baseNode;
