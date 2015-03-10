@@ -12,6 +12,7 @@ HTMLImports.addModule(function(scope) {
 // imports
 var flags = scope.flags;
 var IMPORT_LINK_TYPE = scope.IMPORT_LINK_TYPE;
+var STYLESHEET_SELECTOR = scope.STYLESHEET_SELECTOR;
 var IMPORT_SELECTOR = scope.IMPORT_SELECTOR;
 var rootDocument = scope.rootDocument;
 var Loader = scope.Loader;
@@ -34,6 +35,7 @@ var importer = {
 
   // nodes to load in imports
   importsPreloadSelectors: [
+    STYLESHEET_SELECTOR,
     IMPORT_SELECTOR
   ].join(','),
 
