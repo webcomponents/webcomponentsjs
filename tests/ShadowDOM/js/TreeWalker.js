@@ -73,13 +73,20 @@ suite('TreeWalker', function() {
     assert(isWrapper(treeWalker.nextNode()));
     assert(isWrapper(treeWalker.parentNode()));
     assert(isWrapper(treeWalker.firstChild()));
-    assert(isWrapper(treeWalker.lastChild()) || isWrapper(treeWalker.lastChild())===null);
-    assert(isWrapper(treeWalker.previousSibling()) || isWrapper(treeWalker.previousSibling())===null);
+    assert(isWrapper(treeWalker.lastChild()) ||
+                          isWrapper(treeWalker.lastChild())===null);
+    assert(isWrapper(treeWalker.previousSibling()) ||
+                          isWrapper(treeWalker.previousSibling())===null);
     assert(isWrapper(treeWalker.previousNode()));
 
   });
 
-  test('createTreeWalker with filter', function() {
+  test('createTreeWalker with filter as object with acceptNode function', function() {
+
+    //  NodeFilter.acceptNode as filter does not work in IE.
+    // https://dom.spec.whatwg.org/#nodefilter
+    if (/Trident/.test(navigator.userAgent))
+      return;
 
     var treeWalker = document.createTreeWalker(childDiv, NodeFilter.SHOW_ELEMENT, {
       acceptNode:function(node){
@@ -92,7 +99,26 @@ suite('TreeWalker', function() {
     });
     
     assert.isNotNull(treeWalker.filter);
-    assert.instanceOf(treeWalker.filter,NodeFilter);
+    // in FF and IE treeWalker.filter is just a js object
+    //assert.instanceOf(treeWalker.filter, NodeFilter);
+
+    // we should have one node only.
+    assert.isNotNull(treeWalker.nextNode());
+    assert.isNull(treeWalker.nextNode());
+
+  });
+
+  test('createTreeWalker with filter as a function (works under IE and others)', function() {
+
+    var treeWalker = document.createTreeWalker(childDiv, NodeFilter.SHOW_ELEMENT, function(node){
+        assert(isWrapper(node));
+        if (node.hasAttribute("title") && node.getAttribute("title")==='a'){
+          return NodeFilter.FILTER_ACCEPT;
+        }
+        return false;
+      });
+
+    assert.isNotNull(treeWalker.filter);
 
     // we should have one node only.
     assert.isNotNull(treeWalker.nextNode());
