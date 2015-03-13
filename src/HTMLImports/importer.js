@@ -18,6 +18,8 @@ var Loader = scope.Loader;
 var Observer = scope.Observer;
 var parser = scope.parser;
 
+var hrecount = 0;
+
 // importer
 // highlander object to manage loading of imports
 // for any document, importer:
@@ -125,7 +127,19 @@ function hasBaseURIAccessor(doc) {
 
 function makeDocument(resource, url) {
   // create a new HTML document
-  var doc = document.implementation.createHTMLDocument(IMPORT_LINK_TYPE);
+  var makingDocument = true;
+  while (makingDocument) {
+    try {
+      var doc = document.implementation.createHTMLDocument(IMPORT_LINK_TYPE);
+      makingDocument = false;
+    } catch (err) {
+      if (err.name === "HierarchyRequestError") {
+        console.log(err.name + " " + String(hrecount++));
+      } else {
+        throw err;
+      }
+    }
+  }
   // cache the new document's source url
   doc._URL = url;
   // establish a relative path via <base>
