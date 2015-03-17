@@ -76,6 +76,7 @@ Copyright (c) 2015 The Polymer Authors. All rights reserved.
   * [Custom element's constructor property is unreliable](#constructor)
   * [Contenteditable elements do not trigger MutationObserver](#contentedit)
   * [ShadowCSS: :host-context(...):host(...) doesn't work](#hostcontext)
+  * [execCommand isn't supported under Shadow DOM](#execcommand)
 
 ### Custom element's constructor property is unreliable <a id="constructor"></a>
 See [#215](https://github.com/webcomponents/webcomponentsjs/issues/215) for background.
@@ -100,3 +101,8 @@ don't work, despite working under native Shadow DOM. The solution is to use `pol
 ```
 polyfill-next-selector { content: '.foo :host.bar, :host.foo.bar'; }
 ```
+
+### execCommand and contenteditable isn't supported under Shadow DOM
+See [#212](https://github.com/webcomponents/webcomponentsjs/issues/212)
+
+`execCommand`, and `contenteditable` aren't supported under the ShadowDOM polyfill, with commands that insert or remove nodes being especially prone to failure.
