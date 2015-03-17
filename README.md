@@ -102,7 +102,7 @@ don't work, despite working under native Shadow DOM. The solution is to use `pol
 polyfill-next-selector { content: '.foo :host.bar, :host.foo.bar'; }
 ```
 
-### execCommand and contenteditable isn't supported under Shadow DOM
+### execCommand and contenteditable isn't supported under Shadow DOM <a id="execcommand"></a>
 See [#212](https://github.com/webcomponents/webcomponentsjs/issues/212)
 
 `execCommand`, and `contenteditable` aren't supported under the ShadowDOM polyfill, with commands that insert or remove nodes being especially prone to failure.
