@@ -47,6 +47,10 @@
   mixin(ShadowRoot.prototype, {
     constructor: ShadowRoot,
 
+    get activeElement() {
+      return document.activeElement;
+    }
+
     get innerHTML() {
       return getInnerHTML(this);
     },
