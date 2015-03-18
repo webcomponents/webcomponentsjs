@@ -40,6 +40,10 @@
       x-bar /deep/ .zot {
         color: white;
       }
+
+      x-bar >>> .zot-2 {
+        color: white;
+      }
     </style>
     <div class="foo">orange</div>
     <div class="foo2">green</div>
@@ -58,6 +62,7 @@
 
   <template id="x-zot">
     <div class="zot">Zot</div>
+    <div class="zot-2">Zot</div>
     <div class="zot-inner">inner</div>
   </template>
 
@@ -84,11 +89,18 @@
       var xZot = foo.shadowRoot.querySelector('x-bar').shadowRoot
           .querySelector('x-zot');
       var zot = xZot.shadowRoot.querySelector('.zot');
+      var zot2 = xZot.shadowRoot.querySelector('.zot-2');
 
       chai.assert.equal(getComputedStyle(zot).backgroundColor, 'rgb(0, 128, 0)',
-        '^ styles are applied (backgroundColor)');
+        '::shadow styles are applied (backgroundColor)');
       chai.assert.equal(getComputedStyle(zot).color, 'rgb(255, 255, 255)',
-        '^^ styles are applied (color)');
+        '/deep/ styles are applied (color)');
+
+      // TODO(vicb): remove the if when >>> get supported by browsers
+      if (window.ShadowDOMPolyfill) {
+        chai.assert.equal(getComputedStyle(zot2).color, 'rgb(255, 255, 255)',
+          '>>> styles are applied (color)');
+      }
 
       // NOTE: native import styles not shimmed under SD polyfill
       var unsupported = window.ShadowDOMPolyfill && HTMLImports.useNative;
