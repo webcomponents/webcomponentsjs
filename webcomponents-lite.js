@@ -7,7 +7,7 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
-// @version 0.5.4
+// @version 0.6.0
 window.WebComponents = window.WebComponents || {};
 
 (function(scope) {
@@ -50,6 +50,515 @@ window.WebComponents = window.WebComponents || {};
   }
   scope.flags = flags;
 })(WebComponents);
+
+(function(scope) {
+  "use strict";
+  var hasWorkingUrl = false;
+  if (!scope.forceJURL) {
+    try {
+      var u = new URL("b", "http://a");
+      u.pathname = "c%20d";
+      hasWorkingUrl = u.href === "http://a/c%20d";
+    } catch (e) {}
+  }
+  if (hasWorkingUrl) return;
+  var relative = Object.create(null);
+  relative["ftp"] = 21;
+  relative["file"] = 0;
+  relative["gopher"] = 70;
+  relative["http"] = 80;
+  relative["https"] = 443;
+  relative["ws"] = 80;
+  relative["wss"] = 443;
+  var relativePathDotMapping = Object.create(null);
+  relativePathDotMapping["%2e"] = ".";
+  relativePathDotMapping[".%2e"] = "..";
+  relativePathDotMapping["%2e."] = "..";
+  relativePathDotMapping["%2e%2e"] = "..";
+  function isRelativeScheme(scheme) {
+    return relative[scheme] !== undefined;
+  }
+  function invalid() {
+    clear.call(this);
+    this._isInvalid = true;
+  }
+  function IDNAToASCII(h) {
+    if ("" == h) {
+      invalid.call(this);
+    }
+    return h.toLowerCase();
+  }
+  function percentEscape(c) {
+    var unicode = c.charCodeAt(0);
+    if (unicode > 32 && unicode < 127 && [ 34, 35, 60, 62, 63, 96 ].indexOf(unicode) == -1) {
+      return c;
+    }
+    return encodeURIComponent(c);
+  }
+  function percentEscapeQuery(c) {
+    var unicode = c.charCodeAt(0);
+    if (unicode > 32 && unicode < 127 && [ 34, 35, 60, 62, 96 ].indexOf(unicode) == -1) {
+      return c;
+    }
+    return encodeURIComponent(c);
+  }
+  var EOF = undefined, ALPHA = /[a-zA-Z]/, ALPHANUMERIC = /[a-zA-Z0-9\+\-\.]/;
+  function parse(input, stateOverride, base) {
+    function err(message) {
+      errors.push(message);
+    }
+    var state = stateOverride || "scheme start", cursor = 0, buffer = "", seenAt = false, seenBracket = false, errors = [];
+    loop: while ((input[cursor - 1] != EOF || cursor == 0) && !this._isInvalid) {
+      var c = input[cursor];
+      switch (state) {
+       case "scheme start":
+        if (c && ALPHA.test(c)) {
+          buffer += c.toLowerCase();
+          state = "scheme";
+        } else if (!stateOverride) {
+          buffer = "";
+          state = "no scheme";
+          continue;
+        } else {
+          err("Invalid scheme.");
+          break loop;
+        }
+        break;
+
+       case "scheme":
+        if (c && ALPHANUMERIC.test(c)) {
+          buffer += c.toLowerCase();
+        } else if (":" == c) {
+          this._scheme = buffer;
+          buffer = "";
+          if (stateOverride) {
+            break loop;
+          }
+          if (isRelativeScheme(this._scheme)) {
+            this._isRelative = true;
+          }
+          if ("file" == this._scheme) {
+            state = "relative";
+          } else if (this._isRelative && base && base._scheme == this._scheme) {
+            state = "relative or authority";
+          } else if (this._isRelative) {
+            state = "authority first slash";
+          } else {
+            state = "scheme data";
+          }
+        } else if (!stateOverride) {
+          buffer = "";
+          cursor = 0;
+          state = "no scheme";
+          continue;
+        } else if (EOF == c) {
+          break loop;
+        } else {
+          err("Code point not allowed in scheme: " + c);
+          break loop;
+        }
+        break;
+
+       case "scheme data":
+        if ("?" == c) {
+          query = "?";
+          state = "query";
+        } else if ("#" == c) {
+          this._fragment = "#";
+          state = "fragment";
+        } else {
+          if (EOF != c && "	" != c && "\n" != c && "\r" != c) {
+            this._schemeData += percentEscape(c);
+          }
+        }
+        break;
+
+       case "no scheme":
+        if (!base || !isRelativeScheme(base._scheme)) {
+          err("Missing scheme.");
+          invalid.call(this);
+        } else {
+          state = "relative";
+          continue;
+        }
+        break;
+
+       case "relative or authority":
+        if ("/" == c && "/" == input[cursor + 1]) {
+          state = "authority ignore slashes";
+        } else {
+          err("Expected /, got: " + c);
+          state = "relative";
+          continue;
+        }
+        break;
+
+       case "relative":
+        this._isRelative = true;
+        if ("file" != this._scheme) this._scheme = base._scheme;
+        if (EOF == c) {
+          this._host = base._host;
+          this._port = base._port;
+          this._path = base._path.slice();
+          this._query = base._query;
+          break loop;
+        } else if ("/" == c || "\\" == c) {
+          if ("\\" == c) err("\\ is an invalid code point.");
+          state = "relative slash";
+        } else if ("?" == c) {
+          this._host = base._host;
+          this._port = base._port;
+          this._path = base._path.slice();
+          this._query = "?";
+          state = "query";
+        } else if ("#" == c) {
+          this._host = base._host;
+          this._port = base._port;
+          this._path = base._path.slice();
+          this._query = base._query;
+          this._fragment = "#";
+          state = "fragment";
+        } else {
+          var nextC = input[cursor + 1];
+          var nextNextC = input[cursor + 2];
+          if ("file" != this._scheme || !ALPHA.test(c) || nextC != ":" && nextC != "|" || EOF != nextNextC && "/" != nextNextC && "\\" != nextNextC && "?" != nextNextC && "#" != nextNextC) {
+            this._host = base._host;
+            this._port = base._port;
+            this._path = base._path.slice();
+            this._path.pop();
+          }
+          state = "relative path";
+          continue;
+        }
+        break;
+
+       case "relative slash":
+        if ("/" == c || "\\" == c) {
+          if ("\\" == c) {
+            err("\\ is an invalid code point.");
+          }
+          if ("file" == this._scheme) {
+            state = "file host";
+          } else {
+            state = "authority ignore slashes";
+          }
+        } else {
+          if ("file" != this._scheme) {
+            this._host = base._host;
+            this._port = base._port;
+          }
+          state = "relative path";
+          continue;
+        }
+        break;
+
+       case "authority first slash":
+        if ("/" == c) {
+          state = "authority second slash";
+        } else {
+          err("Expected '/', got: " + c);
+          state = "authority ignore slashes";
+          continue;
+        }
+        break;
+
+       case "authority second slash":
+        state = "authority ignore slashes";
+        if ("/" != c) {
+          err("Expected '/', got: " + c);
+          continue;
+        }
+        break;
+
+       case "authority ignore slashes":
+        if ("/" != c && "\\" != c) {
+          state = "authority";
+          continue;
+        } else {
+          err("Expected authority, got: " + c);
+        }
+        break;
+
+       case "authority":
+        if ("@" == c) {
+          if (seenAt) {
+            err("@ already seen.");
+            buffer += "%40";
+          }
+          seenAt = true;
+          for (var i = 0; i < buffer.length; i++) {
+            var cp = buffer[i];
+            if ("	" == cp || "\n" == cp || "\r" == cp) {
+              err("Invalid whitespace in authority.");
+              continue;
+            }
+            if (":" == cp && null === this._password) {
+              this._password = "";
+              continue;
+            }
+            var tempC = percentEscape(cp);
+            null !== this._password ? this._password += tempC : this._username += tempC;
+          }
+          buffer = "";
+        } else if (EOF == c || "/" == c || "\\" == c || "?" == c || "#" == c) {
+          cursor -= buffer.length;
+          buffer = "";
+          state = "host";
+          continue;
+        } else {
+          buffer += c;
+        }
+        break;
+
+       case "file host":
+        if (EOF == c || "/" == c || "\\" == c || "?" == c || "#" == c) {
+          if (buffer.length == 2 && ALPHA.test(buffer[0]) && (buffer[1] == ":" || buffer[1] == "|")) {
+            state = "relative path";
+          } else if (buffer.length == 0) {
+            state = "relative path start";
+          } else {
+            this._host = IDNAToASCII.call(this, buffer);
+            buffer = "";
+            state = "relative path start";
+          }
+          continue;
+        } else if ("	" == c || "\n" == c || "\r" == c) {
+          err("Invalid whitespace in file host.");
+        } else {
+          buffer += c;
+        }
+        break;
+
+       case "host":
+       case "hostname":
+        if (":" == c && !seenBracket) {
+          this._host = IDNAToASCII.call(this, buffer);
+          buffer = "";
+          state = "port";
+          if ("hostname" == stateOverride) {
+            break loop;
+          }
+        } else if (EOF == c || "/" == c || "\\" == c || "?" == c || "#" == c) {
+          this._host = IDNAToASCII.call(this, buffer);
+          buffer = "";
+          state = "relative path start";
+          if (stateOverride) {
+            break loop;
+          }
+          continue;
+        } else if ("	" != c && "\n" != c && "\r" != c) {
+          if ("[" == c) {
+            seenBracket = true;
+          } else if ("]" == c) {
+            seenBracket = false;
+          }
+          buffer += c;
+        } else {
+          err("Invalid code point in host/hostname: " + c);
+        }
+        break;
+
+       case "port":
+        if (/[0-9]/.test(c)) {
+          buffer += c;
+        } else if (EOF == c || "/" == c || "\\" == c || "?" == c || "#" == c || stateOverride) {
+          if ("" != buffer) {
+            var temp = parseInt(buffer, 10);
+            if (temp != relative[this._scheme]) {
+              this._port = temp + "";
+            }
+            buffer = "";
+          }
+          if (stateOverride) {
+            break loop;
+          }
+          state = "relative path start";
+          continue;
+        } else if ("	" == c || "\n" == c || "\r" == c) {
+          err("Invalid code point in port: " + c);
+        } else {
+          invalid.call(this);
+        }
+        break;
+
+       case "relative path start":
+        if ("\\" == c) err("'\\' not allowed in path.");
+        state = "relative path";
+        if ("/" != c && "\\" != c) {
+          continue;
+        }
+        break;
+
+       case "relative path":
+        if (EOF == c || "/" == c || "\\" == c || !stateOverride && ("?" == c || "#" == c)) {
+          if ("\\" == c) {
+            err("\\ not allowed in relative path.");
+          }
+          var tmp;
+          if (tmp = relativePathDotMapping[buffer.toLowerCase()]) {
+            buffer = tmp;
+          }
+          if (".." == buffer) {
+            this._path.pop();
+            if ("/" != c && "\\" != c) {
+              this._path.push("");
+            }
+          } else if ("." == buffer && "/" != c && "\\" != c) {
+            this._path.push("");
+          } else if ("." != buffer) {
+            if ("file" == this._scheme && this._path.length == 0 && buffer.length == 2 && ALPHA.test(buffer[0]) && buffer[1] == "|") {
+              buffer = buffer[0] + ":";
+            }
+            this._path.push(buffer);
+          }
+          buffer = "";
+          if ("?" == c) {
+            this._query = "?";
+            state = "query";
+          } else if ("#" == c) {
+            this._fragment = "#";
+            state = "fragment";
+          }
+        } else if ("	" != c && "\n" != c && "\r" != c) {
+          buffer += percentEscape(c);
+        }
+        break;
+
+       case "query":
+        if (!stateOverride && "#" == c) {
+          this._fragment = "#";
+          state = "fragment";
+        } else if (EOF != c && "	" != c && "\n" != c && "\r" != c) {
+          this._query += percentEscapeQuery(c);
+        }
+        break;
+
+       case "fragment":
+        if (EOF != c && "	" != c && "\n" != c && "\r" != c) {
+          this._fragment += c;
+        }
+        break;
+      }
+      cursor++;
+    }
+  }
+  function clear() {
+    this._scheme = "";
+    this._schemeData = "";
+    this._username = "";
+    this._password = null;
+    this._host = "";
+    this._port = "";
+    this._path = [];
+    this._query = "";
+    this._fragment = "";
+    this._isInvalid = false;
+    this._isRelative = false;
+  }
+  function jURL(url, base) {
+    if (base !== undefined && !(base instanceof jURL)) base = new jURL(String(base));
+    this._url = url;
+    clear.call(this);
+    var input = url.replace(/^[ \t\r\n\f]+|[ \t\r\n\f]+$/g, "");
+    parse.call(this, input, null, base);
+  }
+  jURL.prototype = {
+    get href() {
+      if (this._isInvalid) return this._url;
+      var authority = "";
+      if ("" != this._username || null != this._password) {
+        authority = this._username + (null != this._password ? ":" + this._password : "") + "@";
+      }
+      return this.protocol + (this._isRelative ? "//" + authority + this.host : "") + this.pathname + this._query + this._fragment;
+    },
+    set href(href) {
+      clear.call(this);
+      parse.call(this, href);
+    },
+    get protocol() {
+      return this._scheme + ":";
+    },
+    set protocol(protocol) {
+      if (this._isInvalid) return;
+      parse.call(this, protocol + ":", "scheme start");
+    },
+    get host() {
+      return this._isInvalid ? "" : this._port ? this._host + ":" + this._port : this._host;
+    },
+    set host(host) {
+      if (this._isInvalid || !this._isRelative) return;
+      parse.call(this, host, "host");
+    },
+    get hostname() {
+      return this._host;
+    },
+    set hostname(hostname) {
+      if (this._isInvalid || !this._isRelative) return;
+      parse.call(this, hostname, "hostname");
+    },
+    get port() {
+      return this._port;
+    },
+    set port(port) {
+      if (this._isInvalid || !this._isRelative) return;
+      parse.call(this, port, "port");
+    },
+    get pathname() {
+      return this._isInvalid ? "" : this._isRelative ? "/" + this._path.join("/") : this._schemeData;
+    },
+    set pathname(pathname) {
+      if (this._isInvalid || !this._isRelative) return;
+      this._path = [];
+      parse.call(this, pathname, "relative path start");
+    },
+    get search() {
+      return this._isInvalid || !this._query || "?" == this._query ? "" : this._query;
+    },
+    set search(search) {
+      if (this._isInvalid || !this._isRelative) return;
+      this._query = "?";
+      if ("?" == search[0]) search = search.slice(1);
+      parse.call(this, search, "query");
+    },
+    get hash() {
+      return this._isInvalid || !this._fragment || "#" == this._fragment ? "" : this._fragment;
+    },
+    set hash(hash) {
+      if (this._isInvalid) return;
+      this._fragment = "#";
+      if ("#" == hash[0]) hash = hash.slice(1);
+      parse.call(this, hash, "fragment");
+    },
+    get origin() {
+      var host;
+      if (this._isInvalid || !this._scheme) {
+        return "";
+      }
+      switch (this._scheme) {
+       case "data":
+       case "file":
+       case "javascript":
+       case "mailto":
+        return "null";
+      }
+      host = this.host;
+      if (!host) {
+        return "";
+      }
+      return this._scheme + "://" + host;
+    }
+  };
+  var OriginalURL = scope.URL;
+  if (OriginalURL) {
+    jURL.createObjectURL = function(blob) {
+      return OriginalURL.createObjectURL.apply(OriginalURL, arguments);
+    };
+    jURL.revokeObjectURL = function(url) {
+      OriginalURL.revokeObjectURL(url);
+    };
+  }
+  scope.URL = jURL;
+})(this);
 
 if (typeof WeakMap === "undefined") {
   (function() {
@@ -437,26 +946,35 @@ window.HTMLImports = window.HTMLImports || {
   }
   function watchImportsLoad(callback, doc) {
     var imports = doc.querySelectorAll("link[rel=import]");
-    var loaded = 0, l = imports.length;
-    function checkDone(d) {
-      if (loaded == l && callback) {
-        callback();
+    var parsedCount = 0, importCount = imports.length, newImports = [], errorImports = [];
+    function checkDone() {
+      if (parsedCount == importCount && callback) {
+        callback({
+          allImports: imports,
+          loadedImports: newImports,
+          errorImports: errorImports
+        });
       }
     }
     function loadedImport(e) {
       markTargetLoaded(e);
-      loaded++;
+      newImports.push(this);
+      parsedCount++;
       checkDone();
     }
-    if (l) {
-      for (var i = 0, imp; i < l && (imp = imports[i]); i++) {
+    function errorLoadingImport(e) {
+      errorImports.push(this);
+      parsedCount++;
+      checkDone();
+    }
+    if (importCount) {
+      for (var i = 0, imp; i < importCount && (imp = imports[i]); i++) {
         if (isImportLoaded(imp)) {
-          loadedImport.call(imp, {
-            target: imp
-          });
+          parsedCount++;
+          checkDone();
         } else {
           imp.addEventListener("load", loadedImport);
-          imp.addEventListener("error", loadedImport);
+          imp.addEventListener("error", errorLoadingImport);
         }
       }
     } else {
@@ -506,11 +1024,11 @@ window.HTMLImports = window.HTMLImports || {
       }
     })();
   }
-  whenReady(function() {
+  whenReady(function(detail) {
     HTMLImports.ready = true;
     HTMLImports.readyTime = new Date().getTime();
     var evt = rootDocument.createEvent("CustomEvent");
-    evt.initCustomEvent("HTMLImportsLoaded", true, true, {});
+    evt.initCustomEvent("HTMLImportsLoaded", true, true, detail);
     rootDocument.dispatchEvent(evt);
   });
   scope.IMPORT_LINK_TYPE = IMPORT_LINK_TYPE;
@@ -538,20 +1056,23 @@ HTMLImports.addModule(function(scope) {
   var CSS_URL_REGEXP = /(url\()([^)]*)(\))/g;
   var CSS_IMPORT_REGEXP = /(@import[\s]+(?!url\())([^;]*)(;)/g;
   var path = {
-    resolveUrlsInStyle: function(style) {
+    resolveUrlsInStyle: function(style, linkUrl) {
       var doc = style.ownerDocument;
       var resolver = doc.createElement("a");
-      style.textContent = this.resolveUrlsInCssText(style.textContent, resolver);
+      style.textContent = this.resolveUrlsInCssText(style.textContent, linkUrl, resolver);
       return style;
     },
-    resolveUrlsInCssText: function(cssText, urlObj) {
-      var r = this.replaceUrls(cssText, urlObj, CSS_URL_REGEXP);
-      r = this.replaceUrls(r, urlObj, CSS_IMPORT_REGEXP);
+    resolveUrlsInCssText: function(cssText, linkUrl, urlObj) {
+      var r = this.replaceUrls(cssText, urlObj, linkUrl, CSS_URL_REGEXP);
+      r = this.replaceUrls(r, urlObj, linkUrl, CSS_IMPORT_REGEXP);
       return r;
     },
-    replaceUrls: function(text, urlObj, regexp) {
+    replaceUrls: function(text, urlObj, linkUrl, regexp) {
       return text.replace(regexp, function(m, pre, url, post) {
         var urlPath = url.replace(/["']/g, "");
+        if (linkUrl) {
+          urlPath = new URL(urlPath, linkUrl).href;
+        }
         urlObj.href = urlPath;
         urlPath = urlObj.href;
         return pre + "'" + urlPath + "'" + post;
@@ -819,6 +1340,7 @@ HTMLImports.addModule(function(scope) {
     parseStyle: function(elt) {
       var src = elt;
       elt = cloneStyle(elt);
+      src.__appliedElement = elt;
       elt.__importElement = src;
       this.parseGeneric(elt);
     },
@@ -1282,7 +1804,7 @@ CustomElements.addModule(function(scope) {
       if (p == doc) {
         return true;
       }
-      p = p.parentNode || p.host;
+      p = p.parentNode || p.nodeType === Node.DOCUMENT_FRAGMENT_NODE && p.host;
     }
   }
   function watchShadow(node) {
@@ -1632,6 +2154,21 @@ CustomElements.addModule(function(scope) {
   var useNative = scope.useNative;
   var initializeModules = scope.initializeModules;
   var isIE11OrOlder = /Trident/.test(navigator.userAgent);
+  if (isIE11OrOlder) {
+    (function() {
+      var importNode = document.importNode;
+      document.importNode = function() {
+        var n = importNode.apply(document, arguments);
+        if (n.nodeType == n.DOCUMENT_FRAGMENT_NODE) {
+          var f = document.createDocumentFragment();
+          f.appendChild(n);
+          return f;
+        } else {
+          return n;
+        }
+      };
+    })();
+  }
   if (useNative) {
     var nop = function() {};
     scope.watchShadow = nop;

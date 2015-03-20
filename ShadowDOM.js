@@ -7,7 +7,7 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
-// @version 0.5.4
+// @version 0.6.0
 if (typeof WeakMap === "undefined") {
   (function() {
     var defineProperty = Object.defineProperty;
@@ -1731,6 +1731,7 @@ window.ShadowDOMPolyfill = {};
   var OriginalDocumentFragment = window.DocumentFragment;
   var originalAppendChild = OriginalNode.prototype.appendChild;
   var originalCompareDocumentPosition = OriginalNode.prototype.compareDocumentPosition;
+  var originalIsEqualNode = OriginalNode.prototype.isEqualNode;
   var originalInsertBefore = OriginalNode.prototype.insertBefore;
   var originalRemoveChild = OriginalNode.prototype.removeChild;
   var originalReplaceChild = OriginalNode.prototype.replaceChild;
@@ -1958,6 +1959,9 @@ window.ShadowDOMPolyfill = {};
     },
     compareDocumentPosition: function(otherNode) {
       return originalCompareDocumentPosition.call(unsafeUnwrap(this), unwrapIfNeeded(otherNode));
+    },
+    isEqualNode: function(otherNode) {
+      return originalIsEqualNode.call(unsafeUnwrap(this), unwrapIfNeeded(otherNode));
     },
     normalize: function() {
       var nodes = snapshotNodeList(this.childNodes);
@@ -2262,6 +2266,12 @@ window.ShadowDOMPolyfill = {};
   }
   CharacterData.prototype = Object.create(Node.prototype);
   mixin(CharacterData.prototype, {
+    get nodeValue() {
+      return this.data;
+    },
+    set nodeValue(data) {
+      this.data = data;
+    },
     get textContent() {
       return this.data;
     },
@@ -3881,9 +3891,6 @@ window.ShadowDOMPolyfill = {};
     containsNode: function(node, allowPartial) {
       return unsafeUnwrap(this).containsNode(unwrapIfNeeded(node), allowPartial);
     },
-    extend: function(node, offset) {
-      unsafeUnwrap(this).extend(unwrapIfNeeded(node), offset);
-    },
     getRangeAt: function(index) {
       return wrap(unsafeUnwrap(this).getRangeAt(index));
     },
@@ -3897,8 +3904,60 @@ window.ShadowDOMPolyfill = {};
       return unsafeUnwrap(this).toString();
     }
   };
+  if (OriginalSelection.prototype.extend) {
+    Selection.prototype.extend = function(node, offset) {
+      unsafeUnwrap(this).extend(unwrapIfNeeded(node), offset);
+    };
+  }
   registerWrapper(window.Selection, Selection, window.getSelection());
   scope.wrappers.Selection = Selection;
+})(window.ShadowDOMPolyfill);
+
+(function(scope) {
+  "use strict";
+  var registerWrapper = scope.registerWrapper;
+  var setWrapper = scope.setWrapper;
+  var unsafeUnwrap = scope.unsafeUnwrap;
+  var unwrapIfNeeded = scope.unwrapIfNeeded;
+  var wrap = scope.wrap;
+  var OriginalTreeWalker = window.TreeWalker;
+  function TreeWalker(impl) {
+    setWrapper(impl, this);
+  }
+  TreeWalker.prototype = {
+    get root() {
+      return wrap(unsafeUnwrap(this).root);
+    },
+    get currentNode() {
+      return wrap(unsafeUnwrap(this).currentNode);
+    },
+    set currentNode(node) {
+      unsafeUnwrap(this).currentNode = unwrapIfNeeded(node);
+    },
+    get filter() {
+      return unsafeUnwrap(this).filter;
+    },
+    parentNode: function() {
+      return wrap(unsafeUnwrap(this).parentNode());
+    },
+    firstChild: function() {
+      return wrap(unsafeUnwrap(this).firstChild());
+    },
+    lastChild: function() {
+      return wrap(unsafeUnwrap(this).lastChild());
+    },
+    previousSibling: function() {
+      return wrap(unsafeUnwrap(this).previousSibling());
+    },
+    previousNode: function() {
+      return wrap(unsafeUnwrap(this).previousNode());
+    },
+    nextNode: function() {
+      return wrap(unsafeUnwrap(this).nextNode());
+    }
+  };
+  registerWrapper(OriginalTreeWalker, TreeWalker);
+  scope.wrappers.TreeWalker = TreeWalker;
 })(window.ShadowDOMPolyfill);
 
 (function(scope) {
@@ -3978,6 +4037,25 @@ window.ShadowDOMPolyfill = {};
       return SelectorsInterface.querySelectorAll.call(this, "[name=" + JSON.stringify(String(name)) + "]");
     }
   });
+  var originalCreateTreeWalker = document.createTreeWalker;
+  var TreeWalkerWrapper = scope.wrappers.TreeWalker;
+  Document.prototype.createTreeWalker = function(root, whatToShow, filter, expandEntityReferences) {
+    var newFilter = null;
+    if (filter) {
+      if (filter.acceptNode && typeof filter.acceptNode === "function") {
+        newFilter = {
+          acceptNode: function(node) {
+            return filter.acceptNode(wrap(node));
+          }
+        };
+      } else if (typeof filter === "function") {
+        newFilter = function(node) {
+          return filter(wrap(node));
+        };
+      }
+    }
+    return new TreeWalkerWrapper(originalCreateTreeWalker.call(unwrap(this), unwrap(root), whatToShow, newFilter, expandEntityReferences));
+  };
   if (document.registerElement) {
     var originalRegisterElement = document.registerElement;
     Document.prototype.registerElement = function(tagName, object) {
@@ -4041,7 +4119,7 @@ window.ShadowDOMPolyfill = {};
   }
   forwardMethodsToWrapper([ window.HTMLBodyElement, window.HTMLDocument || window.Document, window.HTMLHeadElement, window.HTMLHtmlElement ], [ "appendChild", "compareDocumentPosition", "contains", "getElementsByClassName", "getElementsByTagName", "getElementsByTagNameNS", "insertBefore", "querySelector", "querySelectorAll", "removeChild", "replaceChild" ]);
   forwardMethodsToWrapper([ window.HTMLBodyElement, window.HTMLHeadElement, window.HTMLHtmlElement ], matchesNames);
-  forwardMethodsToWrapper([ window.HTMLDocument || window.Document ], [ "adoptNode", "importNode", "contains", "createComment", "createDocumentFragment", "createElement", "createElementNS", "createEvent", "createEventNS", "createRange", "createTextNode", "elementFromPoint", "getElementById", "getElementsByName", "getSelection" ]);
+  forwardMethodsToWrapper([ window.HTMLDocument || window.Document ], [ "adoptNode", "importNode", "contains", "createComment", "createDocumentFragment", "createElement", "createElementNS", "createEvent", "createEventNS", "createRange", "createTextNode", "createTreeWalker", "elementFromPoint", "getElementById", "getElementsByName", "getSelection" ]);
   mixin(Document.prototype, GetElementsByInterface);
   mixin(Document.prototype, ParentNodeInterface);
   mixin(Document.prototype, SelectorsInterface);
