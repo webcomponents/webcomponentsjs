@@ -1,5 +1,5 @@
 [
-  "build/boot.js",
+  "build/boot-lite.js",
   "../URL/URL.js",
   "../MutationObserver/MutationObserver.js",
   "../HTMLImports/build.json",
