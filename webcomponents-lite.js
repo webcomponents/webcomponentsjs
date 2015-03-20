@@ -47,6 +47,9 @@
 
   // construct full dependency list
   var modules = [
+    'URL/URL.js',
+    'WeakMap/WeakMap.js',
+    'MutationObserver/MutationObserver.js',
     'HTMLImports/HTMLImports.js',
     'CustomElements/CustomElements.js',
     'Template/Template.js',
