@@ -150,7 +150,7 @@ window.ShadowDOMPolyfill = {};
   }
 
   function isIdentifierName(name) {
-    return /^\w[a-zA-Z_0-9]*$/.test(name);
+    return /^[a-zA-Z_$][a-zA-Z_$0-9]*$/.test(name);
   }
 
   // The name of the implementation property is intentionally hard to
@@ -426,6 +426,7 @@ window.ShadowDOMPolyfill = {};
   scope.defineGetter = defineGetter;
   scope.defineWrapGetter = defineWrapGetter;
   scope.forwardMethodsToWrapper = forwardMethodsToWrapper;
+  scope.isIdentifierName = isIdentifierName;
   scope.isWrapper = isWrapper;
   scope.isWrapperFor = isWrapperFor;
   scope.mixin = mixin;
