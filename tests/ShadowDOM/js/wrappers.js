@@ -114,4 +114,29 @@ suite('Wrapper creation', function() {
     });
   });
 
+  test('isIdentifierName', function() {
+    var isIdentifierName = ShadowDOMPolyfill.isIdentifierName;
+    // Not identiifers:
+    assert.isFalse(isIdentifierName('123'));
+    assert.isFalse(isIdentifierName('%123'));
+    assert.isFalse(isIdentifierName('-123'));
+
+    // Identifiers:
+    assert.isTrue(isIdentifierName('_123'));
+    assert.isTrue(isIdentifierName('$123'));
+    assert.isTrue(isIdentifierName('abC'));
+    assert.isTrue(isIdentifierName('abc$123'));
+  });
+
+  test('Integer property names', function() {
+    // Create a fake "native" DOM object to test wrapping a numeric property.
+    function TestNative() {}
+    TestNative.prototype['123'] = function() { return 42; };
+    function TestWrapper() {
+      ShadowDOMPolyfill.setWrapper(new TestNative(), this);
+    }
+    ShadowDOMPolyfill.registerWrapper(TestNative, TestWrapper);
+    var wrapper = new TestWrapper();
+    assert.equal(wrapper['123'](), 42);
+  });
 });
