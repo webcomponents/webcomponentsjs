@@ -31,7 +31,7 @@
       return wrap(unsafeUnwrap(this).focusNode);
     },
     addRange: function(range) {
-      unsafeUnwrap(this).addRange(unwrap(range));
+      unsafeUnwrap(this).addRange(unwrapIfNeeded(range));
     },
     collapse: function(node, index) {
       unsafeUnwrap(this).collapse(unwrapIfNeeded(node), index);
