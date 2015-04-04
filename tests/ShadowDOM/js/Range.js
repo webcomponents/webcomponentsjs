@@ -18,17 +18,18 @@ suite('Range', function() {
   var hosts;
   var customElementPrefix = "range-custom-element-";
   var nativeCustomElementPrefix = "range-native-element-";
-  var customElementIndex=0;
-  var nativeCustomElementIndex=0;
+  var customElementIndex = 0;
+  var nativeCustomElementIndex = 0;
 
   setup(function() {
-    isNativeShadowDomSupported = !!unwrap(document.createElement('div')).createShadowRoot;
+    isNativeShadowDomSupported =
+                !!unwrap(document.createElement('div')).createShadowRoot;
   });
 
-  function removeHosts(){
-    if (hosts){
-      hosts.forEach(function(host){
-        if (host && host.parentNode){
+  function removeHosts() {
+    if (hosts) {
+      hosts.forEach(function(host) {
+        if (host && host.parentNode) {
           host.parentNode.removeChild(wrapIfNeeded(host));
         }
       });
@@ -36,44 +37,44 @@ suite('Range', function() {
     }
   }
 
-  function getNewCustomElementType(){
-    return customElementPrefix+customElementIndex++;
+  function getNewCustomElementType() {
+    return customElementPrefix + customElementIndex++;
   }
 
-  function getNewNativeCustomElementType(){
-    return nativeCustomElementPrefix+nativeCustomElementIndex++;
+  function getNewNativeCustomElementType() {
+    return nativeCustomElementPrefix + nativeCustomElementIndex++;
   }
 
-  function createCustomElement(name,shadowDomContentsArray,native){
+  function createCustomElement(name, shadowDomContentsArray, native) {
 
     var prototype = Object.create(HTMLElement.prototype);
     prototype.createdCallback = function() {
       var element = this;
-      if (native){
+      if (native) {
         element = unwrap(this);
       }
-      createShadowDom(element,shadowDomContentsArray);
+      createShadowDom(element, shadowDomContentsArray);
     };
 
-    return document.registerElement(name, {prototype:prototype});
+    return document.registerElement(name, {prototype: prototype});
   }
 
   // If the host has native shadow dom then we need to return native
   // range. Native range is just a polyfill Range unwrapped.
-  function createRangeForHost(host){
+  function createRangeForHost(host) {
     var range = document.createRange();
 
     // If we are dealing with native shadow dom, expose the range object
     // as a native range object by just unwrapping it.
     //noinspection JSUnresolvedVariable
-    if (hasNativeShadowRoot(host)){
+    if (hasNativeShadowRoot(host)) {
       range = unwrap(range);
     }
 
     return range;
   }
 
-  function hasNativeShadowRoot(node){
+  function hasNativeShadowRoot(node) {
     return node && node.shadowRoot && !(node.shadowRoot instanceof ShadowRoot);
   }
 
@@ -84,12 +85,13 @@ suite('Range', function() {
   }
 
   function createStandardElementWithPolyfillShadowDom(shadowDomContentsArray,
-                                                      elementType){
+                                                      elementType) {
     var element = document.createElement(elementType);
-    return createShadowDom(element,shadowDomContentsArray);
+    return createShadowDom(element, shadowDomContentsArray);
   }
 
-  function createHostWithPolyfillShadowDom(shadowDomContentsArray, elementType){
+  function createHostWithPolyfillShadowDom(shadowDomContentsArray,
+                                           elementType) {
     if (!elementType) {
       return createCustomElementWithPolyfillShadowDom(shadowDomContentsArray);
     } else {
@@ -98,20 +100,20 @@ suite('Range', function() {
     }
   }
 
-  function createShadowDom(element,shadowDomContentsArray){
-    shadowDomContentsArray.forEach(function(shadowDomContent){
-      element.createShadowRoot().innerHTML=shadowDomContent;
+  function createShadowDom(element, shadowDomContentsArray) {
+    shadowDomContentsArray.forEach(function(shadowDomContent) {
+      element.createShadowRoot().innerHTML = shadowDomContent;
     });
     return element;
   }
 
   function createStandardElementWithNativeShadowDom(shadowDomContentsArray,
-                                                    elementType){
+                                                    elementType) {
     var element = document.createElement(elementType);
-    return createShadowDom(unwrap(element),shadowDomContentsArray);
+    return createShadowDom(unwrap(element), shadowDomContentsArray);
   }
 
-  function createCustomElementWithNativeShadowDom(shadowDomContentsArray){
+  function createCustomElementWithNativeShadowDom(shadowDomContentsArray) {
     var element;
     var nativeElementType = getNewNativeCustomElementType();
     createCustomElement(nativeElementType, shadowDomContentsArray, true);
@@ -120,16 +122,16 @@ suite('Range', function() {
     assert.isNotNull(element.shadowRoot);
   }
 
-  function createHostWithNativeShadowDom(shadowDomContentsArray, elementType){
+  function createHostWithNativeShadowDom(shadowDomContentsArray, elementType) {
 
-    if (!isNativeShadowDomSupported){
+    if (!isNativeShadowDomSupported) {
       return;
     }
 
-    if (!elementType){
+    if (!elementType) {
       return createCustomElementWithNativeShadowDom(shadowDomContentsArray,
         elementType);
-    }else{
+    } else {
       return createStandardElementWithNativeShadowDom(shadowDomContentsArray,
         elementType);
     }
@@ -139,7 +141,7 @@ suite('Range', function() {
   // if available. The two hosts then will be tested by setting
   // the innerHTML of those hosts and using the polyfill range or
   // the native range. The results should be the same in both cases.
-  function createHostsWithShadowDom(shadowDomContentsArray, elementType){
+  function createHostsWithShadowDom(shadowDomContentsArray, elementType) {
 
     var hostWithPolyFillShadowDom =
       createHostWithPolyfillShadowDom(shadowDomContentsArray, elementType);
@@ -150,7 +152,7 @@ suite('Range', function() {
     assert.isObject(hostWithPolyFillShadowDom);
 
     hosts.push(hostWithPolyFillShadowDom);
-    if (hostWithNativeShadowDom){
+    if (hostWithNativeShadowDom) {
       hosts.push(hostWithNativeShadowDom);
     }
 
@@ -161,7 +163,7 @@ suite('Range', function() {
   // have native shadow dom or polyfill shadow dom. Then we start selecting
   // the range based on the set innerHTML and the range has to work
   // regardless of the structure of the shadow dom.
-  function testRangeWith3SpansHTML(host){
+  function testRangeWith3SpansHTML(host) {
 
     host.innerHTML = "<span>One</span><span>Two</span><span>Three</span>";
 
@@ -176,15 +178,15 @@ suite('Range', function() {
     // We are using the polyfill selection for native and polyfill ranges.
     // It has no impact on the tests results.
     var selection = document.getSelection();
-    if (selection.rangeCount>0){
+    if (selection.rangeCount > 0) {
       selection.removeAllRanges();
     }
 
     // We do not really have to add the range to the selection.
     // It provides visual feedback of the range while we are debugging.
 
-    range.setStart(host,0);
-    range.setEnd(host,2);
+    range.setStart(host, 0);
+    range.setEnd(host, 2);
     selection.addRange(range);
 
     assert.isTrue(range.startContainer === host);
@@ -192,26 +194,26 @@ suite('Range', function() {
     assert.isTrue(range.commonAncestorContainer === host);
     assert.isTrue(range.toString() === "OneTwo");
 
-    range.setStart(host,0);
-    range.setEnd(host,1);
+    range.setStart(host, 0);
+    range.setEnd(host, 1);
     assert.isTrue(range.toString() === "One");
     selection.removeAllRanges();
     selection.addRange(range);
 
-    range.setStart(host,1);
-    range.setEnd(host,2);
+    range.setStart(host, 1);
+    range.setEnd(host, 2);
     assert.isTrue(range.toString() === "Two");
     selection.removeAllRanges();
     selection.addRange(range);
 
-    range.setStart(host,2);
-    range.setEnd(host,3);
+    range.setStart(host, 2);
+    range.setEnd(host, 3);
     assert.isTrue(range.toString() === "Three");
     selection.removeAllRanges();
     selection.addRange(range);
 
-    range.setStart(host,0);
-    range.setEnd(host,3);
+    range.setStart(host, 0);
+    range.setEnd(host, 3);
     assert.isTrue(range.toString() === "OneTwoThree");
     selection.removeAllRanges();
     selection.addRange(range);
@@ -231,21 +233,21 @@ suite('Range', function() {
     // Test selecting the text nodes inside the spans
     var span0TextNode = span0.childNodes[0];
     var span2TextNode = span2.childNodes[0];
-    range.setStart(span0TextNode,1);
-    range.setEnd(span2TextNode,1);
+    range.setStart(span0TextNode, 1);
+    range.setEnd(span2TextNode, 1);
     selection.removeAllRanges();
     selection.addRange(range);
     assert.isTrue(range.toString() === "neTwoT");
   }
 
-  function testRangeWithHosts(hosts){
-    hosts.forEach(function(host){
+  function testRangeWithHosts(hosts) {
+    hosts.forEach(function(host) {
       document.body.appendChild(wrapIfNeeded(host));
       testRangeWith3SpansHTML(host);
     });
   }
 
-  suite('Standard elements (no Shadow Dom)',function(){
+  suite('Standard elements (no Shadow Dom)', function() {
     var div;
 
     teardown(function() {
@@ -319,7 +321,7 @@ suite('Range', function() {
 
   });
 
-  suite('Standard+Custom elements with Shadow Dom',function(){
+  suite('Standard+Custom elements with Shadow Dom', function() {
 
     teardown(function() {
       removeHosts();
@@ -383,7 +385,7 @@ suite('Range', function() {
       var shadowDomContent = "<div>before</div>";
       shadowDomContent += "<div id='container'><content></content></div>";
       shadowDomContent += "<div>after</div>";
-      hosts = createHostsWithShadowDom([shadowDomContent],"div");
+      hosts = createHostsWithShadowDom([shadowDomContent], "div");
       testRangeWithHosts(hosts);
     });
 
@@ -391,29 +393,29 @@ suite('Range', function() {
       var shadowDomContent = "<div>before</div>";
       shadowDomContent += "<div id='container'><shadow></shadow></div>";
       shadowDomContent += "<div>after</div>";
-      hosts = createHostsWithShadowDom([shadowDomContent],"div");
+      hosts = createHostsWithShadowDom([shadowDomContent], "div");
       testRangeWithHosts(hosts);
     });
 
   });
 
-  suite("Standard+Custom elements with oldest+youngest Shadow Dom",function(){
+  suite("Standard+Custom elements with oldest+youngest Shadow Dom", function() {
 
     teardown(function() {
       removeHosts();
     });
 
-    test("div with <content> and <shadow>",function(){
+    test("div with <content> and <shadow>", function() {
       var shadowDomContentsArray = [
         "<content></content>",
         "<shadow></shadow>"
       ];
 
-      hosts = createHostsWithShadowDom(shadowDomContentsArray,"div");
+      hosts = createHostsWithShadowDom(shadowDomContentsArray, "div");
       testRangeWithHosts(hosts);
     });
 
-    test("custom with <content> and <shadow>",function(){
+    test("custom with <content> and <shadow>", function() {
       if (!document.registerElement)
         return;
 
@@ -426,29 +428,29 @@ suite('Range', function() {
       testRangeWithHosts(hosts);
     });
 
-    test("div with wrapped <content> and <shadow>",function(){
+    test("div with wrapped <content> and <shadow>", function() {
       var shadowDomContentsArray = [
         "<div id='container_oldest'><content></content></div>",
         "<div id='container_youngest'><shadow></shadow></div>"
       ];
 
-      hosts = createHostsWithShadowDom(shadowDomContentsArray,"div");
+      hosts = createHostsWithShadowDom(shadowDomContentsArray, "div");
       testRangeWithHosts(hosts);
     });
 
-    test("custom with wrapped <content> and <shadow> and more",function(){
+    test("custom with wrapped <content> and <shadow> and more", function() {
       if (!document.registerElement)
         return;
 
-      var oldestShadowDom  = "<div>In Oldest shadow dom before</div>" +
+      var oldestShadowDom = "<div>In Oldest shadow dom before</div>" +
         "<div id='container_oldest'><content></content>" +
         "</div><div>In Oldest shadow dom after</div>";
 
-      var youngestShadowDom  = "<div>In youngest shadow dom before</div>" +
+      var youngestShadowDom = "<div>In youngest shadow dom before</div>" +
         "<div id='container_oldest'><shadow></shadow>" +
         "</div><div>In youngest shadow dom after</div>";
 
-      var shadowDomContentsArray = [ oldestShadowDom, youngestShadowDom ];
+      var shadowDomContentsArray = [oldestShadowDom, youngestShadowDom];
 
       hosts = createHostsWithShadowDom(shadowDomContentsArray);
       testRangeWithHosts(hosts);
@@ -456,7 +458,7 @@ suite('Range', function() {
 
   });
 
-  suite("multiple <content> with select (not supported)",function(){
+  suite("multiple <content> with select (not supported)", function() {
 
     teardown(function() {
       removeHosts();
@@ -464,10 +466,11 @@ suite('Range', function() {
 
     // Maybe someone can make sense of what range in
     // different trees means.
-    function testRangeWithWithFragmentedContent(host){
+    function testRangeWithWithFragmentedContent(host) {
 
-      host.innerHTML = "<b>bold1</b><i>italic1</i><b>bold2</b>" +
-      "<i>italic2</i><div>some text</div>";
+      host.innerHTML = "<b>bold1</b><i>italic1</i>" +
+                        "<b>bold2</b><i>italic2</i>" +
+                        "<div>some text</div>";
 
       assert.isNotNull(host.shadowRoot);
 
@@ -481,19 +484,19 @@ suite('Range', function() {
       // We are using the polyfill selection for native
       // and polyfill ranges. It has no impact on the tests results.
       var selection = document.getSelection();
-      if (selection.rangeCount>0){
+      if (selection.rangeCount > 0) {
         selection.removeAllRanges();
       }
 
       // Just make sure we do not throw an exception
-      range.setStart(host,0);
-      range.setEnd(host,2);
+      range.setStart(host, 0);
+      range.setEnd(host, 2);
 
-      range.setStart(host,0);
-      range.setEnd(host,1);
+      range.setStart(host, 0);
+      range.setEnd(host, 1);
 
-      range.setStart(host,0);
-      range.setEnd(host,host.childNodes.length+1);
+      range.setStart(host, 0);
+      range.setEnd(host, host.childNodes.length + 1);
 
       assert.isTrue(range.startContainer === host);
       assert.isTrue(range.endContainer === host);
@@ -501,27 +504,27 @@ suite('Range', function() {
       //assert.isTrue(range.toString() === "bold1italic1");
     }
 
-    test.skip("div with multiple <content> wrapped",function(){
+    test.skip("div with multiple <content> wrapped", function() {
       var shadowDomContent = "Bold tags:<div id='bold_container'>" +
         "<content select='b'></content></div><br>" +
         "Italic tags:<div id='italic_container'>" +
         "<content select='i'></content></div><br>" +
         "Others:<div id='main_container'><content></content></div>";
 
-      hosts = createHostsWithShadowDom([shadowDomContent],"div");
-      hosts.forEach(function(host){
+      hosts = createHostsWithShadowDom([shadowDomContent], "div");
+      hosts.forEach(function(host) {
         document.body.appendChild(wrapIfNeeded(host));
         testRangeWithWithFragmentedContent(host);
       });
     });
 
-    test.skip("div with multiple <content>",function(){
+    test.skip("div with multiple <content>", function() {
       var shadowDomContent = "Bold tags:<content select='b'>" +
         "</content><br>Italic tags:<content select='i'>" +
         "</content><br>Others:<content></content>";
 
-      hosts = createHostsWithShadowDom([shadowDomContent],"div");
-      hosts.forEach(function(host){
+      hosts = createHostsWithShadowDom([shadowDomContent], "div");
+      hosts.forEach(function(host) {
         // I am not sure even the native chrome implementation makes
         // sense. The meaning of selecting range in different trees needs to
         // be defined. Not sure if it even makes sense. It did not to me.

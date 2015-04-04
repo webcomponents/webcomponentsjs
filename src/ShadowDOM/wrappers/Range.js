@@ -17,36 +17,33 @@
   var unwrap = scope.unwrap;
   var unwrapIfNeeded = scope.unwrapIfNeeded;
   var wrap = scope.wrap;
+  var getTreeScope = scope.getTreeScope;
 
   var OriginalRange = window.Range;
 
   var ShadowRoot = scope.wrappers.ShadowRoot;
 
-  function isElement(node){
-    return node && node.nodeType == Node.ELEMENT_NODE
-  }
-
-  function getHost(node){
-    while(node && node.parentNode){
-      if (node.parentNode && node.parentNode instanceof ShadowRoot){
-        return node.parentNode.host;
-      }
-      node=node.parentNode;
+  function getHost(node) {
+    var root = getTreeScope(node).root;
+    if (root instanceof ShadowRoot) {
+      return root.host;
     }
+    return null;
   }
 
-  function hostNodeToShadowNode(refNode,offset){
-    if (refNode.shadowRoot){
-      // Note: if the refNode is an element, then selecting a range with and offset
-      // equal to refNode.childNodes.length+1 is valid. That is why calling Math.min
-      // is necessary to make sure we select valid children.
-      var child = refNode.childNodes[Math.min(refNode.childNodes.length-1, offset)];
-      if (child){
-        var insertionPoint = ShadowDOMPolyfill.getDestinationInsertionPoints(child);
-        if (insertionPoint.length>0){
+  function hostNodeToShadowNode(refNode, offset) {
+    if (refNode.shadowRoot) {
+      // Note: if the refNode is an element, then selecting a range with and
+      // offset equal to refNode.childNodes.length+1 is valid. That is why
+      // calling Math.min is necessary to make sure we select valid children.
+      offset = Math.min(refNode.childNodes.length - 1, offset);
+      var child = refNode.childNodes[offset];
+      if (child) {
+        var insertionPoint = scope.getDestinationInsertionPoints(child);
+        if (insertionPoint.length > 0) {
           var parentNode = insertionPoint[0].parentNode;
-          if (isElement(parentNode)){
-            refNode=parentNode;
+          if (parentNode.nodeType == Node.ELEMENT_NODE) {
+            refNode = parentNode;
           }
         }
       }
@@ -54,13 +51,9 @@
     return refNode;
   }
 
-  function shadowNodeToHostNode(rangeNodeFieldName){
-    var node = wrap(unsafeUnwrap(this)[rangeNodeFieldName]);
-    var host = getHost(node);
-    if (host){
-      return host;
-    }
-    return node;
+  function shadowNodeToHostNode(node) {
+    node = wrap(node);
+    return getHost(node) || node;
   }
 
   function Range(impl) {
@@ -69,20 +62,20 @@
   Range.prototype = {
     get startContainer() {
       // Never return a node in the shadow dom.
-      return shadowNodeToHostNode.call(this,"startContainer");
+      return shadowNodeToHostNode(unsafeUnwrap(this).startContainer);
     },
     get endContainer() {
-      return shadowNodeToHostNode.call(this,"endContainer");
+      return shadowNodeToHostNode(unsafeUnwrap(this).endContainer);
     },
     get commonAncestorContainer() {
-      return shadowNodeToHostNode.call(this,"commonAncestorContainer");
+      return shadowNodeToHostNode(unsafeUnwrap(this).commonAncestorContainer);
     },
-    setStart: function(refNode,offset) {
-      refNode=hostNodeToShadowNode(refNode,offset);
+    setStart: function(refNode, offset) {
+      refNode = hostNodeToShadowNode(refNode, offset);
       unsafeUnwrap(this).setStart(unwrapIfNeeded(refNode), offset);
     },
-    setEnd: function(refNode,offset) {
-      refNode=hostNodeToShadowNode(refNode,offset);
+    setEnd: function(refNode, offset) {
+      refNode = hostNodeToShadowNode(refNode, offset);
       unsafeUnwrap(this).setEnd(unwrapIfNeeded(refNode), offset);
     },
     setStartBefore: function(refNode) {
