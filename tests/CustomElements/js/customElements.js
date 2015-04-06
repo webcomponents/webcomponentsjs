@@ -364,6 +364,22 @@ suite('customElements', function() {
     done();
   });
 
+  test('document.importNode upgrades', function() {
+    var XImportPrototype = Object.create(HTMLElement.prototype);
+    XImportPrototype.createdCallback = function() {
+      this.__ready__ = true;
+    };
+    document.registerElement('x-import', {
+      prototype: XImportPrototype
+    });
+    var frag = document.createDocumentFragment();
+    frag.appendChild(document.createElement('x-import'));
+    assert.isTrue(frag.firstChild.__ready__, 'source element upgraded');
+    var imported = document.importNode(frag, true);
+    window.imported = imported;
+    assert.isTrue(imported.firstChild.__ready__, 'imported element upgraded');
+  });
+
   test('entered left apply to view', function() {
     var invocations = [];
     var elementProto = Object.create(HTMLElement.prototype);
