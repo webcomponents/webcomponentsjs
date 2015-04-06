@@ -58,19 +58,12 @@ function forRoots(node, cb) {
   }
 }
 
-/*
-Note that the import tree can consume itself and therefore special care
-must be taken to avoid recursion.
-*/
-var processingDocuments;
 function forDocumentTree(doc, cb) {
-  processingDocuments = [];
-  _forDocumentTree(doc, cb);
-  processingDocuments = null;
+  _forDocumentTree(doc, cb, []);
 }
 
 
-function _forDocumentTree(doc, cb) {
+function _forDocumentTree(doc, cb, processingDocuments) {
   doc = wrap(doc);
   if (processingDocuments.indexOf(doc) >= 0) {
     return;
@@ -79,7 +72,7 @@ function _forDocumentTree(doc, cb) {
   var imports = doc.querySelectorAll('link[rel=' + IMPORT_LINK_TYPE + ']');
   for (var i=0, l=imports.length, n; (i<l) && (n=imports[i]); i++) {
     if (n.import) {
-      _forDocumentTree(n.import, cb);
+      _forDocumentTree(n.import, cb, processingDocuments);
     }
   }
   cb(doc);
