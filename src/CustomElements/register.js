@@ -21,8 +21,9 @@
 CustomElements.addModule(function(scope) {
 
 // imports
+var isIE11OrOlder = scope.isIE11OrOlder;
 var upgradeDocumentTree = scope.upgradeDocumentTree;
-var upgrade = scope.upgrade;
+var upgradeAll = scope.upgradeAll;
 var upgradeWithDefinition = scope.upgradeWithDefinition;
 var implementPrototype = scope.implementPrototype;
 var useNative = scope.useNative;
@@ -291,20 +292,9 @@ function createElement(tag, typeExtension) {
   return element;
 }
 
-function cloneNode(deep) {
-  // call original clone
-  var n = domCloneNode.call(this, deep);
-  // upgrade the element and subtree
-  upgrade(n);
-  // return the clone
-  return n;
-}
-
 // capture native createElement before we override it
 var domCreateElement = document.createElement.bind(document);
 var domCreateElementNS = document.createElementNS.bind(document);
-// capture native cloneNode before we override it
-var domCloneNode = Node.prototype.cloneNode;
 
 // Create a custom 'instanceof'. This is necessary when CustomElements
 // are implemented via a mixin strategy, as for example on IE10.
@@ -329,11 +319,44 @@ if (!Object.__proto__ && !useNative) {
   };
 }
 
+// wrap a dom object method that works on nodes such that it forces upgrade 
+function wrapDomMethodToForceUpgrade(obj, methodName) {
+  var orig = obj[methodName];
+  obj[methodName] = function() {
+    var n = orig.apply(this, arguments);
+    upgradeAll(n);
+    return n;
+  };
+}
+
+wrapDomMethodToForceUpgrade(Node.prototype, 'cloneNode');
+wrapDomMethodToForceUpgrade(document, 'importNode');
+
+// Patch document.importNode to work around IE11 bug that
+// casues children of a document fragment imported while
+// there is a mutation observer to not have a parentNode (!?!)
+if (isIE11OrOlder) {
+  (function() {
+    var importNode = document.importNode;
+    document.importNode = function() {
+      var n = importNode.apply(document, arguments);
+      // Copy all children to a new document fragment since
+      // this one may be broken
+      if (n.nodeType == n.DOCUMENT_FRAGMENT_NODE) {
+        var f = document.createDocumentFragment();
+        f.appendChild(n);
+        return f;
+      } else {
+        return n;
+      }
+    };
+  })();  
+}
+
 // exports
 document.registerElement = register;
 document.createElement = createElement; // override
 document.createElementNS = createElementNS; // override
-Node.prototype.cloneNode = cloneNode; // override
 scope.registry = registry;
 scope.instanceof = isInstance;
 scope.reservedTagList = reservedTagList;
