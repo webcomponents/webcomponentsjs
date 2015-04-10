@@ -128,14 +128,18 @@ suite('Element', function() {
 
     div.offsetHeight;
 
-    var list = div.querySelectorAll('div /deep/ aa');
-    assert.equal(2, list.length);
-    assert.equal(aa1, list[0]);
-    assert.equal(aa2, list[1]);
+    ['div /deep/ aa', 'div >>> aa'].forEach(function(selector) {
+      var list = div.querySelectorAll(selector);
+      assert.equal(2, list.length);
+      assert.equal(aa1, list[0]);
+      assert.equal(aa2, list[1]);
+    });
 
-    list = div.querySelectorAll('div /deep/ bb');
-    assert.equal(1, list.length);
-    assert.equal(bb, list[0]);
+    ['div /deep/ bb', 'div >>> bb'].forEach(function(selector) {
+      var list = div.querySelectorAll(selector);
+      assert.equal(1, list.length);
+      assert.equal(bb, list[0]);
+    });
   });
 
   test('querySelectorAll ::shadow', function() {
