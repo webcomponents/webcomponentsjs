@@ -121,25 +121,31 @@
 
   var originalCreateTreeWalker = document.createTreeWalker;
   var TreeWalkerWrapper = scope.wrappers.TreeWalker;
-  Document.prototype.createTreeWalker = function(root,whatToShow,
-                                                 filter,expandEntityReferences ) {
+  Document.prototype.createTreeWalker = function(root, whatToShow,
+                                              filter, expandEntityReferences) {
 
     var newFilter = null; // IE does not like undefined.
 
-    // Support filter as a function or object with function defined as acceptNode.
-    // IE supports filter as a function only. Chrome and FF support both formats.
-    if (filter){
-      if (filter.acceptNode && typeof filter.acceptNode === 'function'){
+    // Support filter as a function or object with function defined as
+    // acceptNode. IE supports filter as a function only.
+    // Chrome and FF support both formats.
+    if (filter) {
+      if (filter.acceptNode && typeof filter.acceptNode === 'function') {
         newFilter = {
-          acceptNode:function(node) { return filter.acceptNode(wrap(node)); }
+          acceptNode: function(node) {
+            return filter.acceptNode(wrap(node));
+          }
         };
-      }else if (typeof filter === 'function'){
-        newFilter = function(node) { return filter(wrap(node)); }
+      } else if (typeof filter === 'function') {
+        newFilter = function(node) {
+          return filter(wrap(node));
+        }
       }
     }
 
-    return new TreeWalkerWrapper(originalCreateTreeWalker.call(unwrap(this), unwrap(root),
-      whatToShow, newFilter, expandEntityReferences ));
+    return new TreeWalkerWrapper(
+                originalCreateTreeWalker.call(unwrap(this), unwrap(root),
+      whatToShow, newFilter, expandEntityReferences));
   };
 
   if (document.registerElement) {
@@ -153,7 +159,6 @@
 
       if (!prototype)
         prototype = Object.create(HTMLElement.prototype);
-
 
       // If we already used the object as a prototype for another custom
       // element.

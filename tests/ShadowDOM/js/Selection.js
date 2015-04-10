@@ -144,6 +144,7 @@ suite('Selection', function() {
 
   test('addRange', function() {
     var selection = window.getSelection();
+    selection.removeAllRanges();
     var range = document.createRange();
     range.selectNode(b);
     selection.addRange(range);

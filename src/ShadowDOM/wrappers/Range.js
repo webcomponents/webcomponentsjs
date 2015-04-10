@@ -17,26 +17,65 @@
   var unwrap = scope.unwrap;
   var unwrapIfNeeded = scope.unwrapIfNeeded;
   var wrap = scope.wrap;
+  var getTreeScope = scope.getTreeScope;
 
   var OriginalRange = window.Range;
+
+  var ShadowRoot = scope.wrappers.ShadowRoot;
+
+  function getHost(node) {
+    var root = getTreeScope(node).root;
+    if (root instanceof ShadowRoot) {
+      return root.host;
+    }
+    return null;
+  }
+
+  function hostNodeToShadowNode(refNode, offset) {
+    if (refNode.shadowRoot) {
+      // Note: if the refNode is an element, then selecting a range with and
+      // offset equal to refNode.childNodes.length+1 is valid. That is why
+      // calling Math.min is necessary to make sure we select valid children.
+      offset = Math.min(refNode.childNodes.length - 1, offset);
+      var child = refNode.childNodes[offset];
+      if (child) {
+        var insertionPoint = scope.getDestinationInsertionPoints(child);
+        if (insertionPoint.length > 0) {
+          var parentNode = insertionPoint[0].parentNode;
+          if (parentNode.nodeType == Node.ELEMENT_NODE) {
+            refNode = parentNode;
+          }
+        }
+      }
+    }
+    return refNode;
+  }
+
+  function shadowNodeToHostNode(node) {
+    node = wrap(node);
+    return getHost(node) || node;
+  }
 
   function Range(impl) {
     setWrapper(impl, this);
   }
   Range.prototype = {
     get startContainer() {
-      return wrap(unsafeUnwrap(this).startContainer);
+      // Never return a node in the shadow dom.
+      return shadowNodeToHostNode(unsafeUnwrap(this).startContainer);
     },
     get endContainer() {
-      return wrap(unsafeUnwrap(this).endContainer);
+      return shadowNodeToHostNode(unsafeUnwrap(this).endContainer);
     },
     get commonAncestorContainer() {
-      return wrap(unsafeUnwrap(this).commonAncestorContainer);
+      return shadowNodeToHostNode(unsafeUnwrap(this).commonAncestorContainer);
     },
-    setStart: function(refNode,offset) {
+    setStart: function(refNode, offset) {
+      refNode = hostNodeToShadowNode(refNode, offset);
       unsafeUnwrap(this).setStart(unwrapIfNeeded(refNode), offset);
     },
-    setEnd: function(refNode,offset) {
+    setEnd: function(refNode, offset) {
+      refNode = hostNodeToShadowNode(refNode, offset);
       unsafeUnwrap(this).setEnd(unwrapIfNeeded(refNode), offset);
     },
     setStartBefore: function(refNode) {

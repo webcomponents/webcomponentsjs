@@ -24,16 +24,16 @@
   }
 
   TreeWalker.prototype = {
-    get root(){
+    get root() {
       return wrap(unsafeUnwrap(this).root);
     },
     get currentNode() {
       return wrap(unsafeUnwrap(this).currentNode);
     },
     set currentNode(node) {
-      unsafeUnwrap(this).currentNode=unwrapIfNeeded(node);
+      unsafeUnwrap(this).currentNode = unwrapIfNeeded(node);
     },
-    get filter(){
+    get filter() {
       return unsafeUnwrap(this).filter;
     },
     parentNode: function() {
