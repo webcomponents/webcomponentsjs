@@ -10,5 +10,8 @@
     "webcomponents"
   ],
   "license": "BSD",
-  "ignore": []
+  "ignore": [],
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#~2.2.6"
+  }
 }

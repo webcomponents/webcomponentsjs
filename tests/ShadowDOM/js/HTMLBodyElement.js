@@ -125,7 +125,9 @@ htmlSuite('HTMLBodyElement', function() {
     assert.equal(HTMLBodyElement, document.createElement('body').constructor);
   });
 
-  htmlTest('../html/document-body-inner-html.html');
+  if (!window.WCT){
+    htmlTest('../html/document-body-inner-html.html');
 
-  htmlTest('../html/document-body-shadow-root.html');
+    htmlTest('../html/document-body-shadow-root.html');
+  }
 });

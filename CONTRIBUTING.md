@@ -25,6 +25,14 @@ Other projects require a similar agreement: jQuery, Firefox, Apache, Node, and m
 
         git clone git@github.com:{{ username }}/{{ repository }}.git
 
+1. Make sure to run the wct sauce on the webcomponents module you changed. If you changed ShadowDOM, run the following command.
+
+        wct --plugin sauce tests\ShadowDOM\runner_wct.html
+
+   The configuration runs against many platforms and browsers. It's ok to select
+   a subset of those in the wct.conf.js
+   More information on how to run the tests with WCT in wct.conf.js
+
 1. Test your change results in a working build.
    > in the repo you've made changes to, try generating a build:
 

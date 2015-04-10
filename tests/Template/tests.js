@@ -8,9 +8,9 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 (function() {
-
-htmlSuite('Template', function() {
-  htmlTest('html/Template.html');
-});
-
+  htmlSuite('Template', function() {
+    modules_Template.forEach(function(module) {
+      htmlTest(module);
+    })
+  });
 })();

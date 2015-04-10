@@ -930,9 +930,12 @@ test('retarget order (multiple shadow roots)', function() {
     ];
     assertArrayEqual(expected, log);
   });
-
-  htmlTest('../html/on-load-test.html');
-  htmlTest('../html/on-unload-test.html');
+  
+  // running without WCT.
+  if (!window.WCT){
+    htmlTest('../html/on-load-test.html');
+    htmlTest('../html/on-unload-test.html');
+  }
 
   test('event wrap round trip', function() {
     var e = new Event('x');

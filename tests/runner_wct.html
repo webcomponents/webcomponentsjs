@@ -1,0 +1,47 @@
+<!doctype html>
+<!--
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<title>All WebComponents Tests</title>
+<meta charset="utf-8">
+
+<!-- WebComponents -->
+<script src="../webcomponents.js" shadow></script>
+
+<script src="../components/web-component-tester/browser.js"></script>
+
+<script src="CustomElements/modules_CustomElements.js"></script>
+<script src="HTMLImports/modules_HTMLImports.js"></script>
+<script src="ShadowDOM/modules_ShadowDOM.js"></script>
+<script src="ShadowCSS/modules_ShadowCSS.js"></script>
+<script src="Template/modules_Template.js"></script>
+<script src="WebComponents/modules_WebComponents.js"></script>
+
+<script src="ShadowDOM/SDTestUtils.js"></script>
+
+<script>
+  WCT.waitForFrameworks = false;
+  htmlSuite=suite;
+  var modules = [];
+
+  function appendModules(array,moduleName){
+    array.forEach(function(module){
+      modules.push(moduleName+"/"+module);
+    });
+  }
+
+  appendModules(modules_CustomElements,"CustomElements");
+  appendModules(modules_HTMLImports,"HTMLImports");
+  appendModules(modules_ShadowDOM,"ShadowDOM");
+  //appendModules(modules_ShadowCSS,"ShadowCSS");
+  appendModules(modules_Template,"Template");
+  appendModules(modules_WebComponents,"WebComponents");
+
+  WCT.loadSuites(modules);
+</script>
