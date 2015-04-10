@@ -332,6 +332,12 @@
     setWrapper(impl, this);
   }
 
+  var originalCreateDocument = document.implementation.createDocument;
+  DOMImplementation.prototype.createDocument = function() {
+    arguments[2] = unwrap(arguments[2]);
+    return wrap(originalCreateDocument.apply(unsafeUnwrap(this), arguments));
+  };
+
   function wrapImplMethod(constructor, name) {
     var original = document.implementation[name];
     constructor.prototype[name] = function() {
@@ -347,7 +353,6 @@
   }
 
   wrapImplMethod(DOMImplementation, 'createDocumentType');
-  wrapImplMethod(DOMImplementation, 'createDocument');
   wrapImplMethod(DOMImplementation, 'createHTMLDocument');
   forwardImplMethod(DOMImplementation, 'hasFeature');
 
@@ -356,8 +361,8 @@
   forwardMethodsToWrapper([
     window.DOMImplementation,
   ], [
-    'createDocumentType',
     'createDocument',
+    'createDocumentType',
     'createHTMLDocument',
     'hasFeature',
   ]);
