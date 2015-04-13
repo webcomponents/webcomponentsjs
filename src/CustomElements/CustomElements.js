@@ -28,6 +28,7 @@ var file = 'CustomElements.js';
 
 var modules = [
   '../WeakMap/WeakMap.js',
+  '../MutationObserver/MutationObserver.js',
   'base.js',
   'traverse.js',
   'observe.js',
