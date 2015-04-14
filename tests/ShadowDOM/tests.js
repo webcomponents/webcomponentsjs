@@ -118,6 +118,7 @@ var modules = [
   'MutationObserver/shadow-root.js',
   'MutationObserver/transient.js',
   'Node.js',
+  'NonElementParentNodeInterface.js',
   'ParentNodeInterface.js',
   'Range.js',
   'SVGElement.js',

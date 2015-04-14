@@ -14,6 +14,7 @@
   var GetElementsByInterface = scope.GetElementsByInterface;
   var Node = scope.wrappers.Node;
   var ParentNodeInterface = scope.ParentNodeInterface;
+  var NonElementParentNodeInterface = scope.NonElementParentNodeInterface;
   var Selection = scope.wrappers.Selection;
   var SelectorsInterface = scope.SelectorsInterface;
   var ShadowRoot = scope.wrappers.ShadowRoot;
@@ -68,7 +69,6 @@
     'createEventNS',
     'createRange',
     'createTextNode',
-    'getElementById'
   ].forEach(wrapMethod);
 
   var originalAdoptNode = document.adoptNode;
@@ -302,6 +302,7 @@
   mixin(Document.prototype, GetElementsByInterface);
   mixin(Document.prototype, ParentNodeInterface);
   mixin(Document.prototype, SelectorsInterface);
+  mixin(Document.prototype, NonElementParentNodeInterface);
 
   mixin(Document.prototype, {
     get implementation() {
