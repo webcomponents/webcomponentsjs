@@ -25,8 +25,6 @@
   var shadowHostTable = new WeakMap();
   var nextOlderShadowTreeTable = new WeakMap();
 
-  var spaceCharRe = /[ \t\n\r\f]/;
-
   function ShadowRoot(hostWrapper) {
     var node = unwrap(unsafeUnwrap(hostWrapper).ownerDocument.createDocumentFragment());
     DocumentFragment.call(this, node);
@@ -70,12 +68,6 @@
     elementFromPoint: function(x, y) {
       return elementFromPoint(this, this.ownerDocument, x, y);
     },
-
-    getElementById: function(id) {
-      if (spaceCharRe.test(id))
-        return null;
-      return this.querySelector('[id="' + id + '"]');
-    }
   });
 
   scope.wrappers.ShadowRoot = ShadowRoot;

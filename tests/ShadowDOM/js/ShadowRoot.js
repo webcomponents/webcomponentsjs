@@ -36,37 +36,6 @@ suite('ShadowRoot', function() {
     assert.equal(sr2.elementFromPoint(5, 5), null);
   });
 
-  test('getElementById', function() {
-    var div = document.createElement('div');
-    var sr = div.createShadowRoot();
-    sr.innerHTML = '<a id=a name=b></a><b id=b></b>';
-    var a = sr.firstChild;
-    var b = sr.lastChild;
-
-    assert.equal(sr.getElementById('a'), a);
-    assert.equal(sr.getElementById('b'), b);
-  });
-
-  test('getElementById with a non CSS ID', function() {
-    var div = document.createElement('div');
-    var sr = div.createShadowRoot();
-    sr.innerHTML = '<a id=1 name=2></a><b id=2></b>';
-    var a = sr.firstChild;
-    var b = sr.lastChild;
-
-    assert.equal(sr.getElementById(1), a);
-    assert.equal(sr.getElementById(2), b);
-  });
-
-  test('getElementById with a non ID', function() {
-    var div = document.createElement('div');
-    var sr = div.createShadowRoot();
-    sr.innerHTML = '<a id="a b"></a>';
-    var a = sr.firstChild;
-
-    assert.isNull(sr.getElementById('a b'));
-  });
-
   test('olderShadowRoot', function() {
     var host = document.createElement('div');
     host.innerHTML = '<a>a</a><b>b</b>';
