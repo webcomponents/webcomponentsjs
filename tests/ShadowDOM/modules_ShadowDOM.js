@@ -49,6 +49,7 @@ var modules_ShadowDOM = [
   'js/MutationObserver/shadow-root.js',
   'js/MutationObserver/transient.js',
   'js/Node.js',
+  'js/NonElementParentNodeInterface.js',
   'js/ParentNodeInterface.js',
   'js/Range.js',
   'js/SVGElement.js',
