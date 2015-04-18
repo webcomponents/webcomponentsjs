@@ -1,5 +1,5 @@
 [
-  "build/boot.js",
+  "build/boot-lite.js",
   "../URL/URL.js",
   "../WeakMap/WeakMap.js",
   "../MutationObserver/MutationObserver.js",

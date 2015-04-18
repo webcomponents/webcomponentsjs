@@ -75,7 +75,16 @@
     }
   };
 
+  var NonElementParentNodeInterface = {
+    getElementById: function(id) {
+      if (/[ \t\n\r\f]/.test(id))
+        return null;
+      return this.querySelector('[id="' + id + '"]');
+    }
+  };
+
   scope.ChildNodeInterface = ChildNodeInterface;
+  scope.NonElementParentNodeInterface = NonElementParentNodeInterface;
   scope.ParentNodeInterface = ParentNodeInterface;
 
 })(window.ShadowDOMPolyfill);

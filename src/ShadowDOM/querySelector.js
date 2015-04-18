@@ -49,7 +49,7 @@
   }
 
   function shimSelector(selector) {
-    return String(selector).replace(/\/deep\/|::shadow/g, ' ');
+    return String(selector).replace(/\/deep\/|::shadow|>>>/g, ' ');
   }
 
   function shimMatchesSelector(selector) {
@@ -71,7 +71,7 @@
       )
       // From ShadowCSS, will be replaced by space
       .replace(
-        /\^|\/shadow\/|\/shadow-deep\/|::shadow|\/deep\/|::content/g,
+        /\^|\/shadow\/|\/shadow-deep\/|::shadow|\/deep\/|::content|>>>/g,
         ' '
       );
   }

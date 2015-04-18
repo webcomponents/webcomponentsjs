@@ -578,13 +578,15 @@ var selectorRe = /([^{]*)({[\s\S]*?})/gim,
     polyfillHostRe = new RegExp(polyfillHost, 'gim'),
     polyfillHostContextRe = new RegExp(polyfillHostContext, 'gim'),
     shadowDOMSelectorsRe = [
-      /\^\^/g,
-      /\^/g,
-      /\/shadow\//g,
-      /\/shadow-deep\//g,
+      />>>/g,
       /::shadow/g,
-      /\/deep\//g,
-      /::content/g
+      /::content/g,
+      // Deprecated selectors
+      /\/deep\//g, // former >>>
+      /\/shadow\//g, // former ::shadow
+      /\/shadow-deep\//g, // former /deep/
+      /\^\^/g,     // former /shadow/
+      /\^/g        // former /shadow-deep/
     ];
 
 function stylesToCssText(styles, preserveComments) {
