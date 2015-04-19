@@ -148,8 +148,6 @@ gulp.task('test_local_SD', function(cb) {
   var cmd = ['wct', '--plugin', 'local', 'tests/ShadowDOM/runner_wct.html'].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     console.log(stdout);
-    //console.log(stderr);
-    //cb(err);
     cb();
   });
 });
@@ -158,8 +156,6 @@ gulp.task('test_remote_SD', function(cb) {
   var cmd = ['wct', '--plugin', 'sauce', 'tests/ShadowDOM/runner_wct.html'].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     console.log(stdout);
-    //console.log(stderr);
-    //cb(err);
     cb();
   });
 });

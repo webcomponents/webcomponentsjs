@@ -17,8 +17,6 @@ var modules_ShadowCSS = [
   'html/pseudo-scoping-strict.html?shadow&.html',
   'html/polyfill-directive.html',
   'html/polyfill-rule.html',
-  'html/colon-host.html',
-  'html/colon-host.html?shadow&.html',
   'html/combinators.html?shadow&.html',
   'html/combinators-shadow.html',
   'html/combinators-shadow.html?shadow&.html',
@@ -27,6 +25,11 @@ var modules_ShadowCSS = [
   'html/before-content.html?shadow&.html',
   'html/before-content.html',
   'html/style-import.html',
-  'html/style-import-base-tag.html',
   'html/css-animation.html'
 ];
+
+if (!window.WCT) {
+  modules_ShadowCSS.push('html/style-import-base-tag.html');
+  modules_ShadowCSS.push('html/colon-host.html');
+  modules_ShadowCSS.push('html/colon-host.html?shadow&.html');
+}
