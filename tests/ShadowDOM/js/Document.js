@@ -33,6 +33,13 @@ htmlSuite('Document', function() {
     assert.equal(doc2.lastElementChild.tagName, 'HTML');
   });
 
+  test('Create XHTML Document', function() {
+    var docType = wrap(document).implementation.createDocumentType('html', '-//W3C//DTD XHTML 1.0 Transitional//EN',
+                            'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd');
+    var doc = wrap(document).implementation.createDocument('http://www.w3.org/1999/xhtml', 'html', docType);
+    assert(doc);
+  });
+
   test('document.documentElement', function() {
     var doc = wrap(document);
     assert.equal(doc.documentElement.ownerDocument, doc);

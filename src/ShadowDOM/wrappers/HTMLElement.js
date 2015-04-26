@@ -93,6 +93,20 @@
     'noscript'
   ]);
 
+  var XHTML_NS = 'http://www.w3.org/1999/xhtml';
+
+  function needsSelfClosingSlash(node) {
+    // if the namespace is not XHTML_NS, this is probably an XML or SVG Document
+    // and will need a closing slash on void elements
+    if (node.namespaceURI !== XHTML_NS)
+      return true;
+
+    var doctype = node.ownerDocument.doctype;
+    // doctype is null for quirksmode documents
+    // publicId and systemId are required for XHTML, and are null for HTML5
+    return doctype && doctype.publicId && doctype.systemId;
+  }
+
   function getOuterHTML(node, parentNode) {
     switch (node.nodeType) {
       case Node.ELEMENT_NODE:
@@ -102,11 +116,14 @@
         for (var i = 0, attr; attr = attrs[i]; i++) {
           s += ' ' + attr.name + '="' + escapeAttr(attr.value) + '"';
         }
-        s += '>';
-        if (voidElements[tagName])
-          return s;
 
-        return s + getInnerHTML(node) + '</' + tagName + '>';
+        if (voidElements[tagName]) {
+          if (needsSelfClosingSlash(node))
+            s += '/';
+          return s + '>';
+        }
+
+        return s + '>' + getInnerHTML(node) + '</' + tagName + '>';
 
       case Node.TEXT_NODE:
         var data = node.data;

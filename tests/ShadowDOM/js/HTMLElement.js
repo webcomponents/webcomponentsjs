@@ -114,4 +114,12 @@ suite('HTMLElement', function() {
     div.hidden = false;
     assert.isFalse(div.hasAttribute('hidden'));
   });
+
+  test('img outerHTML in XHTML documents', function() {
+    var docType = document.implementation.createDocumentType('html', '-//W3C//DTD XHTML 1.0 Transitional//EN',
+                            'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd');
+    var doc = document.implementation.createDocument('http://www.w3.org/1999/xhtml', 'html', docType);
+    var img = doc.createElement('img');
+    assert.equal(img.outerHTML, '<img/>');
+  });
 });
