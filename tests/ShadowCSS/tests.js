@@ -9,22 +9,7 @@
  */
 
 htmlSuite('ShadowCss', function() {
-  htmlTest('html/pseudo-scoping.html');
-  htmlTest('html/pseudo-scoping.html?shadow');
-  htmlTest('html/pseudo-scoping-strict.html');
-  htmlTest('html/pseudo-scoping-strict.html?shadow');
-  htmlTest('html/polyfill-directive.html');
-  htmlTest('html/polyfill-rule.html');
-  htmlTest('html/colon-host.html');
-  htmlTest('html/colon-host.html?shadow');
-  htmlTest('html/combinators.html?shadow');
-  htmlTest('html/combinators-shadow.html');
-  htmlTest('html/combinators-shadow.html?shadow');
-  htmlTest('html/compressed.html');
-  htmlTest('html/before-content.html');
-  htmlTest('html/before-content.html?shadow');
-  htmlTest('html/before-content.html');
-  htmlTest('html/style-import.html');
-  htmlTest('html/style-import-base-tag.html');
-  htmlTest('html/css-animation.html');
+  modules_ShadowCSS.forEach(function(module) {
+    htmlTest(module);
+  });
 });

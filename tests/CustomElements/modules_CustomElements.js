@@ -8,16 +8,22 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-(function() {
+var modules_CustomElements = [
+  'js/customElements.js',
+  'js/upgrade.js',
+  'js/observe.js',
+  'js/documentRegister.js'
+];
 
-  var file = 'tests.js';
-
-  var src =
-    document.querySelector('script[src*="' + file + '"]').getAttribute('src');
-  var base = src.slice(0, src.indexOf(file));
-
-  modules_CustomElements.forEach(function(src) {
-    document.write('<script src="' + base + src + '"></script>');
-  });
-
-})();
+if (window.WCT) {
+  modules_CustomElements = modules_CustomElements.concat(
+    [
+      'html/attributes.html',
+      'html/customevent-detail.html',
+      'html/imports.html',
+      'html/shadowdom.html',
+      'html/upgrade-dcl.html',
+      'html/upgrade-order.html'
+    ]
+  );
+}

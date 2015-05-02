@@ -9,30 +9,10 @@
  */
 (function() {
 
-htmlSuite('HTMLImports', function() {
-  htmlTest('html/HTMLImports.html');
-  htmlTest('html/parser.html');
-  htmlTest('html/style-links.html');
-  htmlTest('html/style-paths.html');
-  htmlTest('html/load.html');
-  htmlTest('html/load-404.html');
-  htmlTest('html/load-loop.html');
-  htmlTest('html/base/load-base.html');
-  htmlTest('html/currentScript.html');
-  htmlTest('html/dedupe.html');
-  htmlTest('html/dynamic.html');
-  htmlTest('html/dynamic-all-imports-detail.html');
-  htmlTest('html/dynamic-errors-detail.html');
-  htmlTest('html/dynamic-loaded-detail.html');
-  htmlTest('html/csp.html');
-  htmlTest('html/customevent-detail.html');
-  htmlTest('html/encoding.html');
-  htmlTest('html/HTMLImportsLoaded-native.html');
-  // NOTE: The MO polyfill does not function on disconnected documents
-  // like html imports so dynamic elements in imports are not supported.
-  if (!navigator.userAgent.match(/MSIE 10/)) {
-    htmlTest('html/dynamic-elements.html');
-  }
-});
+  htmlSuite('HTMLImports', function() {
+    modules_HTMLImports.forEach(function(module) {
+      htmlTest(module);
+    });
+  });
 
 })();

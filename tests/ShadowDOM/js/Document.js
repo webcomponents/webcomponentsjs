@@ -690,8 +690,10 @@ htmlSuite('Document', function() {
     a3.localName = 'span';
     assert.equal('<span is="x-a-span-2"></span>', a3.outerHTML);
   });
+  
+  if (!window.WCT){
+    htmlTest('../html/document-write.html');
 
-  htmlTest('../html/document-write.html');
-
-  htmlTest('../html/head-then-body.html');
+    htmlTest('../html/head-then-body.html');
+  }
 });

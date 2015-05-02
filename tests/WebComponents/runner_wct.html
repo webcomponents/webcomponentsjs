@@ -11,23 +11,16 @@
 <title>HTMLImports Tests</title>
 <meta charset="utf-8">
 
-<!-- Mocha/Chai -->
-<link rel="stylesheet" href="../tools/mocha/mocha.css">
-<script src="../tools/mocha/mocha.js"></script>
-<script src="../tools/chai/chai.js"></script>
-<script src="../tools/mocha-htmltest.js"></script>
-
-<!-- HTMLImports -->
+<!-- CustomElements -->
 <script src="../../src/Template/Template.js"></script>
 
-<div id="mocha"></div>
+<script src="../../components/web-component-tester/browser.js"></script>
+
+<script src="modules_WebComponents.js"></script>
+
 <script>
+  WCT.waitForFrameworks = false;
+  htmlSuite=suite;
   mocha.setup({ui: 'tdd', slow: 1000});
-</script>
-
-<script src="modules_Template.js"></script>
-<script src="tests.js"></script>
-
-<script>
-  mocha.run();
+  WCT.loadSuites(modules_WebComponents);
 </script>

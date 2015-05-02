@@ -140,3 +140,23 @@ gulp.task('release', function(cb) {
 gulp.task('default', function(cb) {
   runseq('build', 'audit', cb);
 });
+
+// Just a sample of how to run the tests for now
+// running the tests with
+// gulp test:local or gulp test:remote
+// will not work because the test folder is named tests and test
+gulp.task('test_local_SD', function(cb) {
+  var cmd = ['wct', '--plugin', 'local', 'tests/ShadowDOM/runner_wct.html'].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    console.log(stdout);
+    cb();
+  });
+});
+
+gulp.task('test_remote_SD', function(cb) {
+  var cmd = ['wct', '--plugin', 'sauce', 'tests/ShadowDOM/runner_wct.html'].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    console.log(stdout);
+    cb();
+  });
+});
