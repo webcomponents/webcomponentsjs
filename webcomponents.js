@@ -21,11 +21,11 @@
   var flags = {};
   if (!flags.noOpts) {
     // from url
-    location.search.slice(1).split('&').forEach(function(o) {
-      o = o.split('=');
-      var m;
-      if (o[0] && (m = o[0].match(/wc-(.+)/))) {
-        flags[m[1]] = o[1] || true;
+    location.search.slice(1).split('&').forEach(function(option) {
+      var parts = option.split('=');
+      var match;
+      if (parts[0] && (match = parts[0].match(/wc-(.+)/))) {
+        flags[match[1]] = parts[1] || true;
       }
     });
     // from script
