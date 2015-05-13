@@ -16,9 +16,12 @@ window.HTMLImports = window.HTMLImports || {flags:{}};
 // Flags. Convert url arguments to flags
 var flags = {};
 if (!flags.noOpts) {
-  location.search.slice(1).split('&').forEach(function(o) {
-    o = o.split('=');
-    o[0] && (flags[o[0]] = o[1] || true);
+  location.search.slice(1).split('&').forEach(function(option) {
+    var parts = option.split('=');
+    var match;
+    if (parts[0] && (match = parts[0].match(/wc-(.+)/))) {
+      flags[match[1]] = parts[1] || true;
+    }
   });
 }
 
