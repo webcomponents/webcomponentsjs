@@ -18,7 +18,10 @@ var flags = {};
 if (!flags.noOpts) {
   location.search.slice(1).split('&').forEach(function(o) {
     o = o.split('=');
-    o[0] && (flags[o[0]] = o[1] || true);
+    var m;
+    if (o[0] && (m = o[0].match(/wc-(.+)/))) {
+      flags[m[1]] = o[1] || true;
+    }
   });
 }
 

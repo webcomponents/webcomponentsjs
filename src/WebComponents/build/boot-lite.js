@@ -11,10 +11,10 @@ window.WebComponents = window.WebComponents || {};
 
 // process flags
 (function(scope){
-  
+
   // import
   var flags = scope.flags || {};
-  
+
   var file = 'webcomponents-lite.js';
   var script = document.querySelector('script[src*="' + file + '"]');
 
@@ -23,7 +23,10 @@ window.WebComponents = window.WebComponents || {};
     // from url
     location.search.slice(1).split('&').forEach(function(o) {
       o = o.split('=');
-      o[0] && (flags[o[0]] = o[1] || true);
+      var m;
+      if (o[0] && (m = o[0].match(/wc-(.+)/))) {
+        flags[m[1]] = o[1] || true;
+      }
     });
     // from script
     if (script) {
@@ -48,7 +51,7 @@ window.WebComponents = window.WebComponents || {};
   // Determine default settings.
   // If any of these flags match 'native', then force native ShadowDOM; any
   // other truthy value, or failure to detect native
-  // ShadowDOM, results in polyfill 
+  // ShadowDOM, results in polyfill
   flags.shadow = (flags.shadow || flags.shadowdom || flags.polyfill);
   if (flags.shadow === 'native') {
     flags.shadow = false;
