@@ -17,10 +17,10 @@ htmlSuite('loader and build', function() {
 htmlSuite('integration', function() {
   htmlTest('html/web-components.html');
   htmlTest('html/smoke.html');
-  htmlTest('html/smoke.html?shadow');
+  htmlTest('html/smoke.html?wc-shadow');
   htmlTest('html/ce-import.html');
   htmlTest('html/ce-upgradedocumenttree.html');
-  htmlTest('html/ce-import.html?shadow');
+  htmlTest('html/ce-import.html?wc-shadow');
   htmlTest('html/ce-upgrade-order.html');
 });
 
