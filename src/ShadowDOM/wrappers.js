@@ -256,6 +256,9 @@ window.ShadowDOMPolyfill = {};
    *     properties from an instance object.
    */
   function register(nativeConstructor, wrapperConstructor, opt_instance) {
+    if (nativeConstructor == null) {
+      return;
+    }
     var nativePrototype = nativeConstructor.prototype;
     registerInternal(nativePrototype, wrapperConstructor, opt_instance);
     mixinStatics(wrapperConstructor, nativeConstructor);
