@@ -50,5 +50,16 @@ if (typeof HTMLTemplateElement === 'undefined') {
       HTMLTemplateElement.bootstrap(document);
     });
 
+    // Patch document.createElement to ensure newly created templates have content
+    var createElement = document.createElement;
+    document.createElement = function() {
+      'use strict';
+      var el = createElement.apply(document, arguments);
+      if (el.localName == 'template') {
+        el.content = el.ownerDocument.createDocumentFragment();
+      }
+      return el;
+    };
+
   })();
 }
