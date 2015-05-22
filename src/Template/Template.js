@@ -56,7 +56,7 @@ if (typeof HTMLTemplateElement === 'undefined') {
       'use strict';
       var el = createElement.apply(document, arguments);
       if (el.localName == 'template') {
-        el.content = el.ownerDocument.createDocumentFragment();
+        HTMLTemplateElement.decorate(el);
       }
       return el;
     };
