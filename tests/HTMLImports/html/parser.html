@@ -22,6 +22,8 @@
         chai.assert.ok(window.inlineScriptParsed, 'inlineScriptParsed');
         chai.assert.ok(window.externalScriptParsed, 'externalScriptParsed');
         chai.assert.equal(window.uc, '\u2661 \u34A8', 'unicode matches');
+        chai.assert.ok(window.textJavascriptParsed, 'text/javascript');
+        chai.assert.ok(window.applicationJavascriptParsed, 'application/javascript');
         done();
       });
     </script>
