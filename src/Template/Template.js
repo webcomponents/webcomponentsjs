@@ -27,10 +27,10 @@ if (typeof HTMLTemplateElement === 'undefined') {
     HTMLTemplateElement.decorate = function(template) {
       if (!template.content) {
         template.content = template.ownerDocument.createDocumentFragment();
-        var child;
-        while (child = template.firstChild) {
-          template.content.appendChild(child);
-        }
+      }
+      var child;
+      while (child = template.firstChild) {
+        template.content.appendChild(child);
       }
     };
 
@@ -49,6 +49,17 @@ if (typeof HTMLTemplateElement === 'undefined') {
     addEventListener('DOMContentLoaded', function() {
       HTMLTemplateElement.bootstrap(document);
     });
+
+    // Patch document.createElement to ensure newly created templates have content
+    var createElement = document.createElement;
+    document.createElement = function() {
+      'use strict';
+      var el = createElement.apply(document, arguments);
+      if (el.localName == 'template') {
+        HTMLTemplateElement.decorate(el);
+      }
+      return el;
+    };
 
   })();
 }
