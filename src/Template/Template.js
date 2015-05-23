@@ -27,10 +27,10 @@ if (typeof HTMLTemplateElement === 'undefined') {
     HTMLTemplateElement.decorate = function(template) {
       if (!template.content) {
         template.content = template.ownerDocument.createDocumentFragment();
-        var child;
-        while (child = template.firstChild) {
-          template.content.appendChild(child);
-        }
+      }
+      var child;
+      while (child = template.firstChild) {
+        template.content.appendChild(child);
       }
     };
 
