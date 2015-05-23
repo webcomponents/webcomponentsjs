@@ -1,33 +1,33 @@
 BUILD LOG
 ---------
-Build Time: 2015-05-13T18:16:38-0700
+Build Time: 2015-05-22T22:28:11-0700
 
 NODEJS INFORMATION
 ==================
-nodejs: v0.12.0
+nodejs: v2.0.2
 gulp: 3.8.11
 gulp-audit: 1.0.0
 gulp-concat: 2.5.2
 gulp-header: 1.2.2
-gulp-uglify: 1.2.0
-run-sequence: 1.1.0
 web-component-tester: 3.1.3
+run-sequence: 1.1.0
+gulp-uglify: 1.2.0
 
 REPO REVISIONS
 ==============
-webcomponentsjs: ae3533859ab57edcd3a88a0092660bd970c94de4
+webcomponentsjs: c22c0c44751492aa411d7a1e8a84f644bcce66e0
 
 BUILD HASHES
 ============
-CustomElements.js: 2292abfeeb0ca0e03314f35edc50867c89b2dc93
-CustomElements.min.js: 131750c5b4297103b7702bb9123498bd5d4113a3
-HTMLImports.js: 5488833312a155d45744190715c0a702ba4d1340
-HTMLImports.min.js: 3d3cc90f2ff3fd718cb80253b4dc18ac54157411
-MutationObserver.js: 0ca30f350afe701a04d1c541430ada0a38183ed6
-MutationObserver.min.js: a40d2bacdd218c2268ba81da112ba82e1dbc5cb2
-ShadowDOM.js: f054a0ffe44dadf0435699edf1a824f0c731a413
-ShadowDOM.min.js: d9d342dbc43e45abba401b64f023657fc871336d
-webcomponents-lite.js: 1ce1cd2cc25e40252ac8f335a4849a30a20465a8
-webcomponents-lite.min.js: 65c4e97fded2f7f557a5288a39b3b0fb8fd7cf88
-webcomponents.js: 548655e6763e0cdcdebe5b67dea6d452b12079a2
-webcomponents.min.js: 29c327541658cc2cf2d0838db1dcbf34eb4a5ce0
+CustomElements.js: 5dbead2a9f370457daae8453dd30fc0dfef4adc6
+CustomElements.min.js: 14444f6a58dbc9be04ab56ce672eb01eeeba7c99
+HTMLImports.js: 122e2ae7aee84e8986dc6af86c7a65c57cad3545
+HTMLImports.min.js: 4a8116a4827310a802e56d94d970f4e24195d13e
+MutationObserver.js: f63e1a1c7fcb21d07529ff5a957d9fe0742e6a58
+MutationObserver.min.js: b1e2398cb829fbe113090c0cbba76711738b24ae
+ShadowDOM.js: 71228305c0aebb2cc4049be46beefc2a93915af2
+ShadowDOM.min.js: 6cde4400a9d43ff5bcd62adbbe1cbc893aa96813
+webcomponents-lite.js: 65f05b299f9f36fca12fa3d893c2975935b9191b
+webcomponents-lite.min.js: 7d39eede6752d8a2bd6ee643674b7c75b5828512
+webcomponents.js: 80ebf505e8340bdd6fbabaebdd2c6c091022cb3e
+webcomponents.min.js: 032ba31478304ce606c76c12d6d266d7635a24e8
