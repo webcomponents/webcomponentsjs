@@ -179,6 +179,26 @@ suite('customElements', function() {
     assert.equal(xbarbarbar.textContent, 'x-barbarbar');
   });
 
+  test('document.registerElement with type extension treats names as case insensitive', function() {
+    var proto = {prototype: Object.create(HTMLButtonElement.prototype), extends: 'button'};
+    proto.prototype.isXCase = true;
+    var XCase = document.registerElement('X-EXTEND-CASE', proto);
+    // createElement
+    var x = document.createElement('button', 'X-EXTEND-CASE');
+    assert.equal(x.isXCase, true);
+    x = document.createElement('button', 'x-extend-case');
+    assert.equal(x.isXCase, true);
+    x = document.createElement('BUTTON', 'X-EXTEND-CASE');
+    assert.equal(x.isXCase, true);
+    x = document.createElement('BUTTON', 'x-extend-case');
+    assert.equal(x.isXCase, true);
+    // upgrade
+    work.innerHTML = '<button is="X-EXTEND-CASE"></button><button is="x-ExTeNd-CaSe"></button>';
+    CustomElements.takeRecords();
+    assert.equal(work.firstChild.isXCase, true);
+    assert.equal(work.firstChild.nextSibling.isXCase, true);
+  });
+
   test('document.registerElement createdCallback in prototype', function() {
     var XBooPrototype = Object.create(HTMLElement.prototype);
     XBooPrototype.createdCallback = function() {

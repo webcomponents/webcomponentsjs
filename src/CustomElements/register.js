@@ -268,6 +268,12 @@ function createElementNS(namespace, tag, typeExtension) {
 function createElement(tag, typeExtension) {
   // TODO(sjmiles): ignore 'tag' when using 'typeExtension', we could
   // error check it, or perhaps there should only ever be one argument
+  if (tag) {
+    tag = tag.toLowerCase();
+  }
+  if (typeExtension) {
+    typeExtension = typeExtension.toLowerCase();
+  }
   var definition = getRegisteredDefinition(typeExtension || tag);
   if (definition) {
     if (tag == definition.tag && typeExtension == definition.is) {
