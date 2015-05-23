@@ -187,6 +187,8 @@
             this._port = base._port;
             this._path = base._path.slice();
             this._query = base._query;
+            this._username = base._username;
+            this._password = base._password;
             break loop;
           } else if ('/' == c || '\\' == c) {
             if ('\\' == c)
@@ -197,6 +199,8 @@
             this._port = base._port;
             this._path = base._path.slice();
             this._query = '?';
+            this._username = base._username;
+            this._password = base._password;
             state = 'query';
           } else if ('#' == c) {
             this._host = base._host;
@@ -204,6 +208,8 @@
             this._path = base._path.slice();
             this._query = base._query;
             this._fragment = '#';
+            this._username = base._username;
+            this._password = base._password;
             state = 'fragment';
           } else {
             var nextC = input[cursor+1]
@@ -214,6 +220,8 @@
               (EOF != nextNextC && '/' != nextNextC && '\\' != nextNextC && '?' != nextNextC && '#' != nextNextC)) {
               this._host = base._host;
               this._port = base._port;
+              this._username = base._username;
+              this._password = base._password;
               this._path = base._path.slice();
               this._path.pop();
             }
@@ -236,6 +244,8 @@
             if ('file' != this._scheme) {
               this._host = base._host;
               this._port = base._port;
+              this._username = base._username;
+              this._password = base._password;
             }
             state = 'relative path';
             continue;
