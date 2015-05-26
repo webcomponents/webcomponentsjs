@@ -219,9 +219,11 @@ window.ShadowDOMPolyfill = {};
       }
       var descriptor = getDescriptor(source, name);
       var getter, setter;
-      if (allowMethod && typeof descriptor.value === 'function') {
-        target[name] = getMethod(name);
-        continue;
+      if(typeof descriptor.value === 'function') {
+          if (allowMethod) {
+              target[name] = getMethod(name);
+          }
+          continue;
       }
 
       var isEvent = isEventHandlerName(name);
