@@ -209,6 +209,7 @@ var importParser = {
       }
       // dispatch a fake load event and continue parsing
       if (fakeLoad) {
+        // Fire async, to prevent reentrancy
         setTimeout(function() {
           elt.dispatchEvent(new CustomEvent('load', {bubbles: false}));
         });
