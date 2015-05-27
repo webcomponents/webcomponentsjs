@@ -209,7 +209,9 @@ var importParser = {
       }
       // dispatch a fake load event and continue parsing
       if (fakeLoad) {
-        elt.dispatchEvent(new CustomEvent('load', {bubbles: false}));
+        setTimeout(function() {
+          elt.dispatchEvent(new CustomEvent('load', {bubbles: false}));
+        });
       }
     }
   },
