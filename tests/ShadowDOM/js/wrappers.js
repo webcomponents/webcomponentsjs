@@ -94,21 +94,27 @@ suite('Wrapper creation', function() {
     assert.isTrue(Object.getPrototypeOf(br).hasOwnProperty('clear'));
   });
 
-  // Super class is defined as a class above the existing wrapped class (GeneratedWrapper).
+  // Super class is defined as a class above the existing wrapped class
+  // (GeneratedWrapper).
   test('Super class methods are wrapped as methods on base class', function() {
-      // Set a method on a prototype whose parent prototype is not yet wrapped
-      SVGTextElement.prototype.customFn = function(arg) { return arg; };
-      var textNode = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      var wrappedPrototype = Object.getPrototypeOf(textNode);
-      var customFnDescriptor = Object.getOwnPropertyDescriptor(wrappedPrototype, 'customFn');
-      // TODO: This assertion might qualify as a separate test? Not sure if
-      // accessing prototype via Object.getPrototypeOf(Object.getPrototypeOf(textNode))
-      // is by design.
-      assert.isDefined(customFnDescriptor, 'Prototype method should be on first prototype of instance');
-      assert.isFunction(customFnDescriptor.value, 'Super method should be a function');
-      assert.isUndefined(customFnDescriptor.get, 'Super method should not be get/set');
-      assert.isUndefined(customFnDescriptor.set);
-      delete SVGTextElement.prototype.customFn;
+    // Set a method on a prototype whose parent prototype is not yet wrapped
+    SVGTextElement.prototype.customFn = function(arg) { return arg; };
+    var textNode = document.createElementNS(
+        'http://www.w3.org/2000/svg', 'text');
+    var wrappedPrototype = Object.getPrototypeOf(textNode);
+    var customFnDescriptor = Object.getOwnPropertyDescriptor(
+        wrappedPrototype, 'customFn');
+    // TODO: This assertion might qualify as a separate test? Not sure if
+    // accessing prototype via
+    // Object.getPrototypeOf(Object.getPrototypeOf(textNode)) is by design.
+    assert.isDefined(customFnDescriptor,
+        'Prototype method should be on first prototype of instance');
+    assert.isFunction(customFnDescriptor.value,
+        'Super method should be a function');
+    assert.isUndefined(customFnDescriptor.get,
+        'Super method should not be get/set');
+    assert.isUndefined(customFnDescriptor.set);
+    delete SVGTextElement.prototype.customFn;
   });
 
   test('HTMLUnknownElement constructor', function() {
