@@ -101,7 +101,7 @@ window.ShadowDOMPolyfill = {};
   // Make sure they are create before we start modifying things.
   getOwnPropertyNames(window);
 
-  function getWrapperConstructor(node) {
+  function getWrapperConstructor(node, opt_instance) {
     var nativePrototype = node.__proto__ || Object.getPrototypeOf(node);
     if (isFirefox) {
       // HTMLEmbedElements will sometimes be [NS Object wrapper class]
@@ -121,7 +121,7 @@ window.ShadowDOMPolyfill = {};
     var parentWrapperConstructor = getWrapperConstructor(nativePrototype);
 
     var GeneratedWrapper = createWrapperConstructor(parentWrapperConstructor);
-    registerInternal(nativePrototype, GeneratedWrapper, node);
+    registerInternal(nativePrototype, GeneratedWrapper, opt_instance);
 
     return GeneratedWrapper;
   }
@@ -219,9 +219,11 @@ window.ShadowDOMPolyfill = {};
       }
       var descriptor = getDescriptor(source, name);
       var getter, setter;
-      if (allowMethod && typeof descriptor.value === 'function') {
-        target[name] = getMethod(name);
-        continue;
+      if(typeof descriptor.value === 'function') {
+          if (allowMethod) {
+              target[name] = getMethod(name);
+          }
+          continue;
       }
 
       var isEvent = isEventHandlerName(name);
@@ -332,8 +334,13 @@ window.ShadowDOMPolyfill = {};
       return null;
 
     assert(isNative(impl));
-    return impl.__wrapper8e3dd93a60__ ||
-        (impl.__wrapper8e3dd93a60__ = new (getWrapperConstructor(impl))(impl));
+    var wrapper = impl.__wrapper8e3dd93a60__;
+    if (wrapper != null) {
+      return wrapper;
+    }
+
+    return impl.__wrapper8e3dd93a60__ =
+      new (getWrapperConstructor(impl, impl))(impl);
   }
 
   /**

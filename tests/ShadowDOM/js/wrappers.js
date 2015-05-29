@@ -86,6 +86,61 @@ suite('Wrapper creation', function() {
     'video': 'HTMLVideoElement',
   };
 
+  var getCustomClasses = (function() {
+    function WrapperClass() {}
+    ShadowDOMPolyfill.registerWrapper(WrapperClass, function(){});
+    function BaseClass(){}
+    BaseClass.prototype = Object.create(WrapperClass.prototype, {
+      baseMethod: {
+        value: function(arg){return arg;}
+      }
+    });
+    function SuperClass(){};
+    // Set a method on a prototype whose parent prototype is not yet wrapped
+    SuperClass.prototype = Object.create(BaseClass.prototype, {
+      superMethod: {
+        value: function(arg){return arg;}
+      }
+    });
+    var Classes = {
+      WrapperClass: WrapperClass,
+      BaseClass: BaseClass,
+      SuperClass: SuperClass
+    };
+    return function(){
+      return Classes;
+    }
+  })();
+
+  test('Element prototype is first prototype of wrapped instance', function() {
+    // Before #317, prototype had to be retrieved with two calls:
+    // Object.getPrototypeOf(Object.getPrototypeOf(textNode))
+    var Classes = getCustomClasses();
+    var node = Object.create(Classes.SuperClass.prototype);
+    var wrappedNode = ShadowDOMPolyfill.wrap(node);
+    var wrappedPrototype = Object.getPrototypeOf(wrappedNode);
+    var customFnDescriptor = Object.getOwnPropertyDescriptor(
+        wrappedPrototype, 'superMethod');
+    assert.isDefined(customFnDescriptor,
+        'Prototype method should be on first prototype of instance');
+  });
+
+  // Super class is defined as a class above a base class, which is above an
+  // existing wrapped class (GeneratedWrapper).
+  test('Super class methods are wrapped as methods on base class', function() {
+    var Classes = getCustomClasses();
+    var node = Object.create(Classes.SuperClass.prototype);
+    var wrappedNode = ShadowDOMPolyfill.wrap(node);
+    ShadowDOMPolyfill.setWrapper(node, wrappedNode);
+    var wrappedPrototype = Object.getPrototypeOf(wrappedNode);
+    var customFnDescriptor = Object.getOwnPropertyDescriptor(
+        wrappedPrototype, 'superMethod');
+    assert.isFunction(customFnDescriptor.value,
+        'Super method should be a function');
+    assert.isUndefined(customFnDescriptor.get,
+        'Super method should not be get/set');
+    assert.isUndefined(customFnDescriptor.set);
+  });
 
   test('Br element wrapper', function() {
     var br = document.createElement('br');
