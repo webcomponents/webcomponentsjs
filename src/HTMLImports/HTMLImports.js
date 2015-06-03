@@ -52,6 +52,6 @@ modules.forEach(function(f) {
 });
 
 // exports
-HTMLImports.flags = flags;
+window.HTMLImports.flags = flags;
 
 })();

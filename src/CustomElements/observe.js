@@ -13,7 +13,7 @@
  * @module observe
 */
 
-CustomElements.addModule(function(scope){
+window.CustomElements.addModule(function(scope){
 
 // imports
 var flags = scope.flags;

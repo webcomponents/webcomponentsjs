@@ -7,7 +7,7 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
-HTMLImports.addModule(function(scope) {
+window.HTMLImports.addModule(function(scope) {
 
 var CSS_URL_REGEXP = /(url\()([^)]*)(\))/g;
 var CSS_IMPORT_REGEXP = /(@import[\s]+(?!url\())([^;]*)(;)/g;

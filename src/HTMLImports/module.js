@@ -25,5 +25,5 @@ var initializeModules = function() {
 scope.addModule = addModule;
 scope.initializeModules = initializeModules;
 
-})(HTMLImports);
+})(window.HTMLImports);
 

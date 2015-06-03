@@ -67,4 +67,4 @@ window.WebComponents = window.WebComponents || {};
 
   // export
   scope.flags = flags;
-})(WebComponents);
+})(window.WebComponents);

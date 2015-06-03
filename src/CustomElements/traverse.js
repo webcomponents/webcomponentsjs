@@ -9,7 +9,7 @@
  */
 
 // helper methods for traversing through element trees
-CustomElements.addModule(function(scope){
+window.CustomElements.addModule(function(scope){
 
 // imports
 var IMPORT_LINK_TYPE = window.HTMLImports ? HTMLImports.IMPORT_LINK_TYPE : 'none';

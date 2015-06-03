@@ -36,4 +36,4 @@ scope.hasNative = Boolean(document.registerElement);
 scope.useNative = !flags.register && scope.hasNative &&
 		!window.ShadowDOMPolyfill && (!window.HTMLImports || HTMLImports.useNative);
 
-})(CustomElements);
+})(window.CustomElements);
