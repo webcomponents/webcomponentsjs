@@ -7,7 +7,7 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
-// @version 0.7.2
+// @version 0.7.3
 if (typeof WeakMap === "undefined") {
   (function() {
     var defineProperty = Object.defineProperty;
@@ -113,7 +113,7 @@ window.ShadowDOMPolyfill = {};
     defineProperty(object, name, nonEnumerableDataDescriptor);
   }
   getOwnPropertyNames(window);
-  function getWrapperConstructor(node) {
+  function getWrapperConstructor(node, opt_instance) {
     var nativePrototype = node.__proto__ || Object.getPrototypeOf(node);
     if (isFirefox) {
       try {
@@ -126,7 +126,7 @@ window.ShadowDOMPolyfill = {};
     if (wrapperConstructor) return wrapperConstructor;
     var parentWrapperConstructor = getWrapperConstructor(nativePrototype);
     var GeneratedWrapper = createWrapperConstructor(parentWrapperConstructor);
-    registerInternal(nativePrototype, GeneratedWrapper, node);
+    registerInternal(nativePrototype, GeneratedWrapper, opt_instance);
     return GeneratedWrapper;
   }
   function addForwardingProperties(nativePrototype, wrapperPrototype) {
@@ -186,8 +186,10 @@ window.ShadowDOMPolyfill = {};
       }
       var descriptor = getDescriptor(source, name);
       var getter, setter;
-      if (allowMethod && typeof descriptor.value === "function") {
-        target[name] = getMethod(name);
+      if (typeof descriptor.value === "function") {
+        if (allowMethod) {
+          target[name] = getMethod(name);
+        }
         continue;
       }
       var isEvent = isEventHandlerName(name);
@@ -250,7 +252,11 @@ window.ShadowDOMPolyfill = {};
   function wrap(impl) {
     if (impl === null) return null;
     assert(isNative(impl));
-    return impl.__wrapper8e3dd93a60__ || (impl.__wrapper8e3dd93a60__ = new (getWrapperConstructor(impl))(impl));
+    var wrapper = impl.__wrapper8e3dd93a60__;
+    if (wrapper != null) {
+      return wrapper;
+    }
+    return impl.__wrapper8e3dd93a60__ = new (getWrapperConstructor(impl, impl))(impl);
   }
   function unwrap(wrapper) {
     if (wrapper === null) return null;

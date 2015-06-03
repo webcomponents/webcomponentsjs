@@ -1,33 +1,33 @@
 BUILD LOG
 ---------
-Build Time: 2015-05-26T17:48:07-0700
+Build Time: 2015-06-03T16:30:51-0700
 
 NODEJS INFORMATION
 ==================
 nodejs: v2.0.2
-gulp: 3.8.11
+gulp: 3.9.0
 gulp-audit: 1.0.0
 gulp-concat: 2.5.2
 gulp-header: 1.2.2
-run-sequence: 1.1.0
-web-component-tester: 3.1.3
 gulp-uglify: 1.2.0
+run-sequence: 1.1.0
+web-component-tester: 3.1.4
 
 REPO REVISIONS
 ==============
-webcomponentsjs: 131ea2174ec5c4d4a48e6637cc0751dc5dee43a3
+webcomponentsjs: da802598acc91d10d0205cf6130d15bd75fa12d1
 
 BUILD HASHES
 ============
-CustomElements.js: 62dbb3db0856c43bb43a90c1f9ac400cb568d2e2
-CustomElements.min.js: 482d41c9b901e21b8be5dde1f334579bea9b3278
-HTMLImports.js: 6aa44b4dbe224ba04011308ffcfc7bac4d2ecf45
-HTMLImports.min.js: ac0190e185cf6a3fcd9b092b2143b8796c2b2db7
-MutationObserver.js: 6d07c7fab2a59b4d3face7bf3b61474514d506ec
-MutationObserver.min.js: 3e3ec659c0b2c27d5717f2155507d76f06abf103
-ShadowDOM.js: aeb06cb34b92f5fd5f91e169a8545043a4c06e4e
-ShadowDOM.min.js: a615e963dfa831edadd0457327a7c3818693e19c
-webcomponents-lite.js: 5ebee320c939e16c7747d354a7b59c5eaf6372b3
-webcomponents-lite.min.js: 3c4c323b2584c009791a41a351491f610e2cc253
-webcomponents.js: a028071aec0b77be6f1c562552f199ea57f73869
-webcomponents.min.js: 57b88a10558b60e24f309ff6dc914d9100977895
+CustomElements.js: 89978a89cdf96d509b8e399bf8e6aff4431c41ea
+CustomElements.min.js: e8d9ac81e56720cccef8e1ba01400d4f403531b1
+HTMLImports.js: 5a393509ce18b7ee605cd4474750e783a6afa5a5
+HTMLImports.min.js: 6ce4c8c1340b3ceea4a2c05942cf4e8ef685fae3
+MutationObserver.js: 60074504bbdf487e192215647375bffb70888997
+MutationObserver.min.js: 76658a548e3785ee931d45fad4a0bd2b81594aa3
+ShadowDOM.js: 35dceaf9eca85b593764a05b5324173e84f07608
+ShadowDOM.min.js: 80ab65804971765c3450864b24f108efd8bd6086
+webcomponents-lite.js: 94a081e93a4b2c65e645787b6e69c2a0aac204ff
+webcomponents-lite.min.js: 80158c463eb7fda32995d908b9fbabcf95595c0e
+webcomponents.js: de93a7fee51ce01dd61546598f12e481755c44ca
+webcomponents.min.js: 0a70cae0a9589e463aa36d1ec9c1fbc87c1b1c5c
