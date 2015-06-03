@@ -18,7 +18,7 @@
  * @class Document
 */
 
-CustomElements.addModule(function(scope) {
+window.CustomElements.addModule(function(scope) {
 
 // imports
 var isIE11OrOlder = scope.isIE11OrOlder;

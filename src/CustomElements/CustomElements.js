@@ -49,6 +49,6 @@ modules.forEach(function(f) {
 });
 
 // exports
-CustomElements.flags = flags;
+window.CustomElements.flags = flags;
 
 })();

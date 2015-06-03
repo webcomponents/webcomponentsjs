@@ -64,4 +64,4 @@ if (document.readyState === 'complete' ||
   document.addEventListener('DOMContentLoaded', bootstrap);
 }
 
-})(HTMLImports);
+})(window.HTMLImports);

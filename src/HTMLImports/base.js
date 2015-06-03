@@ -237,4 +237,4 @@ scope.rootDocument = rootDocument;
 scope.whenReady = whenReady;
 scope.isIE = isIE;
 
-})(HTMLImports);
+})(window.HTMLImports);
