@@ -95,6 +95,16 @@ if (isIE11OrOlder && (typeof window.CustomEvent !== 'function')) {
     params = params || {};
     var e = document.createEvent('CustomEvent');
     e.initCustomEvent(inType, Boolean(params.bubbles), Boolean(params.cancelable), params.detail);
+    // IE does not set `defaultPrevented` when `preventDefault()` is called on
+    // CustomEvents
+    // http://stackoverflow.com/questions/23349191/event-preventdefault-is-not-working-in-ie-11-for-custom-events
+    e.preventDefault = function() {
+      Object.defineProperty(this, 'defaultPrevented', {
+        get: function() {
+          return true;
+        }
+      });
+    };
     return e;
   };
   window.CustomEvent.prototype = window.Event.prototype;
