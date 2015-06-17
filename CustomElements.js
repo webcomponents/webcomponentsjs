@@ -7,7 +7,7 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
-// @version 0.7.3
+// @version 0.7.4
 if (typeof WeakMap === "undefined") {
   (function() {
     var defineProperty = Object.defineProperty;
@@ -940,6 +940,13 @@ window.CustomElements.addModule(function(scope) {
       params = params || {};
       var e = document.createEvent("CustomEvent");
       e.initCustomEvent(inType, Boolean(params.bubbles), Boolean(params.cancelable), params.detail);
+      e.preventDefault = function() {
+        Object.defineProperty(this, "defaultPrevented", {
+          get: function() {
+            return true;
+          }
+        });
+      };
       return e;
     };
     window.CustomEvent.prototype = window.Event.prototype;

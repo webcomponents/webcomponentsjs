@@ -1,33 +1,33 @@
 BUILD LOG
 ---------
-Build Time: 2015-06-03T16:30:51-0700
+Build Time: 2015-06-17T16:34:06-0700
 
 NODEJS INFORMATION
 ==================
-nodejs: v2.0.2
+nodejs: v2.3.0
 gulp: 3.9.0
-gulp-audit: 1.0.0
 gulp-concat: 2.5.2
 gulp-header: 1.2.2
+gulp-audit: 1.0.0
 gulp-uglify: 1.2.0
 run-sequence: 1.1.0
-web-component-tester: 3.1.4
+web-component-tester: 3.1.7
 
 REPO REVISIONS
 ==============
-webcomponentsjs: da802598acc91d10d0205cf6130d15bd75fa12d1
+webcomponentsjs: 1e997327a07a06b323cfd9c0f2f20be2f19622bd
 
 BUILD HASHES
 ============
-CustomElements.js: 89978a89cdf96d509b8e399bf8e6aff4431c41ea
-CustomElements.min.js: e8d9ac81e56720cccef8e1ba01400d4f403531b1
-HTMLImports.js: 5a393509ce18b7ee605cd4474750e783a6afa5a5
-HTMLImports.min.js: 6ce4c8c1340b3ceea4a2c05942cf4e8ef685fae3
-MutationObserver.js: 60074504bbdf487e192215647375bffb70888997
-MutationObserver.min.js: 76658a548e3785ee931d45fad4a0bd2b81594aa3
-ShadowDOM.js: 35dceaf9eca85b593764a05b5324173e84f07608
-ShadowDOM.min.js: 80ab65804971765c3450864b24f108efd8bd6086
-webcomponents-lite.js: 94a081e93a4b2c65e645787b6e69c2a0aac204ff
-webcomponents-lite.min.js: 80158c463eb7fda32995d908b9fbabcf95595c0e
-webcomponents.js: de93a7fee51ce01dd61546598f12e481755c44ca
-webcomponents.min.js: 0a70cae0a9589e463aa36d1ec9c1fbc87c1b1c5c
+CustomElements.js: d0e14910e243a273a4232a306fa9aaadd42e2e62
+CustomElements.min.js: 52ebed21c61ef87600b5cbd3be1be3c6b3ff6717
+HTMLImports.js: 77031f405ed92311e00dcdf5156334904c3dfd55
+HTMLImports.min.js: 797f433d6c93eba33b4d3f78c5dc6256bfe9b022
+MutationObserver.js: 1a841a203cb205dea00ac8b9cf556b84163287c6
+MutationObserver.min.js: 2e89fddb7b0853569badbb7c8f118740731d9265
+ShadowDOM.js: 7f1a370e34c703563184bc933e0e0eaa239d6e39
+ShadowDOM.min.js: 18aaa44f83dfd1394922c44405a00bd0e5dd1fb6
+webcomponents-lite.js: ec37bb39c88c6350adccb715944c0c3a16a2786b
+webcomponents-lite.min.js: 3cb97939dcae210442fb011fffcd2d8c0f0c1922
+webcomponents.js: 0ef8e88c6adb8fd49494c8d028e8ba5f77ca1ebf
+webcomponents.min.js: 6b2a0409ca8406a2dc4dfc2f2e151ba271f6b29d
