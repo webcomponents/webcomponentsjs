@@ -158,7 +158,7 @@ function _detached(element) {
 // recurse up the tree to check if an element is actually in the main document.
 function inDocument(element) {
   var p = element;
-  var doc = wrap(document);
+  var doc = window.wrap(document);
   while (p) {
     if (p == doc) {
       return true;

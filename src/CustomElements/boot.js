@@ -65,7 +65,7 @@ function bootstrap() {
   // install upgrade hook if HTMLImports are available
   if (window.HTMLImports) {
     window.HTMLImports.__importsParsingHook = function(elt) {
-      upgradeDocumentTree(wrap(elt.import));
+      upgradeDocumentTree(window.wrap(elt.import));
       //CustomElements.parser.parse(elt.import);
     };
   }
