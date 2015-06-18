@@ -110,8 +110,8 @@ var importParser = {
     // TODO(sorvell): consider if there's a better way to do this;
     // expose an imports parsing hook; this is needed, for example, by the
     // CustomElements polyfill.
-    if (HTMLImports.__importsParsingHook) {
-      HTMLImports.__importsParsingHook(elt);
+    if (window.HTMLImports.__importsParsingHook) {
+      window.HTMLImports.__importsParsingHook(elt);
     }
     if (elt.import) {
       elt.import.__importParsed = true;

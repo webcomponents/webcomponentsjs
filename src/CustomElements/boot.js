@@ -48,8 +48,8 @@ var upgradeDocumentTree = scope.upgradeDocumentTree;
 // cannot be wrapped so we help the polyfill by wrapping some elements.
 if (!window.wrap) {
   if (window.ShadowDOMPolyfill) {
-    window.wrap = ShadowDOMPolyfill.wrapIfNeeded;
-    window.unwrap = ShadowDOMPolyfill.unwrapIfNeeded;
+    window.wrap = window.ShadowDOMPolyfill.wrapIfNeeded;
+    window.unwrap = window.ShadowDOMPolyfill.unwrapIfNeeded;
   } else {
     window.wrap = window.unwrap = function(node) {
       return node;
@@ -61,25 +61,25 @@ if (!window.wrap) {
 // bootstrap parsing
 function bootstrap() {
   // parse document
-  upgradeDocumentTree(wrap(document));
+  upgradeDocumentTree(window.wrap(document));
   // install upgrade hook if HTMLImports are available
   if (window.HTMLImports) {
-    HTMLImports.__importsParsingHook = function(elt) {
+    window.HTMLImports.__importsParsingHook = function(elt) {
       upgradeDocumentTree(wrap(elt.import));
       //CustomElements.parser.parse(elt.import);
     };
   }
   // set internal 'ready' flag, now document.registerElement will trigger
   // synchronous upgrades
-  CustomElements.ready = true;
+  window.CustomElements.ready = true;
   // async to ensure *native* custom elements upgrade prior to this
   // DOMContentLoaded can fire before elements upgrade (e.g. when there's
   // an external script)
   setTimeout(function() {
     // capture blunt profiling data
-    CustomElements.readyTime = Date.now();
+    window.CustomElements.readyTime = Date.now();
     if (window.HTMLImports) {
-      CustomElements.elapsed = CustomElements.readyTime - HTMLImports.readyTime;
+      window.CustomElements.elapsed = window.CustomElements.readyTime - window.HTMLImports.readyTime;
     }
     // notify the system that we are bootstrapped
     document.dispatchEvent(
@@ -123,7 +123,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
 // When loading at other readyStates, wait for the appropriate DOM event to
 // bootstrap.
 } else {
-  var loadEvent = window.HTMLImports && !HTMLImports.ready ?
+  var loadEvent = window.HTMLImports && !window.HTMLImports.ready ?
       'HTMLImportsLoaded' : 'DOMContentLoaded';
   window.addEventListener(loadEvent, bootstrap);
 }

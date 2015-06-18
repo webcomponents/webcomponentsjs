@@ -92,7 +92,7 @@
   if (HTMLImports.useNative) {
     installPolymerWarning();
   } else {
-    addEventListener('DOMContentLoaded', installPolymerWarning);
+    window.addEventListener('DOMContentLoaded', installPolymerWarning);
   }
 
 })(window.WebComponents);

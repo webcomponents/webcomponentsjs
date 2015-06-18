@@ -239,10 +239,10 @@ function handler(mutations) {
   pending upgrades and attached/detached callbacks synchronously.
 */
 function takeRecords(node) {
-  node = wrap(node);
+  node = window.wrap(node);
   // If the optional node is not supplied, assume we mean the whole document.
   if (!node) {
-    node = wrap(document);
+    node = window.wrap(document);
   }
   // Find the root of the tree, which will be an Document or ShadowRoot.
   while (node.parentNode) {
@@ -272,7 +272,7 @@ function observe(inRoot) {
 
 // upgrade an entire document and observe it for elements changes.
 function upgradeDocument(doc) {
-  doc = wrap(doc);
+  doc = window.wrap(doc);
   flags.dom && console.group('upgradeDocument: ', (doc.baseURI).split('/').pop());
   addedNode(doc);
   observe(doc);
@@ -295,7 +295,7 @@ var originalCreateShadowRoot = Element.prototype.createShadowRoot;
 if (originalCreateShadowRoot) {
   Element.prototype.createShadowRoot = function() {
     var root = originalCreateShadowRoot.call(this);
-    CustomElements.watchShadow(this);
+    window.CustomElements.watchShadow(this);
     return root;
   };
 }

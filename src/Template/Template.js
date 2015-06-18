@@ -46,7 +46,7 @@ if (typeof HTMLTemplateElement === 'undefined') {
     };
 
     // auto-bootstrapping for main document
-    addEventListener('DOMContentLoaded', function() {
+    window.addEventListener('DOMContentLoaded', function() {
       HTMLTemplateElement.bootstrap(document);
     });
 

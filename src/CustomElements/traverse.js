@@ -12,7 +12,7 @@
 window.CustomElements.addModule(function(scope){
 
 // imports
-var IMPORT_LINK_TYPE = window.HTMLImports ? HTMLImports.IMPORT_LINK_TYPE : 'none';
+var IMPORT_LINK_TYPE = window.HTMLImports ? window.HTMLImports.IMPORT_LINK_TYPE : 'none';
 
 // walk the subtree rooted at node, including descent into shadow-roots,
 // applying 'cb' to each element
@@ -64,7 +64,7 @@ function forDocumentTree(doc, cb) {
 
 
 function _forDocumentTree(doc, cb, processingDocuments) {
-  doc = wrap(doc);
+  doc = window.wrap(doc);
   if (processingDocuments.indexOf(doc) >= 0) {
     return;
   }
