@@ -34,6 +34,6 @@ scope.hasNative = Boolean(document.registerElement);
 // NOTE: For consistent timing, use native custom elements only when not
 // polyfilling other key related web components features.
 scope.useNative = !flags.register && scope.hasNative &&
-		!window.ShadowDOMPolyfill && (!window.HTMLImports || HTMLImports.useNative);
+		!window.ShadowDOMPolyfill && (!window.HTMLImports || window.HTMLImports.useNative);
 
 })(window.CustomElements);

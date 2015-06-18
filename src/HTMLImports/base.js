@@ -38,13 +38,13 @@ var useNative = Boolean(IMPORT_LINK_TYPE in document.createElement('link'));
 // NOTE: ShadowDOMPolyfill intrusion.
 var hasShadowDOMPolyfill = Boolean(window.ShadowDOMPolyfill);
 var wrap = function(node) {
-  return hasShadowDOMPolyfill ? ShadowDOMPolyfill.wrapIfNeeded(node) : node;
+  return hasShadowDOMPolyfill ? window.ShadowDOMPolyfill.wrapIfNeeded(node) : node;
 };
 var rootDocument = wrap(document);
 
 var currentScriptDescriptor = {
   get: function() {
-    var script = HTMLImports.currentScript || document.currentScript ||
+    var script = window.HTMLImports.currentScript || document.currentScript ||
         // NOTE: only works when called in synchronously executing code.
         // readyState should check if `loading` but IE10 is
         // interactive when scripts run so we cheat.
@@ -223,8 +223,8 @@ if (useNative) {
 // behavior of native imports. A main document script that needs to be sure
 // imports have loaded should wait for this event.
 whenReady(function(detail) {
-  HTMLImports.ready = true;
-  HTMLImports.readyTime = new Date().getTime();
+  window.HTMLImports.ready = true;
+  window.HTMLImports.readyTime = new Date().getTime();
   var evt = rootDocument.createEvent("CustomEvent");
   evt.initCustomEvent("HTMLImportsLoaded", true, true, detail);
   rootDocument.dispatchEvent(evt);

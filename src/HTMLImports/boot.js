@@ -61,7 +61,7 @@ var rootDocument = scope.rootDocument;
   Bootstrap the imports machine.
 */
 function bootstrap() {
-  HTMLImports.importer.bootDocument(rootDocument);
+  window.HTMLImports.importer.bootDocument(rootDocument);
 }
 
 // TODO(sorvell): SD polyfill does *not* generate mutations for nodes added
