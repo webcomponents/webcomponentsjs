@@ -1,33 +1,33 @@
 BUILD LOG
 ---------
-Build Time: 2015-06-17T16:34:06-0700
+Build Time: 2015-06-17T19:01:18-0700
 
 NODEJS INFORMATION
 ==================
 nodejs: v2.3.0
 gulp: 3.9.0
+gulp-audit: 1.0.0
 gulp-concat: 2.5.2
 gulp-header: 1.2.2
-gulp-audit: 1.0.0
 gulp-uglify: 1.2.0
-run-sequence: 1.1.0
-web-component-tester: 3.1.7
+run-sequence: 1.1.1
+web-component-tester: 3.2.0
 
 REPO REVISIONS
 ==============
-webcomponentsjs: 1e997327a07a06b323cfd9c0f2f20be2f19622bd
+webcomponentsjs: 1ee61faca40f109f2f5b6ddc8fa15de0319a6e61
 
 BUILD HASHES
 ============
-CustomElements.js: d0e14910e243a273a4232a306fa9aaadd42e2e62
-CustomElements.min.js: 52ebed21c61ef87600b5cbd3be1be3c6b3ff6717
-HTMLImports.js: 77031f405ed92311e00dcdf5156334904c3dfd55
-HTMLImports.min.js: 797f433d6c93eba33b4d3f78c5dc6256bfe9b022
-MutationObserver.js: 1a841a203cb205dea00ac8b9cf556b84163287c6
-MutationObserver.min.js: 2e89fddb7b0853569badbb7c8f118740731d9265
-ShadowDOM.js: 7f1a370e34c703563184bc933e0e0eaa239d6e39
-ShadowDOM.min.js: 18aaa44f83dfd1394922c44405a00bd0e5dd1fb6
-webcomponents-lite.js: ec37bb39c88c6350adccb715944c0c3a16a2786b
-webcomponents-lite.min.js: 3cb97939dcae210442fb011fffcd2d8c0f0c1922
-webcomponents.js: 0ef8e88c6adb8fd49494c8d028e8ba5f77ca1ebf
-webcomponents.min.js: 6b2a0409ca8406a2dc4dfc2f2e151ba271f6b29d
+CustomElements.js: f3f0c7f3c65aeb5cc56c64300fe89003a4c7fa31
+CustomElements.min.js: 557ccd338ab463c9bcd1e3c0fc4102455432214a
+HTMLImports.js: 8c1f33a777d7ff8ee3a22fce8d35e5b927285724
+HTMLImports.min.js: f4ba44076c40f408c661caa8baf81f9e3740689b
+MutationObserver.js: 81934731acd4175701d678dbef11aaefa7d701f5
+MutationObserver.min.js: 6202537174240ba28bf71e22cddf90ce80cf73f8
+ShadowDOM.js: 5e901cfe7eb384f15a39b1bf4e510a06ae03b43e
+ShadowDOM.min.js: 397715836fdd0cfe15a5e966f5ab187ccc1bec15
+webcomponents-lite.js: 5c38f87a645eea9d282de74340c101e5531cb2c0
+webcomponents-lite.min.js: 2a744443fbfba6b30fde7b17606f68cae6036e52
+webcomponents.js: 637cf33c1ee108fb376891eed0b5b47deed8c238
+webcomponents.min.js: c2841b948265560478872747618cad207a693c4f
