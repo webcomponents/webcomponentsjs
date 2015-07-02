@@ -27,35 +27,34 @@ var forDocumentTree = scope.forDocumentTree;
 // manage lifecycle on added node and it's subtree; upgrade the node and
 // entire subtree if necessary and process attached for the node and entire
 // subtree
-function addedNode(node) {
-  return added(node) || addedSubtree(node);
+function addedNode(node, isAttached) {
+  return added(node, isAttached) || addedSubtree(node, isAttached);
 }
 
 // manage lifecycle on added node; upgrade if necessary and process attached
-function added(node) {
-  if (scope.upgrade(node)) {
+function added(node, isAttached) {
+  if (scope.upgrade(node, isAttached)) {
+    // Return true to indicate
     return true;
   }
-  attached(node);
+  if (isAttached) {
+    attached(node);
+  }
 }
 
 // manage lifecycle on added node's subtree only; allows the entire subtree
 // to upgrade if necessary and process attached
-function addedSubtree(node) {
+function addedSubtree(node, isAttached) {
   forSubtree(node, function(e) {
-    if (added(e)) {
+    if (added(e, isAttached)) {
       return true;
     }
   });
 }
 
 function attachedNode(node) {
-  attached(node);
-  // only check subtree if node is actually in document
   if (inDocument(node)) {
-    forSubtree(node, function(e) {
-      attached(e);
-    });
+    attached(node);
   }
 }
 
@@ -104,9 +103,8 @@ function _attached(element) {
   // track element for insertion if it's upgraded and cares about insertion
   if (element.__upgraded__ &&
     (element.attachedCallback || element.detachedCallback)) {
-    // bail if the element is already marked as attached and proceed only
-    // if it's actually in the document at this moment.
-    if (!element.__attached && inDocument(element)) {
+    // bail if the element is already marked as attached
+    if (!element.__attached) {
       element.__attached = true;
       if (element.attachedCallback) {
         element.attachedCallback();
@@ -144,9 +142,8 @@ function _detached(element) {
   // track element for removal if it's upgraded and cares about removal
   if (element.__upgraded__ &&
     (element.attachedCallback || element.detachedCallback)) {
-    // bail if the element is already marked as not attached and proceed only
-    // if it's actually *not* in the document at this moment.
-    if (element.__attached && !inDocument(element)) {
+    // bail if the element is already marked as not attached
+    if (element.__attached) {
       element.__attached = false;
       if (element.detachedCallback) {
         element.detachedCallback();
@@ -196,7 +193,7 @@ function watchShadow(node) {
 
       node.appendChild(div).appendChild(child);
 */
-function handler(mutations) {
+function handler(root, mutations) {
   // for logging only
   if (flags.dom) {
     var mx = mutations[0];
@@ -213,13 +210,14 @@ function handler(mutations) {
     console.group('mutations (%d) [%s]', mutations.length, u || '');
   }
   // handle mutations
+  var isAttached = inDocument(root);
   mutations.forEach(function(mx) {
     if (mx.type === 'childList') {
       forEach(mx.addedNodes, function(n) {
         if (!n.localName) {
           return;
         }
-        addedNode(n);
+        addedNode(n, isAttached);
       });
       forEach(mx.removedNodes, function(n) {
         if (!n.localName) {
@@ -250,7 +248,7 @@ function takeRecords(node) {
   }
   var observer = node.__observer;
   if (observer) {
-    handler(observer.takeRecords());
+    handler(node, observer.takeRecords());
     takeMutations();
   }
 }
@@ -265,7 +263,7 @@ function observe(inRoot) {
   }
   // For each ShadowRoot, we create a new MutationObserver, so the root can be
   // garbage collected once all references to the `inRoot` node are gone.
-  var observer = new MutationObserver(handler);
+  var observer = new MutationObserver(handler.bind(this, inRoot));
   observer.observe(inRoot, {childList: true, subtree: true});
   inRoot.__observer = observer;
 }
@@ -274,7 +272,7 @@ function observe(inRoot) {
 function upgradeDocument(doc) {
   doc = window.wrap(doc);
   flags.dom && console.group('upgradeDocument: ', (doc.baseURI).split('/').pop());
-  addedNode(doc);
+  addedNode(doc, doc === window.wrap(document));
   observe(doc);
   flags.dom && console.groupEnd();
 }

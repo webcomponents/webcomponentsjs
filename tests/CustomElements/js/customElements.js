@@ -457,6 +457,47 @@ suite('customElements', function() {
     assert.deepEqual(['a', 'b', 'c', 'd', 'e'], log);
   });
 
+  test('attached and detached in same turn', function(done) {
+    var log = [];
+    var p = Object.create(HTMLElement.prototype);
+    p.attachedCallback = function() {
+      log.push('attached');
+    };
+    p.detachedCallback = function() {
+      log.push('detached');
+    };
+    document.registerElement('x-ad', {prototype: p});
+    var el = document.createElement('x-ad');
+    work.appendChild(el);
+    work.removeChild(el);
+    setTimeout(function() {
+      assert.deepEqual(['attached', 'detached'], log);
+      done();
+    });
+  });
+
+  test('detached and re-attached in same turn', function(done) {
+    var log = [];
+    var p = Object.create(HTMLElement.prototype);
+    p.attachedCallback = function() {
+      log.push('attached');
+    };
+    p.detachedCallback = function() {
+      log.push('detached');
+    };
+    document.registerElement('x-da', {prototype: p});
+    var el = document.createElement('x-da');
+    work.appendChild(el);
+    CustomElements.takeRecords();
+    log = [];
+    work.removeChild(el);
+    work.appendChild(el);
+    setTimeout(function() {
+      assert.deepEqual(['detached', 'attached'], log);
+      done();
+    });
+  });
+
   test('detachedCallback ordering', function() {
     var log = [];
     var p = Object.create(HTMLElement.prototype);

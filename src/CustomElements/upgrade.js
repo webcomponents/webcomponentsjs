@@ -61,7 +61,7 @@ function upgradeWithDefinition(element, definition) {
   // attachedCallback fires in tree order, call before recursing
   scope.attachedNode(element);
   // there should never be a shadow root on element at this point
-  scope.upgradeSubtree(element);
+  scope.upgradeSubtree(element, element.__attached);
   flags.upgrade && console.groupEnd();
   // OUTPUT
   return element;
