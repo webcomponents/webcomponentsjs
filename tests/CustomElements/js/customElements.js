@@ -46,9 +46,12 @@ suite('customElements', function() {
   });
 
   test('document.registerElement requires name argument to not conflict with a reserved name', function() {
-    assert.throws(function() {
-      document.registerElement('font-face', {prototype: Object.create(HTMLElement.prototype)});
-    }, '', 'Failed to execute \'registerElement\' on \'Document\': Registration failed for type \'font-face\'. The type name is invalid.');
+    // Native Custom Elements no longer throws here so skip this test.
+    if (!CustomElements.useNative) {
+      assert.throws(function() {
+        document.registerElement('font-face', {prototype: Object.create(HTMLElement.prototype)});
+      }, '', 'Failed to execute \'registerElement\' on \'Document\': Registration failed for type \'font-face\'. The type name is invalid.');
+    }
   });
 
   test('document.registerElement requires name argument to be unique', function() {

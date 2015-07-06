@@ -52,12 +52,6 @@ function addedSubtree(node, isAttached) {
   });
 }
 
-function attachedNode(node) {
-  if (inDocument(node)) {
-    attached(node);
-  }
-}
-
 // On platforms without MutationObserver, mutations may not be
 // reliable and therefore attached/detached are not reliable.
 // To make these callbacks less likely to fail, we defer all inserts and removes
@@ -101,14 +95,11 @@ function attached(element) {
 // multiple times so we protect against extra processing here.
 function _attached(element) {
   // track element for insertion if it's upgraded and cares about insertion
-  if (element.__upgraded__ &&
-    (element.attachedCallback || element.detachedCallback)) {
-    // bail if the element is already marked as attached
-    if (!element.__attached) {
-      element.__attached = true;
-      if (element.attachedCallback) {
-        element.attachedCallback();
-      }
+  // bail if the element is already marked as attached
+  if (element.__upgraded__ && !element.__attached) {
+    element.__attached = true;
+    if (element.attachedCallback) {
+      element.attachedCallback();
     }
   }
 }
@@ -140,14 +131,11 @@ function detached(element) {
 // multiple times so we protect against extra processing here.
 function _detached(element) {
   // track element for removal if it's upgraded and cares about removal
-  if (element.__upgraded__ &&
-    (element.attachedCallback || element.detachedCallback)) {
-    // bail if the element is already marked as not attached
-    if (element.__attached) {
-      element.__attached = false;
-      if (element.detachedCallback) {
-        element.detachedCallback();
-      }
+  // bail if the element is already marked as not attached
+  if (element.__upgraded__ && element.__attached) {
+    element.__attached = false;
+    if (element.detachedCallback) {
+      element.detachedCallback();
     }
   }
 }
@@ -192,6 +180,10 @@ function watchShadow(node) {
   (2) In this case, child will get its own mutation record:
 
       node.appendChild(div).appendChild(child);
+
+  We cannot know ahead of time if we need to walk into the node in (1) so we
+  do and see child; however, if it was added via case (2) then it will have its
+  own record and therefore be seen 2x.
 */
 function handler(root, mutations) {
   // for logging only
@@ -210,6 +202,10 @@ function handler(root, mutations) {
     console.group('mutations (%d) [%s]', mutations.length, u || '');
   }
   // handle mutations
+  // NOTE: do an `inDocument` check dynamically here. It's possible that `root`
+  // is a document in which case the answer here can never change; however 
+  // `root` may be an element like a shadowRoot that can be added/removed
+  // from the main document.
   var isAttached = inDocument(root);
   mutations.forEach(function(mx) {
     if (mx.type === 'childList') {
@@ -263,6 +259,8 @@ function observe(inRoot) {
   }
   // For each ShadowRoot, we create a new MutationObserver, so the root can be
   // garbage collected once all references to the `inRoot` node are gone.
+  // Give the handler access to the root so that an 'in document' check can
+  // be done.
   var observer = new MutationObserver(handler.bind(this, inRoot));
   observer.observe(inRoot, {childList: true, subtree: true});
   inRoot.__observer = observer;
@@ -272,7 +270,8 @@ function observe(inRoot) {
 function upgradeDocument(doc) {
   doc = window.wrap(doc);
   flags.dom && console.group('upgradeDocument: ', (doc.baseURI).split('/').pop());
-  addedNode(doc, doc === window.wrap(document));
+  var isMainDocument = (doc === window.wrap(document));
+  addedNode(doc, isMainDocument);
   observe(doc);
   flags.dom && console.groupEnd();
 }
@@ -303,7 +302,7 @@ scope.watchShadow = watchShadow;
 scope.upgradeDocumentTree = upgradeDocumentTree;
 scope.upgradeSubtree = addedSubtree;
 scope.upgradeAll = addedNode;
-scope.attachedNode = attachedNode;
+scope.attached = attached;
 scope.takeRecords = takeRecords;
 
 });

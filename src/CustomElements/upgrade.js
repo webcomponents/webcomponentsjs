@@ -32,21 +32,21 @@ var flags = scope.flags;
  * @return {Element} The upgraded element.
  */
 // Upgrade a node if it can be upgraded and is not already.
-function upgrade(node) {
+function upgrade(node, isAttached) {
   if (!node.__upgraded__ && (node.nodeType === Node.ELEMENT_NODE)) {
     var is = node.getAttribute('is');
     var definition = scope.getRegisteredDefinition(is || node.localName);
     if (definition) {
       if (is && definition.tag == node.localName) {
-        return upgradeWithDefinition(node, definition);
+        return upgradeWithDefinition(node, definition, isAttached);
       } else if (!is && !definition.extends) {
-        return upgradeWithDefinition(node, definition);
+        return upgradeWithDefinition(node, definition, isAttached);
       }
     }
   }
 }
 
-function upgradeWithDefinition(element, definition) {
+function upgradeWithDefinition(element, definition, isAttached) {
   flags.upgrade && console.group('upgrade:', element.localName);
   // some definitions specify an 'is' attribute
   if (definition.is) {
@@ -59,9 +59,11 @@ function upgradeWithDefinition(element, definition) {
   // lifecycle management
   created(element);
   // attachedCallback fires in tree order, call before recursing
-  scope.attachedNode(element);
+  if (isAttached) {
+    scope.attached(element);
+  }
   // there should never be a shadow root on element at this point
-  scope.upgradeSubtree(element, element.__attached);
+  scope.upgradeSubtree(element, isAttached);
   flags.upgrade && console.groupEnd();
   // OUTPUT
   return element;
