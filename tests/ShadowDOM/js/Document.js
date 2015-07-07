@@ -575,7 +575,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement attachedCallback, detachedCallback',
-      function() {
+      function(done) {
     if (!document.registerElement)
       return;
 
@@ -601,9 +601,16 @@ htmlSuite('Document', function() {
 
     var a = new A;
     document.body.appendChild(a);
-    assert.equal(attachedCalls, 1);
-    document.body.removeChild(a);
-    assert.equal(detachedCalls, 1);
+
+    // CE polyfill attachment is async, need to wait... (or force using takeRecords)
+    setTimeout(function() {
+      assert.equal(attachedCalls, 1);
+      document.body.removeChild(a);
+      setTimeout(function() {
+        assert.equal(detachedCalls, 1);
+        done();
+      });
+    });
   });
 
   test('document.registerElement attributeChangedCallback', function() {
@@ -648,7 +655,7 @@ htmlSuite('Document', function() {
     assert.equal(attributeChangedCalls, 3);
   });
 
-  test('document.registerElement get reference, upgrade, rewrap', function() {
+  test('document.registerElement get reference, upgrade', function() {
     if (!document.registerElement)
       return;
 
@@ -664,8 +671,7 @@ htmlSuite('Document', function() {
     };
 
     A = document.registerElement('x-a6', A);
-    // re-wrap after registration to update wrapper
-    ShadowDOMPolyfill.rewrap(ShadowDOMPolyfill.unwrap(div.firstChild));
+
     assert.isTrue(div.firstChild.isCustom);
   });
 
