@@ -229,7 +229,9 @@ var importParser = {
     // keep track of executing script to help polyfill `document.currentScript`
     scope.currentScript = scriptElt;
     this.trackElement(script, function(e) {
-      script.parentNode.removeChild(script);
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
       scope.currentScript = null;
     });
     this.addElementToDocument(script);
