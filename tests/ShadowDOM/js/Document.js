@@ -576,8 +576,10 @@ htmlSuite('Document', function() {
 
   test('document.registerElement attachedCallback, detachedCallback',
       function(done) {
-    if (!document.registerElement)
+    if (!document.registerElement) {
+      done();
       return;
+    }
 
     var attachedCalls = 0;
     var detachedCalls = 0;
@@ -656,8 +658,9 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement get reference, upgrade', function() {
-    if (!document.registerElement)
+    if (!document.registerElement) {
       return;
+    }
 
     div = document.body.appendChild(document.createElement('div'));
     div.innerHTML = '<x-a6></x-a6>';
@@ -671,6 +674,11 @@ htmlSuite('Document', function() {
     };
 
     A = document.registerElement('x-a6', A);
+
+    // make test work when native custom elements is used with SD polyfill
+    if (!window.CustomElements) {
+      ShadowDOMPolyfill.rewrap(ShadowDOMPolyfill.unwrap(div.firstChild));
+    }
 
     assert.isTrue(div.firstChild.isCustom);
   });
