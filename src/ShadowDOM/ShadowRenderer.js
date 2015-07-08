@@ -340,10 +340,9 @@
         var shadowTrees = getShadowTrees(shadowHost);
 
         // 1.2
-        var renderer = getRendererForHost(shadowHost);
         for (var i = 0; i < shadowTrees.length; i++) {
           // 1.2.1
-          renderer.poolDistribution(shadowTrees[i], pool);
+          this.poolDistribution(shadowTrees[i], pool);
         }
 
         // 1.3
@@ -419,10 +418,8 @@
         return;
       }
 
-      // Make sure to use the correct renderer.
       for (var child = node.firstChild; child; child = child.nextSibling) {
-        var renderer = isShadowHost(child) ? getRendererForHost(child) : this;
-        renderer.poolDistribution(child, pool);
+        this.poolDistribution(child, pool);
       }
     },
 
