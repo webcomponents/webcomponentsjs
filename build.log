@@ -1,13 +1,13 @@
 BUILD LOG
 ---------
-Build Time: 2015-06-17T19:01:18-0700
+Build Time: 2015-07-09T14:48:58-0700
 
 NODEJS INFORMATION
 ==================
-nodejs: v2.3.0
+nodejs: v2.3.3
 gulp: 3.9.0
 gulp-audit: 1.0.0
-gulp-concat: 2.5.2
+gulp-concat: 2.6.0
 gulp-header: 1.2.2
 gulp-uglify: 1.2.0
 run-sequence: 1.1.1
@@ -15,19 +15,19 @@ web-component-tester: 3.2.0
 
 REPO REVISIONS
 ==============
-webcomponentsjs: 1ee61faca40f109f2f5b6ddc8fa15de0319a6e61
+webcomponentsjs: b0f4eff3e501b07960de40386bcac47c2afeb851
 
 BUILD HASHES
 ============
-CustomElements.js: f3f0c7f3c65aeb5cc56c64300fe89003a4c7fa31
-CustomElements.min.js: 557ccd338ab463c9bcd1e3c0fc4102455432214a
-HTMLImports.js: 8c1f33a777d7ff8ee3a22fce8d35e5b927285724
-HTMLImports.min.js: f4ba44076c40f408c661caa8baf81f9e3740689b
-MutationObserver.js: 81934731acd4175701d678dbef11aaefa7d701f5
-MutationObserver.min.js: 6202537174240ba28bf71e22cddf90ce80cf73f8
-ShadowDOM.js: 5e901cfe7eb384f15a39b1bf4e510a06ae03b43e
-ShadowDOM.min.js: 397715836fdd0cfe15a5e966f5ab187ccc1bec15
-webcomponents-lite.js: 5c38f87a645eea9d282de74340c101e5531cb2c0
-webcomponents-lite.min.js: 2a744443fbfba6b30fde7b17606f68cae6036e52
-webcomponents.js: 637cf33c1ee108fb376891eed0b5b47deed8c238
-webcomponents.min.js: c2841b948265560478872747618cad207a693c4f
+CustomElements.js: 1ff9c23ef55581aadb5a50655991fcba1636d2a6
+CustomElements.min.js: 6e0b479f58c532480dfd1d3dc139c473f52e294c
+HTMLImports.js: a90ec72d207a969c56c4ff90913ec2b39a8b3bf9
+HTMLImports.min.js: 564b11763a82f4cd1264be0573201692b5c50948
+MutationObserver.js: e3321d300deb7a866867338be3adce94bb23abb1
+MutationObserver.min.js: 3a46adba0a5cdbb3a715a67bce650360e6698615
+ShadowDOM.js: bfe2d7926de503650f95396e7e86f08bc052dbe2
+ShadowDOM.min.js: 10349ae64abd33583e70938a988e557b974e31bb
+webcomponents-lite.js: c43501d2096a2df3f09b371683ee8ba40e78afea
+webcomponents-lite.min.js: e609a0b6f32ff4563b96b4f2a0729cf330ed708c
+webcomponents.js: ebc995d9ff946a4cf0777ab04351aad28bc3ea03
+webcomponents.min.js: 88447a12ec66927d1159fd9ead01bf87a2fdd927
