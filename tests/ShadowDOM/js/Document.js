@@ -412,7 +412,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     var aPrototype = Object.create(HTMLElement.prototype);
@@ -463,7 +463,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement type extension', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     var aPrototype = Object.create(HTMLSpanElement.prototype);
@@ -492,7 +492,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement deeper', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     function C() {}
@@ -530,7 +530,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement createdCallback', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     var self;
@@ -555,7 +555,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement createdCallback upgrade', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     div = document.body.appendChild(document.createElement('div'));
@@ -576,7 +576,7 @@ htmlSuite('Document', function() {
 
   test('document.registerElement attachedCallback, detachedCallback',
       function(done) {
-    if (!document.registerElement) {
+    if (!document.registerElement || !Object.__proto__) {
       done();
       return;
     }
@@ -616,7 +616,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement attributeChangedCallback', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     var attributeChangedCalls = 0;
@@ -658,7 +658,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement get reference, upgrade', function() {
-    if (!document.registerElement) {
+    if (!document.registerElement || !Object.__proto__) {
       return;
     }
 
@@ -684,7 +684,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement optional option', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     document.registerElement('x-a7');
