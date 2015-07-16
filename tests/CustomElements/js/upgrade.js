@@ -118,4 +118,16 @@ suite('upgradeElements', function() {
     });
   });
 
+  test('CustomElements.upgrade upgrades element syntax and ignores bogus type extension', function() {
+    var XProto = Object.create(HTMLElement.prototype);
+    XProto.test = 'x-test-value';
+    document.registerElement('x-test', {
+      prototype: XProto
+    });
+    work.innerHTML = '<x-test is="x-foo"></x-test>';
+    CustomElements.upgradeAll(work);
+    var x = work.querySelector('x-test');
+    assert.equal(x.test, 'x-test-value');
+  });
+
 });
