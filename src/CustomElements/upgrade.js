@@ -35,11 +35,15 @@ var flags = scope.flags;
 function upgrade(node, isAttached) {
   if (!node.__upgraded__ && (node.nodeType === Node.ELEMENT_NODE)) {
     var is = node.getAttribute('is');
-    var definition = scope.getRegisteredDefinition(is || node.localName);
+    // find definition first by localName and secondarily by is attribute
+    var definition = scope.getRegisteredDefinition(node.localName) ||
+      scope.getRegisteredDefinition(is);
     if (definition) {
-      if (is && definition.tag == node.localName) {
-        return upgradeWithDefinition(node, definition, isAttached);
-      } else if (!is && !definition.extends) {
+      // upgrade with is iff the definition tag matches the element tag
+      // and don't upgrade if there's an is and the definition does not extend
+      // a native element
+      if ((is && definition.tag == node.localName) ||
+        (!is && !definition.extends)) {
         return upgradeWithDefinition(node, definition, isAttached);
       }
     }
