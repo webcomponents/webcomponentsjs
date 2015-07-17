@@ -13,13 +13,16 @@
 
   var Element = scope.wrappers.Element;
   var HTMLElement = scope.wrappers.HTMLElement;
-  var registerObject = scope.registerObject;
+  var registerWrapper = scope.registerWrapper;
   var defineWrapGetter = scope.defineWrapGetter;
+  var unsafeUnwrap = scope.unsafeUnwrap;
+  var wrap = scope.wrap;
+  var mixin = scope.mixin;
 
   var SVG_NS = 'http://www.w3.org/2000/svg';
+  var OriginalSVGElement = window.SVGElement;
+
   var svgTitleElement = document.createElementNS(SVG_NS, 'title');
-  var SVGTitleElement = registerObject(svgTitleElement);
-  var SVGElement = Object.getPrototypeOf(SVGTitleElement.prototype).constructor;
 
   // IE11 does not have classList for SVG elements. The spec says that classList
   // is an accessor on Element, but IE11 puts classList on HTMLElement, leaving
@@ -31,7 +34,18 @@
     delete Element.prototype.classList;
   }
 
-  defineWrapGetter(SVGElement, 'ownerSVGElement');
+  function SVGElement(node) {
+    Element.call(this, node);
+  }
+
+  SVGElement.prototype = Object.create(Element.prototype);
+  mixin(SVGElement.prototype, {
+    get ownerSVGElement() {
+      return wrap(unsafeUnwrap(this).ownerSVGElement);
+    }
+  });
+
+  registerWrapper(OriginalSVGElement, SVGElement, document.createElementNS(SVG_NS, 'title'));
 
   scope.wrappers.SVGElement = SVGElement;
 })(window.ShadowDOMPolyfill);
