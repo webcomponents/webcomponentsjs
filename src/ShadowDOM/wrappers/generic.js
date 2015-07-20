@@ -23,7 +23,7 @@
   var OriginalDocumentFragment = window.DocumentFragment;
 
   function DocumentFragment(node) {
-    return Node.call(this, node);
+    Node.call(this, node);
   }
 
   DocumentFragment.prototype = Object.create(Node.prototype);
