@@ -37,6 +37,10 @@
   <div class="styled">red?</div>
   <div class="overridden-style">black?</div>
 
+  <div class="link-typed">red?</div>
+
+  <div class="style-typed">red?</div>
+
 
   <script>
     addEventListener('HTMLImportsLoaded', function() {
@@ -59,6 +63,10 @@
         chai.assert.equal(computedStyle('.styled').backgroundColor, 'rgb(255, 0, 0)');
         // styles in style are applied in the correct order and overriddable
         chai.assert.equal(computedStyle('.overridden-style').backgroundColor, 'rgb(0, 0, 0)');
+        // links with type attr are not imported
+        chai.assert.equal(computedStyle('.link-typed').backgroundColor, 'rgba(0, 0, 0, 0)');
+        // styles with type attr are not imported
+        chai.assert.equal(computedStyle('.style-typed').backgroundColor, 'rgba(0, 0, 0, 0)');
 
 
         done();

@@ -32,8 +32,8 @@ var importParser = {
   // parse selectors for import document elements
   importsSelectors: [
     IMPORT_SELECTOR,
-    'link[rel=stylesheet]',
-    'style',
+    'link[rel=stylesheet]:not([type])',
+    'style:not([type])',
     'script:not([type])',
     'script[type="application/javascript"]',
     'script[type="text/javascript"]'
@@ -178,6 +178,10 @@ var importParser = {
   trackElement: function(elt, callback) {
     var self = this;
     var done = function(e) {
+      // make sure we don't get multiple load/error signals (FF seems to do 
+      // this sometimes when <style> elments change)
+      elt.removeEventListener('load', done);
+      elt.removeEventListener('error', done);
       if (callback) {
         callback(e);
       }
