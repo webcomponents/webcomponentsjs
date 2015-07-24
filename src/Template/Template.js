@@ -93,8 +93,6 @@ if (typeof HTMLTemplateElement === 'undefined') {
           return '&lt;';
         case '>':
           return '&gt;';
-        case '"':
-          return '&quot;'
         case '\u00A0':
           return '&nbsp;';
       }
