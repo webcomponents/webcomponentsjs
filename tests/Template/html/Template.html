@@ -44,6 +44,13 @@
         chai.assert.equal(imp.innerHTML, s);
         chai.assert.equal(imp.content.childNodes.length, 1);
         chai.assert.equal(imp.content.firstChild.textContent, s);
+
+        s = '-<->-"-&-';
+        var escaped = '-&lt;-&gt;-"-&amp;-';
+        imp.innerHTML = s;
+        // innerHTML is properly escaped
+        chai.assert.equal(imp.innerHTML, escaped);
+        chai.assert.equal(imp.content.childNodes.length, 1);
         done();
       });
     </script>

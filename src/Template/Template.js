@@ -39,9 +39,7 @@ if (typeof HTMLTemplateElement === 'undefined') {
         get: function() {
           var o = '';
           for (var e = this.content.firstChild; e; e = e.nextSibling) {
-            if (e) {
-              o += e.outerHTML || e.textContent;
-            }
+            o += e.outerHTML || escapeData(e.data);
           }
           return o;
         },
@@ -84,6 +82,27 @@ if (typeof HTMLTemplateElement === 'undefined') {
       }
       return el;
     };
+
+    var escapeDataRegExp = /[&\u00A0<>]/g;
+
+    function escapeReplace(c) {
+      switch (c) {
+        case '&':
+          return '&amp;';
+        case '<':
+          return '&lt;';
+        case '>':
+          return '&gt;';
+        case '"':
+          return '&quot;'
+        case '\u00A0':
+          return '&nbsp;';
+      }
+    }
+
+    function escapeData(s) {
+      return s.replace(escapeDataRegExp, escapeReplace);
+    }
 
   })();
 }
