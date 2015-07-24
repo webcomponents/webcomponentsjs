@@ -63,6 +63,12 @@
     }
     elementDeclarations.push(arguments);
   };
+
+  // copy any properties off an existing Polymer object
+  if (window.Polymer) {
+    mixin(polymerStub, window.Polymer);
+  }
+
   window.Polymer = polymerStub;
 
   // deliver queued delcarations
@@ -83,6 +89,14 @@
           'load polymer, <link rel="import" href="' +
           'components/polymer/polymer.html">');
       };
+      // copy any properties that have been installed on Polymer
+      mixin(window.Polymer, polymerStub);
+    }
+  }
+
+  function mixin(a, b) {
+    for (var i in b) {
+      a[i] = b[i];
     }
   }
 
