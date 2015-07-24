@@ -14,6 +14,8 @@ if (typeof HTMLTemplateElement === 'undefined') {
 
     var TEMPLATE_TAG = 'template';
 
+    var contentDoc = document.implementation.createHTMLDocument('template');
+
     /**
       Provides a minimal shim for the <template> element.
     */
@@ -32,6 +34,28 @@ if (typeof HTMLTemplateElement === 'undefined') {
       while (child = template.firstChild) {
         template.content.appendChild(child);
       }
+      // add innerHTML to template
+      Object.defineProperty(template, 'innerHTML', {
+        get: function() {
+          var o = '';
+          for (var e = this.content.firstChild; e; e = e.nextSibling) {
+            if (e) {
+              o += e.outerHTML || e.textContent;
+            }
+          }
+          return o;
+        },
+        set: function(text) {
+          contentDoc.body.innerHTML = text;
+          while (this.content.firstChild) {
+            this.content.removeChild(this.content.firstChild);
+          }
+          while (contentDoc.body.firstChild) {
+            this.content.appendChild(contentDoc.body.firstChild);
+          }
+        },
+        configurable: true
+      });
     };
 
     /**
