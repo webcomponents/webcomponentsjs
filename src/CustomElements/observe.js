@@ -300,6 +300,7 @@ if (originalCreateShadowRoot) {
 // exports
 scope.watchShadow = watchShadow;
 scope.upgradeDocumentTree = upgradeDocumentTree;
+scope.upgradeDocument = upgradeDocument;
 scope.upgradeSubtree = addedSubtree;
 scope.upgradeAll = addedNode;
 scope.attached = attached;

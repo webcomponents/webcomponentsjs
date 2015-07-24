@@ -1,0 +1,32 @@
+<!--
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<script>
+(function() {
+
+  window.a1DocsList = [];
+
+  var p = Object.create(HTMLElement.prototype);
+
+  p.createdCallback = function() {
+    a1DocsList.push(this.ownerDocument.baseURI.split('/').pop());
+    this.isA1 = true;
+  }
+
+  document.registerElement('a-1', {prototype: p});
+
+  var p2 = Object.create(HTMLStyleElement.prototype);
+  p2.createdCallback = function() {
+    window.styleAppliedToDocument = Boolean(this.__appliedElement);
+  }
+
+  document.registerElement('special-style', {prototype: p2, extends: 'style'});
+
+})();
+</script>

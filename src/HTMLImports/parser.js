@@ -107,9 +107,7 @@ var importParser = {
   },
 
   parseImport: function(elt) {
-    // TODO(sorvell): consider if there's a better way to do this;
-    // expose an imports parsing hook; this is needed, for example, by the
-    // CustomElements polyfill.
+    elt.import = elt.__doc;
     if (window.HTMLImports.__importsParsingHook) {
       window.HTMLImports.__importsParsingHook(elt);
     }
@@ -260,7 +258,7 @@ var importParser = {
       for (var i=0, l=nodes.length, p=0, n; (i<l) && (n=nodes[i]); i++) {
         if (!this.isParsed(n)) {
           if (this.hasResource(n)) {
-            return nodeIsImport(n) ? this.nextToParseInDoc(n.import, n) : n;
+            return nodeIsImport(n) ? this.nextToParseInDoc(n.__doc, n) : n;
           } else {
             return;
           }
@@ -292,7 +290,7 @@ var importParser = {
   },
 
   hasResource: function(node) {
-    if (nodeIsImport(node) && (node.import === undefined)) {
+    if (nodeIsImport(node) && (node.__doc === undefined)) {
       return false;
     }
     return true;
