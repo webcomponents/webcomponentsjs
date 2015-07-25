@@ -22,6 +22,8 @@ htmlSuite('integration', function() {
   htmlTest('html/ce-upgradedocumenttree.html');
   htmlTest('html/ce-import.html?wc-shadow');
   htmlTest('html/ce-upgrade-order.html');
+  htmlTest('html/ce-import-upgrade.html');
+  htmlTest('html/ce-import-upgrade-async.html');
 });
 
 htmlSuite('Library Cooperation', function() {

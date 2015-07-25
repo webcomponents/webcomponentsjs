@@ -84,7 +84,7 @@ var importer = {
       }
       // don't store import record until we're actually loaded
       // store document resource
-      elt.import = doc;
+      elt.__doc = doc;
     }
     parser.parseNext();
   },

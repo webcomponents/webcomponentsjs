@@ -7,8 +7,26 @@
     Code distributed by Google as part of the polymer project is also
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<link rel="stylesheet" href="sheet3.css">
-<link rel="stylesheet" href="sheet1.css">
-<link rel="stylesheet" href="sheet2.css">
+<script>
+(function() {
 
-<link rel="stylesheet" type="foo" href="sheet4.css">
+  window.a1DocsList = [];
+
+  var p = Object.create(HTMLElement.prototype);
+
+  p.createdCallback = function() {
+    a1DocsList.push(this.ownerDocument.baseURI.split('/').pop());
+    this.isA1 = true;
+  }
+
+  document.registerElement('a-1', {prototype: p});
+
+  var p2 = Object.create(HTMLStyleElement.prototype);
+  p2.createdCallback = function() {
+    window.styleAppliedToDocument = Boolean(this.__appliedElement);
+  }
+
+  document.registerElement('special-style', {prototype: p2, extends: 'style'});
+
+})();
+</script>
