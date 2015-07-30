@@ -61,7 +61,9 @@ if (!window.wrap) {
 // eagarly upgrade imported documents
 if (window.HTMLImports) {
   window.HTMLImports.__importsParsingHook = function(elt) {
-    upgradeDocument(wrap(elt.import));
+    if (elt.import) {
+      upgradeDocument(wrap(elt.import));
+    }
   };
 }
 
