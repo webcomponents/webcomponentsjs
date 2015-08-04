@@ -15,6 +15,7 @@ if (typeof HTMLTemplateElement === 'undefined') {
     var TEMPLATE_TAG = 'template';
 
     var contentDoc = document.implementation.createHTMLDocument('template');
+    var canDecorate = true;
 
     /**
       Provides a minimal shim for the <template> element.
@@ -34,26 +35,33 @@ if (typeof HTMLTemplateElement === 'undefined') {
       while (child = template.firstChild) {
         template.content.appendChild(child);
       }
-      // add innerHTML to template
-      Object.defineProperty(template, 'innerHTML', {
-        get: function() {
-          var o = '';
-          for (var e = this.content.firstChild; e; e = e.nextSibling) {
-            o += e.outerHTML || escapeData(e.data);
-          }
-          return o;
-        },
-        set: function(text) {
-          contentDoc.body.innerHTML = text;
-          while (this.content.firstChild) {
-            this.content.removeChild(this.content.firstChild);
-          }
-          while (contentDoc.body.firstChild) {
-            this.content.appendChild(contentDoc.body.firstChild);
-          }
-        },
-        configurable: true
-      });
+      // add innerHTML to template, if possible
+      // Note: this throws on Safari 7
+      if (canDecorate) {
+        try {
+          Object.defineProperty(template, 'innerHTML', {
+            get: function() {
+              var o = '';
+              for (var e = this.content.firstChild; e; e = e.nextSibling) {
+                o += e.outerHTML || escapeData(e.data);
+              }
+              return o;
+            },
+            set: function(text) {
+              contentDoc.body.innerHTML = text;
+              while (this.content.firstChild) {
+                this.content.removeChild(this.content.firstChild);
+              }
+              while (contentDoc.body.firstChild) {
+                this.content.appendChild(contentDoc.body.firstChild);
+              }
+            },
+            configurable: true
+          });
+        } catch (err) {
+          canDecorate = false;
+        }
+      }
     };
 
     /**
