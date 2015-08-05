@@ -78,16 +78,25 @@ function bootstrap() {
   // async to ensure *native* custom elements upgrade prior to this
   // DOMContentLoaded can fire before elements upgrade (e.g. when there's
   // an external script)
-  setTimeout(function() {
-    // capture blunt profiling data
-    window.CustomElements.readyTime = Date.now();
-    if (window.HTMLImports) {
-      window.CustomElements.elapsed = window.CustomElements.readyTime - window.HTMLImports.readyTime;
-    }
-    // notify the system that we are bootstrapped
-    document.dispatchEvent(
-      new CustomEvent('WebComponentsReady', {bubbles: true})
-    );
+  // Delay doubly to help workaround 
+  // https://code.google.com/p/chromium/issues/detail?id=516550.
+  // CustomElements must use requestAnimationFrame in attachedCallback 
+  // to query style/layout data. The WebComponentsReady event is intended
+  // to convey overall readiness, which ideally should be after elements 
+  // are attached. Adding a slight extra delay to WebComponentsReady 
+  // helps preserve this guarantee.
+  requestAnimationFrame(function() {
+    setTimeout(function() {
+      // capture blunt profiling data
+      window.CustomElements.readyTime = Date.now();
+      if (window.HTMLImports) {
+        window.CustomElements.elapsed = window.CustomElements.readyTime - window.HTMLImports.readyTime;
+      }
+      // notify the system that we are bootstrapped
+      document.dispatchEvent(
+        new CustomEvent('WebComponentsReady', {bubbles: true})
+      );
+    });
   });
 }
 
