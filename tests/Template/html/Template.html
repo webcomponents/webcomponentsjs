@@ -34,6 +34,7 @@
         var imp = document.createElement('template');
         window.imp = imp;
         chai.assert.equal(imp.innerHTML, '');
+
         var s = 'pre<div>Hi</div><div>Bye</div>post';
         imp.innerHTML = s;
         chai.assert.equal(imp.innerHTML, s);
@@ -44,6 +45,17 @@
         chai.assert.equal(imp.innerHTML, s);
         chai.assert.equal(imp.content.childNodes.length, 1);
         chai.assert.equal(imp.content.firstChild.textContent, s);
+
+        s = 'pre<template><div id="inert"></div></template>post';
+        imp.innerHTML = s;
+        // NOTE: we don't support reading nested template content via innerHTML,
+        // only setting it, hence the following won't work:
+        // chai.assert.equal(imp.innerHTML, s);
+        chai.assert.equal(imp.content.childNodes.length, 3);
+        chai.assert.equal(imp.content.childNodes[0].textContent, 'pre');
+        chai.assert.equal(imp.content.childNodes[1].content.childNodes.length, 1);
+        chai.assert.equal(imp.content.childNodes[1].content.firstChild.id, 'inert');
+        chai.assert.equal(imp.content.childNodes[2].textContent, 'post');
 
         s = '-<->-"-&-';
         var escaped = '-&lt;-&gt;-"-&amp;-';
