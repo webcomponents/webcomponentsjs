@@ -49,6 +49,7 @@ if (typeof HTMLTemplateElement === 'undefined') {
             },
             set: function(text) {
               contentDoc.body.innerHTML = text;
+              HTMLTemplateElement.bootstrap(contentDoc);
               while (this.content.firstChild) {
                 this.content.removeChild(this.content.firstChild);
               }
