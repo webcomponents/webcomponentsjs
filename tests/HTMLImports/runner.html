@@ -11,22 +11,41 @@
 <title>HTMLImports Tests</title>
 <meta charset="utf-8">
 
-<!-- Mocha/Chai -->
-<link rel="stylesheet" href="../tools/mocha/mocha.css">
-<script src="../tools/mocha/mocha.js"></script>
-<script src="../tools/chai/chai.js"></script>
-<script src="../tools/mocha-htmltest.js"></script>
-
 <!-- HTMLImports -->
 <script src="../../src/HTMLImports/HTMLImports.js"></script>
-
-<div id="mocha"></div>
 <script>
-  mocha.setup({ui: 'tdd', slow: 1000});
+  window.WCT = {
+    waitFor: function(callback) {
+      this.HTMLImports.whenReady(callback);
+    }
+  };
 </script>
-
-<script src="tests.js"></script>
-
+<script src="../../bower_components/web-component-tester/browser.js"></script>
 <script>
-  mocha.run();
+  var suites = [
+  'html/HTMLImports.html',
+  'html/parser.html',
+  'html/style-links.html',
+  'html/style-paths.html',
+  'html/load.html',
+  'html/load-404.html',
+//  'html/load-loop.html',
+//  'html/base/load-base.html',
+//  'html/currentScript.html',
+//  'html/dedupe.html',
+//  'html/dynamic.html',
+//  'html/dynamic-all-imports-detail.html',
+//  'html/dynamic-errors-detail.html',
+//  'html/dynamic-loaded-detail.html',
+//  'html/csp.html',
+//  'html/customevent-detail.html',
+//  'html/encoding.html',
+//  'html/HTMLImportsLoaded-native.html',
+  ];
+  // NOTE: The MO polyfill does not function on disconnected documents
+  // like html imports so dynamic elements in imports are not supported.
+  if (!navigator.userAgent.match(/MSIE 10/)) {
+    suites.push('html/dynamic-elements.html');
+  }
+  WCT.loadSuites(suites);
 </script>

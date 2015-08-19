@@ -12,9 +12,8 @@
 <head>
   <meta charset="UTF-8">
   <title>HTMLImports Path Tests</title>
-  <script src="../../tools/htmltest.js"></script>
-  <script src="../../tools/chai/chai.js"></script>
   <script src="../../../src/HTMLImports/HTMLImports.js"></script>
+  <script src="../../../bower_components/web-component-tester/browser.js"></script>
   <link rel="import" href="imports/style-paths-import.html">
 </head>
 <body>
@@ -23,7 +22,7 @@
   <div style="font-family: 'Source Code Pro'">Source Code Pro</div>
   <script>
 
-  document.addEventListener('HTMLImportsLoaded', function() {
+  test('style-paths', function(done) {
     // NOTE: IE requires asynchrony here
     setTimeout(function() {
       var i = document.querySelector('[rel=import]');

@@ -11,9 +11,8 @@
 <html>
 <head>
   <title>Style Links Test</title>
-  <script src="../../tools/htmltest.js"></script>
-  <script src="../../tools/chai/chai.js"></script>
   <script src="../../../src/HTMLImports/HTMLImports.js"></script>
+  <script src="../../../bower_components/web-component-tester/browser.js"></script>
   <link rel="import" href="imports/style-links-import.html">
   <style>
     .overridden {
@@ -43,7 +42,7 @@
 
 
   <script>
-    addEventListener('HTMLImportsLoaded', function() {
+    test('style-links', function(done) {
 
       // NOTE: IE requires asynchrony here
       setTimeout(function() {
