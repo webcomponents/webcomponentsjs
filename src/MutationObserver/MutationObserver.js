@@ -565,4 +565,4 @@
     global.MutationObserver = JsMutationObserver;
 
 
-})(this);
+})(window);
