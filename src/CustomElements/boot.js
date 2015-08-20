@@ -13,7 +13,7 @@
 var useNative = scope.useNative;
 var initializeModules = scope.initializeModules;
 
-var isIE11OrOlder = /Trident/.test(navigator.userAgent);
+var isIE = scope.isIE;
 
 // If native, setup stub api and bail.
 // NOTE: we fire `WebComponentsReady` under native for api compatibility
@@ -102,7 +102,7 @@ function bootstrap() {
 
 // CustomEvent shim for IE <= 11
 // NOTE: we explicitly test for IE since Safari has a type `object` CustomEvent
-if (isIE11OrOlder && (typeof window.CustomEvent !== 'function')) {
+if (isIE && (typeof window.CustomEvent !== 'function')) {
   window.CustomEvent = function(inType, params) {
     params = params || {};
     var e = document.createEvent('CustomEvent');
@@ -139,8 +139,5 @@ if (document.readyState === 'complete' || scope.flags.eager) {
       'HTMLImportsLoaded' : 'DOMContentLoaded';
   window.addEventListener(loadEvent, bootstrap);
 }
-
-// exports
-scope.isIE11OrOlder = isIE11OrOlder;
 
 })(window.CustomElements);

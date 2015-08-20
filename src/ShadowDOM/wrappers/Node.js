@@ -349,9 +349,9 @@
   var originalRemoveChild = OriginalNode.prototype.removeChild;
   var originalReplaceChild = OriginalNode.prototype.replaceChild;
 
-  var isIe = /Trident|Edge/.test(navigator.userAgent);
+  var isIEOrEdge = /Trident|Edge/.test(navigator.userAgent);
 
-  var removeChildOriginalHelper = isIe ?
+  var removeChildOriginalHelper = isIEOrEdge ?
       function(parent, child) {
         try {
           originalRemoveChild.call(parent, child);
