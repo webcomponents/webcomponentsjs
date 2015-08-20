@@ -21,7 +21,7 @@
 window.CustomElements.addModule(function(scope) {
 
 // imports
-var isIE11OrOlder = scope.isIE11OrOlder;
+var isIE = scope.isIE;
 var upgradeDocumentTree = scope.upgradeDocumentTree;
 var upgradeAll = scope.upgradeAll;
 var upgradeWithDefinition = scope.upgradeWithDefinition;
@@ -353,7 +353,7 @@ wrapDomMethodToForceUpgrade(document, 'importNode');
 // Patch document.importNode to work around IE11 bug that
 // casues children of a document fragment imported while
 // there is a mutation observer to not have a parentNode (!?!)
-if (isIE11OrOlder) {
+if (isIE) {
   (function() {
     var importNode = document.importNode;
     document.importNode = function() {
