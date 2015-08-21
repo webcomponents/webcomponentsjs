@@ -15,7 +15,8 @@ var rootDocument = scope.rootDocument;
 var flags = scope.flags;
 var isIE = scope.isIE;
 var IMPORT_LINK_TYPE = scope.IMPORT_LINK_TYPE;
-var IMPORT_SELECTOR = 'link[rel=' + IMPORT_LINK_TYPE + ']';
+var IMPORT_SELECTOR = scope.IMPORT_SELECTOR;
+var isImport = scope.isImport;
 
 // importParser
 // highlander object to manage parsing of imports
@@ -136,7 +137,7 @@ var importParser = {
   },
 
   parseLink: function(linkElt) {
-    if (nodeIsImport(linkElt)) {
+    if (isImport(linkElt)) {
       this.parseImport(linkElt);
     } else {
       // make href absolute
@@ -258,7 +259,7 @@ var importParser = {
       for (var i=0, l=nodes.length, p=0, n; (i<l) && (n=nodes[i]); i++) {
         if (!this.isParsed(n)) {
           if (this.hasResource(n)) {
-            return nodeIsImport(n) ? this.nextToParseInDoc(n.__doc, n) : n;
+            return isImport(n) ? this.nextToParseInDoc(n.__doc, n) : n;
           } else {
             return;
           }
@@ -290,17 +291,13 @@ var importParser = {
   },
 
   hasResource: function(node) {
-    if (nodeIsImport(node) && (node.__doc === undefined)) {
+    if (isImport(node) && (node.__doc === undefined)) {
       return false;
     }
     return true;
   }
 
 };
-
-function nodeIsImport(elt) {
-  return (elt.localName === 'link') && (elt.rel === IMPORT_LINK_TYPE);
-}
 
 function generateScriptDataUrl(script) {
   var scriptContent = generateScriptContent(script);
@@ -334,6 +331,5 @@ function cloneStyle(style) {
 
 // exports
 scope.parser = importParser;
-scope.IMPORT_SELECTOR = IMPORT_SELECTOR;
 
 });
