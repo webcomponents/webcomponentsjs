@@ -367,6 +367,10 @@
   Node.prototype = Object.create(EventTarget.prototype);
   mixin(Node.prototype, {
     appendChild: function(childWrapper) {
+      // Do not re-append element if it is already latest child of the parent node
+      if (this === childWrapper.parentNode && !childWrapper.nextSibling) {
+        return;
+      }
       return this.insertBefore(childWrapper, null);
     },
 

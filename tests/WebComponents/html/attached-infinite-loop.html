@@ -1,0 +1,60 @@
+<!doctype html>
+<!--
+    @license
+    Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <title>Attached infinite loop</title>
+    <script src="../../tools/chai/chai.js"></script>
+    <script src="../../tools/htmltest.js"></script>
+
+    <script src="../../../webcomponents.js"></script>
+    <script src="includes/strawkit.js"></script>
+  </head>
+  <body>
+    <script>
+      (function () {
+        var assert = chai.assert;
+        // Initially element is inserted to the end, so allow only one call of `attachedCallback`
+        var attached_count = 0;
+        var attached_limit = 1;
+        var p = Object.create(HTMLElement.prototype);
+        p.attachedCallback = function() {
+          attached_count++;
+          if (attached_count > attached_limit) {
+            return;
+          }
+          this.parentNode.appendChild(this);
+        };
+        document.registerElement('x-attaching-to-same-place', {prototype: p});
+
+        var element = document.createElement('x-attaching-to-same-place');
+        document.body.appendChild(element);
+
+        setTimeout(function() {
+          assert.equal(attached_count, attached_limit, 'attaching to the same parent causes infinite loop');
+
+          // Now lets add one more element after it, this should allow to re-append element once more
+          var div = document.createElement('div');
+          document.body.appendChild(div);
+          // Allow one more, because element is not the last now
+          attached_limit++;
+          element.parentNode.appendChild(element);
+
+          setTimeout(function() {
+            assert.equal(attached_count, attached_limit, 'attaching to the same parent causes infinite loop (case #2)');
+            document.body.removeChild(element);
+            document.body.removeChild(div);
+            done();
+          }, 100);
+        }, 100);
+      })();
+    </script>
+  </body>
+</html>

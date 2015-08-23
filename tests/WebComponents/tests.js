@@ -24,6 +24,7 @@ htmlSuite('integration', function() {
   htmlTest('html/ce-upgrade-order.html');
   htmlTest('html/ce-import-upgrade.html');
   htmlTest('html/ce-import-upgrade-async.html');
+  htmlTest('html/attached-infinite-loop.html');
 });
 
 htmlSuite('Library Cooperation', function() {
