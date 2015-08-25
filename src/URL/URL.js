@@ -613,4 +613,4 @@
 
   scope.URL = jURL;
 
-})(this);
+})(self);
