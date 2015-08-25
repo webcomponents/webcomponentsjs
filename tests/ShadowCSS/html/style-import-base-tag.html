@@ -11,7 +11,13 @@
 <html>
   <head>
     <title>Imports style loading with base tag</title>
-    <base href="/">
+    <base id="base">
+    <script>
+      // URL's in this page are relative to webcomponentsjs repo root
+      // Set base to root of webcomponentsjs repo, or else '/'
+      var wcjs = location.href.match(/^.*webcomponentsjs\//);
+      base.href = wcjs ? wcjs[0] : '/';
+    </script>
     <script src="tests/tools/chai/chai.js"></script>
     <script src="tests/tools/htmltest.js"></script>
 
@@ -21,11 +27,11 @@
   <body>
     <div id="test1" class="red">red</div>
     <script>
+      var link = document.querySelector('link[rel=stylesheet]');
       document.addEventListener('WebComponentsReady', function() {
         function getComputed(selector) {
           return getComputedStyle(document.querySelector(selector));
         }
-        var link = document.querySelector('link[rel=stylesheet]');
         //Tricky interval, because WebComponentsReady is fired before all link[rel=stylesheet] are processed
         var interval = setInterval(function () {
           if (link.__importParsed) {

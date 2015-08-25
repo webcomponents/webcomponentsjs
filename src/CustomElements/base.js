@@ -30,6 +30,7 @@ var initializeModules = function() {
 scope.addModule = addModule;
 scope.initializeModules = initializeModules;
 scope.hasNative = Boolean(document.registerElement);
+scope.isIE = /Trident/.test(navigator.userAgent);
 
 // NOTE: For consistent timing, use native custom elements only when not
 // polyfilling other key related web components features.

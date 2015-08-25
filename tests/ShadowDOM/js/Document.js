@@ -412,7 +412,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     var aPrototype = Object.create(HTMLElement.prototype);
@@ -463,7 +463,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement type extension', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     var aPrototype = Object.create(HTMLSpanElement.prototype);
@@ -492,7 +492,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement deeper', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     function C() {}
@@ -530,7 +530,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement createdCallback', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     var self;
@@ -555,7 +555,7 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement createdCallback upgrade', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     div = document.body.appendChild(document.createElement('div'));
@@ -575,9 +575,11 @@ htmlSuite('Document', function() {
   });
 
   test('document.registerElement attachedCallback, detachedCallback',
-      function() {
-    if (!document.registerElement)
+      function(done) {
+    if (!document.registerElement || !Object.__proto__) {
+      done();
       return;
+    }
 
     var attachedCalls = 0;
     var detachedCalls = 0;
@@ -601,13 +603,20 @@ htmlSuite('Document', function() {
 
     var a = new A;
     document.body.appendChild(a);
-    assert.equal(attachedCalls, 1);
-    document.body.removeChild(a);
-    assert.equal(detachedCalls, 1);
+
+    // CE polyfill attachment is async, need to wait... (or force using takeRecords)
+    setTimeout(function() {
+      assert.equal(attachedCalls, 1);
+      document.body.removeChild(a);
+      setTimeout(function() {
+        assert.equal(detachedCalls, 1);
+        done();
+      });
+    });
   });
 
   test('document.registerElement attributeChangedCallback', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     var attributeChangedCalls = 0;
@@ -648,9 +657,10 @@ htmlSuite('Document', function() {
     assert.equal(attributeChangedCalls, 3);
   });
 
-  test('document.registerElement get reference, upgrade, rewrap', function() {
-    if (!document.registerElement)
+  test('document.registerElement get reference, upgrade', function() {
+    if (!document.registerElement || !Object.__proto__) {
       return;
+    }
 
     div = document.body.appendChild(document.createElement('div'));
     div.innerHTML = '<x-a6></x-a6>';
@@ -664,13 +674,17 @@ htmlSuite('Document', function() {
     };
 
     A = document.registerElement('x-a6', A);
-    // re-wrap after registration to update wrapper
-    ShadowDOMPolyfill.rewrap(ShadowDOMPolyfill.unwrap(div.firstChild));
+
+    // make test work when native custom elements is used with SD polyfill
+    if (!window.CustomElements) {
+      ShadowDOMPolyfill.rewrap(ShadowDOMPolyfill.unwrap(div.firstChild));
+    }
+
     assert.isTrue(div.firstChild.isCustom);
   });
 
   test('document.registerElement optional option', function() {
-    if (!document.registerElement)
+    if (!document.registerElement || !Object.__proto__)
       return;
 
     document.registerElement('x-a7');

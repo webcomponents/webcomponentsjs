@@ -13,7 +13,7 @@
 var useNative = scope.useNative;
 var initializeModules = scope.initializeModules;
 
-var isIE11OrOlder = /Trident/.test(navigator.userAgent);
+var isIE = scope.isIE;
 
 // If native, setup stub api and bail.
 // NOTE: we fire `WebComponentsReady` under native for api compatibility
@@ -43,6 +43,7 @@ if (useNative) {
 
 // imports
 var upgradeDocumentTree = scope.upgradeDocumentTree;
+var upgradeDocument = scope.upgradeDocument;
 
 // ShadowDOM polyfill wraps elements but some elements like `document`
 // cannot be wrapped so we help the polyfill by wrapping some elements.
@@ -57,34 +58,48 @@ if (!window.wrap) {
   }
 }
 
+// eagarly upgrade imported documents
+if (window.HTMLImports) {
+  window.HTMLImports.__importsParsingHook = function(elt) {
+    if (elt.import) {
+      upgradeDocument(wrap(elt.import));
+    }
+  };
+}
 
 // bootstrap parsing
 function bootstrap() {
-  // parse document
+  // one more upgrade to catch out of order registrations
   upgradeDocumentTree(window.wrap(document));
   // install upgrade hook if HTMLImports are available
-  if (window.HTMLImports) {
-    window.HTMLImports.__importsParsingHook = function(elt) {
-      upgradeDocumentTree(window.wrap(elt.import));
-      //CustomElements.parser.parse(elt.import);
-    };
-  }
   // set internal 'ready' flag, now document.registerElement will trigger
   // synchronous upgrades
   window.CustomElements.ready = true;
   // async to ensure *native* custom elements upgrade prior to this
   // DOMContentLoaded can fire before elements upgrade (e.g. when there's
   // an external script)
-  setTimeout(function() {
-    // capture blunt profiling data
-    window.CustomElements.readyTime = Date.now();
-    if (window.HTMLImports) {
-      window.CustomElements.elapsed = window.CustomElements.readyTime - window.HTMLImports.readyTime;
-    }
-    // notify the system that we are bootstrapped
-    document.dispatchEvent(
-      new CustomEvent('WebComponentsReady', {bubbles: true})
-    );
+  // Delay doubly to help workaround
+  // https://code.google.com/p/chromium/issues/detail?id=516550.
+  // CustomElements must use requestAnimationFrame in attachedCallback
+  // to query style/layout data. The WebComponentsReady event is intended
+  // to convey overall readiness, which ideally should be after elements
+  // are attached. Adding a slight extra delay to WebComponentsReady
+  // helps preserve this guarantee.
+  var requestAnimationFrame = window.requestAnimationFrame || function(f) {
+    setTimeout(f, 16);
+  };
+  requestAnimationFrame(function() {
+    setTimeout(function() {
+      // capture blunt profiling data
+      window.CustomElements.readyTime = Date.now();
+      if (window.HTMLImports) {
+        window.CustomElements.elapsed = window.CustomElements.readyTime - window.HTMLImports.readyTime;
+      }
+      // notify the system that we are bootstrapped
+      document.dispatchEvent(
+        new CustomEvent('WebComponentsReady', {bubbles: true})
+      );
+    });
   });
 }
 
@@ -127,8 +142,5 @@ if (document.readyState === 'complete' || scope.flags.eager) {
       'HTMLImportsLoaded' : 'DOMContentLoaded';
   window.addEventListener(loadEvent, bootstrap);
 }
-
-// exports
-scope.isIE11OrOlder = isIE11OrOlder;
 
 })(window.CustomElements);

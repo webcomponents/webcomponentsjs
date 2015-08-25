@@ -14,6 +14,9 @@ if (typeof HTMLTemplateElement === 'undefined') {
 
     var TEMPLATE_TAG = 'template';
 
+    var contentDoc = document.implementation.createHTMLDocument('template');
+    var canDecorate = true;
+
     /**
       Provides a minimal shim for the <template> element.
     */
@@ -26,11 +29,39 @@ if (typeof HTMLTemplateElement === 'undefined') {
     */
     HTMLTemplateElement.decorate = function(template) {
       if (!template.content) {
-        template.content = template.ownerDocument.createDocumentFragment();
+        template.content = contentDoc.createDocumentFragment();
       }
       var child;
       while (child = template.firstChild) {
         template.content.appendChild(child);
+      }
+      // add innerHTML to template, if possible
+      // Note: this throws on Safari 7
+      if (canDecorate) {
+        try {
+          Object.defineProperty(template, 'innerHTML', {
+            get: function() {
+              var o = '';
+              for (var e = this.content.firstChild; e; e = e.nextSibling) {
+                o += e.outerHTML || escapeData(e.data);
+              }
+              return o;
+            },
+            set: function(text) {
+              contentDoc.body.innerHTML = text;
+              HTMLTemplateElement.bootstrap(contentDoc);
+              while (this.content.firstChild) {
+                this.content.removeChild(this.content.firstChild);
+              }
+              while (contentDoc.body.firstChild) {
+                this.content.appendChild(contentDoc.body.firstChild);
+              }
+            },
+            configurable: true
+          });
+        } catch (err) {
+          canDecorate = false;
+        }
       }
     };
 
@@ -60,6 +91,25 @@ if (typeof HTMLTemplateElement === 'undefined') {
       }
       return el;
     };
+
+    var escapeDataRegExp = /[&\u00A0<>]/g;
+
+    function escapeReplace(c) {
+      switch (c) {
+        case '&':
+          return '&amp;';
+        case '<':
+          return '&lt;';
+        case '>':
+          return '&gt;';
+        case '\u00A0':
+          return '&nbsp;';
+      }
+    }
+
+    function escapeData(s) {
+      return s.replace(escapeDataRegExp, escapeReplace);
+    }
 
   })();
 }

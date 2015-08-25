@@ -21,7 +21,7 @@
 window.CustomElements.addModule(function(scope) {
 
 // imports
-var isIE11OrOlder = scope.isIE11OrOlder;
+var isIE = scope.isIE;
 var upgradeDocumentTree = scope.upgradeDocumentTree;
 var upgradeAll = scope.upgradeAll;
 var upgradeWithDefinition = scope.upgradeWithDefinition;
@@ -200,11 +200,7 @@ function resolvePrototypeChain(definition) {
     // work out prototype when using type-extension
     if (definition.is) {
       var inst = document.createElement(definition.tag);
-      var expectedPrototype = Object.getPrototypeOf(inst);
-      // only set nativePrototype if it will actually appear in the definition's chain
-      if (expectedPrototype === definition.prototype) {
-        nativePrototype = expectedPrototype;
-      }
+      nativePrototype = Object.getPrototypeOf(inst);
     }
     // ensure __proto__ reference is installed at each point on the prototype
     // chain.
@@ -212,10 +208,22 @@ function resolvePrototypeChain(definition) {
     // of prototype swizzling. In this case, this generated __proto__ provides
     // limited support for prototype traversal.
     var proto = definition.prototype, ancestor;
-    while (proto && (proto !== nativePrototype)) {
+    var foundPrototype = false;
+    while (proto) {
+      if (proto == nativePrototype) {
+        foundPrototype = true;
+      }
       ancestor = Object.getPrototypeOf(proto);
-      proto.__proto__ = ancestor;
+      if (ancestor) {
+        proto.__proto__ = ancestor;
+      }
       proto = ancestor;
+    }
+    if (!foundPrototype) {
+      // Note the spec actually allows this, but it results in broken elements
+      // and is difficult to polyfill correctly, so we throw
+      console.warn(definition.tag + ' prototype not found in prototype chain for ' +
+        definition.is);
     }
     // cache this in case of mixin
     definition.native = nativePrototype;
@@ -307,6 +315,10 @@ var domCreateElementNS = document.createElementNS.bind(document);
 var isInstance;
 if (!Object.__proto__ && !useNative) {
   isInstance = function(obj, ctor) {
+    // Allows instanceof(<div>, HTMLElement.prototype) to work
+    if (obj instanceof ctor) {
+      return true;
+    }
     var p = obj;
     while (p) {
       // NOTE: this is not technically correct since we're not checking if
@@ -325,7 +337,7 @@ if (!Object.__proto__ && !useNative) {
   };
 }
 
-// wrap a dom object method that works on nodes such that it forces upgrade 
+// wrap a dom object method that works on nodes such that it forces upgrade
 function wrapDomMethodToForceUpgrade(obj, methodName) {
   var orig = obj[methodName];
   obj[methodName] = function() {
@@ -341,7 +353,7 @@ wrapDomMethodToForceUpgrade(document, 'importNode');
 // Patch document.importNode to work around IE11 bug that
 // casues children of a document fragment imported while
 // there is a mutation observer to not have a parentNode (!?!)
-if (isIE11OrOlder) {
+if (isIE) {
   (function() {
     var importNode = document.importNode;
     document.importNode = function() {
@@ -356,7 +368,7 @@ if (isIE11OrOlder) {
         return n;
       }
     };
-  })();  
+  })();
 }
 
 // exports

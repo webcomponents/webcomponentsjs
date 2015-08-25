@@ -17,10 +17,6 @@ suite('Shadow DOM', function() {
     el.offsetWidth;
     return unwrap(el).innerHTML;
   }
-  function getVisualText(el) {
-    el.offsetWidth;
-    return unwrap(el).textContent;
-  }
 
   function normalizeInnerHtml(s) {
     // IE9 - Even though the attribute name is stored as "checked" innerHTML
@@ -524,42 +520,4 @@ suite('Shadow DOM', function() {
 
   });
 
-  // https://github.com/webcomponents/webcomponentsjs/issues/316
-  test('nested renderer should invalidate attributes', function() {
-    // Trailing whitespace in this HTML is to match the original repro, and to
-    // work around: https://github.com/webcomponents/webcomponentsjs/issues/337
-    var div = document.createElement('div');
-    div.innerHTML =
-        '<x-outer></x-outer>' +
-        '<template id="x-host">' +
-          'Foo: [<content select="[foo]"></content>] ' +
-          'Bar: [<content select="[bar]"></content>]' +
-        '</template>' +
-        '<template id="x-outer">' +
-          '<x-host id="host">' +
-            '<child foo>~Foo~</child> ' +
-            '<child foo bar>~Foo+Bar~</child> ' +
-            '<child id="test" bar>~Bar~</child> ' +
-          '</x-host>' +
-          '<br>' +
-        '</template>';
-
-    var hostTemplate = div.querySelector('#x-host');
-    var outerTemplate = div.querySelector('#x-outer');
-
-    var outer = div.querySelector('x-outer');
-    var outerRoot = outer.createShadowRoot();
-    outerRoot.appendChild(document.importNode(outerTemplate.content, true));
-
-    var host = outerRoot.querySelector('x-host');
-    var hostRoot = host.createShadowRoot();
-    hostRoot.appendChild(document.importNode(hostTemplate.content, true));
-
-    var t = outerRoot.querySelector('#test');
-    assert.equal(getVisualText(div), 'Foo: [~Foo~~Foo+Bar~] Bar: [~Bar~]');
-    t.setAttribute('foo', 'hi');
-    assert.equal(getVisualText(div), 'Foo: [~Foo~~Foo+Bar~~Bar~] Bar: []');
-    t.removeAttribute('foo');
-    assert.equal(getVisualText(div), 'Foo: [~Foo~~Foo+Bar~] Bar: [~Bar~]');
-  });
 });
