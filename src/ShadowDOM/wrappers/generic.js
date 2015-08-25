@@ -11,22 +11,31 @@
 (function(scope) {
   'use strict';
 
+  var Node = scope.wrappers.Node;
   var GetElementsByInterface = scope.GetElementsByInterface;
   var NonElementParentNodeInterface = scope.NonElementParentNodeInterface;
   var ParentNodeInterface = scope.ParentNodeInterface;
   var SelectorsInterface = scope.SelectorsInterface;
   var mixin = scope.mixin;
   var registerObject = scope.registerObject;
+  var registerWrapper = scope.registerWrapper;
 
-  var DocumentFragment = registerObject(document.createDocumentFragment());
+  var OriginalDocumentFragment = window.DocumentFragment;
+
+  function DocumentFragment(node) {
+    Node.call(this, node);
+  }
+
+  DocumentFragment.prototype = Object.create(Node.prototype);
   mixin(DocumentFragment.prototype, ParentNodeInterface);
   mixin(DocumentFragment.prototype, SelectorsInterface);
   mixin(DocumentFragment.prototype, GetElementsByInterface);
   mixin(DocumentFragment.prototype, NonElementParentNodeInterface);
 
-  var Comment = registerObject(document.createComment(''));
-
-  scope.wrappers.Comment = Comment;
+  registerWrapper(OriginalDocumentFragment, DocumentFragment, document.createDocumentFragment());
   scope.wrappers.DocumentFragment = DocumentFragment;
+
+  var Comment = registerObject(document.createComment(''));
+  scope.wrappers.Comment = Comment;
 
 })(window.ShadowDOMPolyfill);
