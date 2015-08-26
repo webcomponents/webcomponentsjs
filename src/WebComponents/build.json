@@ -11,5 +11,6 @@
   "lang.js",
   "dom.js",
   "unresolved.js",
+  "whenready.js",
   "bc.js"
 ]

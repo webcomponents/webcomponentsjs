@@ -58,7 +58,8 @@
     'Template/Template.js',
     // these scripts are loaded here due to polyfill timing issues
     'WebComponents/dom.js',
-    'WebComponents/unresolved.js'
+    'WebComponents/unresolved.js',
+    'WebComponents/whenready.js'
   ];
 
   var src = script.getAttribute('src');
