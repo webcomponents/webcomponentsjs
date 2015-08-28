@@ -29,6 +29,11 @@
   var wrap = scope.wrap;
   var wrapIfNeeded = scope.wrapIfNeeded;
   var wrappers = scope.wrappers;
+  var insertBeforeNodeList = scope.insertBeforeNodeList;
+  var clearNodeList = scope.clearNodeList;
+  var indexOfNodeList = scope.indexOfNodeList;
+  var removeItemAtNodeList = scope.removeItemAtNodeList;
+  var copyNodeList = scope.copyNodeList;
 
   function assertIsNodeWrapper(node) {
     assert(node instanceof Node);
@@ -136,8 +141,12 @@
   }
 
   function snapshotNodeList(nodeList) {
-    // NodeLists are not live at the moment so just return the same object.
-    return nodeList;
+    var snapshot = new NodeList();
+    for (var i = 0; i < nodeList.length; i++) {
+      snapshot[i] = nodeList[i];
+    }
+    snapshot.length = i;
+    return snapshot;
   }
 
   // http://dom.spec.whatwg.org/#node-is-inserted
@@ -227,6 +236,9 @@
         childWrapper = nextSibling;
       }
       wrapper.firstChild_ = wrapper.lastChild_ = null;
+      if (wrapper.childNodes_ !== undefined) {
+        clearNodeList(wrapper.childNodes_);
+      }
     } else {
       var node = unwrap(wrapper);
       var child = node.firstChild;
@@ -290,6 +302,21 @@
     return false;
   }
 
+  function getChildNodes(wrapper) {
+      var wrapperList = new NodeList();
+      var i = 0;
+      for (var child = wrapper.firstChild; child; child = child.nextSibling) {
+        wrapperList[i++] = child;
+      }
+      wrapperList.length = i;
+      return wrapperList;
+  }
+  function rebuildChildNodes(wrapper) {
+    if (wrapper.childNodes_ !== undefined) {
+      copyNodeList(wrapper.childNodes_, getChildNodes(wrapper));
+    }
+  }
+
   var OriginalNode = window.Node;
 
   /**
@@ -338,6 +365,9 @@
     this.previousSibling_ = undefined;
 
     this.treeScope_ = undefined;
+
+    this.childNodes_ = undefined;
+    this.children_ = undefined;
   }
 
   var OriginalDocumentFragment = window.DocumentFragment;
@@ -424,6 +454,10 @@
         }
       }
 
+      if (this.childNodes_ !== undefined) {
+        insertBeforeNodeList(this.childNodes_, childWrapper, refWrapper);
+      }
+        
       enqueueMutation(this, 'childList', {
         addedNodes: nodes,
         nextSibling: refWrapper,
@@ -482,9 +516,20 @@
 
         childWrapper.previousSibling_ = childWrapper.nextSibling_ =
             childWrapper.parentNode_ = undefined;
+
+        if (this.childNodes_ !== undefined) {
+          var idxNodeList = indexOfNodeList(this.childNodes_, childWrapper);
+
+          if (idxNodeList !== -1) {
+            removeItemAtNodeList(this.childNodes_,  idxNodeList);
+          } else {
+            rebuildChildNodes(this);
+          }
+        }
       } else {
         clearChildNodes(this);
         removeChildOriginalHelper(unsafeUnwrap(this), childNode);
+        rebuildChildNodes(this);
       }
 
       if (!surpressMutations) {
@@ -547,11 +592,16 @@
               unwrapNodesForInsertion(this, nodes),
               oldChildNode);
         }
+
+        if (this.childNodes_ !== undefined) {
+          this.childNodes_[indexOfNodeList(this.childNodes_, oldChildWrapper)] = newChildWrapper;
+        }
       } else {
         ensureSameOwnerDocument(this, newChildWrapper);
         clearChildNodes(this);
         originalReplaceChild.call(unsafeUnwrap(this), unwrap(newChildWrapper),
                                   oldChildNode);
+        rebuildChildNodes(this);
       }
 
       enqueueMutation(this, 'childList', {
@@ -645,6 +695,7 @@
       } else {
         clearChildNodes(this);
         unsafeUnwrap(this).textContent = textContent;
+        rebuildChildNodes(this);
       }
 
       var addedNodes = snapshotNodeList(this.childNodes);
@@ -659,13 +710,10 @@
     },
 
     get childNodes() {
-      var wrapperList = new NodeList();
-      var i = 0;
-      for (var child = this.firstChild; child; child = child.nextSibling) {
-        wrapperList[i++] = child;
+      if (this.childNodes_ === undefined) {
+        this.childNodes_ = getChildNodes(this);
       }
-      wrapperList.length = i;
-      return wrapperList;
+      return this.childNodes_;
     },
 
     cloneNode: function(deep) {
@@ -744,5 +792,6 @@
   scope.originalRemoveChild = originalRemoveChild;
   scope.snapshotNodeList = snapshotNodeList;
   scope.wrappers.Node = Node;
+  scope.rebuildChildNodes = rebuildChildNodes;
 
 })(window.ShadowDOMPolyfill);
