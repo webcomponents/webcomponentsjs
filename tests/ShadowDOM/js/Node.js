@@ -466,4 +466,90 @@ suite('Node', function() {
     assert.isFalse(div.isEqualNode(clone));
   });
 
+  /* According to DOM Level 1, "the content of the returned NodeList is
+   * 'live' in the sense that, for instance, changes to the children of
+   * the node object that it was created from are immediately reflected
+   * in the nodes returned by the NodeList accessors; it is not a static
+   * snapshot of the content of the node".
+   */
+  test('live childNodes consistency after child removal - issue 321', function() {
+    var a = document.createElement('a');
+    var b = document.createElement('b');
+
+    a.appendChild(b);
+
+    var childNodes = a.childNodes;
+    assert.equal(childNodes.length, 1);
+    
+    a.removeChild(b);
+    assert.equal(a.childNodes.length, 0);
+    assert.equal(childNodes.length, 0);
+  });
+
+  test('live childNodes consistency after child appended - issue 321', function() {
+    var node = document.createElement('a');
+
+    var childNodes = node.childNodes;
+    assert.equal(childNodes.length, 0);
+
+    node.appendChild(document.createElement('b'));
+    assert.equal(node.childNodes.length, 1);
+    assert.equal(childNodes.length, 1);
+  });
+
+  test('live childNodes consistency after child inserted before - issue 321', function() {
+    var node = document.createElement('a');
+    var child = document.createElement('b')
+    
+    node.appendChild(child);
+
+    var childNodes = node.childNodes;
+    assert.equal(childNodes.length, 1);
+
+    var firstChild = document.createElement('c');
+    node.insertBefore(firstChild, child);
+    assert.equal(node.childNodes.length, 2);
+    assert.equal(childNodes.length, 2);
+    assert.equal(childNodes[0], node.childNodes[0]);
+    assert.equal(childNodes[1], node.childNodes[1]);
+    assert.equal(childNodes[0], firstChild);
+    assert.equal(childNodes[1], child);    
+  });
+
+  test('live childNodes consistency after textContent changed - issue 321', function() {
+    var node = document.createElement('a');
+    var child = document.createElement('b')
+    
+    node.appendChild(child);
+
+    var childNodes = node.childNodes;
+    assert.equal(childNodes.length, 1);
+    assert.equal(childNodes[0], child);
+
+    node.textContent = 'text';
+
+    assert.equal(node.childNodes.length, 1);
+    assert.equal(childNodes.length, 1);
+    assert.equal(node.childNodes[0], childNodes[0]);
+    assert.notEqual(childNodes[0], child);
+  });
+
+  test('live childNodes consistency after innerHTML changed - issue 321', function() {
+    var node = document.createElement('a');
+    var child = document.createElement('b')
+    
+    node.appendChild(child);
+
+    var childNodes = node.childNodes;
+    assert.equal(childNodes.length, 1);
+    assert.equal(childNodes[0], child);
+
+    node.innerHTML = '<span>test</span>';
+
+    assert.equal(node.childNodes.length, 1);
+    assert.equal(childNodes.length, 1);
+    assert.equal(node.childNodes[0], childNodes[0]);
+    assert.notEqual(childNodes[0], child);  
+  });
+
 });
