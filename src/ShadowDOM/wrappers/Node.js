@@ -366,8 +366,11 @@
 
     this.treeScope_ = undefined;
 
+    /**
+     * @type {NodeList|undefined}
+     * @private
+     */
     this.childNodes_ = undefined;
-    this.children_ = undefined;
   }
 
   var OriginalDocumentFragment = window.DocumentFragment;
