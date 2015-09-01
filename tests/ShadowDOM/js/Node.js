@@ -472,84 +472,105 @@ suite('Node', function() {
    * in the nodes returned by the NodeList accessors; it is not a static
    * snapshot of the content of the node".
    */
-  test('live childNodes consistency after child removal - issue 321', function() {
-    var a = document.createElement('a');
-    var b = document.createElement('b');
+  suite('live childNodes consistency (issue 321)', function() {
+    test('after child removal', function() {
+      var a = document.createElement('a');
+      var b = document.createElement('b');
 
-    a.appendChild(b);
+      a.appendChild(b);
 
-    var childNodes = a.childNodes;
-    assert.equal(childNodes.length, 1);
-    
-    a.removeChild(b);
-    assert.equal(a.childNodes.length, 0);
-    assert.equal(childNodes.length, 0);
-  });
+      var childNodes = a.childNodes;
+      assert.equal(childNodes.length, 1);
+      
+      a.removeChild(b);
+      assert.equal(a.childNodes.length, 0);
+      assert.equal(childNodes.length, 0);
+    });
 
-  test('live childNodes consistency after child appended - issue 321', function() {
-    var node = document.createElement('a');
+    test('after child appended', function() {
+      var node = document.createElement('a');
 
-    var childNodes = node.childNodes;
-    assert.equal(childNodes.length, 0);
+      var childNodes = node.childNodes;
+      assert.equal(childNodes.length, 0);
 
-    node.appendChild(document.createElement('b'));
-    assert.equal(node.childNodes.length, 1);
-    assert.equal(childNodes.length, 1);
-  });
+      node.appendChild(document.createElement('b'));
+      assert.equal(node.childNodes.length, 1);
+      assert.equal(childNodes.length, 1);
+    });
 
-  test('live childNodes consistency after child inserted before - issue 321', function() {
-    var node = document.createElement('a');
-    var child = document.createElement('b')
-    
-    node.appendChild(child);
+    test('after child inserted before', function() {
+      var node = document.createElement('a');
+      var child = document.createElement('b');
+      
+      node.appendChild(child);
 
-    var childNodes = node.childNodes;
-    assert.equal(childNodes.length, 1);
+      var childNodes = node.childNodes;
+      assert.equal(childNodes.length, 1);
 
-    var firstChild = document.createElement('c');
-    node.insertBefore(firstChild, child);
-    assert.equal(node.childNodes.length, 2);
-    assert.equal(childNodes.length, 2);
-    assert.equal(childNodes[0], node.childNodes[0]);
-    assert.equal(childNodes[1], node.childNodes[1]);
-    assert.equal(childNodes[0], firstChild);
-    assert.equal(childNodes[1], child);    
-  });
+      var firstChild = document.createElement('c');
+      node.insertBefore(firstChild, child);
+      assert.equal(node.childNodes.length, 2);
+      assert.equal(childNodes.length, 2);
+      assert.equal(childNodes[0], node.childNodes[0]);
+      assert.equal(childNodes[1], node.childNodes[1]);
+      assert.equal(childNodes[0], firstChild);
+      assert.equal(childNodes[1], child);    
+    });
 
-  test('live childNodes consistency after textContent changed - issue 321', function() {
-    var node = document.createElement('a');
-    var child = document.createElement('b')
-    
-    node.appendChild(child);
+    test('after textContent changed', function() {
+      var node = document.createElement('a');
+      var child = document.createElement('b');
+      
+      node.appendChild(child);
 
-    var childNodes = node.childNodes;
-    assert.equal(childNodes.length, 1);
-    assert.equal(childNodes[0], child);
+      var childNodes = node.childNodes;
+      assert.equal(childNodes.length, 1);
+      assert.equal(childNodes[0], child);
 
-    node.textContent = 'text';
+      node.textContent = 'text';
 
-    assert.equal(node.childNodes.length, 1);
-    assert.equal(childNodes.length, 1);
-    assert.equal(node.childNodes[0], childNodes[0]);
-    assert.notEqual(childNodes[0], child);
-  });
+      assert.equal(node.childNodes.length, 1);
+      assert.equal(childNodes.length, 1);
+      assert.equal(node.childNodes[0], childNodes[0]);
+      assert.notEqual(childNodes[0], child);
+    });
 
-  test('live childNodes consistency after innerHTML changed - issue 321', function() {
-    var node = document.createElement('a');
-    var child = document.createElement('b')
-    
-    node.appendChild(child);
+    test('after innerHTML changed', function() {
+      var node = document.createElement('a');
+      var child = document.createElement('b');
+      
+      node.appendChild(child);
 
-    var childNodes = node.childNodes;
-    assert.equal(childNodes.length, 1);
-    assert.equal(childNodes[0], child);
+      var childNodes = node.childNodes;
+      assert.equal(childNodes.length, 1);
+      assert.equal(childNodes[0], child);
 
-    node.innerHTML = '<span>test</span>';
+      node.innerHTML = '<span>test</span>';
 
-    assert.equal(node.childNodes.length, 1);
-    assert.equal(childNodes.length, 1);
-    assert.equal(node.childNodes[0], childNodes[0]);
-    assert.notEqual(childNodes[0], child);  
+      assert.equal(node.childNodes.length, 1);
+      assert.equal(childNodes.length, 1);
+      assert.equal(node.childNodes[0], childNodes[0]);
+      assert.notEqual(childNodes[0], child);  
+    });
+
+    test('after replaceChild', function() {
+      var node = document.createElement('a');
+      var child = document.createElement('b');
+      
+      node.appendChild(child);
+
+      var childNodes = node.childNodes;
+      assert.equal(childNodes.length, 1);
+      assert.equal(childNodes[0], child);
+
+      var newChild = document.createElement('c');
+      node.replaceChild(newChild, child);
+
+      assert.equal(node.childNodes.length, 1);
+      assert.equal(childNodes.length, 1);
+      assert.equal(node.childNodes[0], childNodes[0]);
+      assert.notEqual(childNodes[0], child);  
+    });
   });
 
 });
