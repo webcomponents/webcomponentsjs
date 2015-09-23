@@ -103,9 +103,9 @@ function bootstrap() {
   });
 }
 
-// CustomEvent shim for IE <= 11
-// NOTE: we explicitly test for IE since Safari has a type `object` CustomEvent
-if (isIE && (typeof window.CustomEvent !== 'function')) {
+// CustomEvent shim
+// NOTE: we can't check that typeof isn't `function` since Safari has a type `object` CustomEvent
+if (!window.CustomEvent) {
   window.CustomEvent = function(inType, params) {
     params = params || {};
     var e = document.createEvent('CustomEvent');
