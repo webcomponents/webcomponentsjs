@@ -6,5 +6,6 @@
   "../HTMLImports/build.json",
   "../CustomElements/build.json",
   "../Template/Template.js",
+  "dom.js",
   "unresolved.js"
 ]
