@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -7,18 +8,17 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-window.WebComponents = window.WebComponents || {};
+(function() {
 
-// process flags
-(function(scope){
+  // Establish scope.
+  window.WebComponents = window.WebComponents || {flags:{}};
 
-  // import
-  var flags = scope.flags || {};
-
+  // loading script
   var file = 'webcomponents-lite.js';
   var script = document.querySelector('script[src*="' + file + '"]');
 
   // Flags. Convert url arguments to flags
+  var flags = {};
   if (!flags.noOpts) {
     // from url
     location.search.slice(1).split('&').forEach(function(option) {
@@ -48,23 +48,13 @@ window.WebComponents = window.WebComponents || {};
     }
   }
 
-  // Determine default settings.
-  // If any of these flags match 'native', then force native ShadowDOM; any
-  // other truthy value, or failure to detect native
-  // ShadowDOM, results in polyfill
-  flags.shadow = (flags.shadow || flags.shadowdom || flags.polyfill);
-  if (flags.shadow === 'native') {
-    flags.shadow = false;
-  } else {
-    flags.shadow = flags.shadow || !HTMLElement.prototype.createShadowRoot;
-  }
-
   // forward flags
   if (flags.register) {
     window.CustomElements = window.CustomElements || {flags: {}};
     window.CustomElements.flags.register = flags.register;
   }
 
-  // export
-  scope.flags = flags;
-})(window.WebComponents);
+  // exports
+  WebComponents.flags = flags;
+
+})();
