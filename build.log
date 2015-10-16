@@ -1,33 +1,33 @@
 BUILD LOG
 ---------
-Build Time: 2015-09-28T16:50:31-0700
+Build Time: 2015-10-16T14:18:33-0700
 
 NODEJS INFORMATION
 ==================
-nodejs: v4.1.1
+nodejs: v4.2.0
 gulp: 3.9.0
 gulp-audit: 1.0.0
 gulp-concat: 2.6.0
 gulp-header: 1.7.1
-gulp-uglify: 1.4.1
+gulp-uglify: 1.4.2
 run-sequence: 1.1.4
-web-component-tester: 3.3.22
+web-component-tester: 3.3.26
 
 REPO REVISIONS
 ==============
-webcomponentsjs: c469b0002fa265416c83d5c8363071705e345a43
+webcomponentsjs: 185a01c1e6c9941e8d568d321eaec242e5ddd229
 
 BUILD HASHES
 ============
-CustomElements.js: 0d46b5c2bb7c92b6285d574205ca65e49def0617
-CustomElements.min.js: 2de71b634cd1545c401981c68fc31f0a12dd5f82
-HTMLImports.js: 0ddc177cadf99dd47b36bd74296f9d23dc566f25
-HTMLImports.min.js: 43d3866825148a8d0509da06a1e55550762255a9
-MutationObserver.js: 54ad1e3273edc525d1e4e0b75c42e25af7a0fb20
-MutationObserver.min.js: 36c22670e654ace2e7440c2dc4b012802080424b
-ShadowDOM.js: 089f8e6ea35f4365a2bece6481308d2002975e51
-ShadowDOM.min.js: 9d044a4e4221245adf257b229f9c67968f95f955
-webcomponents-lite.js: 8c326ce2b8e40aa4aefe7469f7cf8587c2c625da
-webcomponents-lite.min.js: ce8cf899652990697eb80703ebacf0ae997f7361
-webcomponents.js: fd409f4fab68b8bcc27a6a54e2ec16555a5eaa47
-webcomponents.min.js: efcdb4322c84f68f8c9e9cfc359505c263814051
+CustomElements.js: 943d9f48ad71b444a2eff5c995081b5364777a5f
+CustomElements.min.js: e11be05c876cc665b51dc0f693c200b68c172cd7
+HTMLImports.js: d65caa6ed3b4aff6640da7b1c00ad2661a8e2f79
+HTMLImports.min.js: bb01992d2b0889613f7c64bb89745ee64b819106
+MutationObserver.js: 92f7182e2491f59108795b1d4fdec0cc10937f40
+MutationObserver.min.js: e563d884955f03335a7ad928497561bdaef7c3a4
+ShadowDOM.js: fb8c9b07450dd52a6f63119d1236d02da67e5f9b
+ShadowDOM.min.js: 8f463e01093c9f4f272c465f1a67aaa98e12f11e
+webcomponents-lite.js: de3ae0944d938a3f604c024d41f42e75284c7a78
+webcomponents-lite.min.js: b45f7a55ae166f10da35759ef1c8a08164cec639
+webcomponents.js: d0c9136405a15ad263eed2a2df4b7179ef8dd0ba
+webcomponents.min.js: 73f28593e35232c67e31bacbf612b168e1f24e1f
