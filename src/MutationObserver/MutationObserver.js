@@ -10,6 +10,11 @@
 
 (function(global) {
 
+  // Don't allow this object to be redefined.
+  if (global.JsMutationObserver) {
+    return;
+  }
+
   var registrationsTable = new WeakMap();
 
   var setImmediate;
@@ -561,8 +566,10 @@
 
   global.JsMutationObserver = JsMutationObserver;
 
-  if (!global.MutationObserver)
+  if (!global.MutationObserver) {
     global.MutationObserver = JsMutationObserver;
-
+    // Explicltly mark MO as polyfilled for user reference.
+    JsMutationObserver._isPolyfilled = true;
+  }
 
 })(self);
