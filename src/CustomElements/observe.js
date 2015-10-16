@@ -53,14 +53,23 @@ function addedSubtree(node, isAttached) {
 }
 
 // On platforms without MutationObserver, mutations may not be
-// reliable and therefore attached/detached are not reliable.
-// To make these callbacks less likely to fail, we defer all inserts and removes
+// reliable and therefore attached/detached are not reliable. We think this 
+// occurs sometimes under heavy DOM operation load, but it is not easy to
+// reproduce.
+// To make these callbacks less likely to fail in this scenario, 
+// we *optionally* defer all inserts and removes
 // to give a chance for elements to be attached into dom.
-// This ensures attachedCallback fires for elements that are created and
+// This helps ensure attachedCallback fires for elements that are created and
 // immediately added to dom.
-var hasPolyfillMutations = (!window.MutationObserver ||
-    (window.MutationObserver === window.JsMutationObserver));
-scope.hasPolyfillMutations = hasPolyfillMutations;
+// This change can significantly alter the performance characteristics
+// of attaching elements and therefore we only enable it if the user has 
+// explicitly provided the `throttle-attached` flag.
+var hasThrottledAttached = (window.MutationObserver._isPolyfilled && 
+    flags['throttle-attached']);
+// bc
+scope.hasPolyfillMutations = hasThrottledAttached;
+// exposed for testing
+scope.hasThrottledAttached = hasThrottledAttached;
 
 var isPendingMutations = false;
 var pendingMutations = [];
@@ -82,7 +91,7 @@ function takeMutations() {
 }
 
 function attached(element) {
-  if (hasPolyfillMutations) {
+  if (hasThrottledAttached) {
     deferMutation(function() {
       _attached(element);
     });
@@ -118,7 +127,7 @@ function detachedNode(node) {
 }
 
 function detached(element) {
-  if (hasPolyfillMutations) {
+  if (hasThrottledAttached) {
     deferMutation(function() {
       _detached(element);
     });
