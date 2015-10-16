@@ -37,7 +37,7 @@ window.WebComponents = window.WebComponents || {};
       }
     }
     // log flags
-    if (flags.log) {
+    if (flags.log && flags.log.split) {
       var parts = flags.log.split(',');
       flags.log = {};
       parts.forEach(function(f) {
