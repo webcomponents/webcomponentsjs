@@ -17,6 +17,7 @@ var rootDocument = scope.rootDocument;
 var Loader = scope.Loader;
 var Observer = scope.Observer;
 var parser = scope.parser;
+var isImport = scope.isImport;
 
 // importer
 // highlander object to manage loading of imports
@@ -67,7 +68,7 @@ var importer = {
     // see https://code.google.com/p/chromium/issues/detail?id=249381.
     elt.__resource = resource;
     elt.__error = err;
-    if (isImportLink(elt)) {
+    if (isImport(elt)) {
       var doc = this.documents[url];
       // if we've never seen a document at this url
       if (doc === undefined) {
@@ -110,14 +111,6 @@ var importLoader = new Loader(importer.loaded.bind(importer),
 // NOTE: the observer has a node added callback and this is set
 // by the dynamic importer module.
 importer.observer = new Observer();
-
-function isImportLink(elt) {
-  return isLinkRel(elt, IMPORT_LINK_TYPE);
-}
-
-function isLinkRel(elt, rel) {
-  return elt.localName === 'link' && elt.getAttribute('rel') === rel;
-}
 
 function hasBaseURIAccessor(doc) {
   return !! Object.getOwnPropertyDescriptor(doc, 'baseURI');

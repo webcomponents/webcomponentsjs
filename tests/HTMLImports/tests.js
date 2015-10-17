@@ -17,6 +17,7 @@ htmlSuite('HTMLImports', function() {
   htmlTest('html/load.html');
   htmlTest('html/load-404.html');
   htmlTest('html/load-loop.html');
+  htmlTest('html/load-with-addl-rels.html');
   htmlTest('html/base/load-base.html');
   htmlTest('html/currentScript.html');
   htmlTest('html/dedupe.html');
@@ -24,6 +25,7 @@ htmlSuite('HTMLImports', function() {
   htmlTest('html/dynamic-all-imports-detail.html');
   htmlTest('html/dynamic-errors-detail.html');
   htmlTest('html/dynamic-loaded-detail.html');
+  htmlTest('html/dynamic-with-addl-rels.html');
   htmlTest('html/csp.html');
   htmlTest('html/customevent-detail.html');
   htmlTest('html/encoding.html');

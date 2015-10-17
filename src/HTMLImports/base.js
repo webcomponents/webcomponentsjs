@@ -25,6 +25,7 @@ window.HTMLImports = window.HTMLImports || {flags:{}};
   the code later, only if it's necessary for polyfilling.
 */
 var IMPORT_LINK_TYPE = 'import';
+var IMPORT_SELECTOR = 'link[rel~=' + IMPORT_LINK_TYPE + ']';
 var useNative = Boolean(IMPORT_LINK_TYPE in document.createElement('link'));
 
 /**
@@ -114,7 +115,7 @@ function markTargetLoaded(event) {
 
 // call <callback> when we ensure all imports have loaded
 function watchImportsLoad(callback, doc) {
-  var imports = doc.querySelectorAll('link[rel=import]');
+  var imports = doc.querySelectorAll(IMPORT_SELECTOR);
   var parsedCount = 0, importCount = imports.length, newImports = [], errorImports = [];
   function checkDone() {
     if (parsedCount == importCount && callback) {
@@ -163,6 +164,15 @@ function isImportLoaded(link) {
       link.__importParsed;
 }
 
+// Check whether a given element node is a link with 'import' as one
+// of its relation types
+function isImport(element) {
+  if (element.localName !== 'link') return false;
+  var rels = element.getAttribute('rel');
+  if (rels === '' || rels === null) return false;
+  return rels.split(' ').indexOf(IMPORT_LINK_TYPE) !== -1;
+}
+
 // TODO(sorvell): Workaround for
 // https://www.w3.org/Bugs/Public/show_bug.cgi?id=25007, should be removed when
 // this bug is addressed.
@@ -191,10 +201,6 @@ if (useNative) {
     }
   }
 
-  function isImport(element) {
-    return element.localName === 'link' && element.rel === 'import';
-  }
-
   function handleImport(element) {
     var loaded = element.import;
     if (loaded) {
@@ -209,7 +215,7 @@ if (useNative) {
   // when this script is run.
   (function() {
     if (document.readyState === 'loading') {
-      var imports = document.querySelectorAll('link[rel=import]');
+      var imports = document.querySelectorAll(IMPORT_SELECTOR);
       for (var i=0, l=imports.length, imp; (i<l) && (imp=imports[i]); i++) {
         handleImport(imp);
       }
@@ -232,9 +238,11 @@ whenReady(function(detail) {
 
 // exports
 scope.IMPORT_LINK_TYPE = IMPORT_LINK_TYPE;
+scope.IMPORT_SELECTOR = IMPORT_SELECTOR;
 scope.useNative = useNative;
 scope.rootDocument = rootDocument;
 scope.whenReady = whenReady;
 scope.isIE = isIE;
+scope.isImport = isImport;
 
 })(window.HTMLImports);
