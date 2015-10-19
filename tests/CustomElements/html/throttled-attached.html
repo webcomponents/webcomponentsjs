@@ -11,15 +11,13 @@
 <html>
   <head>
     <title>Custom Elements: throttle attached</title>
-    <script src="../../tools/htmltest.js"></script>
-    <script src="../../tools/chai/chai.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
     <script src="../../../src/CustomElements/CustomElements.js?wc-throttle-attached"></script>
   </head>
   <body>
     <script>
-      addEventListener('WebComponentsReady', function() {
+      test('throttled attachment', function() {
         chai.assert.equal(MutationObserver.__isPolyfilled, CustomElements.hasThrottledAttached);
-        done();
       });
     </script>
   </body>
