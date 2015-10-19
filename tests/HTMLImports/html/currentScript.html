@@ -11,18 +11,20 @@
 <html>
   <head>
     <title>_currentScript Test</title>
-    <script src="../../tools/htmltest.js"></script>
-    <script src="../../tools/chai/chai.js"></script>
+    <script>WCT = {waitFor: function(cb){cb()}};</script>
+    <script src="../../../bower_components/web-component-tester/browser.js"></script>
     <script src="../../../src/HTMLImports/HTMLImports.js"></script>
     <link rel="import" href="imports/script-1.html">
     <script src="imports/current-script.js"></script>
   </head>
   <body>
     <script>
-      chai.assert.equal(document._currentScript.parentNode, document.body, '_currentScript set in main document');
-      addEventListener('HTMLImportsLoaded', function() {
-        chai.assert.equal(window.remoteCurrentScriptExecuted, 2, 'remote script executed from import and main document');
-        done();
+      var cs = document._currentScript;
+      test('currentScript', function() {
+        chai.assert.equal(cs.parentNode, document.body, '_currentScript set in main document');
+        addEventListener('HTMLImportsLoaded', function() {
+          chai.assert.equal(window.remoteCurrentScriptExecuted, 2, 'remote script executed from import and main document');
+        });
       });
     </script>
   </body>

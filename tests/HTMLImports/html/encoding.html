@@ -12,26 +12,17 @@
 <head>
   <meta charset="UTF-8">
   <title></title>
-  <script src="../../tools/htmltest.js"></script>
-  <script src="../../tools/chai/chai.js"></script>
+  <script src="../../../bower_components/web-component-tester/browser.js"></script>
   <script src="../../../src/HTMLImports/HTMLImports.js"></script>
   <link rel="import" href="imports/encoding-import.html">
 </head>
 <body>
-  <span></span>
+  <span id="encodingtarget"></span>
   <script>
-    function test() {
-      run();
-      var span = document.querySelector('span');
+    test('charset is correct', function() {
+      var span = document.getElementById('encodingtarget');
       chai.assert.equal(span.textContent, 'Róbert Viðar Bjarnason');
-      done();
-    }
-
-    if (HTMLImports.ready) {
-      test();
-    } else {
-      addEventListener('HTMLImportsLoaded', test);
-    }
+    });
   </script>
 </body>
 </html>

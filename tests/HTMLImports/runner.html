@@ -12,15 +12,15 @@
 <meta charset="utf-8">
 
 <!-- HTMLImports -->
-<script src="../../src/HTMLImports/HTMLImports.js"></script>
 <script>
-  window.WCT = {
+  WCT = {
     waitFor: function(callback) {
       this.HTMLImports.whenReady(callback);
     }
   };
 </script>
 <script src="../../bower_components/web-component-tester/browser.js"></script>
+<script src="../../src/HTMLImports/HTMLImports.js"></script>
 <script>
   var suites = [
   'html/HTMLImports.html',
@@ -29,18 +29,18 @@
   'html/style-paths.html',
   'html/load.html',
   'html/load-404.html',
-//  'html/load-loop.html',
-//  'html/base/load-base.html',
-//  'html/currentScript.html',
-//  'html/dedupe.html',
-//  'html/dynamic.html',
-//  'html/dynamic-all-imports-detail.html',
-//  'html/dynamic-errors-detail.html',
-//  'html/dynamic-loaded-detail.html',
-//  'html/csp.html',
-//  'html/customevent-detail.html',
-//  'html/encoding.html',
-//  'html/HTMLImportsLoaded-native.html',
+  'html/load-loop.html',
+  'html/base/load-base.html',
+  'html/currentScript.html',
+  'html/dedupe.html',
+  'html/dynamic.html',
+  'html/dynamic-all-imports-detail.html',
+  'html/dynamic-errors-detail.html',
+  'html/dynamic-loaded-detail.html',
+  'html/csp.html',
+  'html/customevent-detail.html',
+  'html/encoding.html',
+  'html/HTMLImportsLoaded-native.html',
   ];
   // NOTE: The MO polyfill does not function on disconnected documents
   // like html imports so dynamic elements in imports are not supported.

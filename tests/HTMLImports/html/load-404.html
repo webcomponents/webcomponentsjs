@@ -12,11 +12,11 @@
   <head>
     <title>load ready 404 test</title>
     <script>
+      WCT = {waitFor: function(cb){cb()}};
     </script>
     <script src="../../../bower_components/web-component-tester/browser.js"></script>
     <script src="../../../src/HTMLImports/HTMLImports.js"></script>
     <script>
-      WCT.waitFor = function(){};
       var errors = 0;
       function errorHandler() {
         errors++;
@@ -29,9 +29,7 @@
   <body>
     <script>
       test('loaded - 404', function(done) {
-        var loaded = false;
         addEventListener('HTMLImportsLoaded', function() {
-          loaded = true;
           check();
         });
 
@@ -42,7 +40,6 @@
 
         function check() {
           clearTimeout(timeout);
-          chai.assert.ok(loaded, '404\'d imports are loaded');
           chai.assert.equal(document.querySelector('link').import, null, '404\'d link.import is null');
           chai.assert.equal(errors, 2, '404\'d generate error event');
           done();

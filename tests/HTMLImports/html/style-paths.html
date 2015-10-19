@@ -38,9 +38,13 @@
       chai.assert.match(getComputedStyle(image).backgroundImage, new RegExp(a.href), 'url in style applied');
 
       if (!HTMLImports.useNative) {
-        var style = document.querySelector('style');
-        chai.assert.ok(style.sheet);
-        chai.assert.equal(style.sheet.cssRules[2].href,
+        var styles = document.querySelectorAll('style');
+        var fontStyle = [].filter.call(styles, function(s) {
+          return s.textContent.indexOf('Source+Code+Pro') > -1;
+        })[0];
+        assert.ok(fontStyle);
+        chai.assert.ok(fontStyle.sheet);
+        chai.assert.equal(fontStyle.sheet.cssRules[2].href,
             'http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,800|Source+Code+Pro',
             '@import url() form rule has proper url')
       }

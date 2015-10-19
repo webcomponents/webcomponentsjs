@@ -62,11 +62,12 @@
         chai.assert.equal(computedStyle('.styled').backgroundColor, 'rgb(255, 0, 0)');
         // styles in style are applied in the correct order and overriddable
         chai.assert.equal(computedStyle('.overridden-style').backgroundColor, 'rgb(0, 0, 0)');
-        // links with type attr are not imported
-        chai.assert.equal(computedStyle('.link-typed').backgroundColor, 'rgba(0, 0, 0, 0)');
+        if (!HTMLImports.useNative) {
+          // links with type attr are not imported
+          chai.assert.notEqual(computedStyle('.link-typed').backgroundColor, 'rgb(0, 0, 128)');
+        }
         // styles with type attr are not imported
-        chai.assert.equal(computedStyle('.style-typed').backgroundColor, 'rgba(0, 0, 0, 0)');
-
+        chai.assert.notEqual(computedStyle('.style-typed').backgroundColor, 'rgb(255, 0, 0)');
 
         done();
       });
