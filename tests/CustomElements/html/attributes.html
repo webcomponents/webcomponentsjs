@@ -11,8 +11,7 @@
 <html>
   <head>
     <title>Custom Elements: attributes</title>
-    <script src="../../tools/htmltest.js"></script>
-    <script src="../../tools/chai/chai.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
     <script src="../../../src/CustomElements/CustomElements.js"></script>
   </head>
   <body>
@@ -35,7 +34,7 @@
       };
       document.registerElement('x-foo', {prototype: prototype});
 
-      addEventListener('WebComponentsReady', function() {
+      test('attributes', function() {
         var xfoo = document.createElement('x-foo');
         chai.assert.isFalse(xfoo.removeAttributeOk);
         chai.assert.isFalse(xfoo.setAttributeOk);
@@ -47,7 +46,6 @@
         xfoo.removeAttribute('squid');
         chai.assert.isTrue(xfoo.removeAttributeOk);
         chai.assert.isTrue(xfoo.setAttributeOk);
-        done();
       });
     </script>
   </body>

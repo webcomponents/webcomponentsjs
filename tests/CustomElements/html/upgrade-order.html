@@ -11,8 +11,7 @@
 <html>
   <head>
     <title>Custom Elements: upgrade order</title>
-    <script src="../../tools/htmltest.js"></script>
-    <script src="../../tools/chai/chai.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
     <script src="../../../src/CustomElements/CustomElements.js"></script>
   </head>
   <body>
@@ -43,14 +42,13 @@
           'x-parent'
       ];
 
-      addEventListener('WebComponentsReady', function() {
+      test('upgrade order', function() {
         chai.assert.equal(created.length, order.length, 'created length is correct');
         chai.assert.equal(attached.length, order.length, 'attached length is correct');
         for (var i=0; i< order.length; i++) {
           chai.assert.equal(created[i], order[i]);
           chai.assert.equal(attached[i], order[i]);
         }
-        done();
       });
     </script>
 

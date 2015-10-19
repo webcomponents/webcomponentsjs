@@ -11,13 +11,12 @@
 <html>
   <head>
     <title>CustomEvent detail test</title>
-    <script src="../../tools/htmltest.js"></script>
-    <script src="../../tools/chai/chai.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
     <script src="../../../src/CustomElements/CustomElements.js"></script>
   </head>
   <body>
     <script>
-      addEventListener('WebComponentsReady', function() {
+      test('CustomEvent detail', function(done) {
         var eventName = 'some-event';
         var eventDetail = 'some-detail';
 

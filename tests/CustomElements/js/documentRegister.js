@@ -26,7 +26,7 @@ function isFormControl(element)
  * Clone the input node, insert it into a div, and then read back the outerHTML, which is now stripped of the XML *
  * Namespace element
  */
-var isIE = /Trident|Edge/.test(navigator.userAgent);
+var isIE = /Trident/.test(navigator.userAgent);
 function assertOuterHTML(element, expected) {
   var outerHTML = element.outerHTML;
   if (isIE) {
