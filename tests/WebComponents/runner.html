@@ -11,24 +11,21 @@
 <title>WebComponents Tests</title>
 <meta charset="utf-8">
 
-<!-- Mocha/Chai -->
-<link rel="stylesheet" href="../tools/mocha/mocha.css">
-<script src="../tools/mocha/mocha.js"></script>
-<script src="../tools/chai/chai.js"></script>
-<script src="../tools/mocha-htmltest.js"></script>
-
-<!-- CustomElements -->
-<script src="../../webcomponents.js"></script>
-
-<div id="mocha"></div>
+<script src="../../../web-component-tester/browser.js"></script>
 <script>
-  mocha.setup({ui: 'tdd', slow: 1000});
-</script>
-
-<script src="tests.js"></script>
-
-<script>
-  document.addEventListener('WebComponentsReady', function() {
-    mocha.run();
-  });
+  WCT.loadSuites([
+    'html/dev-loader.html',
+    'html/dev-loader-swizzled.html',
+    'html/loader-forcepoly.html',
+    'html/web-components.html',
+    'html/smoke.html',
+    'html/smoke.html?wc-shadow',
+    'html/ce-import.html',
+    'html/ce-import.html?wc-shadow',
+    'html/ce-upgradedocumenttree.html',
+    'html/ce-upgrade-order.html',
+    'html/ce-import-upgrade.html',
+    'html/ce-import-upgrade-async.html',
+    'html/jquery-shadowdom-polyfill.html'
+  ]);
 </script>

@@ -12,19 +12,22 @@
 <head>
   <meta charset="UTF-8">
   <title>ShadowDOM Polyfill + jQuery</title>
+  <script src="../../../../web-component-tester/browser.js"></script>
   <script src="../../../webcomponents.js" shadow="polyfill"></script>
-  <script src="../../tools/chai/chai.js"></script>
-  <script src="../../tools/htmltest.js"></script>
   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <body>
   <div id="host">asdf</div>
   <script>
-    $(document).ready(function() {
-      var host = $('#host')[0];
-      var sr = host.createShadowRoot();
-      sr.innerHTML = 'Light: <content></content>; Shadow: <span>qwert</span>';
-      requestAnimationFrame(done);
+    test('jquery + webcomponents', function(done) {
+      $(document).ready(function() {
+        var host = $('#host')[0];
+        var sr = host.createShadowRoot();
+        sr.innerHTML = 'Light: <content></content>; Shadow: <span>qwert</span>';
+        requestAnimationFrame(function() {
+          done();
+        });
+      });
     });
   </script>
 </body>

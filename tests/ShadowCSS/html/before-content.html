@@ -11,8 +11,7 @@
 <html>
 <head>
   <title>content in :before pseudo-class</title>
-  <script src="../../tools/chai/chai.js"></script>
-  <script src="../../tools/htmltest.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
 
   <script src="../../../webcomponents.js"></script>
   <script src="register.js"></script>
@@ -52,7 +51,7 @@
   <script>
     register('x-test', '', HTMLElement.prototype);
 
-    document.addEventListener('WebComponentsReady', function() {
+    test('before content', function(done) {
       setTimeout(function() {
         var root = document.querySelector('x-test').shadowRoot;
         function testContent(node, contentRe) {

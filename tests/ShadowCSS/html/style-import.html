@@ -11,8 +11,7 @@
 <html>
   <head>
     <title>Imports style loading</title>
-    <script src="../../tools/chai/chai.js"></script>
-    <script src="../../tools/htmltest.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
 
     <script src="../../../webcomponents.js" shadow></script>
     <link rel="import" href="imports/style-import.html">
@@ -22,7 +21,7 @@
     <div id="test2" class="blue">blue</div>
     <div id="test3" class="image"></div>
     <script>
-      document.addEventListener('WebComponentsReady', function() {
+      test('style import', function() {
         function getComputed(selector) {
           return getComputedStyle(document.querySelector(selector));
         }
@@ -30,7 +29,6 @@
         chai.assert.equal(getComputed('#test1').backgroundColor, 'rgb(255, 0, 0)', 'shimmed imported style is loaded');
         chai.assert.equal(getComputed('#test2').backgroundColor, 'rgb(0, 0, 255)', 'shimmed imported sheet is loaded');
         chai.assert.ok(getComputed('#test3').backgroundImage, 'shimmed imported style path is correct');
-        done();
       });
     </script>
   </body>

@@ -11,8 +11,7 @@
 <html>
 <head>
   <title>Psuedo scoped styling</title>
-  <script src="../../tools/chai/chai.js"></script>
-  <script src="../../tools/htmltest.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
 
   <script src="../../../webcomponents.js" shadow></script>
   <script src="register.js"></script>
@@ -85,7 +84,7 @@
     register('x-foo', '', HTMLElement.prototype);
     register('x-button', 'button', HTMLButtonElement.prototype, ['x-button']);
 
-    document.addEventListener('WebComponentsReady', function() {
+    test('Psuedo scoped styling strict', function(done) {
       setTimeout(function() {
         var foo = document.querySelector('x-foo');
         var fooDiv = foo.shadowRoot.querySelector('div');

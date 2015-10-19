@@ -8,22 +8,29 @@
     Code distributed by Google as part of the polymer project is also
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<script src="../../tools/chai/chai.js"></script>
-<script src="../../tools/htmltest.js"></script>
+<script>
+  WCT = {
+    waitFor: function(cb) {
+      cb();
+    }
+  };
+</script>
+<script src="../../../../web-component-tester/browser.js"></script>
 
 <script src="../../../src/ShadowDOM/ShadowDOM.js"></script>
 <script>
 
-var assert = chai.assert;
 var wrap = ShadowDOMPolyfill.wrap;
 
-window.addEventListener('load', function(e) {
-  assert.equal(e.target, wrap(document))
-  assert.equal(e.currentTarget, wrap(window));
-  assert.equal(this, wrap(window));
-  assert.equal(e.eventPhase, Event.AT_TARGET);
+test('load event listener works', function(done) {
+  window.addEventListener('load', function(e) {
+    assert.equal(e.target, wrap(document))
+    assert.equal(e.currentTarget, wrap(window));
+    assert.equal(this, wrap(window));
+    assert.equal(e.eventPhase, Event.AT_TARGET);
 
-  done();
+    done();
+  });
 });
 
 </script>

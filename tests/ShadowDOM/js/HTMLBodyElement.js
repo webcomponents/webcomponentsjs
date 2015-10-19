@@ -8,7 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-htmlSuite('HTMLBodyElement', function() {
+suite('HTMLBodyElement', function() {
 
   var wrap = ShadowDOMPolyfill.wrap;
 
@@ -124,8 +124,4 @@ htmlSuite('HTMLBodyElement', function() {
   test('constructor', function() {
     assert.equal(HTMLBodyElement, document.createElement('body').constructor);
   });
-
-  htmlTest('../html/document-body-inner-html.html');
-
-  htmlTest('../html/document-body-shadow-root.html');
 });

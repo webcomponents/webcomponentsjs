@@ -11,19 +11,130 @@
 <title>ShadowDOM Tests</title>
 <meta charset="utf-8">
 
-<!-- Mocha/Chai -->
-<link rel="stylesheet" href="../tools/mocha/mocha.css">
-<script src="../tools/mocha/mocha.js"></script>
-<script src="../tools/chai/chai.js"></script>
-<script src="../tools/mocha-htmltest.js"></script>
+<script src="../../../web-component-tester/browser.js"></script>
 
 <!-- ShadowDOM -->
 <script src="../../src/ShadowDOM/ShadowDOM.js"></script>
 
 <!-- tests -->
-<script src="tests.js"></script>
-
-<div id="mocha"></div>
 <script>
-mocha.run();
+  // common utils
+function expectStructure(nodeOrWrapper, nonNullFields) {
+  assert(nodeOrWrapper);
+  assert.strictEqual(nodeOrWrapper.parentNode, nonNullFields.parentNode || null);
+  assert.strictEqual(nodeOrWrapper.previousSibling,
+      nonNullFields.previousSibling || null);
+  assert.strictEqual(nodeOrWrapper.nextSibling, nonNullFields.nextSibling || null);
+  assert.strictEqual(nodeOrWrapper.firstChild, nonNullFields.firstChild || null);
+  assert.strictEqual(nodeOrWrapper.lastChild, nonNullFields.lastChild || null);
+}
+
+function unwrapAndExpectStructure(node, nonNullFields) {
+  for (var p in nonNullFields) {
+    nonNullFields[p] = ShadowDOMPolyfill.unwrap(nonNullFields[p]);
+  }
+  expectStructure(ShadowDOMPolyfill.unwrap(node), nonNullFields);
+}
+
+function assertArrayEqual(a, b, msg) {
+  for (var i = 0; i < a.length; i++) {
+    assert.equal(a[i], b[i], msg);
+  }
+  assert.equal(a.length, b.length, msg);
+}
+
+function expectMutationRecord(record, expected) {
+  assert.equal(record.type,
+      expected.type === undefined ? null : expected.type);
+  assert.equal(record.target,
+      expected.target === undefined ? null : expected.target);
+  assertArrayEqual(record.addedNodes,
+      expected.addedNodes === undefined ? [] : expected.addedNodes);
+  assertArrayEqual(record.removedNodes,
+      expected.removedNodes === undefined ? [] : expected.removedNodes);
+  assert.equal(record.previousSibling,
+      expected.previousSibling === undefined ?
+          null : expected.previousSibling);
+  assert.equal(record.nextSibling,
+      expected.nextSibling === undefined ? null : expected.nextSibling);
+  assert.equal(record.attributeName,
+      expected.attributeName === undefined ? null : expected.attributeName);
+  assert.equal(record.attributeNamespace,
+      expected.attributeNamespace === undefined ?
+          null : expected.attributeNamespace);
+  assert.equal(record.oldValue,
+      expected.oldValue === undefined ? null : expected.oldValue);
+}
+
+  WCT.loadSuites([
+  'js/ChildNodeInterface.js',
+  'js/Comment.js',
+  'js/DOMTokenList.js',
+  'js/Document.js',
+  'html/document-write.html',
+  'html/head-then-body.html',
+  'js/Element.js',
+  'js/FormData.js',
+  'js/HTMLAudioElement.js',
+  'js/HTMLBodyElement.js',
+  'html/document-body-inner-html.html',
+  'html/document-body-shadow-root.html',
+  'js/HTMLButtonElement.js',
+  'js/HTMLCanvasElement.js',
+  'js/HTMLContentElement.js',
+  'js/HTMLElement.js',
+  'js/HTMLFieldSetElement.js',
+  'js/HTMLFormElement.js',
+  'js/HTMLHeadElement.js',
+  'js/HTMLHtmlElement.js',
+  'js/HTMLImageElement.js',
+  'js/HTMLInputElement.js',
+  'js/HTMLKeygenElement.js',
+  'js/HTMLLabelElement.js',
+  'js/HTMLLegendElement.js',
+  'js/HTMLObjectElement.js',
+  'js/HTMLOptionElement.js',
+  'js/HTMLOutputElement.js',
+  'js/HTMLSelectElement.js',
+  'js/HTMLShadowElement.js',
+  'js/HTMLTableElement.js',
+  'js/HTMLTableRowElement.js',
+  'js/HTMLTableSectionElement.js',
+  'js/HTMLTemplateElement.js',
+  'js/HTMLTextAreaElement.js',
+  'js/MutationObserver.js',
+  'js/MutationObserver/attributes.js',
+  'js/MutationObserver/callback.js',
+  'js/MutationObserver/characterData.js',
+  'js/MutationObserver/childList.js',
+  'js/MutationObserver/mixed.js',
+  'js/MutationObserver/options.js',
+  'js/MutationObserver/shadow-root.js',
+  'js/MutationObserver/transient.js',
+  'js/Node.js',
+  'js/NonElementParentNodeInterface.js',
+  'js/ParentNodeInterface.js',
+  'js/Range.js',
+  'js/SVGElement.js',
+  'js/SVGElementInstance.js',
+  'js/Selection.js',
+  'js/TreeWalker.js',
+  'js/ShadowRoot.js',
+  'js/Text.js',
+  'js/TouchEvent.js',
+  'js/TreeScope.js',
+  'js/Window.js',
+  'js/XMLHttpRequest.js',
+  'js/createTable.js',
+  'js/custom-element.js',
+  'js/events.js',
+  //'html/on-load-test.html',
+  //'html/on-unload-test.html',
+  'js/microtask.js',
+  'js/paralleltrees.js',
+  'js/reprojection.js',
+  'js/rerender.js',
+  'js/test.js',
+  'js/wrappers.js',
+  ]);
 </script>
