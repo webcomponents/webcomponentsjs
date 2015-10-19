@@ -12,29 +12,15 @@
 <meta charset="utf-8">
 
 <!-- WebComponents -->
-<script src="../webcomponents.js" shadow></script>
-
-<!-- Mocha/Chai -->
-<link rel="stylesheet" href="tools/mocha/mocha.css">
-<script src="tools/mocha/mocha.js"></script>
-<script src="tools/chai/chai.js"></script>
-<script src="tools/mocha-htmltest.js"></script>
-
-<div id="mocha"></div>
-<script>
-  mocha.setup({ui: 'tdd', slow: 1000});
-</script>
-
-<script src="CustomElements/tests.js"></script>
-<script src="HTMLImports/tests.js"></script>
-<script src="ShadowDOM/tests.js"></script>
-<script src="ShadowCSS/tests.js"></script>
-<script src="Template/tests.js"></script>
-<script src="WebComponents/tests.js"></script>
-
+<script src="../../web-component-tester/browser.js"></script>
 
 <script>
-  document.addEventListener('WebComponentsReady', function() {
-    mocha.run();
-  });
+  WCT.loadSuites([
+    'HTMLImports/runner.html',
+    'Template/tests.html',
+//    'CustomElements',
+//    'ShadowDOM',
+//    'ShadowCSS',
+//    'WebComponents'
+  ]);
 </script>
