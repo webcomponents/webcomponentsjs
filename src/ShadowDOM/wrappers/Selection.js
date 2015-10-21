@@ -46,7 +46,9 @@
       unsafeUnwrap(this).removeRange(unwrap(range));
     },
     selectAllChildren: function(node) {
-      unsafeUnwrap(this).selectAllChildren(unwrapIfNeeded(node));
+      unsafeUnwrap(this).selectAllChildren(
+          node instanceof ShadowRoot ? unsafeUnwrap(node.host) : unwrapIfNeeded(node)
+      );
     },
     toString: function() {
       return unsafeUnwrap(this).toString();

@@ -68,6 +68,10 @@
     elementFromPoint: function(x, y) {
       return elementFromPoint(this, this.ownerDocument, x, y);
     },
+
+    getSelection: function() {
+      return document.getSelection();
+    }
   });
 
   scope.wrappers.ShadowRoot = ShadowRoot;
