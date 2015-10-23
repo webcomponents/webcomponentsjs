@@ -35,7 +35,7 @@ var xhr = {
         try {
           var locationHeader = request.getResponseHeader("Location");
           if (locationHeader) {
-            var redirectedUrl = (locationHeader.substr( 0, 1 ) === "/")
+            redirectedUrl = (locationHeader.substr( 0, 1 ) === "/")
               ? location.origin + locationHeader  // Location is a relative path
               : locationHeader;                   // Full path
           }
