@@ -12,8 +12,7 @@
 <head>
   <meta name="viewport" content="initial-scale=1.0">
   <title>Using compressed stylesheet</title>
-  <script src="../../tools/chai/chai.js"></script>
-  <script src="../../tools/htmltest.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
 
   <script src="../../../webcomponents.js" shadow></script>
   <script src="register.js"></script>
@@ -35,11 +34,10 @@
   <x-test></x-test>
 
   <script>
-    document.addEventListener('WebComponentsReady', function() {
+    test('compressed', function() {
       var sheet = document.querySelector('[shim-shadowdom-css]');
-      //chai.assert.notMatch(sheet.textContent, /polyfill-next-selector/, 'polyfill rules properly replaced');
-      //chai.assert.notMatch(sheet.textContent, /-shadowcsshost/, 'polyfill rules properly replaced');
-      done();
+      chai.assert.notMatch(sheet.textContent, /polyfill-next-selector/, 'polyfill rules properly replaced');
+      chai.assert.notMatch(sheet.textContent, /-shadowcsshost/, 'polyfill rules properly replaced');
     });
   </script>
 </body>

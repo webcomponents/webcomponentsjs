@@ -11,34 +11,35 @@
 <html>
   <head>
     <title>HTML Imports Dynamic</title>
-    <script src="../../tools/htmltest.js"></script>
-    <script src="../../tools/chai/chai.js"></script>
     <script src="../../../src/HTMLImports/HTMLImports.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
   </head>
   <body>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // some time later
-        setTimeout(function() {
-          var div = document.createElement('div');
-          div.innerHTML = '<link rel="import" href="imports/load-1.html">' +
-              '<link rel="import" href="imports/load-2.html">';
+  <script>
+    var loads = 0;
+    document.addEventListener('DOMContentLoaded', function() {
+      // some time later
+      setTimeout(function() {
+        var div = document.createElement('div');
+        div.innerHTML = '<link rel="import" href="imports/load-1.html">' +
+          '<link rel="import" href="imports/load-2.html">';
           document.body.appendChild(div);
           var ports = document.querySelectorAll('link[rel=import]');
-          var loads = 0;
           for (var i=0, l=ports.length, n; (i<l) && (n=ports[i]); i++) {
             n.addEventListener('load', function(e) {
               loads++;
-              chai.assert.ok(e.target.import);
             });
           }
-          HTMLImports.whenReady(function() {
-            chai.assert.equal(loads, 2);
-            done();
-          });
-        });
       });
-    </script>
+    });
+    test('dynamic imports', function(done) {
+      // wait a bit for the imports to load, or not
+      setTimeout(function() {
+        chai.assert.equal(loads, 2);
+        done();
+      }, 1000);
+    });
+  </script>
   </body>
 </html>

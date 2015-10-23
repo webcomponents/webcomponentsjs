@@ -11,19 +11,17 @@
 <title>ShadowDOM Tests</title>
 <meta charset="utf-8">
 
-<!-- Mocha/Chai -->
-<link rel="stylesheet" href="../tools/mocha/mocha.css">
-<script src="../tools/mocha/mocha.js"></script>
-<script src="../tools/chai/chai.js"></script>
-<script src="../tools/mocha-htmltest.js"></script>
+<script src="../../../web-component-tester/browser.js"></script>
 
 <!-- ShadowDOM -->
-<script src="../../src/ShadowDOM/ShadowDOM.js"></script>
 
 <!-- tests -->
-<script src="tests.js"></script>
-
-<div id="mocha"></div>
 <script>
-mocha.run();
+  WCT.loadSuites([
+  'html/full-suite.html',
+  'html/document-body-inner-html.html',
+  'html/document-body-shadow-root.html',
+  //'html/on-load-test.html',
+  //'html/on-unload-test.html',
+  ]);
 </script>

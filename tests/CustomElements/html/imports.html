@@ -11,8 +11,14 @@
 <html>
   <head>
     <title>Custom Elements: imports integration</title>
-    <script src="../../tools/htmltest.js"></script>
-    <script src="../../tools/chai/chai.js"></script>
+    <script>
+      var ready;
+      WCT = {
+        waitFor: function(cb) {
+          ready = cb;
+        }
+      };
+    </script>
     <script>
       HTMLImports = {};
 
@@ -30,14 +36,12 @@
           link.import = doc;
           HTMLImports.__importsParsingHook(link);
           //
-          addEventListener('WebComponentsReady', function() {
-            chai.assert.equal(2, elementsCreated, 'HTML hook allows main document and import document to upgrade');
-            done();
-          })
+          ready();
         }, 1);
       });
     </script>
     <script src="../../../src/CustomElements/CustomElements.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
     <script>
       (function() {
         var proto = Object.create(HTMLElement.prototype);
@@ -47,6 +51,9 @@
 
         document.registerElement('x-foo', {prototype: proto});
       })();
+      test('CustomElements upgrade from HTML Imports', function() {
+        chai.assert.equal(2, elementsCreated, 'HTML hook allows main document and import document to upgrade');
+      })
     </script>
   </head>
   <body>

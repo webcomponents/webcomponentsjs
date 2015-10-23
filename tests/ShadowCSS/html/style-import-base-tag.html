@@ -18,8 +18,7 @@
       var wcjs = location.href.match(/^.*webcomponentsjs\//);
       base.href = wcjs ? wcjs[0] : '/';
     </script>
-    <script src="tests/tools/chai/chai.js"></script>
-    <script src="tests/tools/htmltest.js"></script>
+    <script src="/components/web-component-tester/browser.js"></script>
 
     <script src="webcomponents.js" shadow></script>
     <link rel="stylesheet" href="tests/ShadowCSS/html/imports/style-import-base-tag.css" shim-shadowdom>
@@ -28,7 +27,7 @@
     <div id="test1" class="red">red</div>
     <script>
       var link = document.querySelector('link[rel=stylesheet]');
-      document.addEventListener('WebComponentsReady', function() {
+      test('style import base tag', function(done) {
         function getComputed(selector) {
           return getComputedStyle(document.querySelector(selector));
         }

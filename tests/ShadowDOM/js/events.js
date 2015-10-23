@@ -8,7 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-htmlSuite('Events', function() {
+suite('Events', function() {
 
   var unwrap = ShadowDOMPolyfill.unwrap;
   var wrap = ShadowDOMPolyfill.wrap;
@@ -930,9 +930,6 @@ test('retarget order (multiple shadow roots)', function() {
     ];
     assertArrayEqual(expected, log);
   });
-
-  htmlTest('../html/on-load-test.html');
-  htmlTest('../html/on-unload-test.html');
 
   test('event wrap round trip', function() {
     var e = new Event('x');

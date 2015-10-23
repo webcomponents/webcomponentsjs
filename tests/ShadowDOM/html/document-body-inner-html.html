@@ -8,24 +8,21 @@
     Code distributed by Google as part of the polymer project is also
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<script src="../../tools/chai/chai.js"></script>
-<script src="../../tools/htmltest.js"></script>
-
 <script src="../../../src/ShadowDOM/ShadowDOM.js"></script>
+<script src="../../../../web-component-tester/browser.js"></script>
 <script>
 
 var assert = chai.assert;
 var wrap = ShadowDOMPolyfill.wrap;
 var doc = wrap(document);
 
-doc.addEventListener('DOMContentLoaded', function(e) {
+test('document body innerhtml', function() {
   var html = '<a></a><b></b>';
   doc.body.innerHTML = html;
 
   assert.equal(doc.body.innerHTML, html);
   assert.equal(document.body.innerHTML, html);
 
-  done();
 });
 
 </script>

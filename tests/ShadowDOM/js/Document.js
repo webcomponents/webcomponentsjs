@@ -8,7 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-htmlSuite('Document', function() {
+suite('Document', function() {
 
   var wrap = ShadowDOMPolyfill.wrap;
 
@@ -704,8 +704,4 @@ htmlSuite('Document', function() {
     a3.localName = 'span';
     assert.equal('<span is="x-a-span-2"></span>', a3.outerHTML);
   });
-
-  htmlTest('../html/document-write.html');
-
-  htmlTest('../html/head-then-body.html');
 });

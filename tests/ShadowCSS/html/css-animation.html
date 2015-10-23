@@ -11,8 +11,7 @@
 <html>
 <head>
   <title>polyfill rule</title>
-  <script src="../../tools/chai/chai.js"></script>
-  <script src="../../tools/htmltest.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
 
   <script src="../../../webcomponents.js" shadow></script>
   <script src="register.js"></script>
@@ -61,7 +60,7 @@
 </template>
 <script>
   XAnimate = register('x-animate', '', HTMLElement.prototype);
-  addEventListener('WebComponentsReady', function() {
+  test('css animation', function(done) {
     setTimeout(function() {
       var x = document.querySelector('x-animate');
       var a = x.shadowRoot.querySelector('.animate');

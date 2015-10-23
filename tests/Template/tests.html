@@ -1,0 +1,67 @@
+<!doctype html>
+<!--
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <title>Template Test</title>
+    <script src="../../src/Template/Template.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+  </head>
+  <body>
+    <template>
+      <span id="content">Hello World!</span>
+    </template>
+
+    <script>
+      suite('Template', function() {
+        var template;
+        suiteSetup(function() {
+          template = document.querySelector('template');
+        });
+
+        test('content', function() {
+          assert.equal(template.childNodes.length, 0, 'template children evacipated');
+          assert.isDefined(template.content, 'template content exists');
+          assert.equal(template.content.childNodes.length, 3, 'template content has expected number of nodes');
+          var content = document.querySelector('#content');
+          assert.isNull(content, 'template content not in document');
+        });
+
+        test('stamping', function() {
+          document.body.appendChild(document.importNode(template.content, true));
+          content = document.querySelector('#content');
+          assert.isDefined(content, 'template content stamped into document');
+        });
+
+        test('innerHTML', function() {
+          var imp = document.createElement('template');
+          assert.equal(imp.innerHTML, '');
+          var s = 'pre<div>Hi</div><div>Bye</div>post';
+          imp.innerHTML = s;
+          assert.equal(imp.innerHTML, s);
+          assert.equal(imp.content.childNodes.length, 4);
+          assert.equal(imp.content.firstChild.textContent, 'pre');
+          s = 'foo';
+          imp.innerHTML = s;
+          assert.equal(imp.innerHTML, s);
+          assert.equal(imp.content.childNodes.length, 1);
+          assert.equal(imp.content.firstChild.textContent, s);
+
+          s = '-<->-"-&-';
+          var escaped = '-&lt;-&gt;-"-&amp;-';
+          imp.innerHTML = s;
+          // innerHTML is properly escaped
+          assert.equal(imp.innerHTML, escaped);
+          assert.equal(imp.content.childNodes.length, 1);
+        });
+      });
+    </script>
+  </body>
+</html>

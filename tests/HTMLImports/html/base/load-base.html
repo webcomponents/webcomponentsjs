@@ -31,8 +31,7 @@
         window.importError = importError;
       })();
     </script>
-    <script src="../../tools/htmltest.js"></script>
-    <script src="../../tools/chai/chai.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
     <script src="../../../src/HTMLImports/HTMLImports.js"></script>
     <link rel="import" href="imports/load-1.html" onload="importLoaded(event)">
     <link rel="import" href="imports/load-2.html" onload="importLoaded(event)">
@@ -43,8 +42,8 @@
     <div id="test2" class="blue">Test</div>
     <div id="test3" class="image"></div>
     <script>
-      document.addEventListener('HTMLImportsLoaded', function() {
-        var baseURI = location.href.replace('base/load-base.html', '').replace(location.search, '');
+      test('imports with base tag', function() {
+        var baseURI = location.protocol + '//' + location.host + location.pathname.replace('base/load-base.html', '');
         chai.assert.equal(document.baseURI, baseURI, 'document.baseURI is correctly modified by base element');
         //
         chai.assert.equal(loadEvents, 3, 'expected # of load events');
@@ -52,7 +51,6 @@
         chai.assert.equal(test1, 'rgb(255, 0, 0)');
         var test2 = getComputedStyle(document.querySelector('#test2')).backgroundColor;
         chai.assert.equal(test2, 'rgb(0, 0, 255)');
-        done();
       });
     </script>
   </body>

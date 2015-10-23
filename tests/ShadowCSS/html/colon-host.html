@@ -12,8 +12,7 @@
 <head>
   <meta name="viewport" content="initial-scale=1.0">
   <title>Using :host styling</title>
-  <script src="../../tools/chai/chai.js"></script>
-  <script src="../../tools/htmltest.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
 
   <script src="../../../webcomponents.js"></script>
   <script src="register.js"></script>
@@ -175,7 +174,7 @@
   </div>
 
   <script>
-    document.addEventListener('WebComponentsReady', function() {
+    test(':host', function() {
       var foo = document.querySelector('x-foo');
       chai.assert.equal(getComputedStyle(foo).backgroundColor, 'rgb(255, 0, 0)',
         ':host styles matching * are applied (backgroundColor)');
@@ -274,7 +273,6 @@
       chai.assert.equal(aStyle.fontStyle, 'italic',
         ':host:pseudoclass styles are shimmed (font-style)');
 
-      done();
     });
   </script>
 </body>

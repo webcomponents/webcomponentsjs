@@ -11,8 +11,7 @@
 <html>
 <head>
   <title>polyfill rule</title>
-  <script src="../../tools/chai/chai.js"></script>
-  <script src="../../tools/htmltest.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
 
   <script src="../../../webcomponents.js" shadow></script>
   <script src="register.js"></script>
@@ -55,7 +54,7 @@
   <script>
     XFoo = register('x-foo', '', HTMLElement.prototype);
 
-    document.addEventListener('WebComponentsReady', function() {
+    test('polyfill rule', function() {
       var foo = document.querySelector('x-foo');
       var zonkStyle = getComputedStyle(foo.querySelector('.zonk'));
       chai.assert.equal(zonkStyle.backgroundColor,
@@ -69,7 +68,6 @@
         'rgb(0, 0, 0)', 'polyfill-unscoped-rule single quote');
       chai.assert.equal(unscopedStyle.paddingTop,
         '20px', 'polyfill-unscoped-rule double quote');
-      done();
     });
   </script>
 

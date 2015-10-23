@@ -1,0 +1,25 @@
+language: node_js
+sudo: false
+matrix:
+  include:
+  - node_js: stable
+    script: xvfb-run wct
+    addons:
+      firefox: latest
+      apt:
+        sources:
+        - google-chrome
+        packages:
+        - google-chrome-stable
+  - node_js: node
+    script:
+    - |
+      if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+        wct -s 'default'
+      fi
+before_script:
+- export PATH=$PWD/node_modules/.bin:$PATH
+env:
+  global:
+  - secure: c0kVrjNDtqd06Gyg4Xi3iopr0KCz1k0LbZeL+TCbnyCdmAE7m9FcJASWvM2Zr7d774hTiMSi0Z79SlV6XZhLN2pi4EsbdEpsnVeAXXH/GYzDKgpXbdfD/nQv4n1nMXL6XSaZkAX7WwgmrjzJ9cXQJYV9vNHIBRcGoVRRyCFx9v4=
+  - secure: Mo+AVRGUmlDENnZ2GioF5pU62WhyLUMnPlSqzeodZzJoAnwcNr9VnHiRCgQBLnHCZwjbMv6C0vhWopY7lN9w77vlS5vr8MDZKjYT/YRl9jk0+hStJ+diSS9MD+FnNNerXe+V+WA6NYVHno3vdWRqDDMYzCdH/pyLukkuKdMFaAU=

@@ -11,9 +11,16 @@
 <html>
   <head>
     <title>HTML Imports Dynamic</title>
-    <script src="../../tools/htmltest.js"></script>
-    <script src="../../tools/chai/chai.js"></script>
+    <script>
+      var ready;
+      WCT = {
+        waitFor: function(cb) {
+          ready = cb;
+        }
+      };
+    </script>
     <script src="../../../src/HTMLImports/HTMLImports.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
   </head>
   <body>
 
@@ -33,15 +40,19 @@
               chai.assert.ok(e.target.import);
             });
           }
-          HTMLImports.whenReady(function(detail) {
-            chai.assert.equal(detail.allImports.length, 2);
-            chai.assert.equal(detail.loadedImports.length, 2);
+          ready();
+        });
+      });
 
-            chai.expect(detail.allImports[0].href).to.contain('imports/load-1.html');
-            chai.expect(detail.allImports[1].href).to.contain('imports/load-2.html');
+      test('HTMLImports whenready detail', function(done) {
+        HTMLImports.whenReady(function(detail) {
+          chai.assert.equal(detail.allImports.length, 2);
+          chai.assert.equal(detail.loadedImports.length, 2);
 
-            done();
-          });
+          chai.expect(detail.allImports[0].href).to.contain('imports/load-1.html');
+          chai.expect(detail.allImports[1].href).to.contain('imports/load-2.html');
+
+          done()
         });
       });
     </script>

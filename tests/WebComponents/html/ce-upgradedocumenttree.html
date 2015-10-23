@@ -12,8 +12,14 @@
   <head>
     <title></title>
     <meta charset="UTF-8">
-    <script src="../../tools/chai/chai.js"></script>
-    <script src="../../tools/htmltest.js"></script>
+    <script>
+      WCT = {
+        waitFor: function(cb) {
+          cb();
+        }
+      }
+    </script>
+    <script src="../../../../web-component-tester/browser.js"></script>
 
     <script src="../../../webcomponents.js"></script>
     <link rel="import" href="element-import-a.html">
@@ -30,18 +36,20 @@
         document.registerElement('x-test', {prototype: proto});
       }
 
-      if (CustomElements.useNative || HTMLImports.useNative) {
-        done();
-      } else {
-        window.addEventListener('WebComponentsReady', function() {
-          CustomElements.ready = false;
-          register();
-          chai.assert.equal(created, 0, 'no elements created when ready explicitly set to false');
-          CustomElements.upgradeDocumentTree(document);
-          chai.assert.equal(created, 3, 'elements in document tree upgraded via CustomElements.upgradeDocumentTree');
-          done();
-        });
-      }
+      test('upgraded document tree', function(done) {
+        if (CustomElements.useNative || HTMLImports.useNative) {
+          return done();
+        } else {
+          window.addEventListener('WebComponentsReady', function() {
+            CustomElements.ready = false;
+            register();
+            chai.assert.equal(created, 0, 'no elements created when ready explicitly set to false');
+            CustomElements.upgradeDocumentTree(document);
+            chai.assert.equal(created, 3, 'elements in document tree upgraded via CustomElements.upgradeDocumentTree');
+            done();
+          });
+        }
+      });
     </script>
   </body>
 </html>

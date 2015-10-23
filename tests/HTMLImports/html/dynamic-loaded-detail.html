@@ -11,13 +11,13 @@
 <html>
   <head>
     <title>HTML Imports Dynamic</title>
-    <script src="../../tools/htmltest.js"></script>
-    <script src="../../tools/chai/chai.js"></script>
     <script src="../../../src/HTMLImports/HTMLImports.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
   </head>
   <body>
 
     <script>
+      var loads = 0;
       document.addEventListener('DOMContentLoaded', function() {
         // some time later
         setTimeout(function() {
@@ -26,23 +26,24 @@
               '<link rel="import" href="imports/load-2.html">';
           document.body.appendChild(div);
           var ports = document.querySelectorAll('link[rel=import]');
-          var loads = 0;
           for (var i=0, l=ports.length, n; (i<l) && (n=ports[i]); i++) {
             n.addEventListener('load', function(e) {
               loads++;
-              chai.assert.ok(e.target.import);
             });
           }
-          HTMLImports.whenReady(function(detail) {
-            chai.assert.equal(detail.allImports.length, 2);
-            chai.assert.equal(detail.errorImports.length, 0);
-            chai.assert.equal(detail.loadedImports.length, 2);
+        });
+      });
 
-            chai.expect(detail.loadedImports[0].href).to.contain('imports/load-1.html');
-            chai.expect(detail.loadedImports[1].href).to.contain('imports/load-2.html');
+      test('dynamic loaded details', function(done) {
+        HTMLImports.whenReady(function(detail) {
+          chai.assert.equal(detail.allImports.length, 2);
+          chai.assert.equal(detail.errorImports.length, 0);
+          chai.assert.equal(detail.loadedImports.length, 2);
 
-            done();
-          });
+          chai.expect(detail.loadedImports[0].href).to.contain('imports/load-1.html');
+          chai.expect(detail.loadedImports[1].href).to.contain('imports/load-2.html');
+
+          done();
         });
       });
     </script>

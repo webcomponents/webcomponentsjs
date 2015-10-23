@@ -11,23 +11,9 @@
 <title>WeakMap tests</title>
 <meta charset="utf-8">
 
-<!-- Mocha/Chai -->
-<link rel="stylesheet" href="../tools/mocha/mocha.css">
-<script src="../tools/mocha/mocha.js"></script>
-<script src="../tools/chai/chai.js"></script>
+<script src="../../src/WeakMap/WeakMap.js"></script>
+<script src="../../../web-component-tester/browser.js"></script>
 
-<!-- WeakMap -->
-<script src="../src/WeakMap/WeakMap.js"></script>
-
-<!-- Test Setup -->
-<div id="mocha"></div>
-<script>
-  mocha.setup({
-    ui: 'tdd',
-    slow: 1000
-  });
-</script>
-<!-- Tests -->
 <script>
   suite('WeakMap', function() {
     var assert = chai.assert;
@@ -72,8 +58,4 @@
       assert.equal(wm.delete({}), false);
     });
   });
-</script>
-<!-- Run Mocha -->
-<script>
-  mocha.run();
 </script>

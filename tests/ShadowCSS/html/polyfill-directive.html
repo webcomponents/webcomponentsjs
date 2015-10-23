@@ -11,8 +11,7 @@
 <html>
 <head>
   <title>polyfill directive</title>
-  <script src="../../tools/chai/chai.js"></script>
-  <script src="../../tools/htmltest.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
 
   <script src="../../../webcomponents.js" shadow></script>
   <script src="register.js"></script>
@@ -96,7 +95,7 @@
     XBar = register('x-bar', 'x-foo', HTMLElement.prototype);
     XAuto = register('x-auto', '', HTMLElement.prototype);
 
-    document.addEventListener('WebComponentsReady', function() {
+    test('polyfill directive', function(done) {
       setTimeout(function() {
         // x-foo
         var n = document.querySelector('x-foo');

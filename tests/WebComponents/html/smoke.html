@@ -12,8 +12,7 @@
   <head>
     <title></title>
     <meta charset="UTF-8">
-    <script src="../../tools/chai/chai.js"></script>
-    <script src="../../tools/htmltest.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
 
     <script src="../../../webcomponents.js"></script>
   </head>
@@ -21,8 +20,7 @@
     <x-foo>plain</x-foo>
     <button is="x-baz">plain</button>
     <script>
-      var assert = chai.assert;
-      window.addEventListener('WebComponentsReady', function() {
+      test('smoke', function(done) {
         var p = Object.create(HTMLElement.prototype);
         p.createdCallback = function() {
           this.textContent = 'custom!';

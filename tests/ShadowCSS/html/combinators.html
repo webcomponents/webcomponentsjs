@@ -12,8 +12,7 @@
 <head>
   <meta name="viewport" content="initial-scale=1.0">
   <title>Using combinators styling</title>
-  <script src="../../tools/chai/chai.js"></script>
-  <script src="../../tools/htmltest.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
 
   <script src="../../../webcomponents.js"></script>
   <script src="register.js"></script>
@@ -71,7 +70,7 @@
   <x-foo></x-foo>
 
   <script>
-    document.addEventListener('WebComponentsReady', function() {
+    test('combinators', function() {
       var foo = document.querySelector('x-foo');
       var xBarRoot = foo.shadowRoot.querySelector('x-bar').shadowRoot;
       var bar = xBarRoot.querySelector('.bar');
@@ -107,7 +106,6 @@
         chai.assert.equal(getComputedStyle(zotDiv).backgroundColor, 'rgb(0, 0, 255)',
             'combinators applied via stylesheet in main document');
       }
-      done();
     });
   </script>
 </body>

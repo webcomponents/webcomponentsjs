@@ -8,10 +8,8 @@
     Code distributed by Google as part of the polymer project is also
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<script src="../../tools/chai/chai.js"></script>
-<script src="../../tools/htmltest.js"></script>
-
 <script src="../../../src/ShadowDOM/ShadowDOM.js"></script>
+<script src="../../../../web-component-tester/browser.js"></script>
 <a></a><script>
 var assert = chai.assert;
 var wrap = ShadowDOMPolyfill.wrap;
@@ -19,6 +17,8 @@ var wrap = ShadowDOMPolyfill.wrap;
 var a = document.querySelector('a');
 document.write('<script><' + '/script>');
 wrap(document).write('<b></b>');
+
+test('document write works with shadowdom', function() {
 assert.equal(a.nextSibling.localName, 'script');
 assert.equal(a.nextSibling.nextSibling.localName, 'script');
 assert.equal(a.nextSibling.nextSibling.nextSibling.localName, 'b');
@@ -26,6 +26,6 @@ assert.equal(a.nextSibling.nextSibling.nextSibling.localName, 'b');
 var all = document.querySelectorAll('*');
 var last = all[all.length - 1];
 assert.equal(last.localName, 'b');
+});
 
-done();
 </script>
