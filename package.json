@@ -11,10 +11,7 @@
     "url": "https://github.com/webcomponents/webcomponentsjs.git"
   },
   "author": "The Polymer Authors",
-  "license": {
-    "type": "BSD-3-Clause",
-    "url": "http://polymer.github.io/LICENSE.txt"
-  },
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/webcomponents/webcomponentsjs/issues"
   },
