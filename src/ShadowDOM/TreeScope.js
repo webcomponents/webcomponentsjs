@@ -63,7 +63,7 @@
   }
 
   function getTreeScope(node) {
-    if (node instanceof scope.wrappers.Window) {
+    if (scope.wrappers.Window !== void 0 && node instanceof scope.wrappers.Window) {
       debugger;
     }
 
