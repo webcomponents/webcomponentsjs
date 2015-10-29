@@ -3,9 +3,9 @@
   "../URL/URL.js",
   "../WeakMap/WeakMap.js",
   "../MutationObserver/MutationObserver.js",
+  "../Template/Template.js",
   "../HTMLImports/build.json",
   "../CustomElements/build.json",
-  "../Template/Template.js",
   "dom.js",
   "unresolved.js"
 ]
