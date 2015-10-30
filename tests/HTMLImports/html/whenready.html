@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--
+    @license
+    Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTMLImports.whenReady ignores async</title>
+  <script>
+  WCT = {
+    waitFor: function(cb) { cb(); }
+  };
+  var asyncLoaded = 0;
+  var syncLoaded = 0;
+  </script>
+  <script src="../../../src/HTMLImports/HTMLImports.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
+  <link rel="import" href="imports/async-sync.html">
+  <link rel="import" href="imports/async-async.html">
+</head>
+<body>
+  <script>
+  test('whenReady ignores async', function(done) {
+    HTMLImports.whenReady(function (detail) {
+      assert(detail.loadedImports, 1, 'whenReady should wait for the sync import');
+      done();
+    });
+  });
+  test('Eventually all imports load', function(done) {
+    setTimeout(function() {
+      assert.equal(syncLoaded, 1, 'sync load count incorrect');
+      assert.equal(asyncLoaded, 1, 'async load count incorrect');
+      done();
+    }, 2000);
+  });
+  </script>
+</body>
+</html>
