@@ -21,23 +21,28 @@
   </script>
   <script src="../../../src/HTMLImports/HTMLImports.js"></script>
   <script src="../../../../web-component-tester/browser.js"></script>
+  <link rel="import" async href="imports/async-async.html">
   <link rel="import" href="imports/async-sync.html">
-  <link rel="import" href="imports/async-async.html">
 </head>
 <body>
   <script>
-  test('whenReady ignores async', function(done) {
-    HTMLImports.whenReady(function (detail) {
-      assert(detail.loadedImports, 1, 'whenReady should wait for the sync import');
-      done();
+  suite('HTMLImports.whenReady with async', function() {
+    var testFn = HTMLImports.useNative ? test.skip : test;
+
+    testFn('whenReady ignores async', function(done) {
+      HTMLImports.whenReady(function (detail) {
+        assert.equal(detail.loadedImports.length, 1, 'whenReady should wait for the sync import');
+        assert.equal(syncLoaded, 1, 'sync load count incorrect');
+        done();
+      });
     });
-  });
-  test('Eventually all imports load', function(done) {
-    setTimeout(function() {
-      assert.equal(syncLoaded, 1, 'sync load count incorrect');
-      assert.equal(asyncLoaded, 1, 'async load count incorrect');
-      done();
-    }, 2000);
+    testFn('Eventually all imports load', function(done) {
+      setTimeout(function() {
+        assert.equal(syncLoaded, 1, 'sync load count incorrect');
+        assert.equal(asyncLoaded, 1, 'async load count incorrect');
+        done();
+      }, 2000);
+    });
   });
   </script>
 </body>
