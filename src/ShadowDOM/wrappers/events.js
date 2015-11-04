@@ -520,6 +520,29 @@
       stopImmediatePropagationTable.set(this, true);
     }
   };
+
+  // defaultPrevented is broken in IE.
+  // https://connect.microsoft.com/IE/feedback/details/790389/event-defaultprevented-returns-false-after-preventdefault-was-called
+  var supportsDefaultPrevented = (function() {
+    var e = document.createEvent('Event');
+    e.initEvent('test', true, true);
+    e.preventDefault();
+    return e.defaultPrevented;
+  })();
+
+  if (!supportsDefaultPrevented) {
+    Event.prototype.preventDefault = function() {
+      if (!this.cancelable)
+        return;
+      unsafeUnwrap(this).preventDefault();
+      Object.defineProperty(this, 'defaultPrevented', {
+        get: function() {
+          return true;
+        }
+      });
+    };
+  }
+
   registerWrapper(OriginalEvent, Event, document.createEvent('Event'));
 
   function unwrapOptions(options) {
