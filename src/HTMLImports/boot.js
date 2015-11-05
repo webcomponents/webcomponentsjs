@@ -36,6 +36,9 @@ if (!window.CustomEvent || isIE && (typeof window.CustomEvent !== 'function')) {
     // CustomEvents
     // http://stackoverflow.com/questions/23349191/event-preventdefault-is-not-working-in-ie-11-for-custom-events
     e.preventDefault = function() {
+      if (!this.cancelable) {
+        return;
+      }
       Object.defineProperty(this, 'defaultPrevented', {
         get: function() {
           return true;

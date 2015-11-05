@@ -333,6 +333,18 @@ suite('Events', function() {
     assertArrayEqual(log, [a, Event.CAPTURING_PHASE, b, Event.CAPTURING_PHASE]);
   });
 
+  test('preventDefault sets defaultPrevented', function() {
+    // is not prevented when not cancelable
+    var e = new CustomEvent('foo');
+    e.preventDefault();
+    assert.isFalse(e.defaultPrevented);
+
+    // is prevented when cancelable
+    e = new CustomEvent('foo', {cancelable: true});
+    e.preventDefault();
+    assert.isTrue(e.defaultPrevented);
+  });
+
   test('click with shadow', function() {
     function addListener(target, currentTarget, opt_phase) {
       var phases;
@@ -1165,10 +1177,7 @@ test('retarget order (multiple shadow roots)', function() {
     div.click();
     assert.equal(calls, 2);
 
-    // defaultPrevented is broken in IE.
-    // https://connect.microsoft.com/IE/feedback/details/790389/event-defaultprevented-returns-false-after-preventdefault-was-called
-    if (!/Trident|Edge/.test(navigator.userAgent))
-      assert.isTrue(event.defaultPrevented);
+    assert.isTrue(event.defaultPrevented);
   });
 
   test('event.path (bubbles)', function() {
