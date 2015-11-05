@@ -103,30 +103,6 @@ function bootstrap() {
   });
 }
 
-// CustomEvent shim
-if (!window.CustomEvent || isIE && (typeof window.CustomEvent !== 'function')) {
-  window.CustomEvent = function(inType, params) {
-    params = params || {};
-    var e = document.createEvent('CustomEvent');
-    e.initCustomEvent(inType, Boolean(params.bubbles), Boolean(params.cancelable), params.detail);
-    // IE does not set `defaultPrevented` when `preventDefault()` is called on
-    // CustomEvents
-    // http://stackoverflow.com/questions/23349191/event-preventdefault-is-not-working-in-ie-11-for-custom-events
-    e.preventDefault = function() {
-      if (!this.cancelable) {
-        return;
-      }
-      Object.defineProperty(this, 'defaultPrevented', {
-        get: function() {
-          return true;
-        }
-      });
-    };
-    return e;
-  };
-  window.CustomEvent.prototype = window.Event.prototype;
-}
-
 // When loading at readyState complete time (or via flag), boot custom elements
 // immediately.
 // If relevant, HTMLImports must already be loaded.
