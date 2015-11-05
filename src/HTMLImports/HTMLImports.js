@@ -31,6 +31,7 @@ var file = 'HTMLImports.js';
 var modules = [
   '../WeakMap/WeakMap.js',
   '../MutationObserver/MutationObserver.js',
+  '../WebComponents/dom.js',
   'base.js',
   'module.js',
   'path.js',

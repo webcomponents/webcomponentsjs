@@ -49,4 +49,53 @@
     })();
   }
 
+  // defaultPrevented is broken in IE.
+  // https://connect.microsoft.com/IE/feedback/details/790389/event-defaultprevented-returns-false-after-preventdefault-was-called
+  var workingDefaultPrevented = (function() {
+    var e = document.createEvent('Event');
+    e.initEvent('foo', true, true);
+    e.preventDefault();
+    return e.defaultPrevented;
+  })();
+
+  if (!workingDefaultPrevented) {
+    var origPreventDefault = Event.prototype.preventDefault;
+    Event.prototype.preventDefault = function() {
+      if (!this.cancelable) {
+        return;
+      }
+      origPreventDefault.call(this);
+      Object.defineProperty(this, 'defaultPrevented', {
+        get: function() {
+          return true;
+        }
+      });
+    };
+  }
+
+  var isIE = /Trident/.test(navigator.userAgent);
+
+  // CustomEvent constructor shim
+  if (!window.CustomEvent || isIE && (typeof window.CustomEvent !== 'function')) {
+    window.CustomEvent = function(inType, params) {
+      params = params || {};
+      var e = document.createEvent('CustomEvent');
+      e.initCustomEvent(inType, Boolean(params.bubbles), Boolean(params.cancelable), params.detail);
+      return e;
+    };
+    window.CustomEvent.prototype = window.Event.prototype;
+  }
+
+  // Event constructor shim
+  if (!window.Event || isIE && (typeof window.Event !== 'function')) {
+    var origEvent = window.Event;
+    window.Event = function(inType, params) {
+      params = params || {};
+      var e = document.createEvent('Event');
+      e.initEvent(inType, Boolean(params.bubbles), Boolean(params.cancelable));
+      return e;
+    };
+    window.Event.prototype = origEvent.prototype;
+  }
+
 })(window.WebComponents);

@@ -32,6 +32,7 @@ var file = 'CustomElements.js';
 var modules = [
   '../WeakMap/WeakMap.js',
   '../MutationObserver/MutationObserver.js',
+  '../WebComponents/dom.js',
   'base.js',
   'traverse.js',
   'observe.js',
