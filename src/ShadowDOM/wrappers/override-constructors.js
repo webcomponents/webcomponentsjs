@@ -77,6 +77,7 @@
     'shadow': 'HTMLShadowElement',
     'source': 'HTMLSourceElement',
     'span': 'HTMLSpanElement',
+    'slot': 'HTMLSlotElement',
     'style': 'HTMLStyleElement',
     'table': 'HTMLTableElement',
     'tbody': 'HTMLTableSectionElement',

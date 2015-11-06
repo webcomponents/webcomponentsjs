@@ -243,6 +243,14 @@ var ShadowCSS = {
    *
    * scopeName menu-item {
    *
+   * And this rule:
+   *
+   * polyfill-next-selector { slotted: ':host nav-item'; }
+   * ::slotted(nav-item) {
+   *
+   * to this:
+   *
+   * scopeName nav-item {
   **/
   insertPolyfillDirectivesInCssText: function(cssText) {
     // TODO(sorvell): remove either content or comment
@@ -387,12 +395,16 @@ var ShadowCSS = {
   },
   /*
    * Convert combinators like ::shadow and pseudo-elements like ::content
-   * by replacing with space.
+   * and ::slotted by replacing with space.
   */
   convertShadowDOMSelectors: function(cssText) {
     for (var i=0; i < shadowDOMSelectorsRe.length; i++) {
       cssText = cssText.replace(shadowDOMSelectorsRe[i], ' ');
     }
+    for (var i=0; i < shadowDOMSelectorFunctionsRe.length; i++) {
+      cssText = cssText.replace(shadowDOMSelectorFunctionsRe[i], '$1 ')
+    }
+
     return cssText;
   },
   // change a selector like 'div' to 'name div'
@@ -587,7 +599,10 @@ var selectorRe = /([^{]*)({[\s\S]*?})/gim,
       /\/shadow-deep\//g, // former /deep/
       /\^\^/g,     // former /shadow/
       /\^/g        // former /shadow-deep/
-    ];
+  ],
+  shadowDOMSelectorFunctionsRe = [
+      /::slotted\((.*)\)/g,
+  ];
 
 function stylesToCssText(styles, preserveComments) {
   var cssText = '';

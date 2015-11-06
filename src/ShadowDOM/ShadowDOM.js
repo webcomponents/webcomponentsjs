@@ -50,6 +50,7 @@ Array.prototype.forEach.call(document.querySelectorAll('script[src]'), function(
   'wrappers/HTMLAudioElement.js',
   'wrappers/HTMLOptionElement.js',
   'wrappers/HTMLSelectElement.js',
+  'wrappers/HTMLSlotElement.js',
   'wrappers/HTMLTableElement.js',
   'wrappers/HTMLTableSectionElement.js',
   'wrappers/HTMLTableRowElement.js',
