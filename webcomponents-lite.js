@@ -53,9 +53,9 @@
     'URL/URL.js',
     'WeakMap/WeakMap.js',
     'MutationObserver/MutationObserver.js',
+    'Template/Template.js',
     'HTMLImports/HTMLImports.js',
     'CustomElements/CustomElements.js',
-    'Template/Template.js',
     // these scripts are loaded here due to polyfill timing issues
     'WebComponents/dom.js',
     'WebComponents/unresolved.js'
