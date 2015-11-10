@@ -280,7 +280,7 @@ function upgradeDocument(doc) {
   doc = window.wrap(doc);
   flags.dom && console.group('upgradeDocument: ', (doc.baseURI).split('/').pop());
   var isMainDocument = (doc === window.wrap(document));
-  addedNode(doc, isMainDocument);
+  upgradeAll(doc, isMainDocument);
   observe(doc);
   flags.dom && console.groupEnd();
 }
@@ -306,11 +306,11 @@ if (originalCreateShadowRoot) {
   };
 }
 
-function upgradeAll(doc) {
+function upgradeAll(doc, isMainDocument) {
   if (HTMLTemplateElement && HTMLTemplateElement.bootstrap) {
     HTMLTemplateElement.bootstrap(doc);
   }
-  addedNode(doc);
+  addedNode(doc, isMainDocument);
 }
 // exports
 scope.watchShadow = watchShadow;
