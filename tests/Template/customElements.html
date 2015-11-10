@@ -1,0 +1,59 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <title>Template with HTMLImports Test</title>
+    <script src="../../src/Template/Template.js"></script>
+    <script src="../../src/CustomElements/CustomElements.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+  </head>
+  <body>
+<body>
+
+    <template>
+      <x-child></x-child>
+    </template>
+    <template id="before">
+    </template>
+    <x-after>
+    </x-after>
+    <script>
+      var created = [];
+      var attached = [];
+
+
+      var childCreated = false;
+      var foundTemplate = false;
+      var xChild = Object.create(HTMLElement.prototype);
+      xChild.custom = true;
+      xChild.createdCallback = function() {
+        childCreated = true;
+      };
+      document.registerElement('x-child', {prototype: xChild});
+      var xAfter = Object.create(HTMLElement.prototype);
+      xAfter.custom = true;
+      xAfter.createdCallback = function() {
+        var template = document.querySelector('#before');
+        if (template && template.content) {
+          foundTemplate = true;
+        }
+      };
+      document.registerElement('x-after', {prototype: xAfter});
+      CustomElements.upgradeAll(document);
+      test('elements within templates not upgraded', function() {
+        assert(!childCreated);
+      });
+      test('templates before elements are bootstrapped before createdCallback', function() {
+        assert(foundTemplate);
+      });
+    </script>
+  </body>
+</html>
