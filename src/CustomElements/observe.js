@@ -53,18 +53,18 @@ function addedSubtree(node, isAttached) {
 }
 
 // On platforms without MutationObserver, mutations may not be
-// reliable and therefore attached/detached are not reliable. We think this 
+// reliable and therefore attached/detached are not reliable. We think this
 // occurs sometimes under heavy DOM operation load, but it is not easy to
 // reproduce.
-// To make these callbacks less likely to fail in this scenario, 
+// To make these callbacks less likely to fail in this scenario,
 // we *optionally* defer all inserts and removes
 // to give a chance for elements to be attached into dom.
 // This helps ensure attachedCallback fires for elements that are created and
 // immediately added to dom.
 // This change can significantly alter the performance characteristics
-// of attaching elements and therefore we only enable it if the user has 
+// of attaching elements and therefore we only enable it if the user has
 // explicitly provided the `throttle-attached` flag.
-var hasThrottledAttached = (window.MutationObserver._isPolyfilled && 
+var hasThrottledAttached = (window.MutationObserver._isPolyfilled &&
     flags['throttle-attached']);
 // bc
 scope.hasPolyfillMutations = hasThrottledAttached;
@@ -212,7 +212,7 @@ function handler(root, mutations) {
   }
   // handle mutations
   // NOTE: do an `inDocument` check dynamically here. It's possible that `root`
-  // is a document in which case the answer here can never change; however 
+  // is a document in which case the answer here can never change; however
   // `root` may be an element like a shadowRoot that can be added/removed
   // from the main document.
   var isAttached = inDocument(root);
@@ -306,12 +306,18 @@ if (originalCreateShadowRoot) {
   };
 }
 
+function upgradeAll(doc) {
+  if (HTMLTemplateElement && HTMLTemplateElement.bootstrap) {
+    HTMLTemplateElement.bootstrap(doc);
+  }
+  addedNode(doc);
+}
 // exports
 scope.watchShadow = watchShadow;
 scope.upgradeDocumentTree = upgradeDocumentTree;
 scope.upgradeDocument = upgradeDocument;
 scope.upgradeSubtree = addedSubtree;
-scope.upgradeAll = addedNode;
+scope.upgradeAll = upgradeAll;
 scope.attached = attached;
 scope.takeRecords = takeRecords;
 
