@@ -17,7 +17,7 @@
   if (!window.performance) {
     var start = Date.now();
     // only at millisecond precision
-    window.performance = {now: function(){ return Date.now() - start }};
+    window.performance = {now: function(){ return Date.now() - start; }};
   }
 
   // polyfill for requestAnimationFrame
@@ -64,12 +64,17 @@
       if (!this.cancelable) {
         return;
       }
+
       origPreventDefault.call(this);
-      Object.defineProperty(this, 'defaultPrevented', {
-        get: function() {
-          return true;
-        }
-      });
+
+      if (!this.defaultPrevented) {
+        Object.defineProperty(this, 'defaultPrevented', {
+          get: function() {
+            return true;
+          },
+          configurable: true
+        });
+      }
     };
   }
 

@@ -534,12 +534,17 @@
     Event.prototype.preventDefault = function() {
       if (!this.cancelable)
         return;
+
       unsafeUnwrap(this).preventDefault();
-      Object.defineProperty(this, 'defaultPrevented', {
-        get: function() {
-          return true;
-        }
-      });
+
+      if (!this.defaultPrevented) {
+        Object.defineProperty(this, 'defaultPrevented', {
+          get: function() {
+            return true;
+          },
+          configurable: true
+        });
+      }
     };
   }
 
