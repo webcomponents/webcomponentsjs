@@ -87,6 +87,8 @@
       var e = new Event('foo', {cancelable: true});
       e.preventDefault();
       assert.isTrue(e.defaultPrevented);
+      // call again, just in case
+      assert.doesNotThrow(e.preventDefault);
     });
   });
 </script>
