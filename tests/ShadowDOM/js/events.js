@@ -1418,6 +1418,8 @@ test('retarget order (multiple shadow roots)', function() {
     };
 
     var error = new Error(msg);
+    // tell WCT to ignore this error
+    error.ignore = true;
     document.addEventListener('click', f = function(e) {
       throw error;
     });

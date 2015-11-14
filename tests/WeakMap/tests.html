@@ -32,7 +32,13 @@
       var o2 = function(){};
       var o3 = window;
 
-      wm.set(o1, 37).set(o2, 'aoeui');
+      // IE 11 WeakMap does not chain
+      if (wm.name || !/Trident/.test(navigator.userAgent)) {
+        wm.set(o1, 37).set(o2, 'aoeui');
+      } else {
+        wm.set(o1, 37);
+        wm.set(o2, 'aoeui');
+      }
 
       assert.equal(wm.get(o1), 37);
       assert.equal(wm.get(o2), 'aoeui');

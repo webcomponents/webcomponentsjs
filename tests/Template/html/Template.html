@@ -59,10 +59,12 @@
 
         s = '-<->-"-&-';
         var escaped = '-&lt;-&gt;-"-&amp;-';
+        var div = document.createElement('div');
+        div.innerHTML = s
         imp.innerHTML = s;
         // innerHTML is properly escaped
         chai.assert.equal(imp.innerHTML, escaped);
-        chai.assert.equal(imp.content.childNodes.length, 1);
+        chai.assert.equal(imp.content.childNodes.length, div.childNodes.length);
         done();
       });
     </script>

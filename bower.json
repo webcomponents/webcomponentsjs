@@ -16,6 +16,6 @@
   "license": "BSD",
   "ignore": [],
   "devDependencies": {
-    "web-component-tester": "~3.3.10"
+    "web-component-tester": "3.4"
   }
 }

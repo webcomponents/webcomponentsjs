@@ -139,6 +139,7 @@ function watchImportsLoad(callback, doc) {
   if (importCount) {
     for (var i=0, imp; i<importCount && (imp=imports[i]); i++) {
       if (isImportLoaded(imp)) {
+        newImports.push(this);
         parsedCount++;
         checkDone();
       } else {
