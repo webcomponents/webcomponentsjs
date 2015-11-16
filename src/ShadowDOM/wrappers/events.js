@@ -537,14 +537,12 @@
 
       unsafeUnwrap(this).preventDefault();
 
-      if (!this.defaultPrevented) {
-        Object.defineProperty(this, 'defaultPrevented', {
-          get: function() {
-            return true;
-          },
-          configurable: true
-        });
-      }
+      Object.defineProperty(this, 'defaultPrevented', {
+        get: function() {
+          return true;
+        },
+        configurable: true
+      });
     };
   }
 
