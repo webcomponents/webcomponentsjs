@@ -28,9 +28,11 @@ if (typeof HTMLTemplateElement === 'undefined') {
       NOTE: there is no support for dynamically adding elements to templates.
     */
     HTMLTemplateElement.decorate = function(template) {
-      if (!template.content) {
-        template.content = contentDoc.createDocumentFragment();
+      // if the template is decorated, return fast
+      if (template.content) {
+        return;
       }
+      template.content = contentDoc.createDocumentFragment();
       var child;
       while (child = template.firstChild) {
         template.content.appendChild(child);
@@ -63,6 +65,9 @@ if (typeof HTMLTemplateElement === 'undefined') {
           canDecorate = false;
         }
       }
+
+      // bootstrap recursively
+      HTMLTemplateElement.bootstrap(template.content);
     };
 
     /**

@@ -33,6 +33,12 @@ var flags = scope.flags;
  */
 // Upgrade a node if it can be upgraded and is not already.
 function upgrade(node, isAttached) {
+  // upgrade template elements before custom elements
+  if (node.localName === 'template') {
+    if (window.HTMLTemplateElement && HTMLTemplateElement.decorate) {
+      HTMLTemplateElement.decorate(node);
+    }
+  }
   if (!node.__upgraded__ && (node.nodeType === Node.ELEMENT_NODE)) {
     var is = node.getAttribute('is');
     // find definition first by localName and secondarily by is attribute
