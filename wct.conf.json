@@ -1,3 +1,6 @@
 {
-  "suites": ["tests/runner.html"]
+  "suites": ["tests/runner.html"],
+  "clientOptions": {
+    "environmentImports": []
+  }
 }

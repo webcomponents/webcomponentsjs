@@ -306,18 +306,12 @@ if (originalCreateShadowRoot) {
   };
 }
 
-function upgradeAll(doc) {
-  if (HTMLTemplateElement && HTMLTemplateElement.bootstrap) {
-    HTMLTemplateElement.bootstrap(doc);
-  }
-  addedNode(doc);
-}
 // exports
 scope.watchShadow = watchShadow;
 scope.upgradeDocumentTree = upgradeDocumentTree;
 scope.upgradeDocument = upgradeDocument;
 scope.upgradeSubtree = addedSubtree;
-scope.upgradeAll = upgradeAll;
+scope.upgradeAll = addedNode;
 scope.attached = attached;
 scope.takeRecords = takeRecords;
 
