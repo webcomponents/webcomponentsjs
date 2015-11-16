@@ -102,7 +102,6 @@
     test('dispatch and prevent', function() {
       var el = document.createElement('div');
       document.body.appendChild(el);
-      var e = new CustomEvent('foo', {cancelable: true, bubbles: true});
       var fn = function(e) {
         e.preventDefault();
       };
@@ -113,6 +112,8 @@
       };
       el.addEventListener('foo', fn);
       document.body.addEventListener('foo', check);
+      var e = new CustomEvent('foo', {cancelable: true, bubbles: true});
+      el.dispatchEvent(e);
       assert.isTrue(e.defaultPrevented);
     });
   });
