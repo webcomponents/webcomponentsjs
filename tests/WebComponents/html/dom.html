@@ -88,7 +88,32 @@
       e.preventDefault();
       assert.isTrue(e.defaultPrevented);
       // call again, just in case
-      assert.doesNotThrow(e.preventDefault);
+      assert.doesNotThrow(function() {e.preventDefault(); });
+    });
+
+    test('CustomEvent defaultPrevented', function() {
+      var e = new CustomEvent('foo', {cancelable: true});
+      e.preventDefault();
+      assert.isTrue(e.defaultPrevented);
+      // call again, just in case
+      assert.doesNotThrow(function() {e.preventDefault(); });
+    });
+
+    test('dispatch and prevent', function() {
+      var el = document.createElement('div');
+      document.body.appendChild(el);
+      var e = new CustomEvent('foo', {cancelable: true, bubbles: true});
+      var fn = function(e) {
+        e.preventDefault();
+      };
+      var check = function check(e) {
+        assert.isTrue(e.defaultPrevented);
+        document.body.removeEventListener('foo', check);
+        document.body.removeChild(el);
+      };
+      el.addEventListener('foo', fn);
+      document.body.addEventListener('foo', check);
+      assert.isTrue(e.defaultPrevented);
     });
   });
 </script>
