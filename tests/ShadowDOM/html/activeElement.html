@@ -97,12 +97,12 @@ suite('activeElement', function() {
   });
 
   teardown(function() {
-    document.body.removeChild(r);
-
     assert.equal(r_0_0.shadowRoot.activeElement, null);
     assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1_0.shadowRoot.activeElement, null);
     assert.equal(r_1_1.shadowRoot.activeElement, null);
+
+    document.body.removeChild(r);
   });
 
 
@@ -241,26 +241,6 @@ suite('activeElement', function() {
     assert.equal(r.shadowRoot.activeElement, r_1);
     assert.equal(r_0.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, r_1_1_l);
-  });
-
-  test('focused element in different document', function() {
-    var docType = doc.implementation.createDocumentType(
-      'html', '-//W3C//DTD XHTML 1.0 Transitional//EN',
-      'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd');
-    var otherDocument = doc.implementation.createDocument(
-      'http://www.w3.org/1999/xhtml', 'html', docType);
-    otherDocument.documentElement.appendChild(
-      otherDocument.createElement('body'));
-
-    var elt = otherDocument.createElement('div');
-    otherDocument.body.appendChild(elt);
-
-    ShadowDOMPolyfill.renderAllPending();
-
-    elt.focus();
-
-    var activeElement = doc.activeElement;
-    assert.isTrue(activeElement === null || activeElement === doc.body);
   });
 });
 
