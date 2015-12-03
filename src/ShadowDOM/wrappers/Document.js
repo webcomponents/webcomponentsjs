@@ -52,7 +52,10 @@
   defineWrapGetter(Document, 'head');
 
   defineGetter(Document, 'activeElement', function() {
-    var activeElement = wrap(unwrap(this).activeElement);
+    var unwrappedActiveElement = unwrap(this).activeElement;
+    if (!unwrappedActiveElement || !unwrappedActiveElement.nodeType) return null;
+
+    var activeElement = wrap(unwrappedActiveElement);
 
     // Loop while activeElement is not a shallow child of this document.
     while (!this.contains(activeElement)) {

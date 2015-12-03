@@ -75,7 +75,10 @@
     },
 
     get activeElement() {
-      var activeElement = wrap(unwrap(this).ownerDocument.activeElement);
+      var unwrappedActiveElement = unwrap(this).ownerDocument.activeElement;
+      if (!unwrappedActiveElement || !unwrappedActiveElement.nodeType) return null;
+
+      var activeElement = wrap(unwrappedActiveElement);
 
       // Loop while activeElement is not a shallow child of this ShadowRoot.
       while (!this.contains(activeElement)) {
