@@ -91,9 +91,6 @@ suite('activeElement', function() {
         r_1_1_l = r_1_1.querySelector('[shadow-template-id=x-shadow-host-root-1-1-light]');
 
     document.body.appendChild(r);
-
-    // Nodes need to be in the document to be focusable.
-    ShadowDOMPolyfill.renderAllPending();
   });
 
   teardown(function() {
