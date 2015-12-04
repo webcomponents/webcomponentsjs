@@ -20,6 +20,7 @@
   var ShadowRoot = scope.wrappers.ShadowRoot;
   var TreeScope = scope.TreeScope;
   var cloneNode = scope.cloneNode;
+  var defineGetter = scope.defineGetter;
   var defineWrapGetter = scope.defineWrapGetter;
   var elementFromPoint = scope.elementFromPoint;
   var forwardMethodsToWrapper = scope.forwardMethodsToWrapper;
@@ -49,6 +50,34 @@
   // overkill at this point.
   defineWrapGetter(Document, 'body');
   defineWrapGetter(Document, 'head');
+
+  defineGetter(Document, 'activeElement', function() {
+    var unwrappedActiveElement = unwrap(this).activeElement;
+    if (!unwrappedActiveElement || !unwrappedActiveElement.nodeType) return null;
+
+    var activeElement = wrap(unwrappedActiveElement);
+
+    // Loop while activeElement is not a shallow child of this document.
+    while (!this.contains(activeElement)) {
+      var lastHost = activeElement;
+      // Iterate until we hit activeElement's containing ShadowRoot (which
+      // isn't this one) or document.
+      while (activeElement.parentNode) {
+        activeElement = activeElement.parentNode;
+      }
+
+      // If we've reached a ShadowRoot, move to its host.
+      if (activeElement.host) {
+        activeElement = activeElement.host;
+      // Otherwise, we've reached a different document - this document is
+      // not an ancestor of the active element.
+      } else {
+        return null;
+      }
+    }
+
+    return activeElement;
+  });
 
   // document cannot be overridden so we override a bunch of its methods
   // directly on the instance.
