@@ -36,6 +36,10 @@
 
       test('dynamic loaded details', function(done) {
         HTMLImports.whenReady(function(detail) {
+          if (HTMLImports.useNative) {
+            return done();
+          }
+
           chai.assert.equal(detail.allImports.length, 2);
           chai.assert.equal(detail.errorImports.length, 0);
           chai.assert.equal(detail.loadedImports.length, 2);

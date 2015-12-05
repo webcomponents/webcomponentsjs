@@ -114,7 +114,7 @@ function markTargetLoaded(event) {
 
 // call <callback> when we ensure all imports have loaded
 function watchImportsLoad(callback, doc) {
-  var imports = doc.querySelectorAll('link[rel=import]');
+  var imports = doc.querySelectorAll('link[rel=import]:not([async])');
   var parsedCount = 0, importCount = imports.length, newImports = [], errorImports = [];
   function checkDone() {
     if (parsedCount == importCount && callback) {
