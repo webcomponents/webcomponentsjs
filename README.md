@@ -90,10 +90,24 @@ window.addEventListener('WebComponentsReady', function(e) {
 
 ## Known Issues
 
+  * [Limited CSS encapsulation](#encapsulation)
   * [Custom element's constructor property is unreliable](#constructor)
   * [Contenteditable elements do not trigger MutationObserver](#contentedit)
   * [ShadowCSS: :host-context(...):host(...) doesn't work](#hostcontext)
   * [execCommand isn't supported under Shadow DOM](#execcommand)
+
+### Limited CSS encapsulation <a id="encapsulation"></a>
+Under native Shadow DOM, CSS selectors cannot cross the shadow boundary. This means document level styles don't apply to shadow roots, and styles defined within a shadow root don't apply outside of that shadow root. [Several selectors](http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom-201/) are provided to be able to deal with the shadow boundary.
+
+The Shadow DOM polyfill can't prevent document styles from leaking into shadow roots. It can, however, encapsulate styles within shadow roots to some extent. This behavior isn't automatically emulated by the Shadow DOM polyfill, but it can be achieved by manually using the included ShadowCSS shim:
+
+```
+WebComponents.ShadowCSS.shimStyling( shadowRoot, scope );
+```
+
+... where `shadowRoot` is the shadow root of a DOM element, and `scope` is the name of the scope used to prefix the selectors. This removes all `<style>` elements from the shadow root, rewrites it rules using the given scope and reinserts the style as a document level stylesheet. Note that the `:host` and `:host-context` pseudo classes are also rewritten.
+
+For a full explanation on the implementation and both the possibilities and the limitations of ShadowCSS please view the documentation in the [ShadowCSS source](src/ShadowCSS/ShadowCSS.js).
 
 ### Custom element's constructor property is unreliable <a id="constructor"></a>
 See [#215](https://github.com/webcomponents/webcomponentsjs/issues/215) for background.
