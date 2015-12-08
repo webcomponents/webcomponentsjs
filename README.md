@@ -96,6 +96,7 @@ window.addEventListener('WebComponentsReady', function(e) {
   * [Contenteditable elements do not trigger MutationObserver](#contentedit)
   * [ShadowCSS: :host-context(...):host(...) doesn't work](#hostcontext)
   * [ShadowCSS: :host(.zot:not(.bar:nth-child(2))) doesn't work](#nestedparens)
+  * [HTML imports: document.currentScript doesn't work as expected](#currentscript)
   * [execCommand isn't supported under Shadow DOM](#execcommand)
 
 ### Limited CSS encapsulation <a id="encapsulation"></a>
@@ -144,6 +145,9 @@ polyfill-next-selector { content: '.foo :host.bar, :host.foo.bar'; }
 
 ### ShadowCSS: :host(.zot:not(.bar:nth-child(2))) doesn't work <a id="nestedparens"></a>
 ShadowCSS `:host()` rules can only have (at most) 1-level of nested parentheses in its argument selector under ShadowCSS. For example, `:host(.zot)` and `:host(.zot:not(.bar))` both work, but `:host(.zot:not(.bar:nth-child(2)))` does not. 
+
+### HTML imports: document.currentScript doesn't work as expected <a id="currentscript"></a>
+In native HTML Imports, document.currentScript.ownerDocument references the import document itself. In the polyfill use document._currentScript.ownerDocument (note the underscore).
 
 ### execCommand and contenteditable isn't supported under Shadow DOM <a id="execcommand"></a>
 See [#212](https://github.com/webcomponents/webcomponentsjs/issues/212)
