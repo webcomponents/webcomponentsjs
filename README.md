@@ -91,6 +91,7 @@ window.addEventListener('WebComponentsReady', function(e) {
 ## Known Issues
 
   * [Limited CSS encapsulation](#encapsulation)
+  * [Element wrapping / unwrapping limitations](#wrapping)
   * [Custom element's constructor property is unreliable](#constructor)
   * [Contenteditable elements do not trigger MutationObserver](#contentedit)
   * [ShadowCSS: :host-context(...):host(...) doesn't work](#hostcontext)
@@ -109,6 +110,13 @@ WebComponents.ShadowCSS.shimStyling( shadowRoot, scope );
 ... where `shadowRoot` is the shadow root of a DOM element, and `scope` is the name of the scope used to prefix the selectors. This removes all `<style>` elements from the shadow root, rewrites it rules using the given scope and reinserts the style as a document level stylesheet. Note that the `:host` and `:host-context` pseudo classes are also rewritten.
 
 For a full explanation on the implementation and both the possibilities and the limitations of ShadowCSS please view the documentation in the [ShadowCSS source](src/ShadowCSS/ShadowCSS.js).
+
+### Element wrapping / unwrapping limitations <a id="wrapping"></a>
+The Shadow DOM polyfill is implemented by [wrapping](http://webcomponents.org/polyfills/shadow-dom/#wrappers) DOM elements whenever possible. It does this by wrapping methods like `document.querySelector` to return wrapped DOM elements. This has a few caveats:
+   * Not _everything_ can be wrapped. For example, elements like `document`, `window`, `document.body`, `document.fullscreenElement` and others are non-configurable and thus cannot be overridden.
+   * Wrappers don't support [live NodeLists](https://developer.mozilla.org/en-US/docs/Web/API/NodeList#A_sometimes-live_collection) like `HTMLElement.childNodes` and `HTMLFormElement.elements`. All NodeLists are snapshotted upon read. See [#217](https://github.com/webcomponents/webcomponentsjs/issues/217) for an explanation.
+
+In order to work around these limitations the polyfill provides the `ShadowDOMPolyfill.wrap` and `ShadowDOMPolyfill.unwrap` methods to respectively wrap and unwrap DOM elements manually.
 
 ### Custom element's constructor property is unreliable <a id="constructor"></a>
 See [#215](https://github.com/webcomponents/webcomponentsjs/issues/215) for background.
