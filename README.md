@@ -94,6 +94,7 @@ window.addEventListener('WebComponentsReady', function(e) {
   * [Custom element's constructor property is unreliable](#constructor)
   * [Contenteditable elements do not trigger MutationObserver](#contentedit)
   * [ShadowCSS: :host-context(...):host(...) doesn't work](#hostcontext)
+  * [ShadowCSS: :host(.zot:not(.bar:nth-child(2))) doesn't work](#nestedparens)
   * [execCommand isn't supported under Shadow DOM](#execcommand)
 
 ### Limited CSS encapsulation <a id="encapsulation"></a>
@@ -132,6 +133,9 @@ don't work, despite working under native Shadow DOM. The solution is to use `pol
 ```
 polyfill-next-selector { content: '.foo :host.bar, :host.foo.bar'; }
 ```
+
+### ShadowCSS: :host(.zot:not(.bar:nth-child(2))) doesn't work <a id="nestedparens"></a>
+ShadowCSS `:host()` rules can only have (at most) 1-level of nested parentheses in its argument selector under ShadowCSS. For example, `:host(.zot)` and `:host(.zot:not(.bar))` both work, but `:host(.zot:not(.bar:nth-child(2)))` does not. 
 
 ### execCommand and contenteditable isn't supported under Shadow DOM <a id="execcommand"></a>
 See [#212](https://github.com/webcomponents/webcomponentsjs/issues/212)
