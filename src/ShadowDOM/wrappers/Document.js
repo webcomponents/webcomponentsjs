@@ -59,7 +59,6 @@
 
     // Loop while activeElement is not a shallow child of this document.
     while (!this.contains(activeElement)) {
-      var lastHost = activeElement;
       // Iterate until we hit activeElement's containing ShadowRoot (which
       // isn't this one) or document.
       while (activeElement.parentNode) {
