@@ -25,7 +25,6 @@
   if (!OriginalWebGLRenderingContext)
     return;
 
-
   function WebGLRenderingContext(impl) {
     setWrapper(impl, this);
   }
