@@ -57,6 +57,9 @@ suite('activeElement', function() {
       var r_1;
         // light
           var r_1_l;
+            // shadow
+              var r_1_l_0;
+              var r_1_l_1;
         // shadow
           var r_1_0;
             // light
@@ -85,6 +88,8 @@ suite('activeElement', function() {
         r_0_1_l = r_0_1.querySelector('[shadow-template-id=x-shadow-host-root-0-1-light]');
     r_1 = r.shadowRoot.querySelector('[shadow-template-id=x-shadow-host-root-1]');
       r_1_l = r_1.querySelector('[shadow-template-id=x-shadow-host-root-1-light]');
+        r_1_l_0 = r_1_l.shadowRoot.querySelector('[shadow-template-id=x-shadow-host-root-1-light-0]');
+        r_1_l_1 = r_1_l.shadowRoot.querySelector('[shadow-template-id=x-shadow-host-root-1-light-1]');
       r_1_0 = r_1.shadowRoot.querySelector('[shadow-template-id=x-shadow-host-root-1-0]');
         r_1_0_l = r_1_0.querySelector('[shadow-template-id=x-shadow-host-root-1-0-light]');
       r_1_1 = r_1.shadowRoot.querySelector('[shadow-template-id=x-shadow-host-root-1-1]');
@@ -94,11 +99,6 @@ suite('activeElement', function() {
   });
 
   teardown(function() {
-    assert.equal(r_0_0.shadowRoot.activeElement, null);
-    assert.equal(r_0_1.shadowRoot.activeElement, null);
-    assert.equal(r_1_0.shadowRoot.activeElement, null);
-    assert.equal(r_1_1.shadowRoot.activeElement, null);
-
     document.body.removeChild(r);
   });
 
@@ -120,16 +120,24 @@ suite('activeElement', function() {
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, null);
     assert.equal(r_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, null);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_l.focus()', function() {
     r_l.focus();
 
     assert.equal(doc.activeElement, r_l);
-    assert.equal(r.shadowRoot.activeElement, null);
+    assert.equal(r.shadowRoot.activeElement, r_l);
     assert.equal(r_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, null);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_0.focus()', function() {
@@ -138,7 +146,11 @@ suite('activeElement', function() {
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, r_0);
     assert.equal(r_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, null);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_0_l.focus()', function() {
@@ -146,8 +158,12 @@ suite('activeElement', function() {
 
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, r_0_l);
-    assert.equal(r_0.shadowRoot.activeElement, null);
+    assert.equal(r_0.shadowRoot.activeElement, r_0_l);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, null);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_0_0.focus()', function() {
@@ -156,7 +172,11 @@ suite('activeElement', function() {
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, r_0);
     assert.equal(r_0.shadowRoot.activeElement, r_0_0);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, null);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_0_0_l.focus()', function() {
@@ -165,7 +185,11 @@ suite('activeElement', function() {
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, r_0);
     assert.equal(r_0.shadowRoot.activeElement, r_0_0_l);
+    assert.equal(r_0_0.shadowRoot.activeElement, r_0_0_l);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, null);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_0_1.focus()', function() {
@@ -174,7 +198,11 @@ suite('activeElement', function() {
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, r_0);
     assert.equal(r_0.shadowRoot.activeElement, r_0_1);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, null);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_0_1_l.focus()', function() {
@@ -183,7 +211,11 @@ suite('activeElement', function() {
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, r_0);
     assert.equal(r_0.shadowRoot.activeElement, r_0_1_l);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, r_0_1_l);
     assert.equal(r_1.shadowRoot.activeElement, null);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_1.focus()', function() {
@@ -192,7 +224,11 @@ suite('activeElement', function() {
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, r_1);
     assert.equal(r_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, null);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_1_l.focus()', function() {
@@ -201,7 +237,39 @@ suite('activeElement', function() {
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, r_1_l);
     assert.equal(r_0.shadowRoot.activeElement, null);
-    assert.equal(r_1_l.shadowRoot.activeElement, null);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
+    assert.equal(r_1.shadowRoot.activeElement, r_1_l);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
+  });
+
+  test('r_1_l_0.focus()', function() {
+    r_1_l_0.focus();
+
+    assert.equal(doc.activeElement, r);
+    assert.equal(r.shadowRoot.activeElement, r_1_l);
+    assert.equal(r_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
+    assert.equal(r_1.shadowRoot.activeElement, r_1_l);
+    assert.equal(r_1_l.shadowRoot.activeElement, r_1_l_0);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
+  });
+
+  test('r_1_l_1.focus()', function() {
+    r_1_l_1.focus();
+
+    assert.equal(doc.activeElement, r);
+    assert.equal(r.shadowRoot.activeElement, r_1_l);
+    assert.equal(r_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
+    assert.equal(r_1.shadowRoot.activeElement, r_1_l);
+    assert.equal(r_1_l.shadowRoot.activeElement, r_1_l_1);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_1_0.focus()', function() {
@@ -210,7 +278,11 @@ suite('activeElement', function() {
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, r_1);
     assert.equal(r_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, r_1_0);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_1_0_l.focus()', function() {
@@ -219,7 +291,11 @@ suite('activeElement', function() {
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, r_1);
     assert.equal(r_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, r_1_0_l);
+    assert.equal(r_1_0.shadowRoot.activeElement, r_1_0_l);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_1_1.focus()', function() {
@@ -228,7 +304,11 @@ suite('activeElement', function() {
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, r_1);
     assert.equal(r_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, r_1_1);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, null);
   });
 
   test('r_1_1_l.focus()', function() {
@@ -237,7 +317,11 @@ suite('activeElement', function() {
     assert.equal(doc.activeElement, r);
     assert.equal(r.shadowRoot.activeElement, r_1);
     assert.equal(r_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_0.shadowRoot.activeElement, null);
+    assert.equal(r_0_1.shadowRoot.activeElement, null);
     assert.equal(r_1.shadowRoot.activeElement, r_1_1_l);
+    assert.equal(r_1_0.shadowRoot.activeElement, null);
+    assert.equal(r_1_1.shadowRoot.activeElement, r_1_1_l);
   });
 });
 
@@ -249,13 +333,17 @@ suite('activeElement', function() {
   <div>
     <div>
       <div shadow-template-id="x-shadow-host-root-0">
-        <div shadow-template-id="x-shadow-host-root-0-light"></div>
+        <div>
+          <div shadow-template-id="x-shadow-host-root-0-light"></div>
+        </div>
       </div>
     </div>
   </div>
   <div>
     <div shadow-template-id="x-shadow-host-root-1">
-      <div shadow-template-id="x-shadow-host-root-1-light"></div>
+      <div>
+        <div shadow-template-id="x-shadow-host-root-1-light"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -266,7 +354,11 @@ suite('activeElement', function() {
   <content></content>
   <div>
     <div shadow-template-id="x-shadow-host-root-0-0">
-      <div shadow-template-id="x-shadow-host-root-0-0-light"></div>
+      <div>
+        <div>
+          <div shadow-template-id="x-shadow-host-root-0-0-light"></div>
+        </div>
+      </div>
     </div>
   </div>
   <div shadow-template-id="x-shadow-host-root-0-1">
@@ -292,21 +384,37 @@ suite('activeElement', function() {
   <content></content>
   <div>
     <div shadow-template-id="x-shadow-host-root-1-0">
-      <div shadow-template-id="x-shadow-host-root-1-0-light"></div>
+      <div>
+        <div>
+          <div shadow-template-id="x-shadow-host-root-1-0-light"></div>
+        </div>
+      </div>
     </div>
   </div>
   <div>
     <div>
       <div>
         <div shadow-template-id="x-shadow-host-root-1-1">
-          <div shadow-template-id="x-shadow-host-root-1-1-light"></div>
+          <div>
+            <div shadow-template-id="x-shadow-host-root-1-1-light"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<template id="x-shadow-host-root-1-light"></template>
+<template id="x-shadow-host-root-1-light">
+  <content></content>
+  <div shadow-template-id="x-shadow-host-root-1-light-0"></div>
+  <div>
+    <div shadow-template-id="x-shadow-host-root-1-light-1"></div>
+  </div>
+</template>
+
+<template id="x-shadow-host-root-1-light-0"></template>
+
+<template id="x-shadow-host-root-1-light-1"></template>
 
 <template id="x-shadow-host-root-1-0">
   <content></content>
