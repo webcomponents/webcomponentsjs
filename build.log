@@ -1,33 +1,33 @@
 BUILD LOG
 ---------
-Build Time: 2015-12-04T16:22:57-0800
+Build Time: 2015-12-15T17:26:55-0800
 
 NODEJS INFORMATION
 ==================
-nodejs: v4.2.2
+nodejs: v4.2.3
 gulp: 3.9.0
-gulp-concat: 2.6.0
 gulp-audit: 1.0.0
+gulp-concat: 2.6.0
 gulp-header: 1.7.1
 gulp-uglify: 1.5.1
 run-sequence: 1.1.5
-web-component-tester: 3.4.2
+web-component-tester: 4.0.2
 
 REPO REVISIONS
 ==============
-webcomponentsjs: 396430f7a0b6c6576fd89c0cb4d452e5de751acc
+webcomponentsjs: 5f1284369eb57e94ca4e88d5d71ceaeb65d1c569
 
 BUILD HASHES
 ============
-CustomElements.js: 6ed97c5b08aa167e6816d14e44dced89125456d4
-CustomElements.min.js: fb06a7ae03a1c53981f8dddf12378fea950939e8
-HTMLImports.js: 4268ee56ebe672636cd655300d1181a4c89e6134
-HTMLImports.min.js: b194ceb2d7f8fd44cb204b3010d39ca6e61be7ed
-MutationObserver.js: 04f260c8b08afc70b9ae79958d23f4265117a5f2
-MutationObserver.min.js: c2b1521086c2ba2aac8e66ca8f5b9d0af86f1a7c
-ShadowDOM.js: 2f7ec402ccec544786ac107b356b873f9922d14d
-ShadowDOM.min.js: 6405b36a169e8e64940726338899f4b43d4d7e30
-webcomponents-lite.js: 9ce76c55a884c4b40c63bae34923a8cd5fa6b697
-webcomponents-lite.min.js: 574896188fe95eed9c522d48e9199d136625cf55
-webcomponents.js: 0ff38ede58a56bb6817af7eb9f8cd92033118331
-webcomponents.min.js: 954404b8dce8d01e3476b3b69e47f9ae39d74c43
+CustomElements.js: 2e3f1d24da1b907cc328b6276f336aed65a07f11
+CustomElements.min.js: a762e3c191cc8d40094650317eace96595ddb2f7
+HTMLImports.js: 83d1d2df9b1fc622712e33e61b42a11445699b6b
+HTMLImports.min.js: a3f8245b26035a6452acadba2d95a5f2653b357e
+MutationObserver.js: 830bdcc25cdc392491d29b350ca077308f3baf4d
+MutationObserver.min.js: 73cbbfa3d44343e0286c133d7d5139dedd9a9765
+ShadowDOM.js: fa039071d7f15dba05d9cea27267d048cfddd1bf
+ShadowDOM.min.js: 975f1950c1347181b067a2d989ca1d8fafe854db
+webcomponents-lite.js: ab4d2adff62906fe3860fed00ee2584146b0f162
+webcomponents-lite.min.js: e59f28a7684cb56c84f83e411b13f0167c19898e
+webcomponents.js: 4881aa5c0dc2d730053ea701b11566cc04464738
+webcomponents.min.js: 305994efdabba100244df45ae6d86894bc69cd53
