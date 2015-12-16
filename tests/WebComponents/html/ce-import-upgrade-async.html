@@ -26,7 +26,9 @@
           // order expected
           assert.deepEqual(a1DocsList, ['a1-instance.html', 'a1-reference.html']);
           // style applied at upgrade time
-          assert.isTrue(styleAppliedToDocument);
+          if (!HTMLImports.useNative) {
+            assert.isTrue(styleAppliedToDocument);
+          }
           done();
         }
 

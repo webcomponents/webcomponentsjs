@@ -12,20 +12,22 @@
   <head>
     <title>HTMLImportsLoaded, native</title>
     <script>WCT = {waitFor: function(cb){ cb() }}</script>
+    <script>
+      var loaded = false;
+      addEventListener('HTMLImportsLoaded', function(e) {
+        loaded = true;
+      });
+    </script>
     <script src="../../../src/HTMLImports/HTMLImports.js"></script>
     <script src="../../../../web-component-tester/browser.js"></script>
   </head>
   <body>
     <link rel="import" href="imports/import-1.html">
     <script>
-      test('HTMLImportsLoaded fires with native imports', function(done) {
-        if (!HTMLImports.useNative) {
-          return done();
+      test('HTMLImportsLoaded fires with native imports', function() {
+        if (HTMLImports.useNative) {
+          assert.isTrue(loaded);
         }
-        addEventListener('HTMLImportsLoaded', function(e) {
-          chai.assert.ok(true, 'HTMLImportsLoaded');
-          done();
-        });
       });
     </script>
   </body>

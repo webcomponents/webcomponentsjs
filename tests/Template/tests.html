@@ -56,10 +56,12 @@
 
           s = '-<->-"-&-';
           var escaped = '-&lt;-&gt;-"-&amp;-';
+          var div = document.createElement('div');
           imp.innerHTML = s;
+          div.innerHTML = s;
           // innerHTML is properly escaped
           assert.equal(imp.innerHTML, escaped);
-          assert.equal(imp.content.childNodes.length, 1);
+          assert.equal(imp.content.childNodes.length, div.childNodes.length);
         });
       });
     </script>

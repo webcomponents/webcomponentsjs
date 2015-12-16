@@ -13,6 +13,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <title>Template with HTMLImports Test</title>
     <script src="../../src/Template/Template.js"></script>
     <script src="../../src/HTMLImports/HTMLImports.js"></script>
+    <script>
+      WCT = {
+        waitFor: function(callback) {
+          this.HTMLImports.whenReady(callback);
+        }
+      };
+    </script>
     <script src="../../../web-component-tester/browser.js"></script>
   </head>
   <body>
