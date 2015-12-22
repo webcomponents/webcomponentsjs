@@ -440,7 +440,6 @@
       if (childWrapper.parentNode !== this) {
         // IE has invalid DOM trees at times.
         var found = false;
-        var childNodes = this.childNodes;
         for (var ieChild = this.firstChild; ieChild;
              ieChild = ieChild.nextSibling) {
           if (ieChild === childWrapper) {
