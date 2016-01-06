@@ -12,8 +12,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Custom Element Upgrade Order</title>
-  <script src="../../tools/chai/chai.js"></script>
-  <script src="../../tools/htmltest.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
 
   <script src="../../../webcomponents.js"></script>
   <link rel="import" href="import-upgrade-order.html">
@@ -21,12 +20,12 @@
 <body>
   <x-foo id="main"></x-foo>
   <script>
-    addEventListener('WebComponentsReady', function() {
+    test('upgrade order', function() {
       // native CE will upgrade in creation order
       // HTMLImports polyfill must be created after main document
       // Therefore, skip this test in that scenario
       if (CustomElements.useNative && !HTMLImports.useNative) {
-        return done();
+        return;
       }
       var proto = Object.create(HTMLElement.prototype);
       var order = [];
@@ -35,7 +34,6 @@
       }
       document.registerElement('x-foo', {prototype: proto});
       chai.assert.deepEqual(order, ['import', 'main'], 'elements are upgraded in imports before main document');
-      done();
     });
   </script>
 </body>

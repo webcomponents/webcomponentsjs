@@ -11,9 +11,8 @@
 <html>
   <head>
     <title>HTML dedupe Test</title>
-    <script src="../../tools/htmltest.js"></script>
-    <script src="../../tools/chai/chai.js"></script>
     <script src="../../../src/HTMLImports/HTMLImports.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
     <link rel="import" href="imports/dedupe.html">
     <script>
       var link = document.createElement('link');
@@ -27,9 +26,8 @@
   </head>
   <body>
     <script>
-      addEventListener('HTMLImportsLoaded', function() {
+      test('imports deduped', function() {
         chai.assert.equal(dedupe, 1, 'import loaded');
-        done();
       });
     </script>
   </body>

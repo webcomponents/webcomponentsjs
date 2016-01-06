@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -7,18 +8,17 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-window.WebComponents = window.WebComponents || {};
+(function() {
 
-// process flags
-(function(scope){
+  // Establish scope.
+  window.WebComponents = window.WebComponents || {flags:{}};
 
-  // import
-  var flags = scope.flags || {};
-
+  // loading script
   var file = 'webcomponents.js';
   var script = document.querySelector('script[src*="' + file + '"]');
 
   // Flags. Convert url arguments to flags
+  var flags = {};
   if (!flags.noOpts) {
     // from url
     location.search.slice(1).split('&').forEach(function(option) {
@@ -65,6 +65,7 @@ window.WebComponents = window.WebComponents || {};
     window.CustomElements.flags.register = flags.register;
   }
 
-  // export
-  scope.flags = flags;
-})(WebComponents);
+  // exports
+  WebComponents.flags = flags;
+
+})();

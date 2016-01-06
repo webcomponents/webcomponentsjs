@@ -36,6 +36,30 @@ suite('ShadowRoot', function() {
     assert.equal(sr2.elementFromPoint(5, 5), null);
   });
 
+  test('getSelection', function() {
+    div = document.body.appendChild(document.createElement('div'));
+    var sr = div.createShadowRoot();
+    sr.innerHTML = '<a>a</a><b>b</b><c>c</c>';
+
+    var selection = sr.getSelection();
+    selection.selectAllChildren(sr);
+
+    assert.equal(selection.toString(), 'abc');
+
+    assert.isFalse(selection.isCollapsed);
+    assert.equal(selection.rangeCount, 1);
+
+    // https://code.google.com/p/chromium/issues/detail?id=336821
+    if (/WebKit/.test(navigator.userAgent))
+      return;
+
+    assert.equal(selection.anchorNode, div);
+    assert.equal(selection.anchorOffset, 0);
+
+    assert.equal(selection.focusNode, div);
+    assert.equal(selection.focusOffset, 3);
+  });
+
   test('olderShadowRoot', function() {
     var host = document.createElement('div');
     host.innerHTML = '<a>a</a><b>b</b>';

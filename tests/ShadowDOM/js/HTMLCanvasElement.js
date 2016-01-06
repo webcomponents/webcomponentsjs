@@ -113,6 +113,7 @@ suite('HTMLCanvasElement', function() {
     try {
       gl = canvas.getContext('webgl');
     } catch (ex) {
+      console.error(ex);
     }
     // IE10 does not have WebGL.
     // Chrome returns null if the graphics card is not supported

@@ -8,7 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-htmlSuite('Events', function() {
+suite('Events', function() {
 
   var unwrap = ShadowDOMPolyfill.unwrap;
   var wrap = ShadowDOMPolyfill.wrap;
@@ -331,6 +331,18 @@ htmlSuite('Events', function() {
 
     c.click();
     assertArrayEqual(log, [a, Event.CAPTURING_PHASE, b, Event.CAPTURING_PHASE]);
+  });
+
+  test('preventDefault sets defaultPrevented', function() {
+    // is not prevented when not cancelable
+    var e = new CustomEvent('foo');
+    e.preventDefault();
+    assert.isFalse(e.defaultPrevented);
+
+    // is prevented when cancelable
+    e = new CustomEvent('foo', {cancelable: true});
+    e.preventDefault();
+    assert.isTrue(e.defaultPrevented);
   });
 
   test('click with shadow', function() {
@@ -931,9 +943,6 @@ test('retarget order (multiple shadow roots)', function() {
     assertArrayEqual(expected, log);
   });
 
-  htmlTest('../html/on-load-test.html');
-  htmlTest('../html/on-unload-test.html');
-
   test('event wrap round trip', function() {
     var e = new Event('x');
     assert.equal(e, wrap(unwrap(e)));
@@ -1168,10 +1177,7 @@ test('retarget order (multiple shadow roots)', function() {
     div.click();
     assert.equal(calls, 2);
 
-    // defaultPrevented is broken in IE.
-    // https://connect.microsoft.com/IE/feedback/details/790389/event-defaultprevented-returns-false-after-preventdefault-was-called
-    if (!/Trident|Edge/.test(navigator.userAgent))
-      assert.isTrue(event.defaultPrevented);
+    assert.isTrue(event.defaultPrevented);
   });
 
   test('event.path (bubbles)', function() {
@@ -1412,6 +1418,8 @@ test('retarget order (multiple shadow roots)', function() {
     };
 
     var error = new Error(msg);
+    // tell WCT to ignore this error
+    error.ignore = true;
     document.addEventListener('click', f = function(e) {
       throw error;
     });

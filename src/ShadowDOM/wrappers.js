@@ -431,6 +431,7 @@ window.ShadowDOMPolyfill = {};
     });
   }
 
+  scope.addForwardingProperties = addForwardingProperties;
   scope.assert = assert;
   scope.constructorTable = constructorTable;
   scope.defineGetter = defineGetter;

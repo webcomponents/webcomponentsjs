@@ -8,10 +8,8 @@
     Code distributed by Google as part of the polymer project is also
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<script src="../../tools/chai/chai.js"></script>
-<script src="../../tools/htmltest.js"></script>
-
 <script src="../../../src/ShadowDOM/ShadowDOM.js"></script>
+<script src="../../../../web-component-tester/browser.js"></script>
 <head>
 <script>
 
@@ -28,11 +26,9 @@ div.parentNode.removeChild(div);
 <body></body>
 <script>
 
-doc.addEventListener('DOMContentLoaded', function(e) {
-  var body = document.querySelector('body');
-  assert.equal(body.localName, 'body');
-
-  done();
-});
+  test('body wrapper is correct after dom modification', function() {
+    var body = document.querySelector('body');
+    assert.equal(body.localName, 'body');
+  });
 
 </script>

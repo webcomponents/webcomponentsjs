@@ -11,16 +11,15 @@
 <html>
   <head>
     <title>load loop Test</title>
-    <script src="../../tools/htmltest.js"></script>
-    <script src="../../tools/chai/chai.js"></script>
     <script src="../../../src/HTMLImports/HTMLImports.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
+    <script>var loaded = [];</script>
     <link rel="import" href="imports/load-a.html">
   </head>
   <body>
     <script>
-      document.addEventListener('HTMLImportsLoaded', function() {
+      test('load loop', function() {
         chai.assert.deepEqual(loaded, ['a', 'b', 'c', 'd']);
-        done();
       });
     </script>
   </body>

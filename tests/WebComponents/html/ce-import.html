@@ -12,15 +12,14 @@
   <head>
     <title></title>
     <meta charset="UTF-8">
-    <script src="../../tools/chai/chai.js"></script>
-    <script src="../../tools/htmltest.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
 
     <script src="../../../webcomponents.js"></script>
   </head>
   <body>
     <x-foo></x-foo>
     <script>
-      window.addEventListener('WebComponentsReady', function() {
+      test('ce-import', function(done) {
         // native imports + shadowdom polyfill is not supported so just pass
         if (HTMLImports.useNative && window.ShadowDOMPolyfill) {
           done();

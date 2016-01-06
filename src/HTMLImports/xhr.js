@@ -31,12 +31,16 @@ var xhr = {
       if (request.readyState === 4) {
         // Servers redirecting an import can add a Location header to help us
         // polyfill correctly.
-        var locationHeader = request.getResponseHeader("Location");
         var redirectedUrl = null;
-        if (locationHeader) {
-          var redirectedUrl = (locationHeader.substr( 0, 1 ) === "/")
-            ? location.origin + locationHeader  // Location is a relative path
-            : locationHeader;                    // Full path
+        try {
+          var locationHeader = request.getResponseHeader("Location");
+          if (locationHeader) {
+            redirectedUrl = (locationHeader.substr( 0, 1 ) === "/")
+              ? location.origin + locationHeader  // Location is a relative path
+              : locationHeader;                   // Full path
+          }
+        } catch ( e ) {
+            console.error( e.message );
         }
         next.call(nextContext, !xhr.ok(request) && request,
             request.response || request.responseText, redirectedUrl);

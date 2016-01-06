@@ -11,22 +11,23 @@
 <html>
 <head>
   <title>HTML Imports Dynamic Elements</title>
-  <script src="../../tools/htmltest.js"></script>
-  <script src="../../tools/chai/chai.js"></script>
   <script src="../../../src/HTMLImports/HTMLImports.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
   <link rel="import" href="imports/dynamic-elements-import.html">
 </head>
 <body>
   <div id="asyncStyled">red?</div>
 
   <script>
-    document.addEventListener('asyncElementsAdded', function() {
-      setTimeout(function() {
-        chai.assert.isTrue(window.asyncScript, 'async added script ran');
-        var computed = getComputedStyle(document.querySelector('#asyncStyled'));
-        chai.assert.equal(computed.backgroundColor, 'rgb(255, 0, 0)', 'async added style applied');
-        done();
-      }, 1);
+    test('async elements added', function(done) {
+      document.addEventListener('asyncElementsAdded', function() {
+        requestAnimationFrame(function() {
+          chai.assert.isTrue(window.asyncScript, 'async added script ran');
+          var computed = getComputedStyle(document.querySelector('#asyncStyled'));
+          chai.assert.equal(computed.backgroundColor, 'rgb(255, 0, 0)', 'async added style applied');
+          done();
+        });
+      });
     });
   </script>
 </body>

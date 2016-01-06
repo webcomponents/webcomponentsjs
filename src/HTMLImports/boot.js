@@ -26,28 +26,6 @@ if (scope.useNative) {
   return;
 }
 
-// CustomEvent shim for IE
-// NOTE: we explicitly test for IE since Safari has an type `object` CustomEvent
-if (isIE && (typeof window.CustomEvent !== 'function')) {
-  window.CustomEvent = function(inType, params) {
-    params = params || {};
-    var e = document.createEvent('CustomEvent');
-    e.initCustomEvent(inType, Boolean(params.bubbles), Boolean(params.cancelable), params.detail);
-    // IE does not set `defaultPrevented` when `preventDefault()` is called on
-    // CustomEvents
-    // http://stackoverflow.com/questions/23349191/event-preventdefault-is-not-working-in-ie-11-for-custom-events
-    e.preventDefault = function() {
-      Object.defineProperty(this, 'defaultPrevented', {
-        get: function() {
-          return true;
-        }
-      });
-    };
-    return e;
-  };
-  window.CustomEvent.prototype = window.Event.prototype;
-}
-
 // Initialize polyfill modules. Note, polyfill modules are loaded but not
 // executed; this is a convenient way to control which modules run when
 // the polyfill is required and allows the polyfill to load even when it's

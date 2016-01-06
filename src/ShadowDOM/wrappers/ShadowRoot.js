@@ -21,6 +21,7 @@
   var setInnerHTML = scope.setInnerHTML;
   var unsafeUnwrap = scope.unsafeUnwrap;
   var unwrap = scope.unwrap;
+  var wrap = scope.wrap;
 
   var shadowHostTable = new WeakMap();
   var nextOlderShadowTreeTable = new WeakMap();
@@ -68,6 +69,44 @@
     elementFromPoint: function(x, y) {
       return elementFromPoint(this, this.ownerDocument, x, y);
     },
+
+    getSelection: function() {
+      return document.getSelection();
+    },
+
+    get activeElement() {
+      var unwrappedActiveElement = unwrap(this).ownerDocument.activeElement;
+      if (!unwrappedActiveElement || !unwrappedActiveElement.nodeType) return null;
+
+      var activeElement = wrap(unwrappedActiveElement);
+
+      // If the active element is this ShadowRoot's host, this ShadowRoot
+      // has no active element.
+      if (activeElement === this.host) {
+        return null;
+      }
+
+      // Loop while activeElement is not a shallow descendant of this ShadowRoot
+      // or this ShadowRoot's host.
+      while (!this.contains(activeElement) && !this.host.contains(activeElement)) {
+        // Iterate until we hit activeElement's containing ShadowRoot (which
+        // isn't this one) or document.
+        while (activeElement.parentNode) {
+          activeElement = activeElement.parentNode;
+        }
+
+        // If we've reached a ShadowRoot, move to its host.
+        if (activeElement.host) {
+          activeElement = activeElement.host;
+        // Otherwise, we've reached a document - this ShadowRoot is not an
+        // ancestor of the active element.
+        } else {
+          return null;
+        }
+      }
+
+      return activeElement;
+    }
   });
 
   scope.wrappers.ShadowRoot = ShadowRoot;

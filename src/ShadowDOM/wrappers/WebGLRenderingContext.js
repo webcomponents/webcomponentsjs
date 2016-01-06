@@ -11,6 +11,7 @@
 (function(scope) {
   'use strict';
 
+  var addForwardingProperties = scope.addForwardingProperties;
   var mixin = scope.mixin;
   var registerWrapper = scope.registerWrapper;
   var setWrapper = scope.setWrapper;
@@ -43,6 +44,15 @@
       unsafeUnwrap(this).texSubImage2D.apply(unsafeUnwrap(this), arguments);
     }
   });
+
+  // WebKit has two additional prototypes in the chain for WebGLRenderingContext which are not exposed on `window`: WebGLRenderingContextBase and CanvasRenderingContextBase.
+  // CanvasRenderingContextBase has only one getter `canvas`, which is taken care of already, so we skip it.
+
+  var OriginalWebGLRenderingContextBase = Object.getPrototypeOf(OriginalWebGLRenderingContext.prototype);
+
+  if (OriginalWebGLRenderingContextBase !== Object.prototype) {
+    addForwardingProperties(OriginalWebGLRenderingContextBase, WebGLRenderingContext.prototype);
+  }
 
   // Blink/WebKit has broken DOM bindings. Usually we would create an instance
   // of the object and pass it into registerWrapper as a "blueprint" but

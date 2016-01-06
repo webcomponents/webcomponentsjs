@@ -1,0 +1,128 @@
+<!doctype html>
+<!--
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<title>Full ShadowDOM suite</title>
+<meta charset="utf-8">
+<script src="../../../src/ShadowDOM/ShadowDOM.js"></script>
+<script src="../../../../web-component-tester/browser.js"></script>
+
+<script>
+  // common utils
+function expectStructure(nodeOrWrapper, nonNullFields) {
+  assert(nodeOrWrapper);
+  assert.strictEqual(nodeOrWrapper.parentNode, nonNullFields.parentNode || null);
+  assert.strictEqual(nodeOrWrapper.previousSibling,
+      nonNullFields.previousSibling || null);
+  assert.strictEqual(nodeOrWrapper.nextSibling, nonNullFields.nextSibling || null);
+  assert.strictEqual(nodeOrWrapper.firstChild, nonNullFields.firstChild || null);
+  assert.strictEqual(nodeOrWrapper.lastChild, nonNullFields.lastChild || null);
+}
+
+function unwrapAndExpectStructure(node, nonNullFields) {
+  for (var p in nonNullFields) {
+    nonNullFields[p] = ShadowDOMPolyfill.unwrap(nonNullFields[p]);
+  }
+  expectStructure(ShadowDOMPolyfill.unwrap(node), nonNullFields);
+}
+
+function assertArrayEqual(a, b, msg) {
+  for (var i = 0; i < a.length; i++) {
+    assert.equal(a[i], b[i], msg);
+  }
+  assert.equal(a.length, b.length, msg);
+}
+
+function expectMutationRecord(record, expected) {
+  assert.equal(record.type,
+      expected.type === undefined ? null : expected.type);
+  assert.equal(record.target,
+      expected.target === undefined ? null : expected.target);
+  assertArrayEqual(record.addedNodes,
+      expected.addedNodes === undefined ? [] : expected.addedNodes);
+  assertArrayEqual(record.removedNodes,
+      expected.removedNodes === undefined ? [] : expected.removedNodes);
+  assert.equal(record.previousSibling,
+      expected.previousSibling === undefined ?
+          null : expected.previousSibling);
+  assert.equal(record.nextSibling,
+      expected.nextSibling === undefined ? null : expected.nextSibling);
+  assert.equal(record.attributeName,
+      expected.attributeName === undefined ? null : expected.attributeName);
+  assert.equal(record.attributeNamespace,
+      expected.attributeNamespace === undefined ?
+          null : expected.attributeNamespace);
+  assert.equal(record.oldValue,
+      expected.oldValue === undefined ? null : expected.oldValue);
+}
+</script>
+
+<script src="../js/ChildNodeInterface.js"></script>
+<script src="../js/Comment.js"></script>
+<script src="../js/DOMTokenList.js"></script>
+<script src="../js/Document.js"></script>
+<script src="../js/Element.js"></script>
+<script src="../js/FormData.js"></script>
+<script src="../js/HTMLAudioElement.js"></script>
+<script src="../js/HTMLBodyElement.js"></script>
+<script src="../js/HTMLButtonElement.js"></script>
+<script src="../js/HTMLCanvasElement.js"></script>
+<script src="../js/HTMLContentElement.js"></script>
+<script src="../js/HTMLElement.js"></script>
+<script src="../js/HTMLFieldSetElement.js"></script>
+<script src="../js/HTMLFormElement.js"></script>
+<script src="../js/HTMLHeadElement.js"></script>
+<script src="../js/HTMLHtmlElement.js"></script>
+<script src="../js/HTMLImageElement.js"></script>
+<script src="../js/HTMLInputElement.js"></script>
+<script src="../js/HTMLKeygenElement.js"></script>
+<script src="../js/HTMLLabelElement.js"></script>
+<script src="../js/HTMLLegendElement.js"></script>
+<script src="../js/HTMLObjectElement.js"></script>
+<script src="../js/HTMLOptionElement.js"></script>
+<script src="../js/HTMLOutputElement.js"></script>
+<script src="../js/HTMLSelectElement.js"></script>
+<script src="../js/HTMLShadowElement.js"></script>
+<script src="../js/HTMLTableElement.js"></script>
+<script src="../js/HTMLTableRowElement.js"></script>
+<script src="../js/HTMLTableSectionElement.js"></script>
+<script src="../js/HTMLTemplateElement.js"></script>
+<script src="../js/HTMLTextAreaElement.js"></script>
+<script src="../js/MutationObserver.js"></script>
+<script src="../js/MutationObserver/attributes.js"></script>
+<script src="../js/MutationObserver/callback.js"></script>
+<script src="../js/MutationObserver/characterData.js"></script>
+<script src="../js/MutationObserver/childList.js"></script>
+<script src="../js/MutationObserver/mixed.js"></script>
+<script src="../js/MutationObserver/options.js"></script>
+<script src="../js/MutationObserver/shadow-root.js"></script>
+<script src="../js/MutationObserver/transient.js"></script>
+<script src="../js/Node.js"></script>
+<script src="../js/NonElementParentNodeInterface.js"></script>
+<script src="../js/ParentNodeInterface.js"></script>
+<script src="../js/Range.js"></script>
+<script src="../js/SVGElement.js"></script>
+<script src="../js/SVGElementInstance.js"></script>
+<script src="../js/Selection.js"></script>
+<script src="../js/TreeWalker.js"></script>
+<script src="../js/ShadowRoot.js"></script>
+<script src="../js/Text.js"></script>
+<script src="../js/TouchEvent.js"></script>
+<script src="../js/TreeScope.js"></script>
+<script src="../js/Window.js"></script>
+<script src="../js/XMLHttpRequest.js"></script>
+<script src="../js/createTable.js"></script>
+<script src="../js/custom-element.js"></script>
+<script src="../js/events.js"></script>
+<script src="../js/microtask.js"></script>
+<script src="../js/paralleltrees.js"></script>
+<script src="../js/reprojection.js"></script>
+<script src="../js/rerender.js"></script>
+<script src="../js/test.js"></script>
+<script src="../js/wrappers.js"></script>

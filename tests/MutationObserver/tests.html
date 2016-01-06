@@ -10,23 +10,11 @@
 -->
 <meta charset="utf-8">
 
-<!-- Mocha/Chai -->
-<link rel="stylesheet" href="../tools/mocha/mocha.css">
-<script src="../tools/mocha/mocha.js"></script>
-<script src="../tools/chai/chai.js"></script>
-<script src="../tools/mocha-htmltest.js"></script>
-
 <!-- MutationObserver -->
 <script src="../../src/WeakMap/WeakMap.js"></script>
 <script src="../../src/MutationObserver/MutationObserver.js"></script>
+<script src="../../../web-component-tester/browser.js"></script>
 <script>
-
-mocha.setup({
-  ui: 'tdd',
-  ignoreLeaks: true
-});
-
-var assert = chai.assert;
 
 function assertArrayEqual(a, b, msg) {
   assert.equal(a.length, b.length, msg);
@@ -36,12 +24,13 @@ function assertArrayEqual(a, b, msg) {
 }
 
 var expectRecord = (function() {
-  var useNative = /native/.test(location.search);
+  var useNative = Boolean(window.MutationObserver ||
+                          window.WebKitMutationObserver);
   var isWebKit = /WebKit/.test(navigator.userAgent);
   var slice = Array.prototype.slice.call.bind(Array.prototype.slice);
 
   if (useNative) {
-    JsMutationObserver =
+    window.JsMutationObserver =
         window.MutationObserver || window.WebKitMutationObserver;
   }
 
@@ -77,14 +66,13 @@ var expectRecord = (function() {
   };
 })();
 
-</script>
-<script src="attributes.js"></script>
-<script src="characterData.js"></script>
-<script src="childList.js"></script>
-<script src="mixed.js"></script>
-<script src="callback.js"></script>
-<script src="transient.js"></script>
-<div id="mocha"></div>
-<script>
-mocha.run();
+WCT.loadSuites([
+  'attributes.js',
+  'characterData.js',
+  'childList.js',
+  'mixed.js',
+  'callback.js',
+  'transient.js'
+]);
+
 </script>

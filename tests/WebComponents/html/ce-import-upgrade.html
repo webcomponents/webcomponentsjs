@@ -12,28 +12,23 @@
   <head>
     <title></title>
     <meta charset="UTF-8">
-    <script src="../../tools/chai/chai.js"></script>
-    <script src="../../tools/htmltest.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
     <script src="../../../webcomponents-lite.js"></script>
     <link rel="import" href="a1-import.html">
   </head>
   <body>
     <script>
-      var assert = chai.assert;
-
-      function testImports() {
+      test('import upgrade', function() {
         // import upgraded
         assert.ok(a1);
         assert.isTrue(isA1Upgraded);
         // order expected
         assert.deepEqual(a1DocsList, ['a1-instance.html', 'a1-reference.html']);
         // style applied at upgrade time
-        assert.isTrue(styleAppliedToDocument);
-        done();
-      }
-
-      addEventListener('WebComponentsReady', testImports);
-
+        if (!HTMLImports.useNative) {
+          assert.isTrue(styleAppliedToDocument);
+        }
+      });
     </script>
   </body>
 </html>

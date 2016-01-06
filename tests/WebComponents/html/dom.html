@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<head>
+  <meta charset="UTF-8">
+  <title>WebComponents dom tests</title>
+  <script src="../../../../web-component-tester/browser.js"></script>
+  <script src="../../../webcomponents.js"></script>
+</head>
+<body>
+<script>
+  suite('WebComponents DOM utils', function() {
+    test('window.performance', function(done) {
+      assert(window.performance);
+      assert.isFunction(window.performance.now);
+      var s = performance.now();
+      setTimeout(function() {
+        e = performance.now();
+        assert.isAbove(e - s, 200);
+        done();
+      }, 200);
+    });
+
+    test('requestAnimationFrame', function(done) {
+      assert.isFunction(window.requestAnimationFrame);
+      var id = requestAnimationFrame(function() {
+        done();
+      });
+      assert.ok(id);
+    });
+
+    test('cancelAnimationFrame', function(done) {
+      assert.isFunction(window.cancelAnimationFrame);
+      var ran = false;
+      var id = requestAnimationFrame(function(){
+        ran = true;
+      });
+      cancelAnimationFrame(id);
+      setTimeout(function() {
+        assert.isFalse(ran);
+        done();
+      }, 100);
+    });
+
+    test('CustomEvent constructor', function() {
+      assert.isFunction(window.CustomEvent);
+      var detail = {};
+      var e = new CustomEvent('foo', {bubbles: true, cancelable: true, detail: detail});
+      assert(e);
+      assert.equal(e.type, 'foo');
+      assert.isTrue(e.bubbles);
+      assert.isTrue(e.cancelable);
+      assert.equal(e.detail, detail);
+
+      e = new CustomEvent('bar');
+      assert(e);
+      assert.equal(e.type, 'bar');
+      assert.isFalse(e.bubbles);
+      assert.isFalse(e.cancelable);
+      assert.notOk(e.detail);
+    });
+
+    test('Event constructor', function() {
+      assert.isFunction(window.Event);
+      var e = new Event('foo', {bubbles: true, cancelable: true});
+      assert(e);
+      assert.equal(e.type, 'foo');
+      assert.isTrue(e.bubbles);
+      assert.isTrue(e.cancelable);
+
+      e = new Event('bar');
+      assert(e);
+      assert.equal(e.type, 'bar');
+      assert.isFalse(e.bubbles);
+      assert.isFalse(e.cancelable);
+    });
+
+    test('event defaultPrevented', function() {
+      var e = new Event('foo', {cancelable: true});
+      e.preventDefault();
+      assert.isTrue(e.defaultPrevented);
+      // call again, just in case
+      assert.doesNotThrow(function() {e.preventDefault(); });
+    });
+
+    test('CustomEvent defaultPrevented', function() {
+      var e = new CustomEvent('foo', {cancelable: true});
+      e.preventDefault();
+      assert.isTrue(e.defaultPrevented);
+      // call again, just in case
+      assert.doesNotThrow(function() {e.preventDefault(); });
+    });
+
+    test('dispatch and prevent', function() {
+      var el = document.createElement('div');
+      document.body.appendChild(el);
+      var fn = function(e) {
+        e.preventDefault();
+      };
+      var check = function check(e) {
+        assert.isTrue(e.defaultPrevented);
+        document.body.removeEventListener('foo', check);
+        document.body.removeChild(el);
+      };
+      el.addEventListener('foo', fn);
+      document.body.addEventListener('foo', check);
+      var e = new CustomEvent('foo', {cancelable: true, bubbles: true});
+      el.dispatchEvent(e);
+      assert.isTrue(e.defaultPrevented);
+    });
+  });
+</script>
+</body>
+</html>

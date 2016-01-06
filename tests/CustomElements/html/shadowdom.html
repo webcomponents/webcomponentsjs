@@ -11,17 +11,16 @@
 <html>
 <head>
   <title>Custom Elements: shadowdom integration</title>
-  <script src="../../tools/htmltest.js"></script>
-  <script src="../../tools/chai/chai.js"></script>
   <script>
     hasShadowDOM = Boolean(Element.prototype.createShadowRoot);
   </script>
   <script src="../../../src/CustomElements/CustomElements.js"></script>
+  <script src="../../../../web-component-tester/browser.js"></script>
 </head>
 <body>
   <x-host></x-host>
   <script>
-    (function() {
+    test('elements upgrade in shadowdom', function(done) {
       if (hasShadowDOM) {
         var elementsCreated = 0;
         // basic proto
@@ -53,7 +52,7 @@
       } else {
         done();
       }
-    })();
+    })
   </script>
 </body>
 </html>

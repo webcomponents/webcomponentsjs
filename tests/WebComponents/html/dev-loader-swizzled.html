@@ -12,20 +12,20 @@
   <head>
     <title></title>
     <meta charset="UTF-8">
-    <script src="../../tools/chai/chai.js"></script>
-    <script src="../../tools/htmltest.js"></script>
+    <script src="../../../../web-component-tester/browser.js"></script>
 
     <script src="../../../webcomponents.js?0.13513513" log="foo,boo" squid="never" spoo></script>
   </head>
   <body>
     <script>
-      chai.assert(window.WebComponents, 'Platform scope missing');
-      chai.assert.equal(WebComponents.flags.squid, 'never', '"squid" flag missing');
-      chai.assert(WebComponents.flags.spoo, '"spoo" flag missing');
-      chai.assert(WebComponents.flags.log, 'flags.log missing');
-      chai.assert(WebComponents.flags.log.foo, 'flags.log.foo missing');
-      chai.assert(WebComponents.flags.log.boo, 'flags.log.foo missing');
-      done();
+      test('loader swizzeled', function() {
+        chai.assert(window.WebComponents, 'Platform scope missing');
+        chai.assert.equal(WebComponents.flags.squid, 'never', '"squid" flag missing');
+        chai.assert(WebComponents.flags.spoo, '"spoo" flag missing');
+        chai.assert(WebComponents.flags.log, 'flags.log missing');
+        chai.assert(WebComponents.flags.log.foo, 'flags.log.foo missing');
+        chai.assert(WebComponents.flags.log.boo, 'flags.log.foo missing');
+      });
     </script>
   </body>
 </html>

@@ -333,6 +333,7 @@
   }
 
   [
+    'focus',
     'getBoundingClientRect',
     'getClientRects',
     'scrollIntoView'
