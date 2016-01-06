@@ -37,29 +37,51 @@ if (typeof HTMLTemplateElement === 'undefined') {
       while (child = template.firstChild) {
         template.content.appendChild(child);
       }
-      // add innerHTML to template, if possible
+      // add innerHTML and outerHTML to template, if possible
       // Note: this throws on Safari 7
       if (canDecorate) {
         try {
-          Object.defineProperty(template, 'innerHTML', {
-            get: function() {
-              var o = '';
-              for (var e = this.content.firstChild; e; e = e.nextSibling) {
-                o += e.outerHTML || escapeData(e.data);
-              }
-              return o;
+          Object.defineProperties(template, {
+            innerHTML: {
+              get: function() {
+                var o = '';
+                for (var e = this.content.firstChild; e; e = e.nextSibling) {
+                  if (e.tagName == 'TEMPLATE') { console.log(e.outerHTML); }
+                  o += e.outerHTML || escapeData(e.data);
+                }
+                return o;
+              },
+              set: function(text) {
+                contentDoc.body.innerHTML = text;
+                HTMLTemplateElement.bootstrap(contentDoc);
+                while (this.content.firstChild) {
+                  this.content.removeChild(this.content.firstChild);
+                }
+                while (contentDoc.body.firstChild) {
+                  this.content.appendChild(contentDoc.body.firstChild);
+                }
+              },
+              configurable: true
             },
-            set: function(text) {
-              contentDoc.body.innerHTML = text;
-              HTMLTemplateElement.bootstrap(contentDoc);
-              while (this.content.firstChild) {
-                this.content.removeChild(this.content.firstChild);
-              }
-              while (contentDoc.body.firstChild) {
-                this.content.appendChild(contentDoc.body.firstChild);
-              }
-            },
-            configurable: true
+            outerHTML: {
+              get: function() {
+                var s = '<template';
+                var attrs = this.attributes;
+                for (var i = 0, attr; attr = attrs[i]; i++) {
+                  s += ' ' + attr.name + '="' + escapeAttr(attr.value) + '"';
+                }
+                return s + '>' + this.innerHTML + '</template>';
+              },
+              set: function(value) {
+                var p = this.parentNode;
+                if (p) {
+                  p.invalidateShadowRenderer();
+                  var df = frag(p, value);
+                  p.replaceChild(df, this);
+                }
+              },
+              configurable: true
+            }
           });
         } catch (err) {
           canDecorate = false;
