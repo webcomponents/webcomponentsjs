@@ -80,15 +80,8 @@
 
       var activeElement = wrap(unwrappedActiveElement);
 
-      // If the active element is this ShadowRoot's host, this ShadowRoot
-      // has no active element.
-      if (activeElement === this.host) {
-        return null;
-      }
-
-      // Loop while activeElement is not a shallow descendant of this ShadowRoot
-      // or this ShadowRoot's host.
-      while (!this.contains(activeElement) && !this.host.contains(activeElement)) {
+      // Loop while activeElement is not a shallow child of this ShadowRoot.
+      while (!this.contains(activeElement)) {
         // Iterate until we hit activeElement's containing ShadowRoot (which
         // isn't this one) or document.
         while (activeElement.parentNode) {
