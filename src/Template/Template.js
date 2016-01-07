@@ -17,6 +17,27 @@ if (typeof HTMLTemplateElement === 'undefined') {
     var contentDoc = document.implementation.createHTMLDocument('template');
     var canDecorate = true;
 
+    var escapeAttrRegExp = /[&\u00A0"]/g;
+
+    function escapeReplace(c) {
+      switch (c) {
+        case '&':
+          return '&amp;';
+        case '<':
+          return '&lt;';
+        case '>':
+          return '&gt;';
+        case '"':
+          return '&quot;'
+        case '\u00A0':
+          return '&nbsp;';
+      }
+    }
+
+    function escapeAttr(s) {
+      return s.replace(escapeAttrRegExp, escapeReplace);
+    }
+
     /**
       Provides a minimal shim for the <template> element.
     */
