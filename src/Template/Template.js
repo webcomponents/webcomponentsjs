@@ -67,7 +67,6 @@ if (typeof HTMLTemplateElement === 'undefined') {
               get: function() {
                 var o = '';
                 for (var e = this.content.firstChild; e; e = e.nextSibling) {
-                  if (e.tagName == 'TEMPLATE') { console.log(e.outerHTML); }
                   o += e.outerHTML || escapeData(e.data);
                 }
                 return o;
@@ -96,7 +95,9 @@ if (typeof HTMLTemplateElement === 'undefined') {
               set: function(value) {
                 var p = this.parentNode;
                 if (p) {
-                  p.invalidateShadowRenderer();
+                  if (typeof p.invalidateShadowRenderer === 'function') {
+                    p.invalidateShadowRenderer();
+                  }
                   var df = frag(p, value);
                   p.replaceChild(df, this);
                 }
