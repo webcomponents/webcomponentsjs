@@ -48,8 +48,6 @@
 
         s = 'pre<template><div id="inert"></div></template>post';
         imp.innerHTML = s;
-        // NOTE: we don't support reading nested template content via innerHTML,
-        // only setting it, hence the following won't work:
         chai.assert.equal(imp.innerHTML, s);
         chai.assert.equal(imp.content.childNodes.length, 3);
         chai.assert.equal(imp.content.childNodes[0].textContent, 'pre');

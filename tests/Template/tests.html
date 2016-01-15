@@ -63,6 +63,18 @@
           assert.equal(imp.innerHTML, escaped);
           assert.equal(imp.content.childNodes.length, div.childNodes.length);
         });
+
+        test('outerHTML', function() {
+          var imp = document.createElement('template');
+          assert.equal(imp.innerHTML, '');
+          var s = 'pre<div>Hi</div><template>inner</template><div>Bye</div>post';
+          imp.innerHTML = s;
+          assert.equal(imp.outerHTML, '<template>' + s + '</template>');
+          imp.setAttribute('data-test', 'pass');
+          imp.setAttribute('data-attr', '');
+          assert.include(imp.outerHTML, 'data-test="pass"');
+          assert.include(imp.outerHTML, 'data-attr=""');
+        });
       });
     </script>
   </body>
