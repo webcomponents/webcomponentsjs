@@ -17,6 +17,12 @@ if (typeof HTMLTemplateElement === 'undefined') {
     var contentDoc = document.implementation.createHTMLDocument('template');
     var canDecorate = true;
 
+    var templateStyle = document.createElement('style');
+    templateStyle.textContent = TEMPLATE_TAG + '{display:none;}';
+
+    var head = document.head;
+    head.insertBefore(templateStyle, head.firstElementChild);
+
     /**
       Provides a minimal shim for the <template> element.
     */

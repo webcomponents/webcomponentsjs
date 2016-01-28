@@ -15,9 +15,20 @@
     <script src="../../../web-component-tester/browser.js"></script>
   </head>
   <body>
-    <template>
-      <span id="content">Hello World!</span>
-    </template>
+    <style>
+      .container {
+        display: flex;
+      }
+      .container > *{
+        flex: 1;
+      }
+    </style>
+
+    <div class="container">
+      <template>
+        <span id="content">Hello World!</span>
+      </template>
+    </div>
 
     <script>
       suite('Template', function() {
@@ -62,6 +73,12 @@
           // innerHTML is properly escaped
           assert.equal(imp.innerHTML, escaped);
           assert.equal(imp.content.childNodes.length, div.childNodes.length);
+        });
+
+        test('No rendering', function() {
+          var bcr = template.getBoundingClientRect();
+          assert.equal(bcr.height, 0);
+          assert.equal(bcr.width, 0);
         });
       });
     </script>
