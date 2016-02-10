@@ -9,10 +9,24 @@
  */
 
 // minimal template polyfill
-if (typeof HTMLTemplateElement === 'undefined') {
-  (function() {
+(function() {
+  var needsTemplate = (typeof HTMLTemplateElement === 'undefined');
 
-    var TEMPLATE_TAG = 'template';
+  // returns true if nested templates can be cloned (they cannot be on 
+  // some impl's like Safari 8)
+  var needsCloning = (function() {
+    if (!needsTemplate) {
+      var t = document.createElement('template');
+      t.innerHTML = '<div></div>';
+      var clone = t.cloneNode(true);
+      return (clone.content.childNodes.length === 0);
+    }
+  })();
+
+  var TEMPLATE_TAG = 'template';
+  var TemplateImpl = function() {};
+
+  if (needsTemplate) {
 
     var contentDoc = document.implementation.createHTMLDocument('template');
     var canDecorate = true;
@@ -20,14 +34,14 @@ if (typeof HTMLTemplateElement === 'undefined') {
     /**
       Provides a minimal shim for the <template> element.
     */
-    HTMLTemplateElement = function() {};
-    HTMLTemplateElement.prototype = Object.create(HTMLElement.prototype);
+    
+    TemplateImpl.prototype = Object.create(HTMLElement.prototype);
 
     /**
       The `decorate` method moves element children to the template's `content`.
       NOTE: there is no support for dynamically adding elements to templates.
     */
-    HTMLTemplateElement.decorate = function(template) {
+    TemplateImpl.decorate = function(template) {
       // if the template is decorated, return fast
       if (template.content) {
         return;
@@ -51,7 +65,7 @@ if (typeof HTMLTemplateElement === 'undefined') {
             },
             set: function(text) {
               contentDoc.body.innerHTML = text;
-              HTMLTemplateElement.bootstrap(contentDoc);
+              TemplateImpl.bootstrap(contentDoc);
               while (this.content.firstChild) {
                 this.content.removeChild(this.content.firstChild);
               }
@@ -63,7 +77,7 @@ if (typeof HTMLTemplateElement === 'undefined') {
           });
 
           template.cloneNode = function(deep) {
-            return HTMLTemplateElement.cloneNode(this, deep);
+            return TemplateImpl.cloneNode(this, deep);
           };
 
         } catch (err) {
@@ -71,73 +85,23 @@ if (typeof HTMLTemplateElement === 'undefined') {
         }
       }
       // bootstrap recursively
-      HTMLTemplateElement.bootstrap(template.content);
-    };
-
-    var nativeCloneNode = Node.prototype.cloneNode;
-
-    HTMLTemplateElement.cloneNode = function(template, deep) {
-      var clone = nativeCloneNode.call(template);
-      this.decorate(clone);
-      if (deep) {
-        // NOTE: use native clone node to make sure CE's wrapped
-        // cloneNode does not cause elements to upgrade.
-        clone.content.appendChild(
-            nativeCloneNode.call(template.content, true));
-        // these two lists should be coincident
-        this.fixClonedDom(clone.content, template.content);
-      }
-      return clone;
-    };
-
-    HTMLTemplateElement.fixClonedDom = function(clone, source) {
-      var s$ = source.querySelectorAll(TEMPLATE_TAG);
-      var t$ = clone.querySelectorAll(TEMPLATE_TAG);
-      for (var i=0, l=t$.length, t, s; i<l; i++) {
-        s = s$[i];
-        t = t$[i];
-        this.decorate(s);
-        t.parentNode.replaceChild(s.cloneNode(true), t);
-      }
-    };
-
-    var originalImportNode = document.importNode;
-
-    Node.prototype.cloneNode = function(deep) {
-      var dom = nativeCloneNode.call(this, deep);
-      if (deep) {
-        HTMLTemplateElement.fixClonedDom(dom, this);
-      }
-      return dom;
-    };
-
-    // clone instead of importing <template>
-    document.importNode = function(element, deep) {
-      if (element.localName === TEMPLATE_TAG) {
-        return HTMLTemplateElement.cloneNode(element, deep);
-      } else {
-        var dom = originalImportNode.call(document, element, deep);
-        if (deep) {
-          HTMLTemplateElement.fixClonedDom(dom, element);
-        }
-        return dom;
-      }
+      TemplateImpl.bootstrap(template.content);
     };
 
     /**
       The `bootstrap` method is called automatically and "fixes" all
       <template> elements in the document referenced by the `doc` argument.
     */
-    HTMLTemplateElement.bootstrap = function(doc) {
+    TemplateImpl.bootstrap = function(doc) {
       var templates = doc.querySelectorAll(TEMPLATE_TAG);
       for (var i=0, l=templates.length, t; (i<l) && (t=templates[i]); i++) {
-        HTMLTemplateElement.decorate(t);
+        TemplateImpl.decorate(t);
       }
     };
 
     // auto-bootstrapping for main document
     document.addEventListener('DOMContentLoaded', function() {
-      HTMLTemplateElement.bootstrap(document);
+      TemplateImpl.bootstrap(document);
     });
 
     // Patch document.createElement to ensure newly created templates have content
@@ -146,7 +110,7 @@ if (typeof HTMLTemplateElement === 'undefined') {
       'use strict';
       var el = createElement.apply(document, arguments);
       if (el.localName == 'template') {
-        HTMLTemplateElement.decorate(el);
+        TemplateImpl.decorate(el);
       }
       return el;
     };
@@ -169,6 +133,67 @@ if (typeof HTMLTemplateElement === 'undefined') {
     function escapeData(s) {
       return s.replace(escapeDataRegExp, escapeReplace);
     }
+  }
 
-  })();
-}
+  // make cloning/importing work!
+  if (needsTemplate || needsCloning) {
+    var nativeCloneNode = Node.prototype.cloneNode;
+
+    TemplateImpl.cloneNode = function(template, deep) {
+      var clone = nativeCloneNode.call(template);
+      if (this.decorate) {
+        this.decorate(clone);
+      }
+      if (deep) {
+        // NOTE: use native clone node to make sure CE's wrapped
+        // cloneNode does not cause elements to upgrade.
+        clone.content.appendChild(
+            nativeCloneNode.call(template.content, true));
+        // these two lists should be coincident
+        this.fixClonedDom(clone.content, template.content);
+      }
+      return clone;
+    };
+
+    TemplateImpl.fixClonedDom = function(clone, source) {
+      var s$ = source.querySelectorAll(TEMPLATE_TAG);
+      var t$ = clone.querySelectorAll(TEMPLATE_TAG);
+      for (var i=0, l=t$.length, t, s; i<l; i++) {
+        s = s$[i];
+        t = t$[i];
+        if (this.decorate) {
+          this.decorate(s);
+        }
+        t.parentNode.replaceChild(s.cloneNode(true), t);
+      }
+    };
+
+    var originalImportNode = document.importNode;
+
+    Node.prototype.cloneNode = function(deep) {
+      var dom = nativeCloneNode.call(this, deep);
+      if (deep) {
+        TemplateImpl.fixClonedDom(dom, this);
+      }
+      return dom;
+    };
+
+    // clone instead of importing <template>
+    document.importNode = function(element, deep) {
+      if (element.localName === TEMPLATE_TAG) {
+        return TemplateImpl.cloneNode(element, deep);
+      } else {
+        var dom = originalImportNode.call(document, element, deep);
+        if (deep) {
+          TemplateImpl.fixClonedDom(dom, element);
+        }
+        return dom;
+      }
+    };
+  }
+
+  if (needsTemplate) {
+    HTMLTemplateElement = TemplateImpl;
+  }
+
+})();
