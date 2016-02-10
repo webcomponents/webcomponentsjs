@@ -85,25 +85,43 @@ if (typeof HTMLTemplateElement === 'undefined') {
         clone.content.appendChild(
             nativeCloneNode.call(template.content, true));
         // these two lists should be coincident
-        var s$ = template.content.querySelectorAll(TEMPLATE_TAG);
-        var t$ = clone.content.querySelectorAll(TEMPLATE_TAG);
-        for (var i=0, l=t$.length, t, s; i<l; i++) {
-          s = s$[i];
-          t = t$[i];
-          this.decorate(s);
-          t.parentNode.replaceChild(s.cloneNode(true), t);
-        }
+        this.fixClonedDom(clone.content, template.content);
       }
       return clone;
     };
 
+    HTMLTemplateElement.fixClonedDom = function(clone, source) {
+      var s$ = source.querySelectorAll(TEMPLATE_TAG);
+      var t$ = clone.querySelectorAll(TEMPLATE_TAG);
+      for (var i=0, l=t$.length, t, s; i<l; i++) {
+        s = s$[i];
+        t = t$[i];
+        this.decorate(s);
+        t.parentNode.replaceChild(s.cloneNode(true), t);
+      }
+    };
+
     var originalImportNode = document.importNode;
+
+    Node.prototype.cloneNode = function(deep) {
+      var dom = nativeCloneNode.call(this, deep);
+      if (deep) {
+        HTMLTemplateElement.fixClonedDom(dom, this);
+      }
+      return dom;
+    };
 
     // clone instead of importing <template>
     document.importNode = function(element, deep) {
-      return (element.localName === TEMPLATE_TAG) ?
-        HTMLTemplateElement.cloneNode(element, deep) :
-        originalImportNode.call(document, element, deep);
+      if (element.localName === TEMPLATE_TAG) {
+        return HTMLTemplateElement.cloneNode(element, deep);
+      } else {
+        var dom = originalImportNode.call(document, element, deep);
+        if (deep) {
+          HTMLTemplateElement.fixClonedDom(dom, element);
+        }
+        return dom;
+      }
     };
 
     /**
