@@ -70,32 +70,31 @@ if (typeof HTMLTemplateElement === 'undefined') {
           canDecorate = false;
         }
       }
-
-      var nativeCloneNode = Node.prototype.cloneNode;
-
-      HTMLTemplateElement.cloneNode = function(template, deep) {
-        var clone = nativeCloneNode.call(template);
-        this.decorate(clone);
-        if (deep) {
-          // NOTE: use native clone node to make sure CE's wrapped
-          // cloneNode does not cause elements to upgrade.
-          clone.content.appendChild(
-              nativeCloneNode.call(template.content, true));
-          // these two lists should be coincident
-          var s$ = template.content.querySelectorAll(TEMPLATE_TAG);
-          var t$ = clone.content.querySelectorAll(TEMPLATE_TAG);
-          for (var i=0, l=t$.length, t, s; i<l; i++) {
-            s = s$[i];
-            t = t$[i];
-            this.decorate(s);
-            t.parentNode.replaceChild(s.cloneNode(true), t);
-          }        
-        }
-        return clone;
-      };
-
       // bootstrap recursively
       HTMLTemplateElement.bootstrap(template.content);
+    };
+
+    var nativeCloneNode = Node.prototype.cloneNode;
+
+    HTMLTemplateElement.cloneNode = function(template, deep) {
+      var clone = nativeCloneNode.call(template);
+      this.decorate(clone);
+      if (deep) {
+        // NOTE: use native clone node to make sure CE's wrapped
+        // cloneNode does not cause elements to upgrade.
+        clone.content.appendChild(
+            nativeCloneNode.call(template.content, true));
+        // these two lists should be coincident
+        var s$ = template.content.querySelectorAll(TEMPLATE_TAG);
+        var t$ = clone.content.querySelectorAll(TEMPLATE_TAG);
+        for (var i=0, l=t$.length, t, s; i<l; i++) {
+          s = s$[i];
+          t = t$[i];
+          this.decorate(s);
+          t.parentNode.replaceChild(s.cloneNode(true), t);
+        }        
+      }
+      return clone;
     };
 
     var originalImportNode = document.importNode;
