@@ -71,12 +71,12 @@
           var clone = imp.cloneNode();
           assert.notEqual(clone, imp, 'element is not cloned');
           assert.isDefined(clone.content, 'cloned template content dne');
-          assert.equal(clone.content.childNodes.length, 0, 
+          assert.equal(clone.content.childNodes.length, 0,
               'non-deep cloned template.content is not empty');
           var deepClone = imp.cloneNode(true);
-          assert.equal(deepClone.content.childNodes.length, 1, 
+          assert.equal(deepClone.content.childNodes.length, 1,
               'deep cloned template.content is empty');
-          assert.notEqual(imp.content.firstChild, deepClone.content.firstChild, 
+          assert.notEqual(imp.content.firstChild, deepClone.content.firstChild,
               'cloned content is not different from source');
         });
 
@@ -87,24 +87,24 @@
           var clone = imp.cloneNode();
           assert.notEqual(clone, imp, 'element is not cloned');
           assert.isDefined(clone.content, 'cloned template content dne');
-          assert.equal(clone.content.childNodes.length, 0, 
+          assert.equal(clone.content.childNodes.length, 0,
               'non-deep cloned template.content is not empty');
           var deepClone = imp.cloneNode(true);
-          assert.equal(deepClone.content.childNodes.length, 2, 
+          assert.equal(deepClone.content.childNodes.length, 2,
               'deep cloned template.content is empty');
-          assert.notEqual(imp.content.firstChild, deepClone.content.firstChild, 
+          assert.notEqual(imp.content.firstChild, deepClone.content.firstChild,
               'cloned content is not different from source');
           var nested = deepClone.content.lastChild;
           assert.isDefined(nested.content, 'nested cloned template content dne');
-          assert.equal(nested.content.childNodes.length, 2, 
+          assert.equal(nested.content.childNodes.length, 2,
               'deep cloned template.content is empty');
           nested = nested.content.lastChild;
           assert.isDefined(nested, 'nested cloned template content dne');
-          assert.equal(nested.content.childNodes.length, 2, 
+          assert.equal(nested.content.childNodes.length, 2,
               'deep cloned template.content is empty');
           nested = nested.content.lastChild;
           assert.isDefined(nested, 'nested cloned template content dne');
-          assert.equal(nested.content.childNodes.length, 1, 
+          assert.equal(nested.content.childNodes.length, 1,
               'deep cloned template.content is empty');
         });
 
@@ -112,15 +112,15 @@
           var imp = document.createElement('template');
           var s = '<div>Hi</div>';
           imp.innerHTML = s;
-          var clone = document.importNode(imp);
+          var clone = document.importNode(imp, false);
           assert.notEqual(clone, imp, 'element is not cloned');
           assert.isDefined(clone.content, 'cloned template content dne');
-          assert.equal(clone.content.childNodes.length, 0, 
+          assert.equal(clone.content.childNodes.length, 0,
               'non-deep cloned template.content is not empty');
           var deepClone = document.importNode(imp, true);
-          assert.equal(deepClone.content.childNodes.length, 1, 
+          assert.equal(deepClone.content.childNodes.length, 1,
               'deep cloned template.content is empty');
-          assert.notEqual(imp.content.firstChild, deepClone.content.firstChild, 
+          assert.notEqual(imp.content.firstChild, deepClone.content.firstChild,
               'cloned content is not different from source');
         });
 
@@ -128,27 +128,27 @@
           var imp = document.createElement('template');
           var s = 'a<template id="a">b<template id="b">c<template id="c">d</template></template></template>';
           imp.innerHTML = s;
-          var clone = document.importNode(imp);
+          var clone = document.importNode(imp, false);
           assert.notEqual(clone, imp, 'element is not cloned');
           assert.isDefined(clone.content, 'cloned template content dne');
-          assert.equal(clone.content.childNodes.length, 0, 
+          assert.equal(clone.content.childNodes.length, 0,
               'non-deep cloned template.content is not empty');
           var deepClone = document.importNode(imp, true);
-          assert.equal(deepClone.content.childNodes.length, 2, 
+          assert.equal(deepClone.content.childNodes.length, 2,
               'deep cloned template.content is empty');
-          assert.notEqual(imp.content.firstChild, deepClone.content.firstChild, 
+          assert.notEqual(imp.content.firstChild, deepClone.content.firstChild,
               'cloned content is not different from source');
           var nested = deepClone.content.lastChild;
           assert.isDefined(nested.content, 'nested cloned template content dne');
-          assert.equal(nested.content.childNodes.length, 2, 
+          assert.equal(nested.content.childNodes.length, 2,
               'deep cloned template.content is empty');
           nested = nested.content.lastChild;
           assert.isDefined(nested, 'nested cloned template content dne');
-          assert.equal(nested.content.childNodes.length, 2, 
+          assert.equal(nested.content.childNodes.length, 2,
               'deep cloned template.content is empty');
           nested = nested.content.lastChild;
           assert.isDefined(nested, 'nested cloned template content dne');
-          assert.equal(nested.content.childNodes.length, 1, 
+          assert.equal(nested.content.childNodes.length, 1,
               'deep cloned template.content is empty');
         });
 

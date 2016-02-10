@@ -92,7 +92,7 @@ if (typeof HTMLTemplateElement === 'undefined') {
           t = t$[i];
           this.decorate(s);
           t.parentNode.replaceChild(s.cloneNode(true), t);
-        }        
+        }
       }
       return clone;
     };
