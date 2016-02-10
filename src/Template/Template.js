@@ -17,9 +17,9 @@
   var needsCloning = (function() {
     if (!needsTemplate) {
       var t = document.createElement('template');
-      t.innerHTML = '<div></div>';
+      t.innerHTML = '<template><div></div></template>';
       var clone = t.cloneNode(true);
-      return (clone.content.childNodes.length === 0);
+      return (clone.content.firstChild.content.childNodes.length == 0);
     }
   })();
 
