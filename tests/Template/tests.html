@@ -206,6 +206,21 @@
               'deep cloned template.content is empty');
         });
 
+        test('importNode: templates have proper owner document', function() {
+          var doc = document.implementation.createHTMLDocument('');
+          var imp = doc.createElement('div');
+          var t = doc.createElement('template');
+          var s = 'a<template id="a">b<template id="b">c<template id="c">d</template></template></template>';
+          t.innerHTML = s;
+          imp.appendChild(t);
+          var impClone = document.importNode(imp, true);
+          imp = imp.firstChild;
+          var deepClone = impClone.firstChild;
+          assert.notEqual(imp.ownerDocument, document);
+          assert.equal(impClone.ownerDocument, document);
+          assert.equal(deepClone.ownerDocument, document);
+        });
+
       });
     </script>
   </body>

@@ -139,10 +139,16 @@
 
   // make cloning/importing work!
   if (needsTemplate || needsCloning) {
+    // NOTE: we rely on this cloneNode not causing element upgrade.
+    // This means this polyfill must load before the CE polyfill and
+    // this would need to be re-worked if a browser supports native CE
+    // but not <template>.
     var nativeCloneNode = Node.prototype.cloneNode;
 
     TemplateImpl.cloneNode = function(template, deep) {
       var clone = nativeCloneNode.call(template);
+      // NOTE: decorate doesn't auto-fix children because they are already
+      // decorated so they need special clone fixup.
       if (this.decorate) {
         this.decorate(clone);
       }
@@ -151,13 +157,17 @@
         // cloneNode does not cause elements to upgrade.
         clone.content.appendChild(
             nativeCloneNode.call(template.content, true));
-        // these two lists should be coincident
+        // now ensure nested templates are cloned correctly.
         this.fixClonedDom(clone.content, template.content);
       }
       return clone;
     };
 
+    // Given a source and cloned subtree, find <template>'s in the cloned 
+    // subtree and replace them with cloned <template>'s from source.
+    // We must do this because only the source templates have proper .content.
     TemplateImpl.fixClonedDom = function(clone, source) {
+      // these two lists should be coincident
       var s$ = source.querySelectorAll(TEMPLATE_TAG);
       var t$ = clone.querySelectorAll(TEMPLATE_TAG);
       for (var i=0, l=t$.length, t, s; i<l; i++) {
@@ -172,15 +182,22 @@
 
     var originalImportNode = document.importNode;
 
+    // override all cloning to fix the cloned subtree to contain properly
+    // cloned templates.
     Node.prototype.cloneNode = function(deep) {
       var dom = nativeCloneNode.call(this, deep);
+      // template.content is cloned iff `deep`.
       if (deep) {
         TemplateImpl.fixClonedDom(dom, this);
       }
       return dom;
     };
 
-    // clone instead of importing <template>
+    // NOTE: we are cloning instead of importing <template>'s.
+    // However, the ownerDocument of the cloned template will be correct!
+    // This is because the native import node creates the right document owned 
+    // subtree and `fixClonedDom` inserts cloned templates into this subtree,
+    // thus updating the owner doc.
     document.importNode = function(element, deep) {
       if (element.localName === TEMPLATE_TAG) {
         return TemplateImpl.cloneNode(element, deep);
