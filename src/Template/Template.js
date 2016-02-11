@@ -192,6 +192,13 @@
         return dom;
       }
     };
+
+    if (needsCloning) {
+      HTMLTemplateElement.prototype.cloneNode = function(deep) {
+        return TemplateImpl.cloneNode(this, deep);
+      };
+    }
+    
   }
 
   if (needsTemplate) {
