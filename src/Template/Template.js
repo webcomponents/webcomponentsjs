@@ -16,10 +16,12 @@
   // some impl's like Safari 8)
   var needsCloning = (function() {
     if (!needsTemplate) {
+      var frag = document.createDocumentFragment();
       var t = document.createElement('template');
-      t.innerHTML = '<template><div></div></template>';
-      var clone = t.cloneNode(true);
-      return (clone.content.firstChild.content.childNodes.length == 0);
+      frag.appendChild(t);
+      t.content.appendChild(document.createElement('div'));
+      var clone = frag.cloneNode(true);
+      return (clone.firstChild.content.childNodes.length === 0);
     }
   })();
 
