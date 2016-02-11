@@ -9,10 +9,26 @@
  */
 
 // minimal template polyfill
-if (typeof HTMLTemplateElement === 'undefined') {
-  (function() {
+(function() {
+  var needsTemplate = (typeof HTMLTemplateElement === 'undefined');
 
-    var TEMPLATE_TAG = 'template';
+  // returns true if nested templates can be cloned (they cannot be on 
+  // some impl's like Safari 8)
+  var needsCloning = (function() {
+    if (!needsTemplate) {
+      var frag = document.createDocumentFragment();
+      var t = document.createElement('template');
+      frag.appendChild(t);
+      t.content.appendChild(document.createElement('div'));
+      var clone = frag.cloneNode(true);
+      return (clone.firstChild.content.childNodes.length === 0);
+    }
+  })();
+
+  var TEMPLATE_TAG = 'template';
+  var TemplateImpl = function() {};
+
+  if (needsTemplate) {
 
     var contentDoc = document.implementation.createHTMLDocument('template');
     var canDecorate = true;
@@ -20,14 +36,14 @@ if (typeof HTMLTemplateElement === 'undefined') {
     /**
       Provides a minimal shim for the <template> element.
     */
-    HTMLTemplateElement = function() {};
-    HTMLTemplateElement.prototype = Object.create(HTMLElement.prototype);
+    
+    TemplateImpl.prototype = Object.create(HTMLElement.prototype);
 
     /**
       The `decorate` method moves element children to the template's `content`.
       NOTE: there is no support for dynamically adding elements to templates.
     */
-    HTMLTemplateElement.decorate = function(template) {
+    TemplateImpl.decorate = function(template) {
       // if the template is decorated, return fast
       if (template.content) {
         return;
@@ -51,7 +67,7 @@ if (typeof HTMLTemplateElement === 'undefined') {
             },
             set: function(text) {
               contentDoc.body.innerHTML = text;
-              HTMLTemplateElement.bootstrap(contentDoc);
+              TemplateImpl.bootstrap(contentDoc);
               while (this.content.firstChild) {
                 this.content.removeChild(this.content.firstChild);
               }
@@ -61,29 +77,33 @@ if (typeof HTMLTemplateElement === 'undefined') {
             },
             configurable: true
           });
+
+          template.cloneNode = function(deep) {
+            return TemplateImpl.cloneNode(this, deep);
+          };
+
         } catch (err) {
           canDecorate = false;
         }
       }
-
       // bootstrap recursively
-      HTMLTemplateElement.bootstrap(template.content);
+      TemplateImpl.bootstrap(template.content);
     };
 
     /**
       The `bootstrap` method is called automatically and "fixes" all
       <template> elements in the document referenced by the `doc` argument.
     */
-    HTMLTemplateElement.bootstrap = function(doc) {
+    TemplateImpl.bootstrap = function(doc) {
       var templates = doc.querySelectorAll(TEMPLATE_TAG);
       for (var i=0, l=templates.length, t; (i<l) && (t=templates[i]); i++) {
-        HTMLTemplateElement.decorate(t);
+        TemplateImpl.decorate(t);
       }
     };
 
     // auto-bootstrapping for main document
     document.addEventListener('DOMContentLoaded', function() {
-      HTMLTemplateElement.bootstrap(document);
+      TemplateImpl.bootstrap(document);
     });
 
     // Patch document.createElement to ensure newly created templates have content
@@ -92,7 +112,7 @@ if (typeof HTMLTemplateElement === 'undefined') {
       'use strict';
       var el = createElement.apply(document, arguments);
       if (el.localName == 'template') {
-        HTMLTemplateElement.decorate(el);
+        TemplateImpl.decorate(el);
       }
       return el;
     };
@@ -115,6 +135,91 @@ if (typeof HTMLTemplateElement === 'undefined') {
     function escapeData(s) {
       return s.replace(escapeDataRegExp, escapeReplace);
     }
+  }
 
-  })();
-}
+  // make cloning/importing work!
+  if (needsTemplate || needsCloning) {
+    // NOTE: we rely on this cloneNode not causing element upgrade.
+    // This means this polyfill must load before the CE polyfill and
+    // this would need to be re-worked if a browser supports native CE
+    // but not <template>.
+    var nativeCloneNode = Node.prototype.cloneNode;
+
+    TemplateImpl.cloneNode = function(template, deep) {
+      var clone = nativeCloneNode.call(template);
+      // NOTE: decorate doesn't auto-fix children because they are already
+      // decorated so they need special clone fixup.
+      if (this.decorate) {
+        this.decorate(clone);
+      }
+      if (deep) {
+        // NOTE: use native clone node to make sure CE's wrapped
+        // cloneNode does not cause elements to upgrade.
+        clone.content.appendChild(
+            nativeCloneNode.call(template.content, true));
+        // now ensure nested templates are cloned correctly.
+        this.fixClonedDom(clone.content, template.content);
+      }
+      return clone;
+    };
+
+    // Given a source and cloned subtree, find <template>'s in the cloned 
+    // subtree and replace them with cloned <template>'s from source.
+    // We must do this because only the source templates have proper .content.
+    TemplateImpl.fixClonedDom = function(clone, source) {
+      // these two lists should be coincident
+      var s$ = source.querySelectorAll(TEMPLATE_TAG);
+      var t$ = clone.querySelectorAll(TEMPLATE_TAG);
+      for (var i=0, l=t$.length, t, s; i<l; i++) {
+        s = s$[i];
+        t = t$[i];
+        if (this.decorate) {
+          this.decorate(s);
+        }
+        t.parentNode.replaceChild(s.cloneNode(true), t);
+      }
+    };
+
+    var originalImportNode = document.importNode;
+
+    // override all cloning to fix the cloned subtree to contain properly
+    // cloned templates.
+    Node.prototype.cloneNode = function(deep) {
+      var dom = nativeCloneNode.call(this, deep);
+      // template.content is cloned iff `deep`.
+      if (deep) {
+        TemplateImpl.fixClonedDom(dom, this);
+      }
+      return dom;
+    };
+
+    // NOTE: we are cloning instead of importing <template>'s.
+    // However, the ownerDocument of the cloned template will be correct!
+    // This is because the native import node creates the right document owned 
+    // subtree and `fixClonedDom` inserts cloned templates into this subtree,
+    // thus updating the owner doc.
+    document.importNode = function(element, deep) {
+      if (element.localName === TEMPLATE_TAG) {
+        return TemplateImpl.cloneNode(element, deep);
+      } else {
+        var dom = originalImportNode.call(document, element, deep);
+        if (deep) {
+          TemplateImpl.fixClonedDom(dom, element);
+        }
+        return dom;
+      }
+    };
+
+    if (needsCloning) {
+      HTMLTemplateElement.prototype.cloneNode = function(deep) {
+        return TemplateImpl.cloneNode(this, deep);
+      };
+    }
+    
+  }
+
+  if (needsTemplate) {
+    HTMLTemplateElement = TemplateImpl;
+  }
+
+})();
