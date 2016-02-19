@@ -37,6 +37,12 @@
           template = document.querySelector('template');
         });
 
+        test('No rendering', function() {
+          var bcr = template.getBoundingClientRect();
+          assert.equal(bcr.height, 0);
+          assert.equal(bcr.width, 0);
+        });
+
         test('content', function() {
           assert.equal(template.childNodes.length, 0, 'template children evacipated');
           assert.isDefined(template.content, 'template content exists');
@@ -73,12 +79,6 @@
           // innerHTML is properly escaped
           assert.equal(imp.innerHTML, escaped);
           assert.equal(imp.content.textContent, div.textContent);
-        });
-
-        test('No rendering', function() {
-          var bcr = template.getBoundingClientRect();
-          assert.equal(bcr.height, 0);
-          assert.equal(bcr.width, 0);
         });
 
         test('clone', function() {
