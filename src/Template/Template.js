@@ -225,7 +225,7 @@
   }
 
   if (needsTemplate) {
-    HTMLTemplateElement = TemplateImpl;
+    window.HTMLTemplateElement = TemplateImpl;
   }
 
 })();
