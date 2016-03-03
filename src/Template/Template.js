@@ -173,6 +173,8 @@
     // subtree and replace them with cloned <template>'s from source.
     // We must do this because only the source templates have proper .content.
     TemplateImpl.fixClonedDom = function(clone, source) {
+      // do nothing if cloned node is not an element
+      if (!source.querySelectorAll) return;
       // these two lists should be coincident
       var s$ = source.querySelectorAll(TEMPLATE_TAG);
       var t$ = clone.querySelectorAll(TEMPLATE_TAG);
