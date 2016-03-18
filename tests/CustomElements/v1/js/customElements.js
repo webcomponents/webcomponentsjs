@@ -116,6 +116,25 @@ suite('customElements', function() {
     assert.instanceOf(xsub, XSub1);
   });
 
+  test('document.defineElement create ES5 via new', function() {
+    function XFooES5() {
+      CustomElements.setCurrentTag('x-foo-es5');
+      // Note the return is super (ahem) important!
+      return HTMLElement.call(this);
+    }
+    XFooES5.prototype = Object.create(HTMLElement.prototype);
+    XFooES5.prototype.constructor = XFooES5;
+    // register x-foo
+    document.defineElement('x-foo-es5', XFooES5);
+    // create an instance via new
+    var xfoo = new XFooES5();
+    console.log(xfoo);
+    // test localName
+    assert.equal(xfoo.localName, 'x-foo-es5');
+    // test instanceof
+    assert.instanceOf(xfoo, XFooES5);
+  });
+
   test('document.defineElement create via createElement', function() {
     class XFoo2 extends HTMLElement {
       constructor() {
@@ -165,6 +184,24 @@ suite('customElements', function() {
     // test instanceof
     assert.instanceOf(xsuper, XSuper2);
     assert.instanceOf(xsub, XSub2);
+  });
+
+  test('document.defineElement create ES5 via createElement', function() {
+    function XBarES5() {
+      CustomElements.setCurrentTag('x-bar-es5');
+      return HTMLElement.call(this);
+    }
+    XBarES5.prototype = Object.create(HTMLElement.prototype);
+    XBarES5.prototype.constructor = XBarES5;
+    // register x-foo
+    document.defineElement('x-bar-es5', XBarES5);
+    // create an instance via createElement
+    var xbar = document.createElement('x-bar-es5');
+    console.log(xbar);
+    // test localName
+    assert.equal(xbar.localName, 'x-bar-es5');
+    // test instanceof
+    assert.instanceOf(xbar, XBarES5);
   });
 
   // test('document.registerElement create via createElementNS', function() {
