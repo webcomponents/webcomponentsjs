@@ -143,9 +143,8 @@
       this._definitions.set(localName, definition);
 
       // 5.1.22
-      // The spec says we should upgrade all existing elements now, but if we
-      // defer we can do less tree walks
-      // scheduleUpgrade();
+      // this causes an upgrade of the document
+      this._addNodes(document.childNodes);
     },
 
     flush() {
