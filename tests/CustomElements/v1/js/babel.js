@@ -12,7 +12,7 @@ suite('babel', function() {
 
   // Fails because the XTypescript constructor does not return the result of
   // the super call. See: https://github.com/Microsoft/TypeScript/issues/7574
-  test('document.defineElement create typescript generated ES5 via new', function() {
+  test('document.defineElement create babel generated ES5 via new', function() {
     'use strict';
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -45,7 +45,7 @@ suite('babel', function() {
     assert.instanceOf(e, XBabel);
   });
 
-  test('document.defineElement create typescript generated ES5 via createElement', function() {
+  test('document.defineElement create babel generated ES5 via createElement', function() {
     'use strict';
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
