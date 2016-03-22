@@ -29,6 +29,94 @@
 
   window.CustomElements = {};
 
+  function CustomElementsRegistry() {}
+  CustomElementsRegistry.prototype.define = function(name, constructor, options) {
+    // 5.1.1
+    if (typeof constructor !== 'function') {
+      throw new TypeError('constructor must be a Constructor');
+    }
+
+    // 5.1.2
+    name = name.toString().toLowerCase();
+
+    // 5.1.3
+    if (!customNameValidation.test(name)) {
+      throw new Error(`NotSupportedError: Document.defineElement failed for '${name}'. The element name is not valid.`);
+    }
+    if (isReservedTag(name)) {
+      throw new Error(`NotSupportedError: Document.defineElement failed for '${name}'. The element name is reserved.`);
+    }
+
+    // 5.1.4? Can't polyfill?
+
+    // 5.1.5
+    if (registry.has(name)) {
+      throw new Error(`NotSupportedError: Document.defineElement an element with name '${name}' is already registered`);
+    }
+
+    // 5.1.6
+    // IE11 doesn't support Map.values, only Map.forEach
+    registry.forEach(function(value, key) {
+      if (value.constructor === constructor) {
+        throw new Error(`NotSupportedError: Document.defineElement failed for '${name}'. The constructor is already used.`);
+      }
+    });
+
+    // 5.1.7
+    var localName = name;
+
+    // 5.1.8
+    var _extends = options && options.extends || '';
+
+    // 5.1.9
+    if (_extends !== null) {
+      // skip for now
+    }
+
+    // 5.1.10, 5.1.11
+    var observedAttributes = constructor.observedAttributes || [];
+
+    // 5.1.12
+    var prototype = constructor.prototype;
+
+    // 5.1.13?
+
+    // 5.1.14
+    var attachedCallback = prototype.attachedCallback;
+    // 5.1.15
+    checkCallback(attachedCallback, localName, 'attachedCallback');
+    // 5.1.16
+    var detachedCallback = prototype.detachedCallback;
+    // 5.1.17
+    checkCallback(detachedCallback, localName, 'detachedCallback');
+    // 5.1.18
+    var attributeChangedCallback = prototype.attributeChangedCallback;
+    // 5.1.19
+    checkCallback(attributeChangedCallback, localName, 'attributeChangedCallback');
+
+    // 5.1.20
+    // @type {Definition}
+    var definition = {
+      name: name,
+      localName: localName,
+      constructor: constructor,
+      attachedCallback: attachedCallback,
+      detachedCallback: detachedCallback,
+      attributeChangedCallback: attributeChangedCallback,
+      observedAttributes: observedAttributes,
+    };
+
+    // 5.1.21
+    registry.set(localName, definition);
+
+    // 5.1.22
+    // The spec says we should upgrade all existing elements now, but if we
+    // defer we can do less tree walks
+    scheduleUpgrade();
+  };
+
+  window.customElements = new CustomElementsRegistry();
+
   function observeRoot(root) {
     if (!root.__observer) {
       var observer = new MutationObserver(handleMutations);
@@ -127,91 +215,6 @@
 
   function scheduleMicrotask(task) {
     return microtaskScheduler.then(task);
-  }
-
-  document.defineElement = function(name, constructor, options) {
-    // 5.1.1
-    if (typeof constructor !== 'function') {
-      throw new TypeError('constructor must be a Constructor');
-    }
-
-    // 5.1.2
-    name = name.toString().toLowerCase();
-
-    // 5.1.3
-    if (!customNameValidation.test(name)) {
-      throw new Error(`NotSupportedError: Document.defineElement failed for '${name}'. The element name is not valid.`);
-    }
-    if (isReservedTag(name)) {
-      throw new Error(`NotSupportedError: Document.defineElement failed for '${name}'. The element name is reserved.`);
-    }
-
-    // 5.1.4? Can't polyfill?
-
-    // 5.1.5
-    if (registry.has(name)) {
-      throw new Error(`NotSupportedError: Document.defineElement an element with name '${name}' is already registered`);
-    }
-
-    // 5.1.6
-    // IE11 doesn't support Map.values, only Map.forEach
-    registry.forEach(function(value, key) {
-      if (value.constructor === constructor) {
-        throw new Error(`NotSupportedError: Document.defineElement failed for '${name}'. The constructor is already used.`);
-      }
-    });
-
-    // 5.1.7
-    var localName = name;
-
-    // 5.1.8
-    var _extends = options && options.extends || '';
-
-    // 5.1.9
-    if (_extends !== null) {
-      // skip for now
-    }
-
-    // 5.1.10, 5.1.11
-    var observedAttributes = constructor.observedAttributes || [];
-
-    // 5.1.12
-    var prototype = constructor.prototype;
-
-    // 5.1.13?
-
-    // 5.1.14
-    var attachedCallback = prototype.attachedCallback;
-    // 5.1.15
-    checkCallback(attachedCallback, localName, 'attachedCallback');
-    // 5.1.16
-    var detachedCallback = prototype.detachedCallback;
-    // 5.1.17
-    checkCallback(detachedCallback, localName, 'detachedCallback');
-    // 5.1.18
-    var attributeChangedCallback = prototype.attributeChangedCallback;
-    // 5.1.19
-    checkCallback(attributeChangedCallback, localName, 'attributeChangedCallback');
-
-    // 5.1.20
-    // @type {Definition}
-    var definition = {
-      name: name,
-      localName: localName,
-      constructor: constructor,
-      attachedCallback: attachedCallback,
-      detachedCallback: detachedCallback,
-      attributeChangedCallback: attributeChangedCallback,
-      observedAttributes: observedAttributes,
-    };
-
-    // 5.1.21
-    registry.set(localName, definition);
-
-    // 5.1.22
-    // The spec says we should upgrade all existing elements now, but if we
-    // defer we can do less tree walks
-    scheduleUpgrade();
   }
 
   function scheduleUpgrade() {
