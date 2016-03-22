@@ -243,7 +243,7 @@ suite('customElements', function() {
 
     // TODO: uncomment when upgrades implemented
     // work.innerHTML = '<X-CASE></X-CASE><x-CaSe></x-CaSe>';
-    // CustomElements.takeRecords();
+    // customElements.flush();
     // assert.equal(work.firstChild.isXCase, true);
     // assert.equal(work.firstChild.nextSibling.isXCase, true);
   });
@@ -402,24 +402,6 @@ suite('customElements', function() {
     done();
   });
 
-  // test('document.registerElement can use Functions as definitions', function() {
-  //   // function used as Custom Element defintion
-  //   function A$A() {
-  //     this.alive = true;
-  //   }
-  //   A$A.prototype = Object.create(HTMLElement.prototype);
-  //   // bind createdCallback to function body
-  //   A$A.prototype.createdCallback = A$A;
-  //   A$A = document.registerElement('a-a', A$A);
-  //   // test via new
-  //   var a = new A$A();
-  //   assert.equal(a.alive, true);
-  //   // test via parser upgrade
-  //   work.innerHTML = '<a-a></a-a>';
-  //   CustomElements.takeRecords();
-  //   assert.equal(work.firstElementChild.alive, true);
-  // });
-
   test('node.cloneNode does not upgrade until attach', function(done) {
     class XBoo extends HTMLElement {
       constructor() {
@@ -462,63 +444,70 @@ suite('customElements', function() {
     assert.isOk(importedEl.__ready__, 'imported element upgraded');
   });
 
-  // test('entered left apply to view', function() {
-  //   var invocations = [];
-  //   var elementProto = Object.create(HTMLElement.prototype);
-  //   elementProto.createdCallback = function() {
-  //     invocations.push('created');
-  //   }
-  //   elementProto.connectedCallback = function() {
-  //     invocations.push('entered');
-  //   }
-  //   elementProto.disconnectedCallback = function() {
-  //     invocations.push('left');
-  //   }
-  //   var tagName = 'x-entered-left-view';
-  //   var CustomElement = document.registerElement(tagName, { prototype: elementProto });
-  //
-  //   var docB = document.implementation.createHTMLDocument('');
-  //   docB.body.innerHTML = '<' + tagName + '></' + tagName + '>';
-  //   CustomElements.upgradeDocumentTree(docB);
-  //   CustomElements.takeRecords();
-  //   assert.deepEqual(invocations, ['created'], 'created but not entered view');
-  //
-  //   var element = docB.body.childNodes[0];
-  //   // note, cannot use instanceof due to IE
-  //   assert.equal(element.__proto__, CustomElement.prototype, 'element is correct type');
-  //
-  //   work.appendChild(element)
-  //   CustomElements.takeRecords();
-  //   assert.deepEqual(invocations, ['created', 'entered'],
-  //       'created and entered view');
-  //
-  //   docB.body.appendChild(element);
-  //   CustomElements.takeRecords();
-  //   assert.deepEqual(invocations, ['created', 'entered', 'left'],
-  //       'created, entered then left view');
-  // });
-  //
-  // test('connectedCallback ordering', function() {
-  //   var log = [];
-  //   var p = Object.create(HTMLElement.prototype);
-  //   p.connectedCallback = function() {
-  //     log.push(this.id);
-  //   };
-  //   document.registerElement('x-boo-ordering', {prototype: p});
-  //
-  //   work.innerHTML =
-  //       '<x-boo-ordering id=a>' +
-  //         '<x-boo-ordering id=b></x-boo-ordering>' +
-  //         '<x-boo-ordering id=c>' +
-  //           '<x-boo-ordering id=d></x-boo-ordering>' +
-  //           '<x-boo-ordering id=e></x-boo-ordering>' +
-  //         '</x-boo-ordering>' +
-  //       '</x-boo-ordering>';
-  //
-  //   CustomElements.takeRecords();
-  //   assert.deepEqual(['a', 'b', 'c', 'd', 'e'], log);
-  // });
-  //
+  test('entered left apply to view', function() {
+    var invocations = [];
+    var tagName = 'x-entered-left';
+    class XEnteredLeft extends HTMLElement {
+      constructor() {
+        customElements.setCurrentTag(tagName);
+        super();
+        invocations.push('constructor');
+      }
+      connectedCallback() {
+        invocations.push('entered');
+      }
+      disconnectedCallback() {
+        invocations.push('left');
+      }
+    }
+    customElements.define(tagName, XEnteredLeft);
+
+    var element = document.createElement(tagName);
+    customElements.flush();
+    assert.deepEqual(invocations, ['constructor'], 'created but not entered view');
+
+    // // note, cannot use instanceof due to IE
+    assert.equal(element.__proto__, XEnteredLeft.prototype, 'element is correct type');
+
+    work.appendChild(element)
+    customElements.flush();
+    assert.deepEqual(invocations, ['constructor', 'entered'],
+        'created and entered view');
+
+    element.parentNode.removeChild(element);
+    customElements.flush();
+    assert.deepEqual(invocations, ['constructor', 'entered', 'left'],
+        'created, entered then left view');
+  });
+
+  test('connectedCallback ordering', function() {
+    var log = [];
+
+    class XOrdering extends HTMLElement {
+      constructor() {
+        customElements.setCurrentTag('x-ordering');
+        super();
+      }
+      connectedCallback() {
+        log.push(this.id);
+      }
+    }
+
+    customElements.define('x-ordering', XOrdering);
+
+    work.innerHTML =
+        '<x-ordering id=a>' +
+          '<x-ordering id=b></x-ordering>' +
+          '<x-ordering id=c>' +
+            '<x-ordering id=d></x-ordering>' +
+            '<x-ordering id=e></x-ordering>' +
+          '</x-ordering>' +
+        '</x-ordering>';
+
+    customElements.flush();
+    assert.deepEqual(['a', 'b', 'c', 'd', 'e'], log);
+  });
+
   // test('attached and detached in same turn', function(done) {
   //   var log = [];
   //   var p = Object.create(HTMLElement.prototype);
