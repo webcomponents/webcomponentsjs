@@ -22,49 +22,49 @@ suite('customElements', function() {
     document.body.removeChild(work);
   });
 
-  test('document.defineElement exists', function() {
-    assert.isFunction(document.defineElement);
+  test('customElements.define exists', function() {
+    assert.isFunction(customElements.define);
   });
 
-  test('document.defineElement requires name argument', function() {
+  test('customElements.define requires name argument', function() {
     assert.throws(function() {
-      document.defineElement();
-    }, '', 'document.defineElement failed to throw when given no arguments');
+      customElements.define();
+    }, '', 'customElements.define failed to throw when given no arguments');
   });
 
-  test('document.defineElement requires name argument to contain a dash', function() {
+  test('customElements.define requires name argument to contain a dash', function() {
     assert.throws(function () {
-      document.defineElement('xfoo', {prototype: Object.create(HTMLElement.prototype)});
-    }, '', 'document.defineElement failed to throw when given no arguments');
+      customElements.define('xfoo', {prototype: Object.create(HTMLElement.prototype)});
+    }, '', 'customElements.define failed to throw when given no arguments');
   });
 
-  test('document.defineElement second argument is not optional', function() {
+  test('customElements.define second argument is not optional', function() {
     assert.throws(function () {
-      document.defineElement('x-no-options');
-    }, '', 'document.defineElement failed to function without ElementRegistionOptions argument');
+      customElements.define('x-no-options');
+    }, '', 'customElements.define failed to function without ElementRegistionOptions argument');
   });
 
-  test('document.defineElement second argument prototype property is not optional', function() {
+  test('customElements.define second argument prototype property is not optional', function() {
     assert.throws(function () {
-      document.defineElement('x-no-proto', {});
-    }, '', 'document.defineElement failed to function without ElementRegistionOptions prototype property');
+      customElements.define('x-no-proto', {});
+    }, '', 'customElements.define failed to function without ElementRegistionOptions prototype property');
   });
 
-  test('document.defineElement requires name argument to not conflict with a reserved name', function() {
+  test('customElements.define requires name argument to not conflict with a reserved name', function() {
     assert.throws(function() {
-      document.defineElement('font-face', {prototype: Object.create(HTMLElement.prototype)});
+      customElements.define('font-face', {prototype: Object.create(HTMLElement.prototype)});
     }, '', 'Failed to execute \'defineElement\' on \'Document\': Registration failed for type \'font-face\'. The type name is invalid.');
   });
 
-  test('document.defineElement requires name argument to be unique', function() {
+  test('customElements.define requires name argument to be unique', function() {
     class XDuplicate extends HTMLElement {}
-    document.defineElement('x-duplicate', XDuplicate);
+    customElements.define('x-duplicate', XDuplicate);
     assert.throws(function() {
-      document.defineElement('x-duplicate', XDuplicate);
-    }, '', 'document.defineElement failed to throw when called multiple times with the same element name');
+      customElements.define('x-duplicate', XDuplicate);
+    }, '', 'customElements.define failed to throw when called multiple times with the same element name');
   });
 
-  test('document.defineElement create via new', function() {
+  test('customElements.define create via new', function() {
     class XFoo extends HTMLElement {
       constructor() {
         CustomElements.setCurrentTag('x-foo');
@@ -72,7 +72,7 @@ suite('customElements', function() {
       }
     }
     // register x-foo
-    document.defineElement('x-foo', XFoo);
+    customElements.define('x-foo', XFoo);
     // create an instance via new
     var xfoo = new XFoo();
     // test localName
@@ -87,7 +87,7 @@ suite('customElements', function() {
     assert.equal(xfoo.textContent, '[x-foo]');
   });
 
-  test('document.defineElement create subclass via new', function() {
+  test('customElements.define create subclass via new', function() {
     class XSuper1 extends HTMLElement {
       constructor() {
         CustomElements.setCurrentTag('x-super-1');
@@ -100,8 +100,8 @@ suite('customElements', function() {
         super();
       }
     }
-    document.defineElement('x-super-1', XSuper1);
-    document.defineElement('x-sub-1', XSub1);
+    customElements.define('x-super-1', XSuper1);
+    customElements.define('x-sub-1', XSub1);
 
     // create an instance via new
     var xsuper = new XSuper1();
@@ -116,7 +116,7 @@ suite('customElements', function() {
     assert.instanceOf(xsub, XSub1);
   });
 
-  test('document.defineElement create ES5 via new', function() {
+  test('customElements.define create ES5 via new', function() {
     function XFooES5() {
       CustomElements.setCurrentTag('x-foo-es5');
       // Note the return is super (ahem) important!
@@ -125,7 +125,7 @@ suite('customElements', function() {
     XFooES5.prototype = Object.create(HTMLElement.prototype);
     XFooES5.prototype.constructor = XFooES5;
     // register x-foo
-    document.defineElement('x-foo-es5', XFooES5);
+    customElements.define('x-foo-es5', XFooES5);
     // create an instance via new
     var xfoo = new XFooES5();
     // test localName
@@ -134,7 +134,7 @@ suite('customElements', function() {
     assert.instanceOf(xfoo, XFooES5);
   });
 
-  test('document.defineElement create via createElement', function() {
+  test('customElements.define create via createElement', function() {
     class XFoo2 extends HTMLElement {
       constructor() {
         CustomElements.setCurrentTag('x-foo');
@@ -142,7 +142,7 @@ suite('customElements', function() {
       }
     }
     // register x-foo
-    var XFoo = document.defineElement('x-foo2', XFoo2);
+    var XFoo = customElements.define('x-foo2', XFoo2);
     // create an instance via createElement
     var xfoo = document.createElement('x-foo2');
     // test localName
@@ -155,7 +155,7 @@ suite('customElements', function() {
     assert.equal(xfoo.textContent, '[x-foo2]');
   });
 
-  test('document.defineElement create subclass via createElement', function() {
+  test('customElements.define create subclass via createElement', function() {
     class XSuper2 extends HTMLElement {
       constructor() {
         CustomElements.setCurrentTag('x-super-1');
@@ -168,8 +168,8 @@ suite('customElements', function() {
         super();
       }
     }
-    document.defineElement('x-super-2', XSuper2);
-    document.defineElement('x-sub-2', XSub2);
+    customElements.define('x-super-2', XSuper2);
+    customElements.define('x-sub-2', XSub2);
 
 
     // create an instance via createElement
@@ -185,7 +185,7 @@ suite('customElements', function() {
     assert.instanceOf(xsub, XSub2);
   });
 
-  test('document.defineElement create ES5 via createElement', function() {
+  test('customElements.define create ES5 via createElement', function() {
     function XBarES5() {
       CustomElements.setCurrentTag('x-bar-es5');
       return HTMLElement.call(this);
@@ -193,7 +193,7 @@ suite('customElements', function() {
     XBarES5.prototype = Object.create(HTMLElement.prototype);
     XBarES5.prototype.constructor = XBarES5;
     // register x-foo
-    document.defineElement('x-bar-es5', XBarES5);
+    customElements.define('x-bar-es5', XBarES5);
     // create an instance via createElement
     var xbar = document.createElement('x-bar-es5');
     // test localName
@@ -202,7 +202,7 @@ suite('customElements', function() {
     assert.instanceOf(xbar, XBarES5);
   });
 
-  test('document.defineElement create via createElementNS', function() {
+  test('customElements.define create via createElementNS', function() {
     class XFoo3 extends HTMLElement {
       constructor() {
         CustomElements.setCurrentTag('x-foo3');
@@ -210,7 +210,7 @@ suite('customElements', function() {
       }
     }
     // register x-foo
-    document.defineElement('x-foo3', XFoo3);
+    customElements.define('x-foo3', XFoo3);
     // create an instance via createElementNS
     var xfoo = document.createElementNS(HTMLNS, 'x-foo3');
     // test instanceof
@@ -219,7 +219,7 @@ suite('customElements', function() {
     assert.equal(xfoo.localName, 'x-foo3');
   });
 
-  test('document.defineElement treats names as case insensitive', function() {
+  test('customElements.define treats names as case insensitive', function() {
     class XCase extends HTMLElement {
       constructor() {
         CustomElements.setCurrentTag('x-case');
@@ -227,7 +227,7 @@ suite('customElements', function() {
         this.isXCase = true;
       }
     }
-    document.defineElement('X-CASE', XCase);
+    customElements.define('X-CASE', XCase);
     // createElement
     var x = document.createElement('X-CASE');
     assert.equal(x.isXCase, true);
@@ -248,7 +248,7 @@ suite('customElements', function() {
     // assert.equal(work.firstChild.nextSibling.isXCase, true);
   });
 
-  test('document.defineElement create multiple instances', function() {
+  test('customElements.define create multiple instances', function() {
     // create an instance
     var xfoo1 = document.createElement('x-foo');
     // create another instance
@@ -262,7 +262,7 @@ suite('customElements', function() {
     assert.equal(xfoo2.textContent, '[x-foo2]');
   });
 
-  test('document.defineElement calls constructor only once', function() {
+  test('customElements.define calls constructor only once', function() {
     var count = 0;
     class XConstructor extends HTMLElement {
       constructor() {
@@ -271,12 +271,12 @@ suite('customElements', function() {
         count++;
       }
     }
-    document.defineElement('x-constructor', XConstructor);
+    customElements.define('x-constructor', XConstructor);
     var xconstructor = new XConstructor();
     assert.equal(count, 1);
   });
 
-  test('document.defineElement [attached|detached]Callbacks', function(done) {
+  test('customElements.define [attached|detached]Callbacks', function(done) {
     class XCallbacks extends HTMLElement {
       constructor() {
         CustomElements.setCurrentTag('x-callbacks');
@@ -293,7 +293,7 @@ suite('customElements', function() {
         this.detached = true;
       }
     }
-    document.defineElement('x-callbacks', XCallbacks);
+    customElements.define('x-callbacks', XCallbacks);
     var e = new XCallbacks();
     assert.isFalse(e.attached);
     assert.isFalse(e.detached);
@@ -312,7 +312,7 @@ suite('customElements', function() {
   });
 
 
-  test('document.defineElement attributeChangedCallback in prototype', function(done) {
+  test('customElements.define attributeChangedCallback in prototype', function(done) {
     class XBoo extends HTMLElement {
       static get observedAttributes() {
         return ['foo'];
@@ -329,13 +329,13 @@ suite('customElements', function() {
         }
       }
     }
-    document.defineElement('x-boo-acp', XBoo);
+    customElements.define('x-boo-acp', XBoo);
     var xboo = new XBoo();
     xboo.setAttribute('foo', 'bar');
     xboo.setAttribute('foo', 'zot');
   });
 
-  test('document.defineElement attachedCallbacks in prototype', function(done) {
+  test('customElements.define attachedCallbacks in prototype', function(done) {
     var inserted = 0;
     class XBoo extends HTMLElement {
       constructor() {
@@ -346,7 +346,7 @@ suite('customElements', function() {
         inserted++;
       }
     }
-    document.defineElement('x-boo-at', XBoo);
+    customElements.define('x-boo-at', XBoo);
     var xboo = new XBoo();
     assert.equal(inserted, 0, 'inserted must be 0');
     work.appendChild(xboo);
@@ -372,7 +372,7 @@ suite('customElements', function() {
         removed = true;
       }
     }
-    document.defineElement('x-boo-ir2', XBoo);
+    customElements.define('x-boo-ir2', XBoo);
     var xboo = new XBoo();
     assert(!removed, 'removed must be false [XBoo]');
     work.appendChild(xboo);
@@ -391,7 +391,7 @@ suite('customElements', function() {
         removed = true;
       }
     }
-    document.defineElement('x-booboo-ir2', XBooBoo);
+    customElements.define('x-booboo-ir2', XBooBoo);
     var xbooboo = new XBooBoo();
     assert(!removed, 'removed must be false [XBooBoo]');
     work.appendChild(xbooboo);
@@ -428,7 +428,7 @@ suite('customElements', function() {
         this.__ready__ = true;
       }
     }
-    document.defineElement('x-boo-clone', XBoo);
+    customElements.define('x-boo-clone', XBoo);
     var xboo = new XBoo();
     work.appendChild(xboo);
     CustomElements.flush();
@@ -449,7 +449,7 @@ suite('customElements', function() {
         this.__ready__ = true;
       }
     }
-    document.defineElement('x-import', XImport);
+    customElements.define('x-import', XImport);
     var frag = document.createDocumentFragment();
     frag.appendChild(document.createElement('x-import'));
     assert.isTrue(frag.firstChild.__ready__, 'source element upgraded');

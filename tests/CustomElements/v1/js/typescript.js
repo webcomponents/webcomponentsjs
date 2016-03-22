@@ -12,7 +12,7 @@ suite('typescript', function() {
 
   // Fails because the XTypescript constructor does not return the result of
   // the super call. See: https://github.com/Microsoft/TypeScript/issues/7574
-  test.skip('document.defineElement create typescript generated ES5 via new', function() {
+  test.skip('customElements.define create typescript generated ES5 via new', function() {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -28,7 +28,7 @@ suite('typescript', function() {
     }(HTMLElement));
 
     // register x-foo
-    document.defineElement('x-typescript', XTypescript);
+    customElements.define('x-typescript', XTypescript);
     // create an instance via new
     var e = new XTypescript();
     console.log(e);
@@ -38,7 +38,7 @@ suite('typescript', function() {
     assert.instanceOf(e, XTypescript);
   });
 
-  test('document.defineElement create typescript generated ES5 via createElement', function() {
+  test('customElements.define create typescript generated ES5 via createElement', function() {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -54,7 +54,7 @@ suite('typescript', function() {
     }(HTMLElement));
 
     // register x-foo
-    document.defineElement('x-typescript2', XTypescript2);
+    customElements.define('x-typescript2', XTypescript2);
     // create an instance via new
     var e = document.createElement('x-typescript2');
     console.log(e);
