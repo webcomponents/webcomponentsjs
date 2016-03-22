@@ -508,133 +508,112 @@ suite('customElements', function() {
     assert.deepEqual(['a', 'b', 'c', 'd', 'e'], log);
   });
 
-  // test('attached and detached in same turn', function(done) {
-  //   var log = [];
-  //   var p = Object.create(HTMLElement.prototype);
-  //   p.connectedCallback = function() {
-  //     log.push('attached');
-  //   };
-  //   p.disconnectedCallback = function() {
-  //     log.push('detached');
-  //   };
-  //   document.registerElement('x-ad', {prototype: p});
-  //   var el = document.createElement('x-ad');
-  //   work.appendChild(el);
-  //   work.removeChild(el);
-  //   setTimeout(function() {
-  //     assert.deepEqual(['attached', 'detached'], log);
-  //     done();
-  //   });
-  // });
-  //
-  // test('detached and re-attached in same turn', function(done) {
-  //   var log = [];
-  //   var p = Object.create(HTMLElement.prototype);
-  //   p.connectedCallback = function() {
-  //     log.push('attached');
-  //   };
-  //   p.disconnectedCallback = function() {
-  //     log.push('detached');
-  //   };
-  //   document.registerElement('x-da', {prototype: p});
-  //   var el = document.createElement('x-da');
-  //   work.appendChild(el);
-  //   CustomElements.takeRecords();
-  //   log = [];
-  //   work.removeChild(el);
-  //   work.appendChild(el);
-  //   setTimeout(function() {
-  //     assert.deepEqual(['detached', 'attached'], log);
-  //     done();
-  //   });
-  // });
-  //
-  // test('disconnectedCallback ordering', function() {
-  //   var log = [];
-  //   var p = Object.create(HTMLElement.prototype);
-  //   p.disconnectedCallback = function() {
-  //    log.push(this.id);
-  //   };
-  //   document.registerElement('x-boo2-ordering', {prototype: p});
-  //
-  //   work.innerHTML =
-  //       '<x-boo2-ordering id=a>' +
-  //         '<x-boo2-ordering id=b></x-boo2-ordering>' +
-  //         '<x-boo2-ordering id=c>' +
-  //           '<x-boo2-ordering id=d></x-boo2-ordering>' +
-  //           '<x-boo2-ordering id=e></x-boo2-ordering>' +
-  //         '</x-boo2-ordering>' +
-  //       '</x-boo2-ordering>';
-  //
-  //     CustomElements.takeRecords();
-  //     work.removeChild(work.firstElementChild);
-  //     CustomElements.takeRecords();
-  //     assert.deepEqual(['a', 'b', 'c', 'd', 'e'], log);
-  // });
-  //
-  // test('instanceof', function() {
-  //   var p = Object.create(HTMLElement.prototype);
-  //   var PCtor = document.registerElement('x-instance', {prototype: p});
-  //   var x = document.createElement('x-instance');
-  //   assert.isTrue(CustomElements.instanceof(x, PCtor), 'instanceof failed for x-instance');
-  //   x = document.createElementNS(HTMLNS, 'x-instance');
-  //   assert.isTrue(CustomElements.instanceof(x, PCtor), 'instanceof failed for x-instance');
-  //
-  //   var p2 = Object.create(PCtor.prototype);
-  //   var P2Ctor = document.registerElement('x-instance2', {prototype: p2});
-  //   var x2 = document.createElement('x-instance2');
-  //   assert.isTrue(CustomElements.instanceof(x2, P2Ctor), 'instanceof failed for x-instance2');
-  //   assert.isTrue(CustomElements.instanceof(x2, PCtor), 'instanceof failed for x-instance2');
-  //   x2 = document.createElementNS(HTMLNS, 'x-instance2');
-  //   assert.isTrue(CustomElements.instanceof(x2, P2Ctor), 'instanceof failed for x-instance2');
-  //   assert.isTrue(CustomElements.instanceof(x2, PCtor), 'instanceof failed for x-instance2');
-  // });
-  //
-  //
-  // test('instanceof typeExtension', function() {
-  //   var p = Object.create(HTMLButtonElement.prototype);
-  //   var PCtor = document.registerElement('x-button-instance', {prototype: p, extends: 'button'});
-  //   var x = document.createElement('button', 'x-button-instance');
-  //   assert.isTrue(CustomElements.instanceof(x, PCtor), 'instanceof failed for x-button-instance');
-  //   assert.isTrue(CustomElements.instanceof(x, HTMLButtonElement), 'instanceof failed for x-button-instance');
-  //   x = document.createElementNS(HTMLNS, 'button', 'x-button-instance');
-  //   assert.isTrue(CustomElements.instanceof(x, PCtor), 'instanceof failed for x-button-instance');
-  //   assert.isTrue(CustomElements.instanceof(x, HTMLButtonElement), 'instanceof failed for x-button-instance');
-  //
-  //   var p2 = Object.create(PCtor.prototype);
-  //   var P2Ctor = document.registerElement('x-button-instance2', {prototype: p2, extends: 'button'});
-  //   var x2 = document.createElement('button','x-button-instance2');
-  //   assert.isTrue(CustomElements.instanceof(x2, P2Ctor), 'instanceof failed for x-button-instance2');
-  //   assert.isTrue(CustomElements.instanceof(x2, PCtor), 'instanceof failed for x-button-instance2');
-  //   assert.isTrue(CustomElements.instanceof(x2, HTMLButtonElement), 'instanceof failed for x-button-instance2');
-  //   x2 = document.createElementNS(HTMLNS, 'button','x-button-instance2');
-  //   assert.isTrue(CustomElements.instanceof(x2, P2Ctor), 'instanceof failed for x-button-instance2');
-  //   assert.isTrue(CustomElements.instanceof(x2, PCtor), 'instanceof failed for x-button-instance2');
-  //   assert.isTrue(CustomElements.instanceof(x2, HTMLButtonElement), 'instanceof failed for x-button-instance2');
-  // });
-  //
-  // test('extends and prototype mismatch', function() {
-  //   var p = Object.create(HTMLElement.prototype);
-  //   var PCtor = document.registerElement('not-button', {
-  //     extends: 'button',
-  //     prototype: p
-  //   });
-  //
-  //   var e = document.createElement('button', 'not-button');
-  //
-  //   // NOTE: firefox has a hack for instanceof that uses element tagname mapping
-  //   // Work around by checking prototype manually
-  //   //
-  //   var ff = document.createElement('button'); ff.__proto__ = null;
-  //   if (ff instanceof HTMLButtonElement) {
-  //     // Base proto will be one below custom proto
-  //     var proto = e.__proto__.__proto__;
-  //     assert.isFalse(proto === HTMLButtonElement.prototype);
-  //     assert.isTrue(proto === HTMLElement.prototype);
-  //   } else {
-  //     assert.isFalse(CustomElements.instanceof(e, HTMLButtonElement));
-  //     assert.isTrue(CustomElements.instanceof(e, HTMLElement));
-  //   }
-  // });
+  test('attached and detached in same turn', function(done) {
+    var log = [];
+    class XAD extends HTMLElement {
+      constructor() {
+        customElements.setCurrentTag('x-ad');
+        super();
+      }
+      connectedCallback() {
+        log.push('attached');
+      }
+      disconnectedCallback() {
+        log.push('detached');
+      }
+    }
+
+    customElements.define('x-ad', XAD);
+    var el = document.createElement('x-ad');
+    work.appendChild(el);
+    work.removeChild(el);
+    customElements.flush();
+    assert.deepEqual(['attached', 'detached'], log);
+    done();
+  });
+
+  test('detached and re-attached in same turn', function(done) {
+    var log = [];
+    class XDA extends HTMLElement {
+      constructor() {
+        customElements.setCurrentTag('x-da');
+        super();
+      }
+      connectedCallback() {
+        log.push('attached');
+      }
+      disconnectedCallback() {
+        log.push('detached');
+      }
+    }
+    customElements.define('x-da', XDA);
+    var el = document.createElement('x-da');
+    work.appendChild(el);
+    customElements.flush();
+    log = [];
+    work.removeChild(el);
+    work.appendChild(el);
+    customElements.flush();
+    assert.deepEqual(['detached', 'attached'], log);
+    done();
+  });
+
+  test('disconnectedCallback ordering', function() {
+    var log = [];
+    class XOrdering2 extends HTMLElement {
+      constructor() {
+        customElements.setCurrentTag('x-ordering2');
+        super();
+      }
+      disconnectedCallback() {
+        log.push(this.id);
+      }
+    }
+    customElements.define('x-ordering2', XOrdering2);
+
+    work.innerHTML =
+        '<x-ordering2 id=a>' +
+          '<x-ordering2 id=b></x-ordering2>' +
+          '<x-ordering2 id=c>' +
+            '<x-ordering2 id=d></x-ordering2>' +
+            '<x-ordering2 id=e></x-ordering2>' +
+          '</x-ordering2>' +
+        '</x-ordering2>';
+
+      customElements.flush();
+      work.removeChild(work.firstElementChild);
+      customElements.flush();
+      assert.deepEqual(['a', 'b', 'c', 'd', 'e'], log);
+  });
+
+  test('instanceof', function() {
+    class XInstance extends HTMLElement {
+      constructor() {
+        customElements.setCurrentTag('x-instance');
+        super();
+      }
+    }
+    customElements.define('x-instance', XInstance);
+    var x = document.createElement('x-instance');
+    assert.instanceOf(x, XInstance, 'instanceof failed for x-instance');
+
+    x = document.createElementNS(HTMLNS, 'x-instance');
+    assert.instanceOf(x, XInstance, 'instanceof failed for x-instance');
+
+    class XInstance2 extends XInstance {
+      constructor() {
+        customElements.setCurrentTag('x-instance2');
+        super();
+      }
+    }
+    customElements.define('x-instance2', XInstance2);
+
+    var x2 = document.createElement('x-instance2');
+    assert.instanceOf(x2, XInstance2, 'instanceof failed for x-instance2');
+    assert.instanceOf(x2, XInstance, 'instanceof failed for x-instance2');
+    x2 = document.createElementNS(HTMLNS, 'x-instance2');
+    assert.instanceOf(x2, XInstance2, 'instanceof failed for x-instance2');
+    assert.instanceOf(x2, XInstance, 'instanceof failed for x-instance2');
+  });
 
 });
