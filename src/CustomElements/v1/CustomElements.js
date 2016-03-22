@@ -29,6 +29,20 @@
 
   window.CustomElements = {};
 
+  function observeRoot(root) {
+    if (!root.__observer) {
+      var observer = new MutationObserver(handleMutations);
+      observer.observe(root, {childList: true, subtree: true});
+      root.__observer = observer;
+    }
+    return root.__observer;
+  }
+  var _observer = observeRoot(document);
+
+  CustomElements.flush = function() {
+    handleMutations(_observer.takeRecords());
+  };
+
   var _newInstance;
   var _newTagName;
 
@@ -53,9 +67,14 @@
       return i;
     }
     if (_newTagName) {
-      var tagName = _newTagName;
+      var tagName = _newTagName.toLowerCase();
       _newTagName = null;
-      return document.createElement(tagName);
+      var element = rawCreateElement(tagName);
+      var definition = registry.get(tagName);
+      if (definition) {
+        _upgradeElement(element, definition, false);
+        return element;
+      }
     }
     throw new Error('unknown constructor');
   }
@@ -66,6 +85,26 @@
     enumerable: false,
     value: HTMLElement,
   });
+
+  var rawCreateElement = document.createElement.bind(document);
+  document.createElement = function(tagName) {
+    var element = rawCreateElement(tagName);
+    var definition = registry.get(tagName.toLowerCase());
+    if (definition) {
+      _upgradeElement(element, definition, true);
+    }
+    return element;
+  };
+
+  var HTMLNS = 'http://www.w3.org/1999/xhtml';
+  var _origCreateElementNS = document.createElementNS;
+  document.createElementNS = function(namespaceURI, qualifiedName) {
+    if (namespaceURI === 'http://www.w3.org/1999/xhtml') {
+      return document.createElement(qualifiedName);
+    } else {
+      return _origCreateElementNS(namespaceURI, qualifiedName);
+    }
+  };
 
   // @type {Map<String, Definition>}
   var registry = new Map();
@@ -144,15 +183,15 @@
     // 5.1.14
     var attachedCallback = prototype.attachedCallback;
     // 5.1.15
-    checkCallback(attachedCallback);
+    checkCallback(attachedCallback, localName, 'attachedCallback');
     // 5.1.16
     var detachedCallback = prototype.detachedCallback;
     // 5.1.17
-    checkCallback(detachedCallback);
+    checkCallback(detachedCallback, localName, 'detachedCallback');
     // 5.1.18
     var attributeChangedCallback = prototype.attributeChangedCallback;
     // 5.1.19
-    checkCallback(attributeChangedCallback);
+    checkCallback(attributeChangedCallback, localName, 'attributeChangedCallback');
 
     // 5.1.20
     // @type {Definition}
@@ -163,6 +202,7 @@
       attachedCallback: attachedCallback,
       detachedCallback: detachedCallback,
       attributeChangedCallback: attributeChangedCallback,
+      observedAttributes: observedAttributes,
     };
 
     // 5.1.21
@@ -173,20 +213,6 @@
     // defer we can do less tree walks
     scheduleUpgrade();
   }
-
-  var _origCreateElement = document.createElement;
-  document.createElement = function(tagName) {
-    var instance = _origCreateElement.call(document, tagName);
-    var registration = registry.get(tagName);
-    if (registration) {
-      var prototype = registration.constructor.prototype;
-      Object.setPrototypeOf(instance, prototype);
-      setNewInstance(instance);
-      new (registration.constructor)();
-      console.assert(_newInstance == null);
-    }
-    return instance;
-  };
 
   function scheduleUpgrade() {
     if (upgradeTask !== null) {
@@ -213,13 +239,115 @@
     }
   }
 
+  var attributeObserver = new MutationObserver(handleAttributeChange);
+  function handleAttributeChange(mutations) {
+    console.log('handleAttributeChange', arguments);
+    for (var i = 0; i < mutations.length; i++) {
+      var mutation = mutations[i];
+      if (mutation.type === 'attributes') {
+        var name = mutation.attributeName;
+        var oldValue = mutation.oldValue;
+        var target = mutation.target;
+        var newValue = target.getAttribute(name);
+        var namespace = mutation.attributeNamespace;
+        target.attributeChangedCallback(name, oldValue, newValue, namespace);
+      }
+    }
+  }
+
+  function _upgradeElement(element, definition, callConstructor) {
+    var prototype = definition.constructor.prototype;
+    Object.setPrototypeOf(element, prototype);
+    if (callConstructor) {
+      setNewInstance(element);
+      element.__upgraded = true;
+      new (definition.constructor)();
+      console.assert(_newInstance == null);
+    }
+    if (definition.attributeChangedCallback && definition.observedAttributes.length > 0) {
+      attributeObserver.observe(element, {
+        attributes: true,
+        attributeOldValue: true,
+        attributeFilter: definition.observedAttributes,
+      });
+    }
+  }
+
   function checkCallback(callback, elementName, calllbackName) {
-    if (callback !== undefined && !typeof callback !== 'function') {
-      throw new Error(`TypeError: ${elementName} '$[calllbackName]' is not a Function`);
+    if (callback !== undefined && typeof callback !== 'function') {
+      console.warn(typeof callback);
+      throw new Error(`TypeError: ${elementName} '${calllbackName}' is not a Function`);
     }
   }
 
   function isReservedTag(name) {
     return reservedTagList.indexOf(name) !== -1;
+  }
+
+  var forEach = Array.prototype.forEach.call.bind(Array.prototype.forEach);
+
+  function handleMutations(mutations) {
+    // console.log('handleMutations', mutations);
+    for (var i = 0; i < mutations.length; i++) {
+      var mutation = mutations[i];
+      if (mutation.type === 'childList') {
+        addNodes(mutation.addedNodes);
+        removeNodes(mutation.removedNodes);
+      }
+    }
+  }
+
+  function addNodes(nodeList) {
+    for (var i = 0; i < nodeList.length; i++) {
+      var root = nodeList[i];
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+      do {
+        var node = walker.currentNode;
+        var definition = registry.get(node.localName);
+        if (!definition) {
+          continue;
+        }
+        if (!node.__upgraded) {
+          _upgradeElement(node, definition, true);
+        }
+        if (node.__upgraded && !node.__attached) {
+          node.__attached = true;
+          var definition = registry.get(node.localName);
+          if (definition && definition.attachedCallback) {
+            definition.attachedCallback.call(node);
+          }
+        }
+      } while (walker.nextNode())
+    }
+  }
+
+  function removeNodes(nodeList) {
+    for (var i = 0; i < nodeList.length; i++) {
+      var root = nodeList[i];
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+      do {
+        var node = walker.currentNode;
+        if (node.__upgraded && node.__attached) {
+          node.__attached = false;
+          var definition = registry.get(node.localName);
+          if (definition && definition.detachedCallback) {
+            definition.detachedCallback.call(node);
+          }
+        }
+      } while (walker.nextNode())
+    }
+  }
+
+  // recurse up the tree to check if an element is actually in the main document.
+  function inDocument(element) {
+    var p = element;
+    // var doc = window.wrap(document);
+    var doc = document;
+    while (p = p.parentNode || ((p.nodeType === Node.DOCUMENT_FRAGMENT_NODE) && p.host)) {
+      if (p === doc) {
+        return true;
+      }
+    }
+    return false;
   }
 })();

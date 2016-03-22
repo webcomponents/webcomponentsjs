@@ -128,7 +128,6 @@ suite('customElements', function() {
     document.defineElement('x-foo-es5', XFooES5);
     // create an instance via new
     var xfoo = new XFooES5();
-    console.log(xfoo);
     // test localName
     assert.equal(xfoo.localName, 'x-foo-es5');
     // test instanceof
@@ -197,276 +196,212 @@ suite('customElements', function() {
     document.defineElement('x-bar-es5', XBarES5);
     // create an instance via createElement
     var xbar = document.createElement('x-bar-es5');
-    console.log(xbar);
     // test localName
     assert.equal(xbar.localName, 'x-bar-es5');
     // test instanceof
     assert.instanceOf(xbar, XBarES5);
   });
 
-  // test('document.registerElement create via createElementNS', function() {
-  //   // create an instance via createElementNS
-  //   var xfoo = document.createElementNS(HTMLNS, 'x-foo2');
-  //   // test localName
-  //   assert.equal(xfoo.localName, 'x-foo2');
-  //   // attach content
-  //   xfoo.textContent = '[x-foo2]';
-  //   // test textContent
-  //   assert.equal(xfoo.textContent, '[x-foo2]');
-  // });
-  //
-  // test('document.registerElement treats names as case insensitive', function() {
-  //   var proto = {prototype: Object.create(HTMLElement.prototype)};
-  //   proto.prototype.isXCase = true;
-  //   var XCase = document.registerElement('X-CASE', proto);
-  //   // createElement
-  //   var x = document.createElement('X-CASE');
-  //   assert.equal(x.isXCase, true);
-  //   x = document.createElement('x-case');
-  //   assert.equal(x.isXCase, true);
-  //   // createElementNS
-  //   // NOTE: createElementNS is case sensitive, disable tests
-  //   // x = document.createElementNS(HTMLNS, 'X-CASE');
-  //   // assert.equal(x.isXCase, true);
-  //   // x = document.createElementNS(HTMLNS, 'x-case');
-  //   // assert.equal(x.isXCase, true);
-  //   // upgrade
-  //   work.innerHTML = '<X-CASE></X-CASE><x-CaSe></x-CaSe>';
-  //   CustomElements.takeRecords();
-  //   assert.equal(work.firstChild.isXCase, true);
-  //   assert.equal(work.firstChild.nextSibling.isXCase, true);
-  // });
-  //
-  // test('document.registerElement create multiple instances', function() {
-  //   var XFooPrototype = Object.create(HTMLElement.prototype);
-  //   XFooPrototype.bluate = function() {
-  //     this.color = 'lightblue';
-  //   };
-  //   var XFoo = document.registerElement('x-foo3', {
-  //     prototype: XFooPrototype
-  //   });
-  //   // create an instance
-  //   var xfoo1 = new XFoo();
-  //   // create another instance
-  //   var xfoo2 = new XFoo();
-  //   // test textContent
-  //   xfoo1.textContent = '[x-foo1]';
-  //   xfoo2.textContent = '[x-foo2]';
-  //   assert.equal(xfoo1.textContent, '[x-foo1]');
-  //   assert.equal(xfoo2.textContent, '[x-foo2]');
-  //   // test bluate
-  //   xfoo1.bluate();
-  //   assert.equal(xfoo1.color, 'lightblue');
-  //   assert.isUndefined(xfoo2.color);
-  // });
-  //
-  // test('document.registerElement extend native element', function() {
-  //   // test native element extension
-  //   var XBarPrototype = Object.create(HTMLButtonElement.prototype);
-  //   var XBar = document.registerElement('x-bar', {
-  //     prototype: XBarPrototype,
-  //     extends: 'button'
-  //   });
-  //   var xbar = new XBar();
-  //   work.appendChild(xbar).textContent = 'x-bar';
-  //   xbar = work.querySelector('button[is=x-bar]');
-  //   assert(xbar);
-  //   assert.equal(xbar.textContent, 'x-bar');
-  //   // test extension of native element extension
-  //   var XBarBarPrototype = Object.create(XBarPrototype);
-  //   var XBarBar = document.registerElement('x-barbar', {
-  //     prototype: XBarBarPrototype,
-  //     extends: 'button'
-  //   });
-  //   var xbarbar = new XBarBar();
-  //   work.appendChild(xbarbar).textContent = 'x-barbar';
-  //   xbarbar = work.querySelector('button[is=x-barbar]');
-  //   assert(xbarbar);
-  //   assert.equal(xbarbar.textContent, 'x-barbar');
-  //   // test extension^3
-  //   var XBarBarBarPrototype = Object.create(XBarBarPrototype);
-  //   var XBarBarBar = document.registerElement('x-barbarbar', {
-  //     prototype: XBarBarBarPrototype,
-  //     extends: 'button'
-  //   });
-  //   var xbarbarbar = new XBarBarBar();
-  //   work.appendChild(xbarbarbar).textContent = 'x-barbarbar';
-  //   xbarbarbar = work.querySelector('button[is=x-barbarbar]');
-  //   assert(xbarbarbar);
-  //   assert.equal(xbarbarbar.textContent, 'x-barbarbar');
-  // });
-  //
-  // test('document.registerElement with type extension treats names as case insensitive', function() {
-  //   var proto = {prototype: Object.create(HTMLButtonElement.prototype), extends: 'button'};
-  //   proto.prototype.isXCase = true;
-  //   var XCase = document.registerElement('X-EXTEND-CASE', proto);
-  //   // createElement
-  //   var x = document.createElement('button', 'X-EXTEND-CASE');
-  //   assert.equal(x.isXCase, true);
-  //   x = document.createElement('button', 'x-extend-case');
-  //   assert.equal(x.isXCase, true);
-  //   x = document.createElement('BUTTON', 'X-EXTEND-CASE');
-  //   assert.equal(x.isXCase, true);
-  //   x = document.createElement('BUTTON', 'x-extend-case');
-  //   assert.equal(x.isXCase, true);
-  //   // upgrade
-  //   work.innerHTML = '<button is="X-EXTEND-CASE"></button><button is="x-ExTeNd-CaSe"></button>';
-  //   CustomElements.takeRecords();
-  //   assert.equal(work.firstChild.isXCase, true);
-  //   assert.equal(work.firstChild.nextSibling.isXCase, true);
-  // });
-  //
-  // test('document.registerElement createdCallback in prototype', function() {
-  //   var XBooPrototype = Object.create(HTMLElement.prototype);
-  //   XBooPrototype.createdCallback = function() {
-  //     this.style.fontStyle = 'italic';
-  //   }
-  //   var XBoo = document.registerElement('x-boo', {
-  //     prototype: XBooPrototype
-  //   });
-  //   var xboo = new XBoo();
-  //   assert.equal(xboo.style.fontStyle, 'italic');
-  //   //
-  //   var XBooBooPrototype = Object.create(XBooPrototype);
-  //   XBooBooPrototype.createdCallback = function() {
-  //     XBoo.prototype.createdCallback.call(this);
-  //     this.style.fontSize = '32pt';
-  //   };
-  //   var XBooBoo = document.registerElement('x-booboo', {
-  //     prototype: XBooBooPrototype
-  //   });
-  //   var xbooboo = new XBooBoo();
-  //   assert.equal(xbooboo.style.fontStyle, 'italic');
-  //   assert.equal(xbooboo.style.fontSize, '32pt');
-  // });
-  //
-  // test('document.registerElement [created|attached|detached]Callbacks in prototype', function(done) {
-  //   var ready, inserted, removed;
-  //   var XBooPrototype = Object.create(HTMLElement.prototype);
-  //   XBooPrototype.createdCallback = function() {
-  //     ready = true;
-  //   }
-  //   XBooPrototype.attachedCallback = function() {
-  //     inserted = true;
-  //   }
-  //   XBooPrototype.detachedCallback = function() {
-  //     removed = true;
-  //   }
-  //   var XBoo = document.registerElement('x-boo-ir', {
-  //     prototype: XBooPrototype
-  //   });
-  //   var xboo = new XBoo();
-  //   assert(ready, 'ready must be true [XBoo]');
-  //   assert(!inserted, 'inserted must be false [XBoo]');
-  //   assert(!removed, 'removed must be false [XBoo]');
-  //   work.appendChild(xboo);
-  //   CustomElements.takeRecords();
-  //   assert(inserted, 'inserted must be true [XBoo]');
-  //   work.removeChild(xboo);
-  //   CustomElements.takeRecords();
-  //   assert(removed, 'removed must be true [XBoo]');
-  //   //
-  //   ready = inserted = removed = false;
-  //   var XBooBooPrototype = Object.create(XBooPrototype);
-  //   XBooBooPrototype.createdCallback = function() {
-  //     XBoo.prototype.createdCallback.call(this);
-  //   };
-  //   XBooBooPrototype.attachedCallback = function() {
-  //     XBoo.prototype.attachedCallback.call(this);
-  //   };
-  //   XBooBooPrototype.detachedCallback = function() {
-  //     XBoo.prototype.detachedCallback.call(this);
-  //   };
-  //   var XBooBoo = document.registerElement('x-booboo-ir', {
-  //     prototype: XBooBooPrototype
-  //   });
-  //   var xbooboo = new XBooBoo();
-  //   assert(ready, 'ready must be true [XBooBoo]');
-  //   assert(!inserted, 'inserted must be false [XBooBoo]');
-  //   assert(!removed, 'removed must be false [XBooBoo]');
-  //   work.appendChild(xbooboo);
-  //   CustomElements.takeRecords();
-  //   assert(inserted, 'inserted must be true [XBooBoo]');
-  //   work.removeChild(xbooboo);
-  //   CustomElements.takeRecords();
-  //   assert(removed, 'removed must be true [XBooBoo]');
-  //   done();
-  // });
-  //
-  // test('document.registerElement attributeChangedCallback in prototype', function(done) {
-  //   var XBooPrototype = Object.create(HTMLElement.prototype);
-  //   XBooPrototype.attributeChangedCallback = function(inName, inOldValue) {
-  //     if (inName == 'foo' && inOldValue=='bar'
-  //         && this.attributes.foo.value == 'zot') {
-  //       done();
-  //     }
-  //   }
-  //   var XBoo = document.registerElement('x-boo-acp', {
-  //     prototype: XBooPrototype
-  //   });
-  //   var xboo = new XBoo();
-  //   xboo.setAttribute('foo', 'bar');
-  //   xboo.setAttribute('foo', 'zot');
-  // });
-  //
-  // test('document.registerElement attachedCallbacks in prototype', function(done) {
-  //   var inserted = 0;
-  //   var XBooPrototype = Object.create(HTMLElement.prototype);
-  //   XBooPrototype.attachedCallback = function() {
-  //     inserted++;
-  //   };
-  //   var XBoo = document.registerElement('x-boo-at', {
-  //     prototype: XBooPrototype
-  //   });
-  //   var xboo = new XBoo();
-  //   assert.equal(inserted, 0, 'inserted must be 0');
-  //   work.appendChild(xboo);
-  //   CustomElements.takeRecords();
-  //   assert.equal(inserted, 1, 'inserted must be 1');
-  //   work.removeChild(xboo);
-  //   CustomElements.takeRecords();
-  //   assert(!xboo.parentNode);
-  //   work.appendChild(xboo);
-  //   CustomElements.takeRecords();
-  //   assert.equal(inserted, 2, 'inserted must be 2');
-  //   done();
-  // });
-  //
-  // test('document.registerElement detachedCallbacks in prototype', function(done) {
-  //   var ready, inserted, removed;
-  //   var XBooPrototype = Object.create(HTMLElement.prototype);
-  //   XBooPrototype.detachedCallback = function() {
-  //     removed = true;
-  //   }
-  //   var XBoo = document.registerElement('x-boo-ir2', {
-  //     prototype: XBooPrototype
-  //   });
-  //   var xboo = new XBoo();
-  //   assert(!removed, 'removed must be false [XBoo]');
-  //   work.appendChild(xboo);
-  //   CustomElements.takeRecords();
-  //   work.removeChild(xboo);
-  //   CustomElements.takeRecords();
-  //   assert(removed, 'removed must be true [XBoo]');
-  //   //
-  //   ready = inserted = removed = false;
-  //   var XBooBooPrototype = Object.create(XBooPrototype);
-  //   XBooBooPrototype.detachedCallback = function() {
-  //     XBoo.prototype.detachedCallback.call(this);
-  //   };
-  //   var XBooBoo = document.registerElement('x-booboo-ir2', {
-  //     prototype: XBooBooPrototype
-  //   });
-  //   var xbooboo = new XBooBoo();
-  //   assert(!removed, 'removed must be false [XBooBoo]');
-  //   work.appendChild(xbooboo);
-  //   CustomElements.takeRecords();
-  //   work.removeChild(xbooboo);
-  //   CustomElements.takeRecords();
-  //   assert(removed, 'removed must be true [XBooBoo]');
-  //   done();
-  // });
-  //
+  test('document.defineElement create via createElementNS', function() {
+    class XFoo3 extends HTMLElement {
+      constructor() {
+        CustomElements.setCurrentTag('x-foo3');
+        super();
+      }
+    }
+    // register x-foo
+    document.defineElement('x-foo3', XFoo3);
+    // create an instance via createElementNS
+    var xfoo = document.createElementNS(HTMLNS, 'x-foo3');
+    // test instanceof
+    assert.instanceOf(xfoo, XFoo3);
+    // test localName
+    assert.equal(xfoo.localName, 'x-foo3');
+  });
+
+  test('document.defineElement treats names as case insensitive', function() {
+    class XCase extends HTMLElement {
+      constructor() {
+        CustomElements.setCurrentTag('x-case');
+        super();
+        this.isXCase = true;
+      }
+    }
+    document.defineElement('X-CASE', XCase);
+    // createElement
+    var x = document.createElement('X-CASE');
+    assert.equal(x.isXCase, true);
+    x = document.createElement('x-case');
+    assert.equal(x.isXCase, true);
+    // createElementNS
+    // NOTE: createElementNS is case sensitive, disable tests
+    // x = document.createElementNS(HTMLNS, 'X-CASE');
+    // assert.equal(x.isXCase, true);
+    // x = document.createElementNS(HTMLNS, 'x-case');
+    // assert.equal(x.isXCase, true);
+    // upgrade
+
+    // TODO: uncomment when upgrades implemented
+    // work.innerHTML = '<X-CASE></X-CASE><x-CaSe></x-CaSe>';
+    // CustomElements.takeRecords();
+    // assert.equal(work.firstChild.isXCase, true);
+    // assert.equal(work.firstChild.nextSibling.isXCase, true);
+  });
+
+  test('document.defineElement create multiple instances', function() {
+    // create an instance
+    var xfoo1 = document.createElement('x-foo');
+    // create another instance
+    var xfoo2 = document.createElement('x-foo');
+
+    assert.notStrictEqual(xfoo1, xfoo2);
+    // test textContent
+    xfoo1.textContent = '[x-foo1]';
+    xfoo2.textContent = '[x-foo2]';
+    assert.equal(xfoo1.textContent, '[x-foo1]');
+    assert.equal(xfoo2.textContent, '[x-foo2]');
+  });
+
+  test('document.defineElement calls constructor only once', function() {
+    var count = 0;
+    class XConstructor extends HTMLElement {
+      constructor() {
+        CustomElements.setCurrentTag('x-constructor');
+        super();
+        count++;
+      }
+    }
+    document.defineElement('x-constructor', XConstructor);
+    var xconstructor = new XConstructor();
+    assert.equal(count, 1);
+  });
+
+  test('document.defineElement [attached|detached]Callbacks', function(done) {
+    class XCallbacks extends HTMLElement {
+      constructor() {
+        CustomElements.setCurrentTag('x-callbacks');
+        super();
+        this.attached = false;
+        this.detached = false;
+      }
+
+      attachedCallback() {
+        this.attached = true;
+      }
+
+      detachedCallback() {
+        this.detached = true;
+      }
+    }
+    document.defineElement('x-callbacks', XCallbacks);
+    var e = new XCallbacks();
+    assert.isFalse(e.attached);
+    assert.isFalse(e.detached);
+
+    work.appendChild(e);
+    CustomElements.flush();
+    assert.isTrue(e.attached);
+    assert.isFalse(e.detached);
+
+    work.removeChild(e);
+    CustomElements.flush();
+    assert.isTrue(e.attached);
+    assert.isTrue(e.detached);
+
+    done();
+  });
+
+
+  test('document.defineElement attributeChangedCallback in prototype', function(done) {
+    class XBoo extends HTMLElement {
+      static get observedAttributes() {
+        return ['foo'];
+      }
+
+      constructor() {
+        CustomElements.setCurrentTag('x-boo-acp');
+        super();
+      }
+      attributeChangedCallback(inName, inOldValue) {
+        if (inName == 'foo' && inOldValue=='bar'
+            && this.attributes.foo.value == 'zot') {
+          done();
+        }
+      }
+    }
+    document.defineElement('x-boo-acp', XBoo);
+    var xboo = new XBoo();
+    xboo.setAttribute('foo', 'bar');
+    xboo.setAttribute('foo', 'zot');
+  });
+
+  test('document.defineElement attachedCallbacks in prototype', function(done) {
+    var inserted = 0;
+    class XBoo extends HTMLElement {
+      constructor() {
+        CustomElements.setCurrentTag('x-boo-at');
+        super();
+      }
+      attachedCallback() {
+        inserted++;
+      }
+    }
+    document.defineElement('x-boo-at', XBoo);
+    var xboo = new XBoo();
+    assert.equal(inserted, 0, 'inserted must be 0');
+    work.appendChild(xboo);
+    CustomElements.flush();
+    assert.equal(inserted, 1, 'inserted must be 1');
+    work.removeChild(xboo);
+    CustomElements.flush();
+    assert(!xboo.parentNode);
+    work.appendChild(xboo);
+    CustomElements.flush();
+    assert.equal(inserted, 2, 'inserted must be 2');
+    done();
+  });
+
+  test('document.registerElement detachedCallbacks in prototype', function(done) {
+    var ready, inserted, removed;
+    class XBoo extends HTMLElement {
+      constructor() {
+        CustomElements.setCurrentTag('x-boo-ir2');
+        super();
+      }
+      detachedCallback() {
+        removed = true;
+      }
+    }
+    document.defineElement('x-boo-ir2', XBoo);
+    var xboo = new XBoo();
+    assert(!removed, 'removed must be false [XBoo]');
+    work.appendChild(xboo);
+    CustomElements.flush();
+    work.removeChild(xboo);
+    CustomElements.flush();
+    assert(removed, 'removed must be true [XBoo]');
+
+    ready = inserted = removed = false;
+    class XBooBoo extends HTMLElement {
+      constructor() {
+        CustomElements.setCurrentTag('x-booboo-ir2');
+        super();
+      }
+      detachedCallback() {
+        removed = true;
+      }
+    }
+    document.defineElement('x-booboo-ir2', XBooBoo);
+    var xbooboo = new XBooBoo();
+    assert(!removed, 'removed must be false [XBooBoo]');
+    work.appendChild(xbooboo);
+    CustomElements.flush();
+    work.removeChild(xbooboo);
+    CustomElements.flush();
+    assert(removed, 'removed must be true [XBooBoo]');
+    done();
+  });
+
   // test('document.registerElement can use Functions as definitions', function() {
   //   // function used as Custom Element defintion
   //   function A$A() {
@@ -484,39 +419,49 @@ suite('customElements', function() {
   //   CustomElements.takeRecords();
   //   assert.equal(work.firstElementChild.alive, true);
   // });
-  //
-  // test('node.cloneNode upgrades', function(done) {
-  //   var XBooPrototype = Object.create(HTMLElement.prototype);
-  //   XBooPrototype.createdCallback = function() {
-  //     this.__ready__ = true;
-  //   };
-  //   var XBoo = document.registerElement('x-boo-clone', {
-  //     prototype: XBooPrototype
-  //   });
-  //   var xboo = new XBoo();
-  //   work.appendChild(xboo);
-  //   CustomElements.takeRecords();
-  //   var xboo2 = xboo.cloneNode(true);
-  //   assert(xboo2.__ready__, 'clone createdCallback must be called');
-  //   done();
-  // });
-  //
-  // test('document.importNode upgrades', function() {
-  //   var XImportPrototype = Object.create(HTMLElement.prototype);
-  //   XImportPrototype.createdCallback = function() {
-  //     this.__ready__ = true;
-  //   };
-  //   document.registerElement('x-import', {
-  //     prototype: XImportPrototype
-  //   });
-  //   var frag = document.createDocumentFragment();
-  //   frag.appendChild(document.createElement('x-import'));
-  //   assert.isTrue(frag.firstChild.__ready__, 'source element upgraded');
-  //   var imported = document.importNode(frag, true);
-  //   window.imported = imported;
-  //   assert.isTrue(imported.firstChild.__ready__, 'imported element upgraded');
-  // });
-  //
+
+  test('node.cloneNode does not upgrade until attach', function(done) {
+    class XBoo extends HTMLElement {
+      constructor() {
+        CustomElements.setCurrentTag('x-boo-clone');
+        super();
+        this.__ready__ = true;
+      }
+    }
+    document.defineElement('x-boo-clone', XBoo);
+    var xboo = new XBoo();
+    work.appendChild(xboo);
+    CustomElements.flush();
+    var xboo2 = xboo.cloneNode(true);
+    CustomElements.flush();
+    assert.isNotOk(xboo2.__ready__, 'clone createdCallback must be called');
+    work.appendChild(xboo2);
+    CustomElements.flush();
+    assert.isTrue(xboo2.__ready__, 'clone createdCallback must be called');
+    done();
+  });
+
+  test('document.importNode upgrades', function() {
+    class XImport extends HTMLElement {
+      constructor() {
+        CustomElements.setCurrentTag('x-import');
+        super();
+        this.__ready__ = true;
+      }
+    }
+    document.defineElement('x-import', XImport);
+    var frag = document.createDocumentFragment();
+    frag.appendChild(document.createElement('x-import'));
+    assert.isTrue(frag.firstChild.__ready__, 'source element upgraded');
+    var imported = document.importNode(frag, true);
+    window.imported = imported;
+    var importedEl = imported.firstChild;
+    assert.isNotOk(importedEl.__ready__, 'imported element upgraded');
+    work.appendChild(imported);
+    CustomElements.flush();
+    assert.isOk(importedEl.__ready__, 'imported element upgraded');
+  });
+
   // test('entered left apply to view', function() {
   //   var invocations = [];
   //   var elementProto = Object.create(HTMLElement.prototype);
