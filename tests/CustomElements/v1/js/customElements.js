@@ -67,7 +67,7 @@ suite('customElements', function() {
   test('customElements.define create via new', function() {
     class XFoo extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-foo');
+        customElements.setCurrentTag('x-foo');
         super();
       }
     }
@@ -90,13 +90,13 @@ suite('customElements', function() {
   test('customElements.define create subclass via new', function() {
     class XSuper1 extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-super-1');
+        customElements.setCurrentTag('x-super-1');
         super();
       }
     }
     class XSub1 extends XSuper1 {
       constructor() {
-        CustomElements.setCurrentTag('x-sub-1');
+        customElements.setCurrentTag('x-sub-1');
         super();
       }
     }
@@ -118,7 +118,7 @@ suite('customElements', function() {
 
   test('customElements.define create ES5 via new', function() {
     function XFooES5() {
-      CustomElements.setCurrentTag('x-foo-es5');
+      customElements.setCurrentTag('x-foo-es5');
       // Note the return is super (ahem) important!
       return HTMLElement.call(this);
     }
@@ -137,7 +137,7 @@ suite('customElements', function() {
   test('customElements.define create via createElement', function() {
     class XFoo2 extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-foo');
+        customElements.setCurrentTag('x-foo');
         super();
       }
     }
@@ -158,13 +158,13 @@ suite('customElements', function() {
   test('customElements.define create subclass via createElement', function() {
     class XSuper2 extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-super-1');
+        customElements.setCurrentTag('x-super-1');
         super();
       }
     }
     class XSub2 extends XSuper2 {
       constructor() {
-        CustomElements.setCurrentTag('x-sub-1');
+        customElements.setCurrentTag('x-sub-1');
         super();
       }
     }
@@ -187,7 +187,7 @@ suite('customElements', function() {
 
   test('customElements.define create ES5 via createElement', function() {
     function XBarES5() {
-      CustomElements.setCurrentTag('x-bar-es5');
+      customElements.setCurrentTag('x-bar-es5');
       return HTMLElement.call(this);
     }
     XBarES5.prototype = Object.create(HTMLElement.prototype);
@@ -205,7 +205,7 @@ suite('customElements', function() {
   test('customElements.define create via createElementNS', function() {
     class XFoo3 extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-foo3');
+        customElements.setCurrentTag('x-foo3');
         super();
       }
     }
@@ -222,7 +222,7 @@ suite('customElements', function() {
   test('customElements.define treats names as case insensitive', function() {
     class XCase extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-case');
+        customElements.setCurrentTag('x-case');
         super();
         this.isXCase = true;
       }
@@ -266,7 +266,7 @@ suite('customElements', function() {
     var count = 0;
     class XConstructor extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-constructor');
+        customElements.setCurrentTag('x-constructor');
         super();
         count++;
       }
@@ -279,7 +279,7 @@ suite('customElements', function() {
   test('customElements.define [attached|detached]Callbacks', function(done) {
     class XCallbacks extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-callbacks');
+        customElements.setCurrentTag('x-callbacks');
         super();
         this.attached = false;
         this.detached = false;
@@ -299,12 +299,12 @@ suite('customElements', function() {
     assert.isFalse(e.detached);
 
     work.appendChild(e);
-    CustomElements.flush();
+    customElements.flush();
     assert.isTrue(e.attached);
     assert.isFalse(e.detached);
 
     work.removeChild(e);
-    CustomElements.flush();
+    customElements.flush();
     assert.isTrue(e.attached);
     assert.isTrue(e.detached);
 
@@ -319,7 +319,7 @@ suite('customElements', function() {
       }
 
       constructor() {
-        CustomElements.setCurrentTag('x-boo-acp');
+        customElements.setCurrentTag('x-boo-acp');
         super();
       }
       attributeChangedCallback(inName, inOldValue) {
@@ -339,7 +339,7 @@ suite('customElements', function() {
     var inserted = 0;
     class XBoo extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-boo-at');
+        customElements.setCurrentTag('x-boo-at');
         super();
       }
       connectedCallback() {
@@ -350,13 +350,13 @@ suite('customElements', function() {
     var xboo = new XBoo();
     assert.equal(inserted, 0, 'inserted must be 0');
     work.appendChild(xboo);
-    CustomElements.flush();
+    customElements.flush();
     assert.equal(inserted, 1, 'inserted must be 1');
     work.removeChild(xboo);
-    CustomElements.flush();
+    customElements.flush();
     assert(!xboo.parentNode);
     work.appendChild(xboo);
-    CustomElements.flush();
+    customElements.flush();
     assert.equal(inserted, 2, 'inserted must be 2');
     done();
   });
@@ -365,7 +365,7 @@ suite('customElements', function() {
     var ready, inserted, removed;
     class XBoo extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-boo-ir2');
+        customElements.setCurrentTag('x-boo-ir2');
         super();
       }
       disconnectedCallback() {
@@ -376,15 +376,15 @@ suite('customElements', function() {
     var xboo = new XBoo();
     assert(!removed, 'removed must be false [XBoo]');
     work.appendChild(xboo);
-    CustomElements.flush();
+    customElements.flush();
     work.removeChild(xboo);
-    CustomElements.flush();
+    customElements.flush();
     assert(removed, 'removed must be true [XBoo]');
 
     ready = inserted = removed = false;
     class XBooBoo extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-booboo-ir2');
+        customElements.setCurrentTag('x-booboo-ir2');
         super();
       }
       disconnectedCallback() {
@@ -395,9 +395,9 @@ suite('customElements', function() {
     var xbooboo = new XBooBoo();
     assert(!removed, 'removed must be false [XBooBoo]');
     work.appendChild(xbooboo);
-    CustomElements.flush();
+    customElements.flush();
     work.removeChild(xbooboo);
-    CustomElements.flush();
+    customElements.flush();
     assert(removed, 'removed must be true [XBooBoo]');
     done();
   });
@@ -423,7 +423,7 @@ suite('customElements', function() {
   test('node.cloneNode does not upgrade until attach', function(done) {
     class XBoo extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-boo-clone');
+        customElements.setCurrentTag('x-boo-clone');
         super();
         this.__ready__ = true;
       }
@@ -431,12 +431,12 @@ suite('customElements', function() {
     customElements.define('x-boo-clone', XBoo);
     var xboo = new XBoo();
     work.appendChild(xboo);
-    CustomElements.flush();
+    customElements.flush();
     var xboo2 = xboo.cloneNode(true);
-    CustomElements.flush();
+    customElements.flush();
     assert.isNotOk(xboo2.__ready__, 'clone createdCallback must be called');
     work.appendChild(xboo2);
-    CustomElements.flush();
+    customElements.flush();
     assert.isTrue(xboo2.__ready__, 'clone createdCallback must be called');
     done();
   });
@@ -444,7 +444,7 @@ suite('customElements', function() {
   test('document.importNode upgrades', function() {
     class XImport extends HTMLElement {
       constructor() {
-        CustomElements.setCurrentTag('x-import');
+        customElements.setCurrentTag('x-import');
         super();
         this.__ready__ = true;
       }
@@ -458,7 +458,7 @@ suite('customElements', function() {
     var importedEl = imported.firstChild;
     assert.isNotOk(importedEl.__ready__, 'imported element upgraded');
     work.appendChild(imported);
-    CustomElements.flush();
+    customElements.flush();
     assert.isOk(importedEl.__ready__, 'imported element upgraded');
   });
 
