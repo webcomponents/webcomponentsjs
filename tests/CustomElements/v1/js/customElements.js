@@ -285,11 +285,11 @@ suite('customElements', function() {
         this.detached = false;
       }
 
-      attachedCallback() {
+      connectedCallback() {
         this.attached = true;
       }
 
-      detachedCallback() {
+      disconnectedCallback() {
         this.detached = true;
       }
     }
@@ -335,14 +335,14 @@ suite('customElements', function() {
     xboo.setAttribute('foo', 'zot');
   });
 
-  test('customElements.define attachedCallbacks in prototype', function(done) {
+  test('customElements.define connectedCallbacks in prototype', function(done) {
     var inserted = 0;
     class XBoo extends HTMLElement {
       constructor() {
         CustomElements.setCurrentTag('x-boo-at');
         super();
       }
-      attachedCallback() {
+      connectedCallback() {
         inserted++;
       }
     }
@@ -361,14 +361,14 @@ suite('customElements', function() {
     done();
   });
 
-  test('document.registerElement detachedCallbacks in prototype', function(done) {
+  test('document.registerElement disconnectedCallbacks in prototype', function(done) {
     var ready, inserted, removed;
     class XBoo extends HTMLElement {
       constructor() {
         CustomElements.setCurrentTag('x-boo-ir2');
         super();
       }
-      detachedCallback() {
+      disconnectedCallback() {
         removed = true;
       }
     }
@@ -387,7 +387,7 @@ suite('customElements', function() {
         CustomElements.setCurrentTag('x-booboo-ir2');
         super();
       }
-      detachedCallback() {
+      disconnectedCallback() {
         removed = true;
       }
     }
@@ -468,10 +468,10 @@ suite('customElements', function() {
   //   elementProto.createdCallback = function() {
   //     invocations.push('created');
   //   }
-  //   elementProto.attachedCallback = function() {
+  //   elementProto.connectedCallback = function() {
   //     invocations.push('entered');
   //   }
-  //   elementProto.detachedCallback = function() {
+  //   elementProto.disconnectedCallback = function() {
   //     invocations.push('left');
   //   }
   //   var tagName = 'x-entered-left-view';
@@ -498,10 +498,10 @@ suite('customElements', function() {
   //       'created, entered then left view');
   // });
   //
-  // test('attachedCallback ordering', function() {
+  // test('connectedCallback ordering', function() {
   //   var log = [];
   //   var p = Object.create(HTMLElement.prototype);
-  //   p.attachedCallback = function() {
+  //   p.connectedCallback = function() {
   //     log.push(this.id);
   //   };
   //   document.registerElement('x-boo-ordering', {prototype: p});
@@ -522,10 +522,10 @@ suite('customElements', function() {
   // test('attached and detached in same turn', function(done) {
   //   var log = [];
   //   var p = Object.create(HTMLElement.prototype);
-  //   p.attachedCallback = function() {
+  //   p.connectedCallback = function() {
   //     log.push('attached');
   //   };
-  //   p.detachedCallback = function() {
+  //   p.disconnectedCallback = function() {
   //     log.push('detached');
   //   };
   //   document.registerElement('x-ad', {prototype: p});
@@ -541,10 +541,10 @@ suite('customElements', function() {
   // test('detached and re-attached in same turn', function(done) {
   //   var log = [];
   //   var p = Object.create(HTMLElement.prototype);
-  //   p.attachedCallback = function() {
+  //   p.connectedCallback = function() {
   //     log.push('attached');
   //   };
-  //   p.detachedCallback = function() {
+  //   p.disconnectedCallback = function() {
   //     log.push('detached');
   //   };
   //   document.registerElement('x-da', {prototype: p});
@@ -560,10 +560,10 @@ suite('customElements', function() {
   //   });
   // });
   //
-  // test('detachedCallback ordering', function() {
+  // test('disconnectedCallback ordering', function() {
   //   var log = [];
   //   var p = Object.create(HTMLElement.prototype);
-  //   p.detachedCallback = function() {
+  //   p.disconnectedCallback = function() {
   //    log.push(this.id);
   //   };
   //   document.registerElement('x-boo2-ordering', {prototype: p});

@@ -16,8 +16,8 @@
  * @property {Function} name
  * @property {Function} localName
  * @property {Function} constructor
- * @property {Function} attachedCallback
- * @property {Function} detachedCallback
+ * @property {Function} connectedCallback
+ * @property {Function} disconnectedCallback
  * @property {Function} attributeChangedCallback
  * @property {String[]} observedAttributes
  * http://w3c.github.io/webcomponents/spec/custom/#dfn-element-definition-construction-stack
@@ -82,13 +82,13 @@
     // 5.1.13?
 
     // 5.1.14
-    var attachedCallback = prototype.attachedCallback;
+    var connectedCallback = prototype.connectedCallback;
     // 5.1.15
-    checkCallback(attachedCallback, localName, 'attachedCallback');
+    checkCallback(connectedCallback, localName, 'connectedCallback');
     // 5.1.16
-    var detachedCallback = prototype.detachedCallback;
+    var disconnectedCallback = prototype.disconnectedCallback;
     // 5.1.17
-    checkCallback(detachedCallback, localName, 'detachedCallback');
+    checkCallback(disconnectedCallback, localName, 'disconnectedCallback');
     // 5.1.18
     var attributeChangedCallback = prototype.attributeChangedCallback;
     // 5.1.19
@@ -100,8 +100,8 @@
       name: name,
       localName: localName,
       constructor: constructor,
-      attachedCallback: attachedCallback,
-      detachedCallback: detachedCallback,
+      connectedCallback: connectedCallback,
+      disconnectedCallback: disconnectedCallback,
       attributeChangedCallback: attributeChangedCallback,
       observedAttributes: observedAttributes,
     };
@@ -316,8 +316,8 @@
         if (node.__upgraded && !node.__attached) {
           node.__attached = true;
           var definition = registry.get(node.localName);
-          if (definition && definition.attachedCallback) {
-            definition.attachedCallback.call(node);
+          if (definition && definition.connectedCallback) {
+            definition.connectedCallback.call(node);
           }
         }
       } while (walker.nextNode())
@@ -333,8 +333,8 @@
         if (node.__upgraded && node.__attached) {
           node.__attached = false;
           var definition = registry.get(node.localName);
-          if (definition && definition.detachedCallback) {
-            definition.detachedCallback.call(node);
+          if (definition && definition.disconnectedCallback) {
+            definition.disconnectedCallback.call(node);
           }
         }
       } while (walker.nextNode())
