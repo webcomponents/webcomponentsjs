@@ -11,22 +11,25 @@
 /**
  * 2.3
  * http://w3c.github.io/webcomponents/spec/custom/#dfn-element-definition
- *
- * @typedef {Object} Definition
- * @property {Function} name
- * @property {Function} localName
- * @property {Function} constructor
- * @property {Function} connectedCallback
- * @property {Function} disconnectedCallback
- * @property {Function} attributeChangedCallback
- * @property {String[]} observedAttributes
- * http://w3c.github.io/webcomponents/spec/custom/#dfn-element-definition-construction-stack
- * @property {Function[]} constructionStack
+ * @typedef {{
+ *  name: string,
+ *  localName: string,
+ *  constructor: Function,
+ *  connectedCallback: Function,
+ *  disconnectedCallback: Function,
+ *  attributeChangedCallback: Function,
+ *  observedAttributes: Array<string>,
+ * }}
  */
+var CustomElementDefinition;
 
 (function() {
   'use strict';
 
+  /**
+   * @const
+   * @type {Array<string>}
+   */
   var reservedTagList = [
     'annotation-xml',
     'color-profile',
@@ -38,11 +41,13 @@
     'missing-glyph',
   ];
 
+  /**
+   * @const
+   */
   var customNameValidation = /^[a-z][.0-9_a-z]*-[\-.0-9_a-z]*$/;
 
   function checkCallback(callback, elementName, calllbackName) {
     if (callback !== undefined && typeof callback !== 'function') {
-      console.warn(typeof callback);
       throw new Error(`TypeError: ${elementName} '${calllbackName}' is not a Function`);
     }
   }
@@ -51,17 +56,26 @@
     return reservedTagList.indexOf(name) !== -1;
   }
 
+  /**
+   * @constructor
+   * @property {Map<String, CustomElementDefinition>} _defintions
+   * @property {MutationObserver} _observer
+   * @property {MutationObserver} _attributeObserver
+   * @property {HTMLElement} _newInstance
+   * @property {string} _newTagName
+   * @property {boolean} polyfilled
+   */
   function CustomElementsRegistry() {
-    // @type {Map<String, Definition>}
     this._definitions = new Map();
     this._observer = this._observeRoot(document);
     this._attributeObserver =
         new MutationObserver(this._handleAttributeChange.bind(this));
-    this._newInstance;
-    this._newTagName;
+    this._newInstance = null;
+    this._newTagName = null;
     this.polyfilled = true;
   }
 
+  /** @lends {CustomElementsRegistry.prototype} */
   CustomElementsRegistry.prototype = {
     define(name, constructor, options) {
       // 5.1.1
@@ -102,12 +116,12 @@
       var _extends = options && options.extends || '';
 
       // 5.1.9
-      if (_extends !== null) {
-        // skip for now
-      }
+      // skip for now
+      // if (_extends !== null) {
+      // }
 
       // 5.1.10, 5.1.11
-      var observedAttributes = constructor.observedAttributes || [];
+      var observedAttributes = constructor['observedAttributes'] || [];
 
       // 5.1.12
       var prototype = constructor.prototype;
@@ -115,20 +129,20 @@
       // 5.1.13?
 
       // 5.1.14
-      var connectedCallback = prototype.connectedCallback;
+      var connectedCallback = prototype['connectedCallback'];
       // 5.1.15
       checkCallback(connectedCallback, localName, 'connectedCallback');
       // 5.1.16
-      var disconnectedCallback = prototype.disconnectedCallback;
+      var disconnectedCallback = prototype['disconnectedCallback'];
       // 5.1.17
       checkCallback(disconnectedCallback, localName, 'disconnectedCallback');
       // 5.1.18
-      var attributeChangedCallback = prototype.attributeChangedCallback;
+      var attributeChangedCallback = prototype['attributeChangedCallback'];
       // 5.1.19
       checkCallback(attributeChangedCallback, localName, 'attributeChangedCallback');
 
       // 5.1.20
-      // @type {Definition}
+      // @type {CustomElementDefinition}
       var definition = {
         name: name,
         localName: localName,
@@ -156,7 +170,6 @@
     },
 
     _setNewInstance(instance) {
-      console.assert(this._newInstance == null);
       this._newInstance = instance;
     },
 
@@ -179,12 +192,15 @@
       }
     },
 
+    /**
+     * @param {NodeList} nodeList
+     */
     _addNodes(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
         var walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
         do {
-          var node = walker.currentNode;
+          var node = /** @type {HTMLElement} */ (walker.currentNode);
           var definition = this._definitions.get(node.localName);
           if (!definition) {
             continue;
@@ -202,6 +218,9 @@
       }
     },
 
+    /**
+     * @param {NodeList} nodeList
+     */
     _removeNodes(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
@@ -219,9 +238,14 @@
       }
     },
 
+    /**
+     * @param {HTMLElement} element
+     * @param {CustomElementDefinition} definition
+     * @param {boolean} callConstructor
+     */
     _upgradeElement(element, definition, callConstructor) {
       var prototype = definition.constructor.prototype;
-      Object.setPrototypeOf(element, prototype);
+      element.__proto__ = prototype;
       if (callConstructor) {
         this._setNewInstance(element);
         element.__upgraded = true;
@@ -237,6 +261,9 @@
       }
     },
 
+    /**
+     * @private
+     */
     _handleAttributeChange(mutations) {
       for (var i = 0; i < mutations.length; i++) {
         var mutation = mutations[i];
@@ -246,71 +273,72 @@
           var target = mutation.target;
           var newValue = target.getAttribute(name);
           var namespace = mutation.attributeNamespace;
-          target.attributeChangedCallback(name, oldValue, newValue, namespace);
+          target['attributeChangedCallback'](name, oldValue, newValue, namespace);
         }
       }
     },
+  };
+  // Closure Compiler Exports
+  window['CustomElementsRegistry'] = CustomElementsRegistry;
+  CustomElementsRegistry.prototype['define'] = CustomElementsRegistry.prototype.define;
+  CustomElementsRegistry.prototype['flush'] = CustomElementsRegistry.prototype.flush;
+  CustomElementsRegistry.prototype['setCurrentTag'] = CustomElementsRegistry.prototype.setCurrentTag;
+  CustomElementsRegistry.prototype['polyfilled'] = CustomElementsRegistry.prototype.polyfilled;
 
+  // patch window.HTMLElement
+
+  // TODO: patch up all built-in subclasses of HTMLElement to use the fake
+  // HTMLElement.prototype
+  var origHTMLElement = window.HTMLElement;
+  window.HTMLElement = function() {
+    if (window['customElements']._newInstance) {
+      var i = window['customElements']._newInstance;
+      window['customElements']._newInstance = null;
+      window['customElements']._newTagName = null;
+      return i;
+    }
+    if (window['customElements']._newTagName) {
+      var tagName = window['customElements']._newTagName.toLowerCase();
+      window['customElements']._newTagName = null;
+      return window.document._createElement(tagName, false);
+    }
+    throw new Error('unknown constructor');
+  }
+  HTMLElement.prototype = Object.create(origHTMLElement.prototype);
+  Object.defineProperty(HTMLElement.prototype, 'constructor', {
+    writable: false,
+    configurable: true,
+    enumerable: false,
+    value: HTMLElement,
+  });
+
+  // patch document.createElement
+
+  var rawCreateElement = document.createElement.bind(document);
+  document._createElement = function(tagName, callConstructor) {
+    var element = rawCreateElement.call(document, tagName);
+    var definition = window['customElements']._definitions.get(tagName.toLowerCase());
+    if (definition) {
+      window['customElements']._upgradeElement(element, definition, callConstructor);
+    }
+    return element;
+  };
+  document.createElement = function(tagName) {
+    return document._createElement(tagName, true);
+  }
+
+  // patch document.createElementNS
+
+  var HTMLNS = 'http://www.w3.org/1999/xhtml';
+  var _origCreateElementNS = document.createElementNS;
+  document.createElementNS = function(namespaceURI, qualifiedName) {
+    if (namespaceURI === 'http://www.w3.org/1999/xhtml') {
+      return document.createElement(qualifiedName);
+    } else {
+      return _origCreateElementNS.call(document, namespaceURI, qualifiedName);
+    }
   };
 
-  function patchHTMLElement(win) {
-    // TODO: patch up all built-in subclasses of HTMLElement to use the fake
-    // HTMLElement.prototype
-    var origHTMLElement = HTMLElement;
-    window.HTMLElement = function() {
-      if (win.customElements._newInstance) {
-        var i = win.customElements._newInstance;
-        win.customElements._newInstance = null;
-        win.customElements._newTagName = null;
-        return i;
-      }
-      if (win.customElements._newTagName) {
-        var tagName = win.customElements._newTagName.toLowerCase();
-        win.customElements._newTagName = null;
-        return win.document._createElement(tagName, false);
-      }
-      throw new Error('unknown constructor');
-    }
-    HTMLElement.prototype = Object.create(origHTMLElement.prototype);
-    Object.defineProperty(HTMLElement.prototype, 'constructor', {
-      writable: false,
-      configurable: true,
-      enumerable: false,
-      value: HTMLElement,
-    });
-  }
-
-  function patchCreateElement(win) {
-    var doc = win.document;
-    var rawCreateElement = doc.createElement.bind(document);
-    doc._createElement = function(tagName, callConstructor) {
-      var element = rawCreateElement(tagName);
-      var definition = win.customElements._definitions.get(tagName.toLowerCase());
-      if (definition) {
-        win.customElements._upgradeElement(element, definition, callConstructor);
-      }
-      return element;
-    };
-    doc.createElement = function(tagName) {
-      return doc._createElement(tagName, true);
-    }
-  }
-
-  function patchCreateElementNS(win) {
-    var doc = win.document;
-    var HTMLNS = 'http://www.w3.org/1999/xhtml';
-    var _origCreateElementNS = document.createElementNS;
-    doc.createElementNS = function(namespaceURI, qualifiedName) {
-      if (namespaceURI === 'http://www.w3.org/1999/xhtml') {
-        return doc.createElement(qualifiedName);
-      } else {
-        return _origCreateElementNS(namespaceURI, qualifiedName);
-      }
-    };
-  }
-
-  window.customElements = new CustomElementsRegistry();
-  patchHTMLElement(window);
-  patchCreateElement(window);
-  patchCreateElementNS(window);
+  /** @type {CustomElementsRegistry} */
+  window['customElements'] = new (window['CustomElementsRegistry'])();
 })();
