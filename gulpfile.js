@@ -12,17 +12,19 @@
 
 'use strict';
 
-var
-  audit = require('gulp-audit'),
-  concat = require('gulp-concat'),
-  exec = require('child_process').exec,
-  fs = require('fs'),
-  gulp = require('gulp'),
-  header = require('gulp-header'),
-  path = require('path'),
-  runseq = require('run-sequence'),
-  uglify = require('gulp-uglify')
-;
+var audit = require('gulp-audit');
+var compilerPackage = require('google-closure-compiler');
+var concat = require('gulp-concat');
+var exec = require('child_process').exec;
+var fs = require('fs');
+var gulp = require('gulp');
+var header = require('gulp-header');
+var path = require('path');
+var rename = require('gulp-rename');
+var runseq = require('run-sequence');
+var uglify = require('gulp-uglify');
+
+var closureCompiler = compilerPackage.gulp();
 
 // init tests with gulp
 require('web-component-tester').gulp.init(gulp);
@@ -129,7 +131,21 @@ defineBuildTask('HTMLImports');
 defineBuildTask('ShadowDOM');
 defineBuildTask('MutationObserver');
 
-gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements', 
+gulp.task('CustomElementsV1', function () {
+  return gulp.src('./src/CustomElements/v1/CustomElements.js', {base: './'})
+      .pipe(closureCompiler({
+          compilation_level: 'ADVANCED',
+          warning_level: 'VERBOSE',
+          language_in: 'ECMASCRIPT6_STRICT',
+          language_out: 'ECMASCRIPT5_STRICT',
+          output_wrapper: '(function(){\n%output%\n}).call(this)',
+          externs: 'externs/html5.js',
+          js_output_file: 'CustomElementsV1.min.js'
+        }))
+      .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements',
   'HTMLImports', 'ShadowDOM', 'copy-bower', 'MutationObserver']);
 
 gulp.task('release', function(cb) {
