@@ -67,7 +67,7 @@ suite('customElements', function() {
   test('customElements.define create via new', function() {
     class XFoo extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-foo');
+        customElements.currentTag = 'x-foo';
         super();
       }
     }
@@ -90,13 +90,13 @@ suite('customElements', function() {
   test('customElements.define create subclass via new', function() {
     class XSuper1 extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-super-1');
+        customElements.currentTag = 'x-super-1';
         super();
       }
     }
     class XSub1 extends XSuper1 {
       constructor() {
-        customElements.setCurrentTag('x-sub-1');
+        customElements.currentTag = 'x-sub-1';
         super();
       }
     }
@@ -118,7 +118,7 @@ suite('customElements', function() {
 
   test('customElements.define create ES5 via new', function() {
     function XFooES5() {
-      customElements.setCurrentTag('x-foo-es5');
+      customElements.currentTag = 'x-foo-es5';
       // Note the return is super (ahem) important!
       return HTMLElement.call(this);
     }
@@ -137,7 +137,7 @@ suite('customElements', function() {
   test('customElements.define create via createElement', function() {
     class XFoo2 extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-foo');
+        customElements.currentTag = 'x-foo';
         super();
       }
     }
@@ -158,13 +158,13 @@ suite('customElements', function() {
   test('customElements.define create subclass via createElement', function() {
     class XSuper2 extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-super-1');
+        customElements.currentTag = 'x-super-1';
         super();
       }
     }
     class XSub2 extends XSuper2 {
       constructor() {
-        customElements.setCurrentTag('x-sub-1');
+        customElements.currentTag = 'x-sub-1';
         super();
       }
     }
@@ -187,7 +187,7 @@ suite('customElements', function() {
 
   test('customElements.define create ES5 via createElement', function() {
     function XBarES5() {
-      customElements.setCurrentTag('x-bar-es5');
+      customElements.currentTag = 'x-bar-es5';
       return HTMLElement.call(this);
     }
     XBarES5.prototype = Object.create(HTMLElement.prototype);
@@ -205,7 +205,7 @@ suite('customElements', function() {
   test('customElements.define create via createElementNS', function() {
     class XFoo3 extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-foo3');
+        customElements.currentTag = 'x-foo3';
         super();
       }
     }
@@ -222,7 +222,7 @@ suite('customElements', function() {
   test('customElements.define treats names as case insensitive', function() {
     class XCase extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-case');
+        customElements.currentTag = 'x-case';
         super();
         this.isXCase = true;
       }
@@ -266,7 +266,7 @@ suite('customElements', function() {
     var count = 0;
     class XConstructor extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-constructor');
+        customElements.currentTag = 'x-constructor';
         super();
         count++;
       }
@@ -279,7 +279,7 @@ suite('customElements', function() {
   test('customElements.define [attached|detached]Callbacks', function(done) {
     class XCallbacks extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-callbacks');
+        customElements.currentTag = 'x-callbacks';
         super();
         this.attached = false;
         this.detached = false;
@@ -319,11 +319,11 @@ suite('customElements', function() {
       }
 
       constructor() {
-        customElements.setCurrentTag('x-boo-acp');
+        customElements.currentTag = 'x-boo-acp';
         super();
       }
       attributeChangedCallback(inName, inOldValue) {
-        if (inName == 'foo' && inOldValue=='bar'
+        if (inName == 'foo' && inOldValue == 'bar'
             && this.attributes.foo.value == 'zot') {
           done();
         }
@@ -339,7 +339,7 @@ suite('customElements', function() {
     var inserted = 0;
     class XBoo extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-boo-at');
+        customElements.currentTag = 'x-boo-at';
         super();
       }
       connectedCallback() {
@@ -365,7 +365,7 @@ suite('customElements', function() {
     var ready, inserted, removed;
     class XBoo extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-boo-ir2');
+        customElements.currentTag = 'x-boo-ir2';
         super();
       }
       disconnectedCallback() {
@@ -384,7 +384,7 @@ suite('customElements', function() {
     ready = inserted = removed = false;
     class XBooBoo extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-booboo-ir2');
+        customElements.currentTag = 'x-booboo-ir2';
         super();
       }
       disconnectedCallback() {
@@ -405,7 +405,7 @@ suite('customElements', function() {
   test('node.cloneNode does not upgrade until attach', function(done) {
     class XBoo extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-boo-clone');
+        customElements.currentTag = 'x-boo-clone';
         super();
         this.__ready__ = true;
       }
@@ -426,7 +426,7 @@ suite('customElements', function() {
   test('document.importNode upgrades', function() {
     class XImport extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-import');
+        customElements.currentTag = 'x-import';
         super();
         this.__ready__ = true;
       }
@@ -449,7 +449,7 @@ suite('customElements', function() {
     var tagName = 'x-entered-left';
     class XEnteredLeft extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag(tagName);
+        customElements.currentTag = tagName;
         super();
         invocations.push('constructor');
       }
@@ -485,7 +485,7 @@ suite('customElements', function() {
 
     class XOrdering extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-ordering');
+        customElements.currentTag = 'x-ordering';
         super();
       }
       connectedCallback() {
@@ -512,7 +512,7 @@ suite('customElements', function() {
     var log = [];
     class XAD extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-ad');
+        customElements.currentTag = 'x-ad';
         super();
       }
       connectedCallback() {
@@ -536,7 +536,7 @@ suite('customElements', function() {
     var log = [];
     class XDA extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-da');
+        customElements.currentTag = 'x-da';
         super();
       }
       connectedCallback() {
@@ -562,7 +562,7 @@ suite('customElements', function() {
     var log = [];
     class XOrdering2 extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-ordering2');
+        customElements.currentTag = 'x-ordering2';
         super();
       }
       disconnectedCallback() {
@@ -589,7 +589,7 @@ suite('customElements', function() {
   test('instanceof', function() {
     class XInstance extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('x-instance');
+        customElements.currentTag = 'x-instance';
         super();
       }
     }
@@ -602,7 +602,7 @@ suite('customElements', function() {
 
     class XInstance2 extends XInstance {
       constructor() {
-        customElements.setCurrentTag('x-instance2');
+        customElements.currentTag = 'x-instance2';
         super();
       }
     }

@@ -24,7 +24,7 @@ suite('upgrade', function() {
   function registerTestComponent(inName, inValue) {
     var C = class extends HTMLElement {
       constructor() {
-        customElements.setCurrentTag('inName');
+        customElements.currentTag = 'inName';
         super();
       }
     };

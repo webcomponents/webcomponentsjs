@@ -21,7 +21,7 @@ suite('typescript', function() {
     var XTypescript = (function (_super) {
         __extends(XTypescript, _super);
         function XTypescript() {
-            customElements.setCurrentTag('x-typescript');
+            customElements.currentTag = 'x-typescript';
             _super.call(this);
         }
         return XTypescript;
@@ -47,7 +47,7 @@ suite('typescript', function() {
     var XTypescript2 = (function (_super) {
         __extends(XTypescript2, _super);
         function XTypescript2() {
-            customElements.setCurrentTag('x-typescript2');
+            customElements.currentTag = 'x-typescript2';
             _super.call(this);
         }
         return XTypescript2;

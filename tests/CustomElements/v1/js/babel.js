@@ -27,7 +27,7 @@ suite('babel', function() {
       function XBabel() {
         _classCallCheck(this, XBabel);
 
-        customElements.setCurrentTag('x-babel');
+        customElements.currentTag = 'x-babel';
         return _possibleConstructorReturn(this, Object.getPrototypeOf(XBabel).call(this));
       }
 
@@ -60,7 +60,7 @@ suite('babel', function() {
       function XBabel2() {
         _classCallCheck(this, XBabel2);
 
-        customElements.setCurrentTag('x-babel2');
+        customElements.currentTag = 'x-babel2';
         return _possibleConstructorReturn(this, Object.getPrototypeOf(XBabel2).call(this));
       }
 

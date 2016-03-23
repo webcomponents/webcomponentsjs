@@ -164,10 +164,6 @@ var CustomElementDefinition;
       this._handleMutations(this._observer.takeRecords());
     },
 
-    setCurrentTag(tagName) {
-      this._newTagName = this._newTagName || tagName;
-    },
-
     _setNewInstance(instance) {
       this._newInstance = instance;
     },
@@ -277,11 +273,17 @@ var CustomElementDefinition;
       }
     },
   };
+  // TODO: Figure out how to export a setter w/o using defineProperty
+  Object.defineProperty(CustomElementsRegistry.prototype, 'currentTag', {
+    set(tagName) {
+      this._newTagName = this._newTagName || tagName;
+    },
+  });
+
   // Closure Compiler Exports
   window['CustomElementsRegistry'] = CustomElementsRegistry;
   CustomElementsRegistry.prototype['define'] = CustomElementsRegistry.prototype.define;
   CustomElementsRegistry.prototype['flush'] = CustomElementsRegistry.prototype.flush;
-  CustomElementsRegistry.prototype['setCurrentTag'] = CustomElementsRegistry.prototype.setCurrentTag;
   CustomElementsRegistry.prototype['polyfilled'] = CustomElementsRegistry.prototype.polyfilled;
 
   // patch window.HTMLElement
