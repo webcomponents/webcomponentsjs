@@ -61,27 +61,18 @@ var CustomElementDefinition;
     return reservedTagList.indexOf(name) !== -1;
   }
 
-  /**
-   * @constructor
-   * @property {Map<String, CustomElementDefinition>} _defintions
-   * @property {MutationObserver} _observer
-   * @property {MutationObserver} _attributeObserver
-   * @property {HTMLElement} _newInstance
-   * @property {string} _newTagName
-   * @property {boolean} polyfilled
-   */
-  function CustomElementsRegistry() {
-    this._definitions = new Map();
-    this._observer = this._observeRoot(document);
-    this._attributeObserver =
-        new MutationObserver(this._handleAttributeChange.bind(this));
-    this._newInstance = null;
-    this._newTagName = null;
-    this.polyfilled = true;
-  }
-
-  /** @lends {CustomElementsRegistry.prototype} */
-  CustomElementsRegistry.prototype = {
+  /** @export */
+  class CustomElementsRegistry {
+    constructor() {
+       this._definitions = new Map();
+       this._observer = this._observeRoot(document);
+       this._attributeObserver =
+           new MutationObserver(this._handleAttributeChange.bind(this));
+       this._newInstance = null;
+       this._newTagName = null;
+       this.polyfilled = true;
+    }
+    /** @export */
     define(name, constructor, options) {
       // 5.1.1
       if (typeof constructor !== 'function') {
@@ -158,15 +149,17 @@ var CustomElementDefinition;
       // 5.1.22
       // this causes an upgrade of the document
       this._addNodes(doc.childNodes);
-    },
-
+    }
+    set currentTag(tagName) {
+      this._newTagName = this._newTagName || tagName;
+    }
     flush() {
       this._handleMutations(this._observer.takeRecords());
-    },
+    }
 
     _setNewInstance(instance) {
       this._newInstance = instance;
-    },
+    }
 
     _observeRoot(root) {
       if (!root.__observer) {
@@ -175,7 +168,7 @@ var CustomElementDefinition;
         root.__observer = observer;
       }
       return root.__observer;
-    },
+    }
 
     _handleMutations(mutations) {
       for (var i = 0; i < mutations.length; i++) {
@@ -185,7 +178,7 @@ var CustomElementDefinition;
           this._removeNodes(mutation.removedNodes);
         }
       }
-    },
+    }
 
     /**
      * @param {NodeList} nodeList
@@ -211,7 +204,7 @@ var CustomElementDefinition;
           }
         } while (walker.nextNode())
       }
-    },
+    }
 
     /**
      * @param {NodeList} nodeList
@@ -231,7 +224,7 @@ var CustomElementDefinition;
           }
         } while (walker.nextNode())
       }
-    },
+    }
 
     /**
      * @param {HTMLElement} element
@@ -254,7 +247,7 @@ var CustomElementDefinition;
           attributeFilter: definition.observedAttributes,
         });
       }
-    },
+    }
 
     /**
      * @private
@@ -271,20 +264,16 @@ var CustomElementDefinition;
           target['attributeChangedCallback'](name, oldValue, newValue, namespace);
         }
       }
-    },
+    }
   };
-  // TODO: Figure out how to export a setter w/o using defineProperty
-  Object.defineProperty(CustomElementsRegistry.prototype, 'currentTag', {
-    set(tagName) {
-      this._newTagName = this._newTagName || tagName;
-    },
-  });
-
   // Closure Compiler Exports
   window['CustomElementsRegistry'] = CustomElementsRegistry;
   CustomElementsRegistry.prototype['define'] = CustomElementsRegistry.prototype.define;
   CustomElementsRegistry.prototype['flush'] = CustomElementsRegistry.prototype.flush;
   CustomElementsRegistry.prototype['polyfilled'] = CustomElementsRegistry.prototype.polyfilled;
+
+  /** @export */
+  window['customElements'] = new CustomElementsRegistry();
 
   // patch window.HTMLElement
 
@@ -341,7 +330,4 @@ var CustomElementDefinition;
       return _origCreateElementNS.call(document, namespaceURI, qualifiedName);
     }
   };
-
-  /** @type {CustomElementsRegistry} */
-  window['customElements'] = new CustomElementsRegistry();
 })();

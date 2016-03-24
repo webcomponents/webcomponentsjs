@@ -139,7 +139,7 @@ gulp.task('CustomElementsV1', function () {
           language_in: 'ECMASCRIPT6_STRICT',
           language_out: 'ECMASCRIPT5_STRICT',
           output_wrapper: '(function(){\n%output%\n}).call(this)',
-          externs: 'externs/html5.js',
+          externs: ['externs/html5.js','externs/customelements.js'],
           js_output_file: 'CustomElementsV1.min.js'
         }))
       .pipe(gulp.dest('./dist'));
