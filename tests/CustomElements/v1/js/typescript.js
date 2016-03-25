@@ -21,7 +21,6 @@ suite('typescript', function() {
     var XTypescript = (function (_super) {
         __extends(XTypescript, _super);
         function XTypescript() {
-            customElements.currentTag = 'x-typescript';
             _super.call(this);
         }
         return XTypescript;
@@ -31,7 +30,6 @@ suite('typescript', function() {
     customElements.define('x-typescript', XTypescript);
     // create an instance via new
     var e = new XTypescript();
-    console.log(e);
     // test localName
     assert.equal(e.localName, 'x-typescript');
     // test instanceof
@@ -47,7 +45,6 @@ suite('typescript', function() {
     var XTypescript2 = (function (_super) {
         __extends(XTypescript2, _super);
         function XTypescript2() {
-            customElements.currentTag = 'x-typescript2';
             _super.call(this);
         }
         return XTypescript2;
@@ -57,7 +54,6 @@ suite('typescript', function() {
     customElements.define('x-typescript2', XTypescript2);
     // create an instance via new
     var e = document.createElement('x-typescript2');
-    console.log(e);
     // test localName
     assert.equal(e.localName, 'x-typescript2');
     // test instanceof
