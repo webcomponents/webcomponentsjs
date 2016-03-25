@@ -62,26 +62,24 @@ var CustomElementDefinition;
   }
 
   /**
-   * @constructor
    * @property {Map<String, CustomElementDefinition>} _defintions
    * @property {MutationObserver} _observer
    * @property {MutationObserver} _attributeObserver
    * @property {HTMLElement} _newInstance
-   * @property {string} _newTagName
    * @property {boolean} polyfilled
    */
-  function CustomElementsRegistry() {
-    this._definitions = new Map();
-    this._observer = this._observeRoot(document);
-    this._attributeObserver =
-        new MutationObserver(this._handleAttributeChange.bind(this));
-    this._newInstance = null;
-    this._newTagName = null;
-    this.polyfilled = true;
-  }
+  class CustomElementsRegistry {
 
-  /** @lends {CustomElementsRegistry.prototype} */
-  CustomElementsRegistry.prototype = {
+    constructor() {
+      this._definitions = new Map();
+      this._constructors = new Map();
+      this._observer = this._observeRoot(document);
+      this._attributeObserver =
+          new MutationObserver(this._handleAttributeChange.bind(this));
+      this._newInstance = null;
+      this.polyfilled = true;
+    }
+
     define(name, constructor, options) {
       // 5.1.1
       if (typeof constructor !== 'function') {
@@ -108,11 +106,9 @@ var CustomElementDefinition;
 
       // 5.1.6
       // IE11 doesn't support Map.values, only Map.forEach
-      this._definitions.forEach(function(value, key) {
-        if (value.constructor === constructor) {
-          throw new Error(`NotSupportedError: document.defineElement failed for '${name}'. The constructor is already used.`);
-        }
-      });
+      if (this._constructors.has(constructor)) {
+        throw new Error(`NotSupportedError: document.defineElement failed for '${name}'. The constructor is already used.`);
+      }
 
       // 5.1.7
       var localName = name;
@@ -154,19 +150,20 @@ var CustomElementDefinition;
 
       // 5.1.21
       this._definitions.set(localName, definition);
+      this._constructors.set(constructor, localName);
 
       // 5.1.22
       // this causes an upgrade of the document
       this._addNodes(doc.childNodes);
-    },
+    }
 
     flush() {
       this._handleMutations(this._observer.takeRecords());
-    },
+    }
 
     _setNewInstance(instance) {
       this._newInstance = instance;
-    },
+    }
 
     _observeRoot(root) {
       if (!root.__observer) {
@@ -175,7 +172,7 @@ var CustomElementDefinition;
         root.__observer = observer;
       }
       return root.__observer;
-    },
+    }
 
     _handleMutations(mutations) {
       for (var i = 0; i < mutations.length; i++) {
@@ -185,7 +182,7 @@ var CustomElementDefinition;
           this._removeNodes(mutation.removedNodes);
         }
       }
-    },
+    }
 
     /**
      * @param {NodeList} nodeList
@@ -211,7 +208,7 @@ var CustomElementDefinition;
           }
         } while (walker.nextNode())
       }
-    },
+    }
 
     /**
      * @param {NodeList} nodeList
@@ -231,7 +228,7 @@ var CustomElementDefinition;
           }
         } while (walker.nextNode())
       }
-    },
+    }
 
     /**
      * @param {HTMLElement} element
@@ -254,7 +251,7 @@ var CustomElementDefinition;
           attributeFilter: definition.observedAttributes,
         });
       }
-    },
+    }
 
     /**
      * @private
@@ -271,14 +268,8 @@ var CustomElementDefinition;
           target['attributeChangedCallback'](name, oldValue, newValue, namespace);
         }
       }
-    },
-  };
-  // TODO: Figure out how to export a setter w/o using defineProperty
-  Object.defineProperty(CustomElementsRegistry.prototype, 'currentTag', {
-    set(tagName) {
-      this._newTagName = this._newTagName || tagName;
-    },
-  });
+    }
+  }
 
   // Closure Compiler Exports
   window['CustomElementsRegistry'] = CustomElementsRegistry;
@@ -296,15 +287,13 @@ var CustomElementDefinition;
     if (customElements._newInstance) {
       var i = customElements._newInstance;
       customElements._newInstance = null;
-      customElements._newTagName = null;
       return i;
     }
-    if (customElements._newTagName) {
-      var tagName = customElements._newTagName.toLowerCase();
-      customElements._newTagName = null;
+    if (this.constructor) {
+      var tagName = customElements._constructors.get(this.constructor);
       return doc._createElement(tagName, false);
     }
-    throw new Error('unknown constructor');
+    throw new Error('unknown constructor. Did you call customElements.define()?');
   }
   HTMLElement.prototype = Object.create(origHTMLElement.prototype);
   Object.defineProperty(HTMLElement.prototype, 'constructor', {

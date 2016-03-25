@@ -27,7 +27,6 @@ suite('babel', function() {
       function XBabel() {
         _classCallCheck(this, XBabel);
 
-        customElements.currentTag = 'x-babel';
         return _possibleConstructorReturn(this, Object.getPrototypeOf(XBabel).call(this));
       }
 
@@ -38,7 +37,6 @@ suite('babel', function() {
     customElements.define('x-babel', XBabel);
     // create an instance via new
     var e = new XBabel();
-    console.log(e);
     // test localName
     assert.equal(e.localName, 'x-babel');
     // test instanceof
@@ -60,7 +58,6 @@ suite('babel', function() {
       function XBabel2() {
         _classCallCheck(this, XBabel2);
 
-        customElements.currentTag = 'x-babel2';
         return _possibleConstructorReturn(this, Object.getPrototypeOf(XBabel2).call(this));
       }
 
@@ -71,7 +68,6 @@ suite('babel', function() {
     customElements.define('x-babel2', XBabel2);
     // create an instance via new
     var e = document.createElement('x-babel2');
-    console.log(e);
     // test localName
     assert.equal(e.localName, 'x-babel2');
     // test instanceof

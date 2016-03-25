@@ -22,12 +22,7 @@ suite('upgrade', function() {
   });
 
   function registerTestComponent(inName, inValue) {
-    var C = class extends HTMLElement {
-      constructor() {
-        customElements.currentTag = 'inName';
-        super();
-      }
-    };
+    var C = class extends HTMLElement {};
     C.prototype.value = inValue || 'value';
     customElements.define(inName, C);
   }
