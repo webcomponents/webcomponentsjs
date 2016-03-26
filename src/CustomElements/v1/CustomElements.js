@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+ * Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
  * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
@@ -81,62 +81,56 @@ var CustomElementDefinition;
     }
 
     define(name, constructor, options) {
-      // 5.1.1
+      // 2.4.1
       if (typeof constructor !== 'function') {
         throw new TypeError('constructor must be a Constructor');
       }
 
-      // 5.1.2
+      // 2.4.2
       name = name.toString().toLowerCase();
 
-      // 5.1.3
+      // 2.4.3
       if (!customNameValidation.test(name)) {
-        throw new Error(`NotSupportedError: document.defineElement failed for '${name}'. The element name is not valid.`);
+        throw new SyntaxError(`CustomElementRegistry.define: The element name '${name}' is not valid.`);
       }
       if (isReservedTag(name)) {
-        throw new Error(`NotSupportedError: document.defineElement failed for '${name}'. The element name is reserved.`);
+        throw new SyntaxError(`CustomElementRegistry.define: The element name '${name}' is reserved.`);
       }
 
-      // 5.1.4? Can't polyfill?
-
-      // 5.1.5
+      // 2.4.4
       if (this._definitions.has(name)) {
-        throw new Error(`NotSupportedError: document.defineElement an element with name '${name}' is already registered`);
+        throw new Error(`NotSupportedError: CustomElementRegistry.define: An element with name '${name}' is already defined`);
       }
 
-      // 5.1.6
-      // IE11 doesn't support Map.values, only Map.forEach
+      // 2.4.5
       if (this._constructors.has(constructor)) {
-        throw new Error(`NotSupportedError: document.defineElement failed for '${name}'. The constructor is already used.`);
+        throw new Error(`NotSupportedError: CustomElementRegistry.define failed for '${name}'. The constructor is already used.`);
       }
 
-      // 5.1.7
+      // 2.4.6
       var localName = name;
 
-      // 5.1.8
-      var _extends = options && options.extends || '';
+      // 2.4.7 & 2.4.8: not supporting extends
 
-      // 5.1.9
-      // skip for now
-      // if (_extends !== null) {
-      // }
-
-      // 5.1.10, 5.1.11
+      // 2.4.9, 2.4.10
       var observedAttributes = constructor['observedAttributes'] || [];
 
-      // 5.1.12
+      // 2.4.11
       var prototype = constructor.prototype;
 
-      // 5.1.13?
+      // 2.4.12
+      if (typeof prototype !== 'object') {
+        throw new TypeError('CustomElementRegistry.define: type of prototype is not "object"');
+      }
 
-      // 5.1.14 & 5.1.15
+      // 2.4.13 & 2.4.14
       var connectedCallback = getCallback(prototype, 'connectedCallback', localName);
-      // 5.1.16 & 5.1.17
+      // 2.4.15 & 2.4.16
       var disconnectedCallback = getCallback(prototype, 'disconnectedCallback', localName);
-      // 5.1.18 & 5.1.19
+      // 2.4.17 & 2.4.18
       var attributeChangedCallback = getCallback(prototype, 'attributeChangedCallback', localName);
 
-      // 5.1.20
+      // 2.4.19
       // @type {CustomElementDefinition}
       var definition = {
         name: name,
@@ -148,11 +142,10 @@ var CustomElementDefinition;
         observedAttributes: observedAttributes,
       };
 
-      // 5.1.21
+      // 2.4.20
       this._definitions.set(localName, definition);
       this._constructors.set(constructor, localName);
 
-      // 5.1.22
       // this causes an upgrade of the document
       this._addNodes(doc.childNodes);
     }
@@ -296,12 +289,7 @@ var CustomElementDefinition;
     throw new Error('unknown constructor. Did you call customElements.define()?');
   }
   HTMLElement.prototype = Object.create(origHTMLElement.prototype);
-  Object.defineProperty(HTMLElement.prototype, 'constructor', {
-    writable: false,
-    configurable: true,
-    enumerable: false,
-    value: HTMLElement,
-  });
+  Object.defineProperty(HTMLElement.prototype, 'constructor', {value: HTMLElement});
 
   // patch doc.createElement
 
