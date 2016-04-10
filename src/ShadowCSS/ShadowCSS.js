@@ -566,7 +566,7 @@ var selectorRe = /([^{]*)({[\s\S]*?})/gim,
     // note: :host-context pre-processed to -shadowcsshostcontext.
     polyfillHostContext = '-shadowcsscontext',
     parenSuffix = ')(?:\\((' +
-        '(?:\\([^)(]*\\)|[^)(]*)+?' +
+        '(?:\\([^)(]*\\)|[^)(])+?' +
         ')\\))?([^,{]*)';
     var cssColonHostRe = new RegExp('(' + polyfillHost + parenSuffix, 'gim'),
     cssColonHostContextRe = new RegExp('(' + polyfillHostContext + parenSuffix, 'gim'),
