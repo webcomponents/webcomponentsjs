@@ -11,8 +11,29 @@
 // minimal template polyfill
 (function() {
   var needsTemplate = (typeof HTMLTemplateElement === 'undefined');
+  // NOTE: Patch document.importNode to work around IE11 bug that
+  // casues children of a document fragment imported while
+  // there is a mutation observer to not have a parentNode (!?!)
+  // This needs to happen *after* patching importNode to fix template cloning
+  if (/Trident/.test(navigator.userAgent)) {
+    (function() {
+      var importNode = document.importNode;
+      document.importNode = function() {
+        var n = importNode.apply(document, arguments);
+        // Copy all children to a new document fragment since
+        // this one may be broken
+        if (n.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+          var f = document.createDocumentFragment();
+          f.appendChild(n);
+          return f;
+        } else {
+          return n;
+        }
+      };
+    })();
+  }
 
-  // returns true if nested templates can be cloned (they cannot be on 
+  // returns true if nested templates can be cloned (they cannot be on
   // some impl's like Safari 8)
   var needsCloning = (function() {
     if (!needsTemplate) {
@@ -42,7 +63,6 @@
     /**
       Provides a minimal shim for the <template> element.
     */
-    
     TemplateImpl.prototype = Object.create(HTMLElement.prototype);
 
     /**
@@ -59,6 +79,11 @@
       while (child = template.firstChild) {
         template.content.appendChild(child);
       }
+
+      template.cloneNode = function(deep) {
+        return TemplateImpl.cloneNode(this, deep);
+      };
+
       // add innerHTML to template, if possible
       // Note: this throws on Safari 7
       if (canDecorate) {
@@ -83,10 +108,6 @@
             },
             configurable: true
           });
-
-          template.cloneNode = function(deep) {
-            return TemplateImpl.cloneNode(this, deep);
-          };
 
         } catch (err) {
           canDecorate = false;
@@ -169,7 +190,7 @@
       return clone;
     };
 
-    // Given a source and cloned subtree, find <template>'s in the cloned 
+    // Given a source and cloned subtree, find <template>'s in the cloned
     // subtree and replace them with cloned <template>'s from source.
     // We must do this because only the source templates have proper .content.
     TemplateImpl.fixClonedDom = function(clone, source) {
@@ -203,7 +224,7 @@
 
     // NOTE: we are cloning instead of importing <template>'s.
     // However, the ownerDocument of the cloned template will be correct!
-    // This is because the native import node creates the right document owned 
+    // This is because the native import node creates the right document owned
     // subtree and `fixClonedDom` inserts cloned templates into this subtree,
     // thus updating the owner doc.
     document.importNode = function(element, deep) {
@@ -223,7 +244,6 @@
         return TemplateImpl.cloneNode(this, deep);
       };
     }
-    
   }
 
   if (needsTemplate) {
