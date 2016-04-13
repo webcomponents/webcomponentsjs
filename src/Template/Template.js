@@ -138,7 +138,7 @@
     document.createElement = function() {
       'use strict';
       var el = createElement.apply(document, arguments);
-      if (el.localName == 'template') {
+      if (el.localName === 'template') {
         TemplateImpl.decorate(el);
       }
       return el;
@@ -173,7 +173,7 @@
     var nativeCloneNode = Node.prototype.cloneNode;
 
     TemplateImpl.cloneNode = function(template, deep) {
-      var clone = nativeCloneNode.call(template);
+      var clone = nativeCloneNode.call(template, false);
       // NOTE: decorate doesn't auto-fix children because they are already
       // decorated so they need special clone fixup.
       if (this.decorate) {
