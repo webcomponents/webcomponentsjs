@@ -33,16 +33,16 @@
     })();
   }
 
-  // returns true if nested templates can be cloned (they cannot be on
+  // returns true if nested templates cannot be cloned (they cannot be on
   // some impl's like Safari 8)
   var needsCloning = (function() {
     if (!needsTemplate) {
-      var frag = document.createDocumentFragment();
       var t = document.createElement('template');
-      frag.appendChild(t);
-      t.content.appendChild(document.createElement('div'));
-      var clone = frag.cloneNode(true);
-      return (clone.firstChild.content.childNodes.length === 0);
+      var t2 = document.createElement('template');
+      t2.content.appendChild(document.createElement('div'));
+      t.content.appendChild(t2);
+      var clone = t.cloneNode(true);
+      return (clone.content.childNodes.length === 0 || clone.content.firstChild.content.childNodes.length === 0);
     }
   })();
 

@@ -130,7 +130,7 @@
           var imp = document.createElement('template');
           var s = 'a<template id="a">b<template id="b">c<template id="c">d</template></template></template>';
           setupTemplate(imp, s);
-          var clone = imp.cloneNode();
+          var clone = imp.cloneNode(false);
           assert.notEqual(clone, imp, 'element is not cloned');
           assert.isDefined(clone.content, 'cloned template content dne');
           assert.equal(clone.content.childNodes.length, 0,
