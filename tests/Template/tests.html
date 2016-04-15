@@ -37,6 +37,32 @@
           template = document.querySelector('template');
         });
 
+        var canInnerHTML = (function() {
+          var el = document.createElement('div');
+          try {
+            Object.defineProperty(el, 'innerHTML', {
+              get: function(){},
+              set: function(){}
+            });
+            return true;
+          } catch(e) {
+            return false;
+          }
+        })();
+
+        function setupTemplate(template, string) {
+          if (canInnerHTML) {
+            template.innerHTML = string;
+          } else {
+            var el = document.createElement('div');
+            el.innerHTML = string;
+            var nodes = Array.prototype.slice.call(el.childNodes, 0);
+            for (var i = 0; i < nodes.length; i++) {
+              template.content.appendChild(nodes[i]);
+            }
+          }
+        }
+
         test('No rendering', function() {
           var bcr = template.getBoundingClientRect();
           assert.equal(bcr.height, 0);
@@ -58,6 +84,9 @@
         });
 
         test('innerHTML', function() {
+          if (!canInnerHTML) {
+            this.skip();
+          }
           var imp = document.createElement('template');
           assert.equal(imp.innerHTML, '');
           var s = 'pre<div>Hi</div><div>Bye</div>post';
@@ -84,7 +113,7 @@
         test('clone', function() {
           var imp = document.createElement('template');
           var s = '<div>Hi</div>';
-          imp.innerHTML = s;
+          setupTemplate(imp, s);
           var clone = imp.cloneNode();
           assert.notEqual(clone, imp, 'element is not cloned');
           assert.isDefined(clone.content, 'cloned template content dne');
@@ -100,8 +129,8 @@
         test('clone nested', function() {
           var imp = document.createElement('template');
           var s = 'a<template id="a">b<template id="b">c<template id="c">d</template></template></template>';
-          imp.innerHTML = s;
-          var clone = imp.cloneNode();
+          setupTemplate(imp, s);
+          var clone = imp.cloneNode(false);
           assert.notEqual(clone, imp, 'element is not cloned');
           assert.isDefined(clone.content, 'cloned template content dne');
           assert.equal(clone.content.childNodes.length, 0,
@@ -129,7 +158,7 @@
           var imp = document.createElement('div');
           var t = document.createElement('template');
           var s = 'a<template id="a">b<template id="b">c<template id="c">d</template></template></template>';
-          t.innerHTML = s;
+          setupTemplate(t, s);
           imp.appendChild(t);
           var impClone = imp.cloneNode(true);
           var imp = imp.firstChild;
@@ -155,7 +184,7 @@
         test('importNode', function() {
           var imp = document.createElement('template');
           var s = '<div>Hi</div>';
-          imp.innerHTML = s;
+          setupTemplate(imp, s)
           var clone = document.importNode(imp, false);
           assert.notEqual(clone, imp, 'element is not cloned');
           assert.isDefined(clone.content, 'cloned template content dne');
@@ -171,7 +200,7 @@
         test('importNode: nested', function() {
           var imp = document.createElement('template');
           var s = 'a<template id="a">b<template id="b">c<template id="c">d</template></template></template>';
-          imp.innerHTML = s;
+          setupTemplate(imp, s);
           var clone = document.importNode(imp, false);
           assert.notEqual(clone, imp, 'element is not cloned');
           assert.isDefined(clone.content, 'cloned template content dne');
@@ -200,7 +229,7 @@
           var imp = document.createElement('div');
           var t = document.createElement('template');
           var s = 'a<template id="a">b<template id="b">c<template id="c">d</template></template></template>';
-          t.innerHTML = s;
+          setupTemplate(t, s);
           imp.appendChild(t);
           var impClone = document.importNode(imp, true);
           imp = imp.firstChild;
