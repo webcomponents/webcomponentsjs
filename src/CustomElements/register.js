@@ -91,6 +91,10 @@ function register(name, options) {
   }
   // record name
   definition.__name = name.toLowerCase();
+  // ensure extended name is also treated case-insensitively
+  if (definition.extends) {
+    definition.extends = definition.extends.toLowerCase();
+  }
   // ensure a lifecycle object so we don't have to null test it
   definition.lifecycle = definition.lifecycle || {};
   // build a list of ancestral custom elements (for native base detection)
