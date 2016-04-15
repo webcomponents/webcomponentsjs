@@ -14,6 +14,7 @@
   var HTMLContentElement = scope.wrappers.HTMLContentElement;
   var HTMLElement = scope.wrappers.HTMLElement;
   var HTMLShadowElement = scope.wrappers.HTMLShadowElement;
+  var HTMLSlotElement = scope.wrappers.HTMLSlotElement;
   var HTMLTemplateElement = scope.wrappers.HTMLTemplateElement;
   var mixin = scope.mixin;
   var registerWrapper = scope.registerWrapper;
@@ -22,6 +23,8 @@
 
   function HTMLUnknownElement(node) {
     switch (node.localName) {
+      case 'slot':
+        return new HTMLSlotElement(node);
       case 'content':
         return new HTMLContentElement(node);
       case 'shadow':

@@ -73,6 +73,11 @@
       .replace(
         /\^|\/shadow\/|\/shadow-deep\/|::shadow|\/deep\/|::content|>>>/g,
         ' '
+      )
+      // From ShadowCSS, will be replaced by function argument + space
+      .replace(
+        /\::slotted\((.*)\)/g,
+        '$1 '
       );
   }
 

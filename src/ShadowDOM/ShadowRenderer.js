@@ -13,6 +13,7 @@
 
   var Element = scope.wrappers.Element;
   var HTMLContentElement = scope.wrappers.HTMLContentElement;
+  var HTMLSlotElement = scope.wrappers.HTMLSlotElement;
   var HTMLShadowElement = scope.wrappers.HTMLShadowElement;
   var Node = scope.wrappers.Node;
   var ShadowRoot = scope.wrappers.ShadowRoot;
@@ -387,19 +388,22 @@
       if (node instanceof HTMLShadowElement)
         return;
 
-      if (node instanceof HTMLContentElement) {
-        var content = node;
-        this.updateDependentAttributes(content.getAttribute('select'));
+      var isContentNode = node instanceof HTMLContentElement;
+      var isSlotNode = node instanceof HTMLSlotElement;
+
+      if (isContentNode || isSlotNode) {
+        var attributeName = isContentNode ? 'content' : 'name'
+        this.updateDependentAttributes(node.getAttribute(attributeName));
 
         var anyDistributed = false;
 
         // 1.1
         for (var i = 0; i < pool.length; i++) {
-          var node = pool[i];
-          if (!node)
+          var poolNode = pool[i];
+          if (!poolNode)
             continue;
-          if (matches(node, content)) {
-            destributeNodeInto(node, content);
+          if (matches(poolNode, node)) {
+            destributeNodeInto(poolNode, node);
             pool[i] = undefined;
             anyDistributed = true;
           }
@@ -408,10 +412,10 @@
         // 1.2
         // Fallback content
         if (!anyDistributed) {
-          for (var child = content.firstChild;
+          for (var child = node.firstChild;
                child;
                child = child.nextSibling) {
-            destributeNodeInto(child, content);
+            destributeNodeInto(child, node);
           }
         }
 
@@ -422,6 +426,7 @@
         this.poolDistribution(child, pool);
       }
     },
+
 
     buildRenderTree: function(renderNode, node) {
       var children = this.compose(node);
@@ -516,7 +521,8 @@
   function getShadowInsertionPoint(node) {
     if (node instanceof HTMLShadowElement)
       return node;
-    if (node instanceof HTMLContentElement)
+    if (node instanceof HTMLContentElement ||
+       node instanceof HTMLSlotElement)
       return null;
     for (var child = node.firstChild; child; child = child.nextSibling) {
       var res = getShadowInsertionPoint(child);
@@ -553,27 +559,32 @@
   //   negation
   var selectorStartCharRe = /^(:not\()?[*.#[a-zA-Z_|]/;
 
-  function matches(node, contentElement) {
-    var select = contentElement.getAttribute('select');
-    if (!select)
-      return true;
-
-    // Here we know the select attribute is a non empty string.
-    select = select.trim();
-    if (!select)
-      return true;
-
+  function matches(node, distributorElement) {
     if (!(node instanceof Element))
       return false;
 
-    if (!selectorStartCharRe.test(select))
-      return false;
+    var isContentElement = distributorElement instanceof HTMLContentElement;
+    var isSlotElement = distributorElement instanceof HTMLSlotElement;
 
-    try {
-      return node.matches(select);
-    } catch (ex) {
-      // Invalid selector.
-      return false;
+    if (isContentElement || isSlotElement) {
+
+        var selectAttribute = isContentElement ? 'select' : 'name'
+        var select = distributorElement.getAttribute(selectAttribute);
+
+        select = select.trim();
+        if (!select)
+          return true;
+
+        // Here we know the select attribute is a non empty string.
+        if (!selectorStartCharRe.test(select))
+            return false;
+
+        try {
+            return node.matches(select) || node.matches('[slot="' + select + '"]');
+        } catch (ex) {
+            // Invalid selector.
+            return false;
+        }
     }
   }
 
@@ -584,6 +595,7 @@
 
   function isInsertionPoint(node) {
     return node instanceof HTMLContentElement ||
+           node instanceof HTMLSlotElement ||
            node instanceof HTMLShadowElement;
   }
 
@@ -611,9 +623,9 @@
   // - a direct child to the ShadowRoot is added or removed
   // - a direct child to the host is added or removed
   // - a new shadow root is created
-  // - a direct child to a content/shadow element is added or removed
-  // - a sibling to a content/shadow element is added or removed
-  // - content[select] is changed
+  // - a direct child to a slot/content/shadow element is added or removed
+  // - a sibling to a slot/content/shadow element is added or removed
+  // - content[select]/slot[name] is changed
   // - an attribute in a direct child to a host is modified
 
   /**
@@ -630,6 +642,7 @@
   };
 
   HTMLContentElement.prototype.getDistributedNodes =
+  HTMLSlotElement.prototype.getDistributedNodes =
   HTMLShadowElement.prototype.getDistributedNodes = function() {
     // TODO(arv): We should only rerender the dirty ancestor renderers (from
     // the root and down).
@@ -642,7 +655,7 @@
     return getDestinationInsertionPoints(this) || [];
   };
 
-  HTMLContentElement.prototype.nodeIsInserted_ =
+  HTMLSlotElement.prototype.nodeIsInserted_ =
   HTMLShadowElement.prototype.nodeIsInserted_ = function() {
     // Invalidate old renderer if any.
     this.invalidateShadowRenderer();
