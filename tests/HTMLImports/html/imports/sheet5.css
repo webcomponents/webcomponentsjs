@@ -8,6 +8,6 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-.link-wrong-typed {
-  background-color: navy;
+.link-typed {
+  background-color: green;
 }
