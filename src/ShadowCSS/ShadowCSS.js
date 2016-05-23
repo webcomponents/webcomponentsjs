@@ -739,7 +739,7 @@ if (window.ShadowDOMPolyfill) {
           originalParseGeneric.call(this, elt);
           return;
         }
-        if (elt.__resource) {
+        if (elt.__resource != undefined) {
           style = elt.ownerDocument.createElement('style');
           style.textContent = elt.__resource;
         }
@@ -767,7 +767,7 @@ if (window.ShadowDOMPolyfill) {
       HTMLImports.parser.hasResource = function(node) {
         if (node.localName === 'link' && node.rel === 'stylesheet' &&
             node.hasAttribute(SHIM_ATTRIBUTE)) {
-          return (node.__resource);
+          return (node.__resource != undefined);
         } else {
           return hasResource.call(this, node);
         }
