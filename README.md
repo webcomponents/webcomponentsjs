@@ -119,6 +119,8 @@ The Shadow DOM polyfill is implemented by [wrapping](http://webcomponents.org/po
 
 In order to work around these limitations the polyfill provides the `ShadowDOMPolyfill.wrap` and `ShadowDOMPolyfill.unwrap` methods to respectively wrap and unwrap DOM elements manually.
 
+Alternative to `ShadowDOMPolyfill.wrap` might be to use `querySelector` method, which always wraps results. For instance, you can get wrapped `document` in a generic way without using polyfill-specific calls as `document.querySelector('html').parentNode`.
+
 ### Custom element's constructor property is unreliable <a id="constructor"></a>
 See [#215](https://github.com/webcomponents/webcomponentsjs/issues/215) for background.
 
