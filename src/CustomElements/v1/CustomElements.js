@@ -61,6 +61,20 @@ var CustomElementDefinition;
     return reservedTagList.indexOf(name) !== -1;
   }
 
+  function createTreeWalker (root) {
+    // Accept all currently filtered elements.
+    function acceptNode () {
+      return NodeFilter.FILTER_ACCEPT;
+    }
+
+    // Work around Internet Explorer wanting a function instead of an object.
+    // IE also *requires* this argument where other browsers don't.
+    const safeFilter = acceptNode;
+    safeFilter.acceptNode = acceptNode;
+
+    return doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, safeFilter, false);
+  }
+
   /**
    * @property {Map<String, CustomElementDefinition>} _defintions
    * @property {MutationObserver} _observer
@@ -150,6 +164,12 @@ var CustomElementDefinition;
       this._addNodes(doc.childNodes);
     }
 
+    // http://w3c.github.io/webcomponents/spec/custom/#dom-customelementsregistry-get
+    get(localName) {
+      const def = this._definitions.get(localName);
+      return def ? def.constructor : undefined;
+    }
+
     flush() {
       this._handleMutations(this._observer.takeRecords());
     }
@@ -183,7 +203,7 @@ var CustomElementDefinition;
     _addNodes(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
-        var walker = doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+        var walker = createTreeWalker(root);
         do {
           var node = /** @type {HTMLElement} */ (walker.currentNode);
           var definition = this._definitions.get(node.localName);
@@ -199,7 +219,7 @@ var CustomElementDefinition;
               definition.connectedCallback.call(node);
             }
           }
-        } while (walker.nextNode())
+        } while (root.nodeType === 1 && walker.nextNode())
       }
     }
 
@@ -209,7 +229,7 @@ var CustomElementDefinition;
     _removeNodes(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
-        var walker = doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+        var walker = createTreeWalker(root);
         do {
           var node = walker.currentNode;
           if (node.__upgraded && node.__attached) {
@@ -219,7 +239,7 @@ var CustomElementDefinition;
               definition.disconnectedCallback.call(node);
             }
           }
-        } while (walker.nextNode())
+        } while (root.nodeType === 1 && walker.nextNode())
       }
     }
 
@@ -237,11 +257,21 @@ var CustomElementDefinition;
         new (definition.constructor)();
         console.assert(this._newInstance == null);
       }
-      if (definition.attributeChangedCallback && definition.observedAttributes.length > 0) {
+
+      var observedAttributes = definition.observedAttributes;
+      if (definition.attributeChangedCallback && observedAttributes.length > 0) {
         this._attributeObserver.observe(element, {
           attributes: true,
           attributeOldValue: true,
-          attributeFilter: definition.observedAttributes,
+          attributeFilter: observedAttributes,
+        });
+
+        // Trigger attributeChangedCallback for existing attributes.
+        // http://w3c.github.io/webcomponents/spec/custom/#upgrades - part 8
+        observedAttributes.forEach(function (name) {
+          if (element.hasAttribute(name)) {
+            element.attributeChangedCallback(name, null, element.getAttribute(name));
+          }
         });
       }
     }
@@ -296,7 +326,7 @@ var CustomElementDefinition;
   var rawCreateElement = doc.createElement.bind(document);
   doc._createElement = function(tagName, callConstructor) {
     var customElements = win['customElements'];
-    var element = rawCreateElement.call(document, tagName);
+    var element = rawCreateElement(tagName);
     var definition = customElements._definitions.get(tagName.toLowerCase());
     if (definition) {
       customElements._upgradeElement(element, definition, callConstructor);
