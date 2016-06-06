@@ -303,7 +303,7 @@ var CustomElementDefinition;
       return doc._createElement(tagName, false);
     }
     throw new Error('unknown constructor. Did you call customElements.define()?');
-  };
+  }
   HTMLElement.prototype = Object.create(origHTMLElement.prototype);
   Object.defineProperty(HTMLElement.prototype, 'constructor', {value: HTMLElement});
 
