@@ -316,7 +316,7 @@ suite('customElements', function() {
   test('customElements.get', function (done) {
     class XBoo extensd HTMLElement {}
     customElements.define('x-boo-get', XGetTest);
-    assert.equal('gaga', customElements.get('x-get-test'));
+    assert.equal(XGetTest, customElements.get('x-boo-get'));
     done();
   });
 
