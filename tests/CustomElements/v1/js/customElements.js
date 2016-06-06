@@ -313,6 +313,34 @@ suite('customElements', function() {
     done();
   });
 
+  test('customElements.get', function (done) {
+    class XBoo extensd HTMLElement {}
+    customElements.define('x-boo-get', XGetTest);
+    assert.equal('gaga', customElements.get('x-get-test'));
+    done();
+  });
+
+  test('attributeChangedCallback for existing observed attributes', function (done) {
+    var changed = [];
+    class XBoo extends HTMLElement {
+      static observedAttributes () {
+        return ['test1'];
+      }
+      attributeChangedCallback(name, oldValue, newValue) {
+        changed.push({ name, oldValue, newValue });
+      }
+    }
+    var xboo = new XBoo();
+    xboo.setAttribute('test1', 'test1');
+    xboo.setAttribute('test2', 'test2');
+    customElements.flush();
+    assert.equal(changed.length, 1, 'should only trigger for observed attributes');
+    assert.equal(changed[0].name).to.equal('test1', 'name');
+    assert.equal(changed[0].oldValue).to.equal(null, 'oldValue');
+    assert.equal(changed[0].newValue).to.equal('test1', 'newValue');
+    done();
+  });
+
   test('document.registerElement disconnectedCallbacks in prototype', function(done) {
     var ready, inserted, removed;
     class XBoo extends HTMLElement {

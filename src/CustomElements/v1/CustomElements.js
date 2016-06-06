@@ -150,6 +150,12 @@ var CustomElementDefinition;
       this._addNodes(doc.childNodes);
     }
 
+    // http://w3c.github.io/webcomponents/spec/custom/#dom-customelementsregistry-get
+    get(localName) {
+      const def = this._definitions.get(localName);
+      return def ? def.constructor : undefined;
+    }
+
     flush() {
       this._handleMutations(this._observer.takeRecords());
     }
@@ -237,11 +243,21 @@ var CustomElementDefinition;
         new (definition.constructor)();
         console.assert(this._newInstance == null);
       }
-      if (definition.attributeChangedCallback && definition.observedAttributes.length > 0) {
+
+      var observedAttributes = definition.observedAttributes;
+      if (definition.attributeChangedCallback && observedAttributes.length > 0) {
         this._attributeObserver.observe(element, {
           attributes: true,
           attributeOldValue: true,
-          attributeFilter: definition.observedAttributes,
+          attributeFilter: observedAttributes,
+        });
+
+        // Trigger attributeChangedCallback for existing attributes.
+        // http://w3c.github.io/webcomponents/spec/custom/#upgrades - part 8
+        observedAttributes.forEach(function (name) {
+          if (element.hasAttribute(name)) {
+            element.attributeChangedCallback(name, null, element.getAttribute(name));
+          }
         });
       }
     }
@@ -287,7 +303,7 @@ var CustomElementDefinition;
       return doc._createElement(tagName, false);
     }
     throw new Error('unknown constructor. Did you call customElements.define()?');
-  }
+  };
   HTMLElement.prototype = Object.create(origHTMLElement.prototype);
   Object.defineProperty(HTMLElement.prototype, 'constructor', {value: HTMLElement});
 
@@ -296,7 +312,7 @@ var CustomElementDefinition;
   var rawCreateElement = doc.createElement.bind(document);
   doc._createElement = function(tagName, callConstructor) {
     var customElements = win['customElements'];
-    var element = rawCreateElement.call(document, tagName);
+    var element = rawCreateElement(tagName);
     var definition = customElements._definitions.get(tagName.toLowerCase());
     if (definition) {
       customElements._upgradeElement(element, definition, callConstructor);
