@@ -61,6 +61,20 @@ var CustomElementDefinition;
     return reservedTagList.indexOf(name) !== -1;
   }
 
+  function createTreeWalker (root) {
+    // Accept all currently filtered elements.
+    function acceptNode () {
+      return NodeFilter.FILTER_ACCEPT;
+    }
+
+    // Work around Internet Explorer wanting a function instead of an object.
+    // IE also *requires* this argument where other browsers don't.
+    const safeFilter = acceptNode;
+    safeFilter.acceptNode = acceptNode;
+
+    return doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, safeFilter, false);
+  }
+
   /**
    * @property {Map<String, CustomElementDefinition>} _defintions
    * @property {MutationObserver} _observer
@@ -189,7 +203,7 @@ var CustomElementDefinition;
     _addNodes(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
-        var walker = doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, null);
+        var walker = createTreeWalker(root);
         do {
           var node = /** @type {HTMLElement} */ (walker.currentNode);
           var definition = this._definitions.get(node.localName);
@@ -205,7 +219,7 @@ var CustomElementDefinition;
               definition.connectedCallback.call(node);
             }
           }
-        } while (walker.nextNode())
+        } while (root.nodeType === 1 && walker.nextNode())
       }
     }
 
@@ -215,7 +229,7 @@ var CustomElementDefinition;
     _removeNodes(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
-        var walker = doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, null);
+        var walker = createTreeWalker(root);
         do {
           var node = walker.currentNode;
           if (node.__upgraded && node.__attached) {
@@ -225,7 +239,7 @@ var CustomElementDefinition;
               definition.disconnectedCallback.call(node);
             }
           }
-        } while (walker.nextNode())
+        } while (root.nodeType === 1 && walker.nextNode())
       }
     }
 
