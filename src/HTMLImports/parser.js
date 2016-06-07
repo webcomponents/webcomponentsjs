@@ -14,6 +14,7 @@ var path = scope.path;
 var rootDocument = scope.rootDocument;
 var flags = scope.flags;
 var isIE = scope.isIE;
+var isOldOpera = scope.isOldOpera;
 var IMPORT_LINK_TYPE = scope.IMPORT_LINK_TYPE;
 var IMPORT_SELECTOR = 'link[rel=' + IMPORT_LINK_TYPE + ']';
 
@@ -191,7 +192,7 @@ var importParser = {
 
     // NOTE: IE does not fire "load" event for styles that have already loaded
     // This is in violation of the spec, so we try our hardest to work around it
-    if (isIE && elt.localName === 'style') {
+    if ((isIE || isOldOpera) && elt.localName === 'style') {
       var fakeLoad = false;
       // If there's not @import in the textContent, assume it has loaded
       if (elt.textContent.indexOf('@import') == -1) {

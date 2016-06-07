@@ -58,7 +58,8 @@ suite('HTMLHtmlElement', function() {
     var matches = html.matchesSelector ||
         html.mozMatchesSelector ||
         html.webkitMatchesSelector ||
-        html.msMatchesSelector;
+        html.msMatchesSelector ||
+        html.oMatchesSelector;
 
     assert.isTrue(matches.call(document.body, 'body'));
     assert.isTrue(matches.call(wrap(document.body), 'body'));

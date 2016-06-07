@@ -32,6 +32,7 @@
     'mozMatchesSelector',
     'msMatchesSelector',
     'webkitMatchesSelector',
+    'oMatchesSelector'
   ].filter(function(name) {
     return OriginalElement.prototype[name];
   });

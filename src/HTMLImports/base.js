@@ -71,6 +71,7 @@ Object.defineProperty(rootDocument, '_currentScript', currentScriptDescriptor);
  */
 
 var isIE = /Trident/.test(navigator.userAgent);
+var isOldOpera = /Presto/.test(navigator.userAgent);
 
 // call a callback when all HTMLImports in the document at call time
 // (or at least document ready) have loaded.
@@ -237,5 +238,6 @@ scope.useNative = useNative;
 scope.rootDocument = rootDocument;
 scope.whenReady = whenReady;
 scope.isIE = isIE;
+scope.isOldOpera = isOldOpera;
 
 })(window.HTMLImports);

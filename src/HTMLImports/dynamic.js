@@ -60,6 +60,7 @@ var matches = HTMLElement.prototype.matches ||
     HTMLElement.prototype.matchesSelector ||
     HTMLElement.prototype.webkitMatchesSelector ||
     HTMLElement.prototype.mozMatchesSelector ||
-    HTMLElement.prototype.msMatchesSelector;
+    HTMLElement.prototype.msMatchesSelector ||
+    HTMLElement.prototype.oMatchesSelector;
 
 });
