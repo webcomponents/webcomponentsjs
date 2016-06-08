@@ -150,6 +150,12 @@ var CustomElementDefinition;
       this._addNodes(doc.childNodes);
     }
 
+    // https://html.spec.whatwg.org/multipage/scripting.html#custom-elements-api
+    get(localName) {
+      const def = this._definitions.get(localName);
+      return def ? def.constructor : undefined;
+    }
+
     flush() {
       this._handleMutations(this._observer.takeRecords());
     }

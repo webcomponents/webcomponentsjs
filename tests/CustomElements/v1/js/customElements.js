@@ -313,6 +313,13 @@ suite('customElements', function() {
     done();
   });
 
+  test('customElements.get', function (done) {
+    class XBoo extensd HTMLElement {}
+    customElements.define('x-boo-get', XGetTest);
+    assert.equal(XBoo, customElements.get('x-boo-get'));
+    done();
+  });
+
   test('document.registerElement disconnectedCallbacks in prototype', function(done) {
     var ready, inserted, removed;
     class XBoo extends HTMLElement {
