@@ -247,7 +247,7 @@ var CustomElementDefinition;
         });
 
         // Trigger attributeChangedCallback for existing attributes.
-        // http://w3c.github.io/webcomponents/spec/custom/#upgrades - part 8
+        // https://html.spec.whatwg.org/multipage/scripting.html#upgrades - part 1
         observedAttributes.forEach(function (name) {
           if (element.hasAttribute(name)) {
             element.attributeChangedCallback(name, null, element.getAttribute(name));
