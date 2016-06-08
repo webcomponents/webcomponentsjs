@@ -8,11 +8,11 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-suite('babel', function() {
+suite('Closure', function() {
 
-  // Fails because the XTypescript constructor does not return the result of
-  // the super call. See: https://github.com/Microsoft/TypeScript/issues/7574
-  test('customElements.define create babel generated ES5 via new', function() {
+  // Fails at a.prototype.constructor = a;
+  // Closure needs to use Object.defineProperty?
+  test.skip('customElements.define create Closure generated ES5 via new', function() {
     'use strict';
 
     // Closure standard library code
