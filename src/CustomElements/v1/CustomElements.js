@@ -296,7 +296,7 @@ var CustomElementDefinition;
   var rawCreateElement = doc.createElement.bind(document);
   doc._createElement = function(tagName, callConstructor) {
     var customElements = win['customElements'];
-    var element = rawCreateElement.call(document, tagName);
+    var element = rawCreateElement(tagName);
     var definition = customElements._definitions.get(tagName.toLowerCase());
     if (definition) {
       customElements._upgradeElement(element, definition, callConstructor);
