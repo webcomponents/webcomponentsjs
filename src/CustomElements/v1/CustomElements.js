@@ -150,6 +150,12 @@ var CustomElementDefinition;
       this._addNodes(doc.childNodes);
     }
 
+    // http://w3c.github.io/webcomponents/spec/custom/#dom-customelementsregistry-get
+    get(localName) {
+      const def = this._definitions.get(localName);
+      return def ? def.constructor : undefined;
+    }
+
     flush() {
       this._handleMutations(this._observer.takeRecords());
     }
