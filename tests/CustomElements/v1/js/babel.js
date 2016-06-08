@@ -8,11 +8,9 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-suite('babel', function() {
+suite('Babel', function() {
 
-  // Fails because the XTypescript constructor does not return the result of
-  // the super call. See: https://github.com/Microsoft/TypeScript/issues/7574
-  test('customElements.define create babel generated ES5 via new', function() {
+  test('customElements.define create Babel generated ES5 via new', function() {
     'use strict';
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -43,7 +41,7 @@ suite('babel', function() {
     assert.instanceOf(e, XBabel);
   });
 
-  test('customElements.define create babel generated ES5 via createElement', function() {
+  test('customElements.define create Babel generated ES5 via createElement', function() {
     'use strict';
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
