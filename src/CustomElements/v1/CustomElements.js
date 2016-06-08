@@ -237,11 +237,21 @@ var CustomElementDefinition;
         new (definition.constructor)();
         console.assert(this._newInstance == null);
       }
-      if (definition.attributeChangedCallback && definition.observedAttributes.length > 0) {
+
+      var observedAttributes = definition.observedAttributes;
+      if (definition.attributeChangedCallback && observedAttributes.length > 0) {
         this._attributeObserver.observe(element, {
           attributes: true,
           attributeOldValue: true,
-          attributeFilter: definition.observedAttributes,
+          attributeFilter: observedAttributes,
+        });
+
+        // Trigger attributeChangedCallback for existing attributes.
+        // http://w3c.github.io/webcomponents/spec/custom/#upgrades - part 8
+        observedAttributes.forEach(function (name) {
+          if (element.hasAttribute(name)) {
+            element.attributeChangedCallback(name, null, element.getAttribute(name));
+          }
         });
       }
     }
