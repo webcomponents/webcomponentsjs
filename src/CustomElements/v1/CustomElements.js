@@ -150,7 +150,7 @@ var CustomElementDefinition;
       this._addNodes(doc.childNodes);
     }
 
-    // http://w3c.github.io/webcomponents/spec/custom/#dom-customelementsregistry-get
+    // https://html.spec.whatwg.org/multipage/scripting.html#custom-elements-api
     get(localName) {
       const def = this._definitions.get(localName);
       return def ? def.constructor : undefined;
