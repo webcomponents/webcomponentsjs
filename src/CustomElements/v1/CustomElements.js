@@ -61,6 +61,10 @@ var CustomElementDefinition;
     return reservedTagList.indexOf(name) !== -1;
   }
 
+  function createTreeWalker (root) {
+    return doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, null, false);
+  }
+
   /**
    * @property {Map<String, CustomElementDefinition>} _defintions
    * @property {MutationObserver} _observer
@@ -183,7 +187,12 @@ var CustomElementDefinition;
     _addNodes(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
-        var walker = doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+
+        if (root.nodeType !== Node.ELEMENT_NODE) {
+          continue;
+        }
+
+        var walker = createTreeWalker(root);
         do {
           var node = /** @type {HTMLElement} */ (walker.currentNode);
           var definition = this._definitions.get(node.localName);
@@ -209,7 +218,12 @@ var CustomElementDefinition;
     _removeNodes(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
-        var walker = doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+
+        if (root.nodeType !== Node.ELEMENT_NODE) {
+          continue;
+        }
+
+        var walker = createTreeWalker(root);
         do {
           var node = walker.currentNode;
           if (node.__upgraded && node.__attached) {
