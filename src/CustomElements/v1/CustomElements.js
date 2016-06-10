@@ -69,7 +69,7 @@ var CustomElementDefinition;
   }
 
   function isElement(node) {
-    return node.nodeType !== Node.ELEMENT_NODE
+    return node.nodeType === Node.ELEMENT_NODE
   }
 
   /**
