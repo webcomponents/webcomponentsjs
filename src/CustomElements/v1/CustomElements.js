@@ -68,6 +68,10 @@ var CustomElementDefinition;
     return doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, null, false);
   }
 
+  function isElement(node) {
+    return node.nodeType !== Node.ELEMENT_NODE
+  }
+
   /**
    * @property {Map<String, CustomElementDefinition>} _defintions
    * @property {MutationObserver} _observer
@@ -191,7 +195,7 @@ var CustomElementDefinition;
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
 
-        if (root.nodeType !== Node.ELEMENT_NODE) {
+        if (!isElement(root)) {
           continue;
         }
 
@@ -222,7 +226,7 @@ var CustomElementDefinition;
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
 
-        if (root.nodeType !== Node.ELEMENT_NODE) {
+        if (!isElement(root)) {
           continue;
         }
 
