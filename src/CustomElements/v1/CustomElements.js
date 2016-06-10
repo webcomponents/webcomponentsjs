@@ -61,7 +61,10 @@ var CustomElementDefinition;
     return reservedTagList.indexOf(name) !== -1;
   }
 
-  function createTreeWalker (root) {
+  function createTreeWalker(root) {
+    // IE 11 requires the third and fourth arguments be present. If the ghird
+    // arg is null, it applies the default behaviour. However IE also requires
+    // the fourth argument be present even though the other browsers ignore it.
     return doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, null, false);
   }
 
