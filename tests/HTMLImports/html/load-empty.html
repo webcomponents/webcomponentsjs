@@ -17,8 +17,8 @@
         function importLoaded(event) {
           window.loadEvents++;
           if (event.type === 'load' && event.target.import) {
-            var s = event.target.import.querySelector('script');
-            chai.assert.ok(s, 'load event target can be used to find element in import');
+            var emptyImport = event.target.import;
+            chai.assert.ok(emptyImport instanceof Document, 'load event target can be used to find imported document');
           }
         }
 
