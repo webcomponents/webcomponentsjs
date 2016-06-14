@@ -293,10 +293,10 @@ var CustomElementDefinition;
 
   // patch doc.createElement
 
-  var rawCreateElement = doc.createElement.bind(document);
+  var rawCreateElement = doc.createElement;
   doc._createElement = function(tagName, callConstructor) {
     var customElements = win['customElements'];
-    var element = rawCreateElement(tagName);
+    var element = rawCreateElement.call(doc, tagName);
     var definition = customElements._definitions.get(tagName.toLowerCase());
     if (definition) {
       customElements._upgradeElement(element, definition, callConstructor);
