@@ -22,10 +22,10 @@ suite('shadow DOM', function() {
     document.body.removeChild(work);
   });
 
-  test('custom elements are created in shadow roots', function() {
-    if (!Element.prototype.attachShadow) {
-      return;
-    }
+  // Tests should be skipped in browsers that don't have native Shadow DOM
+  var testFn = Element.prototype.attachShadow ? test : test.skip;
+
+  testFn('custom elements are created in shadow roots', function() {
     class XShadow extends HTMLElement {}
     customElements.define('x-shadow', XShadow);
 
@@ -39,10 +39,7 @@ suite('shadow DOM', function() {
     assert.instanceOf(el, XShadow);
   });
 
-  test('custom elements are upgraded in shadow roots', function() {
-    if (!Element.prototype.attachShadow) {
-      return;
-    }
+  testFn('custom elements are upgraded in shadow roots', function() {
     class XShadow2 extends HTMLElement {}
 
     var shadowRoot = work.attachShadow({mode: 'open'});
