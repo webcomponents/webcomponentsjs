@@ -313,9 +313,42 @@ suite('customElements', function() {
     done();
   });
 
+  test('attributeChangedCallback for existing observed attributes', function (done) {
+    var changed = [];
+    class XBoo extends HTMLElement {
+      static get observedAttributes () {
+        return ['test1'];
+      }
+      attributeChangedCallback(name, oldValue, newValue) {
+        changed.push({ 
+          name: name, 
+          oldValue: oldValue, 
+          newValue: newValue
+        });
+      }
+      connectedCallback() {
+        this.innerHTML = 'testing';
+      }
+    }
+
+    var element = document.createElement('x-boo-at1');
+    element.setAttribute('test1', 'test1');
+    element.setAttribute('test2', 'test2');
+    work.appendChild(element);
+
+    customElements.define('x-boo-at1', XBoo);
+    customElements.flush();
+
+    assert.equal(changed.length, 1, 'should only trigger for observed attributes');
+    assert.equal(changed[0].name, 'test1', 'name');
+    assert.equal(changed[0].oldValue, null, 'oldValue');
+    assert.equal(changed[0].newValue, 'test1', 'newValue');
+    done();
+  });
+
   test('customElements.get', function (done) {
-    class XBoo extensd HTMLElement {}
-    customElements.define('x-boo-get', XGetTest);
+    class XBoo extends HTMLElement {}
+    customElements.define('x-boo-get', XBoo);
     assert.equal(XBoo, customElements.get('x-boo-get'));
     done();
   });
