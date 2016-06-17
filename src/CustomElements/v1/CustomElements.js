@@ -73,11 +73,13 @@ var CustomElementDefinition;
     constructor() {
       this._definitions = new Map();
       this._constructors = new Map();
-      this._observer = this._observeRoot(document);
+      this._observer = new MutationObserver(this._handleMutations.bind(this));
       this._attributeObserver =
           new MutationObserver(this._handleAttributeChange.bind(this));
       this._newInstance = null;
       this.polyfilled = true;
+
+      this._observeRoot(document);
     }
 
     define(name, constructor, options) {
@@ -165,12 +167,7 @@ var CustomElementDefinition;
     }
 
     _observeRoot(root) {
-      if (!root.__observer) {
-        var observer = new MutationObserver(this._handleMutations.bind(this));
-        observer.observe(root, {childList: true, subtree: true});
-        root.__observer = observer;
-      }
-      return root.__observer;
+      this._observer.observe(root, {childList: true, subtree: true});
     }
 
     _handleMutations(mutations) {
@@ -193,17 +190,19 @@ var CustomElementDefinition;
         do {
           var node = /** @type {HTMLElement} */ (walker.currentNode);
           var definition = this._definitions.get(node.localName);
-          if (!definition) {
-            continue;
-          }
-          if (!node.__upgraded) {
-            this._upgradeElement(node, definition, true);
-          }
-          if (node.__upgraded && !node.__attached) {
-            node.__attached = true;
-            if (definition && definition.connectedCallback) {
-              definition.connectedCallback.call(node);
+          if (definition) {
+            if (!node.__upgraded) {
+              this._upgradeElement(node, definition, true);
             }
+            if (node.__upgraded && !node.__attached) {
+              node.__attached = true;
+              if (definition && definition.connectedCallback) {
+                definition.connectedCallback.call(node);
+              }
+            }
+          }
+          if (node.shadowRoot) {
+            this._addNodes(node.shadowRoot.childNodes);
           }
         } while (walker.nextNode())
       }
@@ -324,6 +323,20 @@ var CustomElementDefinition;
       return _origCreateElementNS.call(document, namespaceURI, qualifiedName);
     }
   };
+
+  // patch Element.attachShadow
+
+  var _origAttachShadow = Element.prototype.attachShadow;
+  if (_origAttachShadow) {
+    Object.defineProperty(Element.prototype, 'attachShadow', {
+      value: function(options) {
+        var root = _origAttachShadow.call(this, options);
+        var customElements = win['customElements'];
+        customElements._observeRoot(root);
+        return root;
+      },
+    });
+  }
 
   /** @type {CustomElementsRegistry} */
   window['customElements'] = new CustomElementsRegistry();
