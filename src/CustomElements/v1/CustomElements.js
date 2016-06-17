@@ -61,6 +61,17 @@ var CustomElementDefinition;
     return reservedTagList.indexOf(name) !== -1;
   }
 
+  function createTreeWalker(root) {
+    // IE 11 requires the third and fourth arguments be present. If the ghird
+    // arg is null, it applies the default behaviour. However IE also requires
+    // the fourth argument be present even though the other browsers ignore it.
+    return doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, null, false);
+  }
+
+  function isElement(node) {
+    return node.nodeType === Node.ELEMENT_NODE
+  }
+
   /**
    * @property {Map<String, CustomElementDefinition>} _defintions
    * @property {MutationObserver} _observer
@@ -186,7 +197,12 @@ var CustomElementDefinition;
     _addNodes(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
-        var walker = doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+
+        if (!isElement(root)) {
+          continue;
+        }
+
+        var walker = createTreeWalker(root);
         do {
           var node = /** @type {HTMLElement} */ (walker.currentNode);
           var definition = this._definitions.get(node.localName);
@@ -214,7 +230,12 @@ var CustomElementDefinition;
     _removeNodes(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
-        var walker = doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+
+        if (!isElement(root)) {
+          continue;
+        }
+
+        var walker = createTreeWalker(root);
         do {
           var node = walker.currentNode;
           if (node.__upgraded && node.__attached) {
