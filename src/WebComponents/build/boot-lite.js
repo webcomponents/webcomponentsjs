@@ -37,14 +37,12 @@
       }
     }
     // log flags
+    flags.log = {};
     if (flags.log && flags.log.split) {
       var parts = flags.log.split(',');
-      flags.log = {};
       parts.forEach(function(f) {
         flags.log[f] = true;
       });
-    } else {
-      flags.log = {};
     }
   }
 
