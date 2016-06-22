@@ -1,0 +1,59 @@
+<!doctype html>
+<!--
+    @license
+    Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <title>Custom Elements: imports integration</title>
+    <script>
+      var _HTMLImportsLoaded = false;
+      addEventListener('HTMLImportsLoaded', function() {
+        _HTMLImportsLoaded = true;
+      });
+
+      WCT = {
+        waitFor: function(cb) {
+          if (_HTMLImportsLoaded) {
+            cb();
+          } else {
+            addEventListener('HTMLImportsLoaded', function() {
+              cb();
+            });
+          }
+        }
+      };
+
+    </script>
+    <script src="../../../../dist/HTMLImports.js"></script>
+    <script src="../../../../src/CustomElements/v1/CustomElements.js"></script>
+    <script src="../../../../../web-component-tester/browser.js"></script>
+    <link rel="import" href="imported-doc.html" id="import">
+    <script>
+
+      console.log(document.querySelector('#import').import);
+      var elementsCreated = 0;
+
+      class XFoo extends HTMLElement {
+        constructor() {
+          console.log("XFoo");
+          super();
+          elementsCreated++;
+        }
+      }
+      customElements.define('x-foo', XFoo);
+
+      test('CustomElements upgrade from HTML Imports', function() {
+        chai.assert.equal(2, elementsCreated, 'HTML hook allows main document and import document to upgrade');
+      });
+    </script>
+  </head>
+  <body>
+    <x-foo></x-foo>
+  </body>
+</html>
