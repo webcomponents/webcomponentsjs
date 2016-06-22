@@ -289,7 +289,7 @@ suite('customElements', function() {
     xboo.setAttribute('foo', 'zot');
   });
 
-  test('customElements.define connectedCallbacks in prototype', function(done) {
+  test('customElements.define connectedCallbacks in prototype', function() {
     var inserted = 0;
     class XBoo extends HTMLElement {
       connectedCallback() {
@@ -308,10 +308,9 @@ suite('customElements', function() {
     work.appendChild(xboo);
     customElements.flush();
     assert.equal(inserted, 2, 'inserted must be 2');
-    done();
   });
 
-  test('attributeChangedCallback for existing observed attributes', function (done) {
+  test('attributeChangedCallback for existing observed attributes', function () {
     var changed = [];
     class XBoo extends HTMLElement {
       static get observedAttributes () {
@@ -341,17 +340,15 @@ suite('customElements', function() {
     assert.equal(changed[0].name, 'test1', 'name');
     assert.equal(changed[0].oldValue, null, 'oldValue');
     assert.equal(changed[0].newValue, 'test1', 'newValue');
-    done();
   });
 
-  test('customElements.get', function (done) {
+  test('customElements.get', function () {
     class XBoo extends HTMLElement {}
     customElements.define('x-boo-get', XBoo);
     assert.equal(XBoo, customElements.get('x-boo-get'));
-    done();
   });
 
-  test('document.registerElement disconnectedCallbacks in prototype', function(done) {
+  test('document.registerElement disconnectedCallbacks in prototype', function() {
     var ready, inserted, removed;
     class XBoo extends HTMLElement {
       disconnectedCallback() {
@@ -381,10 +378,9 @@ suite('customElements', function() {
     work.removeChild(xbooboo);
     customElements.flush();
     assert(removed, 'removed must be true [XBooBoo]');
-    done();
   });
 
-  test('node.cloneNode does not upgrade until attach', function(done) {
+  test('node.cloneNode does not upgrade until connected', function() {
     class XBoo extends HTMLElement {
       constructor() {
         super();
@@ -397,11 +393,10 @@ suite('customElements', function() {
     customElements.flush();
     var xboo2 = xboo.cloneNode(true);
     customElements.flush();
-    assert.isNotOk(xboo2.__ready__, 'clone createdCallback must be called');
+    assert.isNotOk(xboo2.__ready__, 'clone constructor must be called');
     work.appendChild(xboo2);
     customElements.flush();
-    assert.isTrue(xboo2.__ready__, 'clone createdCallback must be called');
-    done();
+    assert.isTrue(xboo2.__ready__, 'clone constructor must be called');
   });
 
   test('document.importNode upgrades', function() {
@@ -483,7 +478,7 @@ suite('customElements', function() {
     assert.deepEqual(['a', 'b', 'c', 'd', 'e'], log);
   });
 
-  test('connected and disconnected in same turn', function(done) {
+  test('connected and disconnected in same turn', function() {
     var log = [];
     class XAD extends HTMLElement {
       connectedCallback() {
@@ -500,10 +495,9 @@ suite('customElements', function() {
     work.removeChild(el);
     customElements.flush();
     assert.deepEqual(['connected', 'disconnected'], log);
-    done();
   });
 
-  test('disconnected and re-connected in same turn', function(done) {
+  test('disconnected and re-connected in same turn', function() {
     var log = [];
     class XDA extends HTMLElement {
       connectedCallback() {
@@ -522,7 +516,6 @@ suite('customElements', function() {
     work.appendChild(el);
     customElements.flush();
     assert.deepEqual(['disconnected', 'connected'], log);
-    done();
   });
 
   test('disconnectedCallback ordering', function() {
