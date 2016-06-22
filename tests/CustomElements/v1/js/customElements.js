@@ -562,7 +562,11 @@ suite('customElements', function() {
     assert.instanceOf(x2, XInstance, 'instanceof failed for x-instance2');
   });
 
-  test('innerHTML on disconnected elements customizes contents', function() {
+  var innerHTMLDescriptor =
+      Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+  var innerTestFn = innerHTMLDescriptor.configurable ? test : test.skip;
+
+  innerTestFn('innerHTML on disconnected elements customizes contents', function() {
     var passed = false;
     class XInner extends HTMLElement {
       constructor() {
