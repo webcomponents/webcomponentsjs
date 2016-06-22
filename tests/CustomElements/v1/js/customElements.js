@@ -237,38 +237,36 @@ suite('customElements', function() {
     assert.equal(count, 1);
   });
 
-  test('customElements.define [attached|detached]Callbacks', function(done) {
+  test('customElements.define [connected|disconnected]Callbacks', function() {
     class XCallbacks extends HTMLElement {
       constructor() {
         super();
-        this.attached = false;
-        this.detached = false;
+        this.connected = false;
+        this.disconnected = false;
       }
 
       connectedCallback() {
-        this.attached = true;
+        this.connected = true;
       }
 
       disconnectedCallback() {
-        this.detached = true;
+        this.disconnected = true;
       }
     }
     customElements.define('x-callbacks', XCallbacks);
     var e = new XCallbacks();
-    assert.isFalse(e.attached);
-    assert.isFalse(e.detached);
+    assert.isFalse(e.connected);
+    assert.isFalse(e.disconnected);
 
     work.appendChild(e);
     customElements.flush();
-    assert.isTrue(e.attached);
-    assert.isFalse(e.detached);
+    assert.isTrue(e.connected);
+    assert.isFalse(e.disconnected);
 
     work.removeChild(e);
     customElements.flush();
-    assert.isTrue(e.attached);
-    assert.isTrue(e.detached);
-
-    done();
+    assert.isTrue(e.connected);
+    assert.isTrue(e.disconnected);
   });
 
 
@@ -320,9 +318,9 @@ suite('customElements', function() {
         return ['test1'];
       }
       attributeChangedCallback(name, oldValue, newValue) {
-        changed.push({ 
-          name: name, 
-          oldValue: oldValue, 
+        changed.push({
+          name: name,
+          oldValue: oldValue,
           newValue: newValue
         });
       }
@@ -485,14 +483,14 @@ suite('customElements', function() {
     assert.deepEqual(['a', 'b', 'c', 'd', 'e'], log);
   });
 
-  test('attached and detached in same turn', function(done) {
+  test('connected and disconnected in same turn', function(done) {
     var log = [];
     class XAD extends HTMLElement {
       connectedCallback() {
-        log.push('attached');
+        log.push('connected');
       }
       disconnectedCallback() {
-        log.push('detached');
+        log.push('disconnected');
       }
     }
 
@@ -501,18 +499,18 @@ suite('customElements', function() {
     work.appendChild(el);
     work.removeChild(el);
     customElements.flush();
-    assert.deepEqual(['attached', 'detached'], log);
+    assert.deepEqual(['connected', 'disconnected'], log);
     done();
   });
 
-  test('detached and re-attached in same turn', function(done) {
+  test('disconnected and re-connected in same turn', function(done) {
     var log = [];
     class XDA extends HTMLElement {
       connectedCallback() {
-        log.push('attached');
+        log.push('connected');
       }
       disconnectedCallback() {
-        log.push('detached');
+        log.push('disconnected');
       }
     }
     customElements.define('x-da', XDA);
@@ -523,7 +521,7 @@ suite('customElements', function() {
     work.removeChild(el);
     work.appendChild(el);
     customElements.flush();
-    assert.deepEqual(['detached', 'attached'], log);
+    assert.deepEqual(['disconnected', 'connected'], log);
     done();
   });
 
