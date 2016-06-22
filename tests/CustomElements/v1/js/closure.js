@@ -10,6 +10,8 @@
 
 suite('Closure', function() {
 
+  customElements.enableFlush = true;
+
   // Fails at a.prototype.constructor = a;
   // Closure needs to use Object.defineProperty?
   test.skip('customElements.define create Closure generated ES5 via new', function() {

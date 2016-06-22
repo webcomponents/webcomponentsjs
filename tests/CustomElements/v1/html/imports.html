@@ -35,8 +35,7 @@
     <script src="../../../../../web-component-tester/browser.js"></script>
     <link rel="import" href="imported-doc.html" id="import">
     <script>
-
-      console.log(document.querySelector('#import').import);
+      customElements.enableFlush = true;
       var elementsCreated = 0;
 
       class XFoo extends HTMLElement {

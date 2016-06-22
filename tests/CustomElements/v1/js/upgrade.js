@@ -12,6 +12,8 @@ suite('upgrade', function() {
   var work;
   var assert = chai.assert;
 
+  customElements.enableFlush = true;
+
   setup(function() {
     work = document.createElement('div');
     document.body.appendChild(work);
