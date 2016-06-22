@@ -384,6 +384,26 @@ var CustomElementDefinition;
     });
   }
 
+  // patch Element.innerHTML
+  // TODO(justinfagnani):
+  //   1. Don't _addNodes if the element is connected, the global
+  //      MustionObserver will kick in.
+  //   2. Observe disconnected elements, remove it when connected?
+  //   3. Observe all elements when disconnected?
+  //   4. Make async to match timing of everything else.
+  var _origInnerHTML = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+  Object.defineProperty(Element.prototype, 'innerHTML', {
+    get: function() {
+      return _origInnerHTML.get.call(this);
+    },
+    set: function(v) {
+      _origInnerHTML.set.call(this, v);
+      customElements._addNodes(this.childNodes);
+    },
+    configurable: true,
+    enumerable: true,
+  });
+
   /** @type {CustomElementsRegistry} */
   window['customElements'] = new CustomElementsRegistry();
 })();
