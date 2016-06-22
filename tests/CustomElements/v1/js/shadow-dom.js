@@ -12,6 +12,8 @@ suite('shadow DOM', function() {
 
   var work;
   var assert = chai.assert;
+  
+  customElements.enableFlush = true;
 
   setup(function() {
     work = document.createElement('div');

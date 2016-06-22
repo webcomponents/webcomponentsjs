@@ -13,6 +13,8 @@ suite('customElements', function() {
   var assert = chai.assert;
   var HTMLNS = 'http://www.w3.org/1999/xhtml';
 
+  customElements.enableFlush = true;
+
   setup(function() {
     work = document.createElement('div');
     document.body.appendChild(work);
@@ -566,7 +568,7 @@ suite('customElements', function() {
       Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
   var innerTestFn = innerHTMLDescriptor.configurable ? test : test.skip;
 
-  innerTestFn('innerHTML on disconnected elements customizes contents', function() {
+  test('innerHTML on disconnected elements customizes contents', function() {
     var passed = false;
     class XInner extends HTMLElement {
       constructor() {
@@ -580,5 +582,6 @@ suite('customElements', function() {
     customElements.flush();
     assert.isTrue(passed);
   });
+
 
 });

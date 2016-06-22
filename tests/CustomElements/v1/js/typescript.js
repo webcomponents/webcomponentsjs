@@ -10,6 +10,8 @@
 
 suite('typescript', function() {
 
+  customElements.enableFlush = true;
+
   // Fails because the XTypescript constructor does not return the result of
   // the super call. See: https://github.com/Microsoft/TypeScript/issues/7574
   test.skip('customElements.define create typescript generated ES5 via new', function() {

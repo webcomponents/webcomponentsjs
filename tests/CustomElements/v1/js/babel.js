@@ -10,6 +10,8 @@
 
 suite('Babel', function() {
 
+  customElements.enableFlush = true;
+
   test('customElements.define create Babel generated ES5 via new', function() {
     'use strict';
 

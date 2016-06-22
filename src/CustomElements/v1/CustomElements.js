@@ -82,11 +82,12 @@ var CustomElementDefinition;
   function CustomElementsRegistry() {
     this._definitions = new Map();
     this._constructors = new Map();
-    this._observer = new MutationObserver(this._handleMutations.bind(this));
+    this._observers = new Set();
     this._attributeObserver =
         new MutationObserver(this._handleAttributeChange.bind(this));
     this._newInstance = null;
     this.polyfilled = true;
+    this.enableFlush = false;
 
     this._observeRoot(document);
   }
@@ -170,7 +171,12 @@ var CustomElementDefinition;
     },
 
     flush: function() {
-      this._handleMutations(this._observer.takeRecords());
+      if (this.enableFlush) {
+        console.warn("flush!!!");
+        this._observers.forEach(function(observer) {
+          this._handleMutations(observer.takeRecords());
+        }, this);
+      }
     },
 
     _setNewInstance: function(instance) {
@@ -178,7 +184,22 @@ var CustomElementDefinition;
     },
 
     _observeRoot: function(root) {
-      this._observer.observe(root, {childList: true, subtree: true});
+      root.__observer = new MutationObserver(this._handleMutations.bind(this));
+      root.__observer.observe(root, {childList: true, subtree: true});
+      if (this.enableFlush) {
+        // this is memory leak, only use in tests
+        this._observers.add(root.__observer);
+      }
+    },
+
+    _unobserveRoot: function(root) {
+      if (root.__observer) {
+        root.__observer.disconnect();
+        root.__observer = null;
+        if (this.enableFlush) {
+          this._observers.delete(root.__observer);
+        }
+      }
     },
 
     _handleMutations: function(mutations) {
@@ -201,6 +222,8 @@ var CustomElementDefinition;
         if (!isElement(root)) {
           continue;
         }
+
+        this._unobserveRoot(root);
 
         var walker = createTreeWalker(root);
         do {
@@ -249,7 +272,7 @@ var CustomElementDefinition;
         if (!isElement(root)) {
           continue;
         }
-
+        this._observeRoot(root);
         var walker = createTreeWalker(root);
         do {
           var node = walker.currentNode;
@@ -352,6 +375,7 @@ var CustomElementDefinition;
     if (definition) {
       customElements._upgradeElement(element, definition, callConstructor);
     }
+    customElements._observeRoot(element);
     return element;
   };
   doc.createElement = function(tagName) {
@@ -381,28 +405,6 @@ var CustomElementDefinition;
         customElements._observeRoot(root);
         return root;
       },
-    });
-  }
-
-  // patch Element.innerHTML
-  // TODO(justinfagnani):
-  //   1. Don't _addNodes if the element is connected, the global
-  //      MustionObserver will kick in.
-  //   2. Observe disconnected elements, remove it when connected?
-  //   3. Observe all elements when disconnected?
-  //   4. Make async to match timing of everything else.
-  var _origInnerHTML = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
-  if (_origInnerHTML.configurable) {
-    Object.defineProperty(Element.prototype, 'innerHTML', {
-      get: function() {
-        return _origInnerHTML.get.call(this);
-      },
-      set: function(v) {
-        _origInnerHTML.set.call(this, v);
-        customElements._addNodes(this.childNodes);
-      },
-      configurable: true,
-      enumerable: true,
     });
   }
 
