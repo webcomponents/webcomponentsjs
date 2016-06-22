@@ -220,6 +220,21 @@ var CustomElementDefinition;
           if (node.shadowRoot) {
             this._addNodes(node.shadowRoot.childNodes);
           }
+          if (node.tagName === 'LINK') {
+            var onLoad = (function() {
+              var link = node;
+              return function() {
+                link.removeEventListener('load', onLoad);
+                this._observeRoot(link.import);
+                this._addNodes(link.import.childNodes);
+              }.bind(this);
+            }).bind(this)();
+            if (node.import) {
+              onLoad();
+            } else {
+              node.addEventListener('load', onLoad);
+            }
+          }
         } while (walker.nextNode())
       }
     }
