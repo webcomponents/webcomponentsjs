@@ -35,7 +35,7 @@ suite('shadow DOM', function() {
     container.innerHTML = '<x-shadow></x-shadow>';
 
     customElements.flush();
-    let el = container.querySelector('x-shadow');
+    var el = container.querySelector('x-shadow');
     assert.instanceOf(el, XShadow);
   });
 
@@ -49,7 +49,7 @@ suite('shadow DOM', function() {
 
     customElements.flush();
     customElements.define('x-shadow2', XShadow2);
-    let el = container.querySelector('x-shadow2');
+    var el = container.querySelector('x-shadow2');
     assert.instanceOf(el, XShadow2);
   });
 

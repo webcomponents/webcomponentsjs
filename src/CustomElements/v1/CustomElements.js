@@ -79,21 +79,21 @@ var CustomElementDefinition;
    * @property {HTMLElement} _newInstance
    * @property {boolean} polyfilled
    */
-  class CustomElementsRegistry {
+  function CustomElementsRegistry() {
+    this._definitions = new Map();
+    this._constructors = new Map();
+    this._observer = new MutationObserver(this._handleMutations.bind(this));
+    this._attributeObserver =
+        new MutationObserver(this._handleAttributeChange.bind(this));
+    this._newInstance = null;
+    this.polyfilled = true;
 
-    constructor() {
-      this._definitions = new Map();
-      this._constructors = new Map();
-      this._observer = new MutationObserver(this._handleMutations.bind(this));
-      this._attributeObserver =
-          new MutationObserver(this._handleAttributeChange.bind(this));
-      this._newInstance = null;
-      this.polyfilled = true;
+    this._observeRoot(document);
+  }
 
-      this._observeRoot(document);
-    }
+  CustomElementsRegistry.prototype = {
 
-    define(name, constructor, options) {
+    define: function(name, constructor, options) {
       // 2.4.1
       if (typeof constructor !== 'function') {
         throw new TypeError('constructor must be a Constructor');
@@ -161,27 +161,27 @@ var CustomElementDefinition;
 
       // this causes an upgrade of the document
       this._addNodes(doc.childNodes);
-    }
+    },
 
     // https://html.spec.whatwg.org/multipage/scripting.html#custom-elements-api
-    get(localName) {
-      const def = this._definitions.get(localName);
+    get: function(localName) {
+      var def = this._definitions.get(localName);
       return def ? def.constructor : undefined;
-    }
+    },
 
-    flush() {
+    flush: function() {
       this._handleMutations(this._observer.takeRecords());
-    }
+    },
 
-    _setNewInstance(instance) {
+    _setNewInstance: function(instance) {
       this._newInstance = instance;
-    }
+    },
 
-    _observeRoot(root) {
+    _observeRoot: function(root) {
       this._observer.observe(root, {childList: true, subtree: true});
-    }
+    },
 
-    _handleMutations(mutations) {
+    _handleMutations: function(mutations) {
       for (var i = 0; i < mutations.length; i++) {
         var mutation = mutations[i];
         if (mutation.type === 'childList') {
@@ -189,12 +189,12 @@ var CustomElementDefinition;
           this._removeNodes(mutation.removedNodes);
         }
       }
-    }
+    },
 
     /**
      * @param {NodeList} nodeList
      */
-    _addNodes(nodeList) {
+    _addNodes: function(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
 
@@ -237,12 +237,12 @@ var CustomElementDefinition;
           }
         } while (walker.nextNode())
       }
-    }
+    },
 
     /**
      * @param {NodeList} nodeList
      */
-    _removeNodes(nodeList) {
+    _removeNodes: function(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
 
@@ -262,14 +262,14 @@ var CustomElementDefinition;
           }
         } while (walker.nextNode())
       }
-    }
+    },
 
     /**
      * @param {HTMLElement} element
      * @param {CustomElementDefinition} definition
      * @param {boolean} callConstructor
      */
-    _upgradeElement(element, definition, callConstructor) {
+    _upgradeElement: function(element, definition, callConstructor) {
       var prototype = definition.constructor.prototype;
       element.__proto__ = prototype;
       if (callConstructor) {
@@ -295,12 +295,12 @@ var CustomElementDefinition;
           }
         });
       }
-    }
+    },
 
     /**
      * @private
      */
-    _handleAttributeChange(mutations) {
+    _handleAttributeChange: function(mutations) {
       for (var i = 0; i < mutations.length; i++) {
         var mutation = mutations[i];
         if (mutation.type === 'attributes') {
@@ -312,7 +312,7 @@ var CustomElementDefinition;
           target['attributeChangedCallback'](name, oldValue, newValue, namespace);
         }
       }
-    }
+    },
   }
 
   // Closure Compiler Exports
@@ -392,17 +392,19 @@ var CustomElementDefinition;
   //   3. Observe all elements when disconnected?
   //   4. Make async to match timing of everything else.
   var _origInnerHTML = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
-  Object.defineProperty(Element.prototype, 'innerHTML', {
-    get: function() {
-      return _origInnerHTML.get.call(this);
-    },
-    set: function(v) {
-      _origInnerHTML.set.call(this, v);
-      customElements._addNodes(this.childNodes);
-    },
-    configurable: true,
-    enumerable: true,
-  });
+  if (_origInnerHTML.configurable) {
+    Object.defineProperty(Element.prototype, 'innerHTML', {
+      get: function() {
+        return _origInnerHTML.get.call(this);
+      },
+      set: function(v) {
+        _origInnerHTML.set.call(this, v);
+        customElements._addNodes(this.childNodes);
+      },
+      configurable: true,
+      enumerable: true,
+    });
+  }
 
   /** @type {CustomElementsRegistry} */
   window['customElements'] = new CustomElementsRegistry();
