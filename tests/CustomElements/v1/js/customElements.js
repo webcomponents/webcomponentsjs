@@ -562,4 +562,19 @@ suite('customElements', function() {
     assert.instanceOf(x2, XInstance, 'instanceof failed for x-instance2');
   });
 
+  test('innerHTML on disconnected elements customizes contents', function() {
+    var passed = false;
+    class XInner extends HTMLElement {
+      constructor() {
+        super();
+        passed = true;
+      }
+    }
+    customElements.define('x-inner', XInner);
+    var div = document.createElement('div');
+    div.innerHTML = '<x-inner></x-inner>';
+    customElements.flush();
+    assert.isTrue(passed);
+  });
+
 });
