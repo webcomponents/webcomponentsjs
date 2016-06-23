@@ -73,6 +73,7 @@ var CustomElementDefinition;
   }
 
   /**
+   * @constructor
    * @property {Map<String, CustomElementDefinition>} _defintions
    * @property {MutationObserver} _observer
    * @property {MutationObserver} _attributeObserver
@@ -82,6 +83,7 @@ var CustomElementDefinition;
   function CustomElementsRegistry() {
     this._definitions = new Map();
     this._constructors = new Map();
+    this._whenDefinedMap = new Map();
     this._observers = new Set();
     this._attributeObserver =
         new MutationObserver(this._handleAttributeChange.bind(this));
@@ -162,12 +164,35 @@ var CustomElementDefinition;
 
       // this causes an upgrade of the document
       this._addNodes(doc.childNodes);
+
+      // resolve whenDefined Promises
+      var deferred = this._whenDefinedMap.get(localName);
+      if (deferred) {
+        deferred.resolve();
+        this._whenDefinedMap.delete(localName);
+      }
     },
 
     // https://html.spec.whatwg.org/multipage/scripting.html#custom-elements-api
     get: function(localName) {
       var def = this._definitions.get(localName);
       return def ? def.constructor : undefined;
+    },
+
+    whenDefined: function(localName) {
+      if (!customNameValidation.test(localName)) {
+        return Promise.reject(new SyntaxError(`CustomElementRegistry.whenDefined: The element name '${localName}' is not valid.`));
+      }
+      if (this._definitions.has(localName)) {
+        return Promise.resolve();
+      }
+      var deferred = {
+        promise: new Promise(function(resolve, _) {
+          deferred.resolve = resolve;
+        })
+      };
+      this._whenDefinedMap.set(localName, deferred);
+      return deferred.promise;
     },
 
     flush: function() {
