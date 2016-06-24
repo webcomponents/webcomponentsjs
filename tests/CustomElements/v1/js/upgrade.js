@@ -23,99 +23,42 @@ suite('upgrade', function() {
     document.body.removeChild(work);
   });
 
-  function registerTestComponent(inName, inValue) {
-    var C = class extends HTMLElement {};
-    C.prototype.value = inValue || 'value';
-    customElements.define(inName, C);
-  }
-
-  function testElements(node, selector, value) {
-    Array.prototype.forEach.call(node.querySelectorAll(selector), function(n) {
-      assert.equal(n.value, value);
-    });
-  }
-
-  test('custom element automatically upgrades', function(done) {
-    work.innerHTML = '<x-auto></x-auto>';
-    var x = work.firstChild;
-    // must flush after mutations to avoid false passes
+  test('connected elements upgrade when defined', function() {
+    work.innerHTML = '<x-markup-1><x-markup-2></x-markup-2></x-markup-1>';
+    var e1 = work.firstChild;
+    var e2 = e1.firstChild;
     customElements.flush();
-    assert.isUndefined(x.value);
-    registerTestComponent('x-auto', 'auto');
-    assert.equal(x.value, 'auto');
-    done();
+
+    class X1 extends HTMLElement {}
+    class X2 extends HTMLElement {}
+    customElements.define('x-markup-1', X1);
+    customElements.define('x-markup-2', X2);
+
+    assert.instanceOf(e1, X1);
+    assert.instanceOf(e2, X2);
   });
 
-  test('custom element automatically upgrades in subtree', function(done) {
-    work.innerHTML = '<div></div>';
-    var target = work.firstChild;
-    target.innerHTML = '<x-auto-sub></x-auto-sub>';
-    var x = target.firstChild;
-    // must flush after mutations to avoid false passes
+  test('defined disconnected elements upgrade when connected', function() {
+    var e1 = document.createElement('x-disconnected-1');
+    var e2 = document.createElement('x-disconnected-2');
+    e1.appendChild(e2);
+    // make sure that mutation records for the append are flushed
     customElements.flush();
-    assert.isUndefined(x.value);
-    registerTestComponent('x-auto-sub', 'auto-sub');
-    assert.equal(x.value, 'auto-sub');
-    done();
-  });
 
-  test('custom elements automatically upgrade', function(done) {
-    registerTestComponent('x-auto1', 'auto1');
-    registerTestComponent('x-auto2', 'auto2');
-    work.innerHTML = '<div><div><x-auto1></x-auto1><x-auto1></x-auto1>' +
-      '</div></div><div><x-auto2><x-auto1></x-auto1></x-auto2>' +
-      '<x-auto2><x-auto1></x-auto1></x-auto2></div>';
+    class X1 extends HTMLElement {}
+    class X2 extends HTMLElement {}
+    customElements.define('x-disconnected-1', X1);
+    customElements.define('x-disconnected-2', X2);
+
+    // disconnected elements should not be upgraded
+    assert.notInstanceOf(e1, X1);
+    assert.notInstanceOf(e2, X2);
+
+    // they should upgrade when connected
+    work.appendChild(e1);
     customElements.flush();
-    testElements(work, 'x-auto1', 'auto1');
-    testElements(work, 'x-auto2', 'auto2');
-    done();
+    assert.instanceOf(e1, X1);
+    assert.instanceOf(e2, X2);
   });
 
-  test('custom elements automatically upgrade in subtree', function(done) {
-    registerTestComponent('x-auto-sub1', 'auto-sub1');
-    registerTestComponent('x-auto-sub2', 'auto-sub2');
-    work.innerHTML = '<div></div>';
-    var target = work.firstChild;
-    target.innerHTML = '<div><div><x-auto-sub1></x-auto-sub1><x-auto-sub1></x-auto-sub1>' +
-      '</div></div><div><x-auto-sub2><x-auto-sub1></x-auto-sub1></x-auto-sub2>' +
-      '<x-auto-sub2><x-auto-sub1></x-auto-sub1></x-auto-sub2></div>';
-    customElements.flush();
-    testElements(target, 'x-auto-sub1', 'auto-sub1');
-    testElements(target, 'x-auto-sub2', 'auto-sub2');
-    done();
-  });
-
-  test('CustomElements.upgrade upgrades custom element syntax', function() {
-    registerTestComponent('x-foo31', 'foo');
-    work.innerHTML = '<x-foo31>Foo</x-foo31>';
-    var xfoo = work.firstChild;
-    customElements.flush();
-    assert.equal(xfoo.value, 'foo');
-  });
-
-  test('mutation observer upgrades custom element syntax', function(done) {
-    registerTestComponent('x-foo32', 'foo');
-    work.innerHTML = '<x-foo32>Foo</x-foo32>';
-    customElements.flush();
-    var xfoo = work.firstChild;
-    assert.equal(xfoo.value, 'foo');
-    done();
-  });
-
-  test('document.register upgrades custom element syntax', function() {
-    work.innerHTML = '<x-foo33>Foo</x-foo33>';
-    registerTestComponent('x-foo33', 'foo');
-    var xfoo = work.firstChild;
-    assert.equal(xfoo.value, 'foo');
-  });
-
-  test('CustomElements.upgrade upgrades custom element syntax', function() {
-    registerTestComponent('x-zot', 'zot');
-    registerTestComponent('x-zim', 'zim');
-    work.innerHTML = '<x-zot><x-zim></x-zim></x-zot>';
-    var xzot = work.firstChild, xzim = xzot.firstChild;
-    customElements.flush();
-    assert.equal(xzot.value, 'zot');
-    assert.equal(xzim.value, 'zim');
-  });
 });
