@@ -12,7 +12,7 @@ suite('shadow DOM', function() {
 
   var work;
   var assert = chai.assert;
-  
+
   customElements.enableFlush = true;
 
   setup(function() {
@@ -44,14 +44,19 @@ suite('shadow DOM', function() {
   testFn('custom elements are upgraded in shadow roots', function() {
     class XShadow2 extends HTMLElement {}
 
+    // setup shadow root
     var shadowRoot = work.attachShadow({mode: 'open'});
     var container = document.createElement('div');
     shadowRoot.appendChild(container);
     container.innerHTML = '<x-shadow2></x-shadow2>';
-
-    customElements.flush();
-    customElements.define('x-shadow2', XShadow2);
     var el = container.querySelector('x-shadow2');
+    customElements.flush();
+
+    // undefined elements are not upgraded
+    assert.notInstanceOf(el, XShadow2);
+
+    // elements are upgraded on definition
+    customElements.define('x-shadow2', XShadow2);
     assert.instanceOf(el, XShadow2);
   });
 
