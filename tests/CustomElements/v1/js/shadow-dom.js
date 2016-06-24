@@ -8,7 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-suite('shadow DOM', function() {
+suite('Shadow DOM Support', function() {
 
   var work;
   var assert = chai.assert;
