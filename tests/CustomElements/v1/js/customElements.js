@@ -391,43 +391,47 @@ suite('customElements', function() {
     assert(removed, 'removed must be true [XBooBoo]');
   });
 
-  test('node.cloneNode does not upgrade until connected', function() {
-    class XBoo extends HTMLElement {
-      constructor() {
-        super();
-        this.__ready__ = true;
-      }
-    }
-    customElements.define('x-boo-clone', XBoo);
-    var xboo = new XBoo();
-    work.appendChild(xboo);
+  test('cloned custom elements are not customized', function() {
+    class XCloned extends HTMLElement {}
+    customElements.define('x-cloned', XCloned);
+
+    var original = document.createElement('x-cloned');
     customElements.flush();
-    var xboo2 = xboo.cloneNode(true);
+    assert.instanceOf(original, XCloned);
+
+    var imported = document.importNode(original);
     customElements.flush();
-    assert.isNotOk(xboo2.__ready__, 'clone constructor must be called');
-    work.appendChild(xboo2);
-    customElements.flush();
-    assert.isTrue(xboo2.__ready__, 'clone constructor must be called');
+    assert.notInstanceOf(imported, XCloned);
   });
 
-  test('document.importNode upgrades', function() {
-    class XImport extends HTMLElement {
-      constructor() {
-        super();
-        this.__ready__ = true;
-      }
-    }
-    customElements.define('x-import', XImport);
-    var frag = document.createDocumentFragment();
-    frag.appendChild(document.createElement('x-import'));
-    assert.isTrue(frag.firstChild.__ready__, 'source element upgraded');
-    var imported = document.importNode(frag, true);
-    window.imported = imported;
-    var importedEl = imported.firstChild;
-    assert.isNotOk(importedEl.__ready__, 'imported element upgraded');
-    work.appendChild(imported);
+  test('imported custom elements are not customized', function() {
+    class XImported extends HTMLElement {}
+    customElements.define('x-imported', XImported);
+
+    // most imports happen on nodes in a different document, but elements
+    // in another document woudn't be customized in the first place
+    var original = document.createElement('x-imported');
     customElements.flush();
-    assert.isOk(importedEl.__ready__, 'imported element upgraded');
+    assert.instanceOf(original, XImported);
+
+    var imported = document.importNode(original);
+    customElements.flush();
+    assert.notInstanceOf(imported, XImported);
+  });
+
+  test('adopted custom elements are not customized', function() {
+    class XAdopted extends HTMLElement {}
+    customElements.define('x-adopted', XAdopted);
+
+    var otherDoc = document.implementation.createHTMLDocument('adopt');
+    var original = otherDoc.createElement('x-adopted');
+    customElements.flush();
+    // x-adopted is not defined in its document
+    assert.notInstanceOf(original, XAdopted);
+
+    var imported = document.importNode(original);
+    customElements.flush();
+    assert.notInstanceOf(imported, XAdopted);
   });
 
   test('entered left apply to view', function() {
