@@ -8,11 +8,11 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-suite('Babel', function() {
+suite('Babel ES5 Output', function() {
 
   customElements.enableFlush = true;
 
-  test('customElements.define create Babel generated ES5 via new', function() {
+  test('Babel generated ES5 works via new()', function() {
     'use strict';
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -43,7 +43,7 @@ suite('Babel', function() {
     assert.instanceOf(e, XBabel);
   });
 
-  test('customElements.define create Babel generated ES5 via createElement', function() {
+  test('Babel generated ES5 works via createElement', function() {
     'use strict';
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }

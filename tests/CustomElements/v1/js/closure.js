@@ -8,13 +8,13 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-suite('Closure', function() {
+suite('Closure ES5 Output', function() {
 
   customElements.enableFlush = true;
 
   // Fails at a.prototype.constructor = a;
   // Closure needs to use Object.defineProperty?
-  test.skip('customElements.define create Closure generated ES5 via new', function() {
+  test.skip('Closure generated ES5 works', function() {
     'use strict';
 
     // Closure standard library code

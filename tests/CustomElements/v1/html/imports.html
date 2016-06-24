@@ -47,8 +47,12 @@
       }
       customElements.define('x-foo', XFoo);
 
-      test('CustomElements upgrade from HTML Imports', function() {
-        chai.assert.equal(2, elementsCreated, 'HTML hook allows main document and import document to upgrade');
+      suite('HTML Imports Integration', function() {
+
+        test('CustomElements upgrade from HTML Imports', function() {
+          chai.assert.equal(2, elementsCreated, 'HTML hook allows main document and import document to upgrade');
+        });
+        
       });
     </script>
   </head>

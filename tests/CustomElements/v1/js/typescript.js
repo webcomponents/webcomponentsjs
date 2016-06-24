@@ -8,13 +8,13 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-suite('typescript', function() {
+suite('TypeScript ES5 Output', function() {
 
   customElements.enableFlush = true;
 
   // Fails because the XTypescript constructor does not return the result of
   // the super call. See: https://github.com/Microsoft/TypeScript/issues/7574
-  test.skip('customElements.define create typescript generated ES5 via new', function() {
+  test.skip('TypeScript generated ES5 works via new()', function() {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -38,7 +38,7 @@ suite('typescript', function() {
     assert.instanceOf(e, XTypescript);
   });
 
-  test('customElements.define create typescript generated ES5 via createElement', function() {
+  test('TypeScript generated ES5 works via createElement', function() {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }

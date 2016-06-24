@@ -8,7 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-suite('upgrade', function() {
+suite('Upgrades', function() {
   var work;
   var assert = chai.assert;
 
