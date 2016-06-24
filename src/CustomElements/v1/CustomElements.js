@@ -168,7 +168,7 @@ var CustomElementDefinition;
       // resolve whenDefined Promises
       var deferred = this._whenDefinedMap.get(localName);
       if (deferred) {
-        deferred.resolve();
+        deferred.resolve(undefined);
         this._whenDefinedMap.delete(localName);
       }
     },
@@ -187,10 +187,11 @@ var CustomElementDefinition;
         return Promise.resolve();
       }
       var deferred = {
-        promise: new Promise(function(resolve, _) {
-          deferred.resolve = resolve;
-        })
+        promise: null,
       };
+      deferred.promise = new Promise(function(resolve, _) {
+       deferred.resolve = resolve;
+      });
       this._whenDefinedMap.set(localName, deferred);
       return deferred.promise;
     },
