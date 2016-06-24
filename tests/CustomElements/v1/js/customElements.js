@@ -350,6 +350,15 @@ suite('customElements', function() {
     assert.equal(XBoo, customElements.get('x-boo-get'));
   });
 
+  test.only('customElements.whenDefined', function () {
+    var promise = customElements.whenDefined('x-when-defined').then(function (r) {
+      assert.isUndefined(r);
+    });
+    class XDefined extends HTMLElement {}
+    customElements.define('x-when-defined', XDefined);
+    return promise;
+  });
+
   test('document.registerElement disconnectedCallbacks in prototype', function() {
     var ready, inserted, removed;
     class XBoo extends HTMLElement {
