@@ -372,10 +372,8 @@ var CustomElementDefinition;
 
   // patch window.HTMLElement
 
-  // TODO: patch up all built-in subclasses of HTMLElement to use the fake
-  // HTMLElement.prototype
   var origHTMLElement = win.HTMLElement;
-  win.HTMLElement = function() {
+  win.HTMLElement = function HTMLElement() {
     var customElements = win['customElements'];
     if (customElements._newInstance) {
       var i = customElements._newInstance;
@@ -388,8 +386,87 @@ var CustomElementDefinition;
     }
     throw new Error('unknown constructor. Did you call customElements.define()?');
   }
-  HTMLElement.prototype = Object.create(origHTMLElement.prototype);
-  Object.defineProperty(HTMLElement.prototype, 'constructor', {value: HTMLElement});
+  win.HTMLElement.prototype = Object.create(origHTMLElement.prototype);
+  Object.defineProperty(win.HTMLElement.prototype, 'constructor', {value: win.HTMLElement});
+
+  // patch all built-in subclasses of HTMLElement to inherit from the new HTMLElement
+  // See https://html.spec.whatwg.org/multipage/indices.html#element-interfaces
+
+  /** @const */
+  var htmlElementSubclasses = [
+  	'Button',
+  	'Canvas',
+  	'Data',
+  	'Head',
+  	'Mod',
+  	'TableCell',
+  	'TableCol',
+    'Anchor',
+    'Area',
+    'Base',
+    'Body',
+    'BR',
+    'DataList',
+    'Details',
+    'Dialog',
+    'Div',
+    'DList',
+    'Embed',
+    'FieldSet',
+    'Form',
+    'Heading',
+    'HR',
+    'Html',
+    'IFrame',
+    'Image',
+    'Input',
+    'Keygen',
+    'Label',
+    'Legend',
+    'LI',
+    'Link',
+    'Map',
+    'Media',
+    'Menu',
+    'MenuItem',
+    'Meta',
+    'Meter',
+    'Object',
+    'OList',
+    'OptGroup',
+    'Option',
+    'Output',
+    'Paragraph',
+    'Param',
+    'Picture',
+    'Pre',
+    'Progress',
+    'Quote',
+    'Script',
+    'Select',
+    'Slot',
+    'Source',
+    'Span',
+    'Style',
+    'TableCaption',
+    'Table',
+    'TableRow',
+    'TableSection',
+    'Template',
+    'TextArea',
+    'Time',
+    'Title',
+    'Track',
+    'UList',
+    'Unknown',
+  ];
+
+  for (var i = 0; i < htmlElementSubclasses.length; i++) {
+    var ctor = window['HTML' + htmlElementSubclasses[i] + 'Element'];
+    if (ctor) {
+      ctor.prototype.__proto__ = win.HTMLElement.prototype;
+    }
+  }
 
   // patch doc.createElement
 
