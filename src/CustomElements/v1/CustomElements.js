@@ -29,6 +29,9 @@ var CustomElementDefinition;
   var doc = document;
   var win = window;
 
+  // name validation
+  // https://html.spec.whatwg.org/multipage/scripting.html#valid-custom-element-name
+
   /**
    * @const
    * @type {Array<string>}
@@ -44,25 +47,14 @@ var CustomElementDefinition;
     'missing-glyph',
   ];
 
-  /**
-   * @const
-   */
+  /** @const */
   var customNameValidation = /^[a-z][.0-9_a-z]*-[\-.0-9_a-z]*$/;
-
-  function getCallback(proto, calllbackName, elementName) {
-    var callback = proto[calllbackName];
-    if (callback !== undefined && typeof callback !== 'function') {
-      throw new Error(`TypeError: ${elementName} '${calllbackName}' is not a Function`);
-    }
-    return callback;
-  }
-
-  function isReservedTag(name) {
-    return reservedTagList.indexOf(name) !== -1;
+  function isValidCustomElementName(name) {
+    return customNameValidation.test(name) && reservedTagList.indexOf(name) === -1;
   }
 
   function createTreeWalker(root) {
-    // IE 11 requires the third and fourth arguments be present. If the ghird
+    // IE 11 requires the third and fourth arguments be present. If the third
     // arg is null, it applies the default behaviour. However IE also requires
     // the fourth argument be present even though the other browsers ignore it.
     return doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, null, false);
@@ -73,21 +65,34 @@ var CustomElementDefinition;
   }
 
   /**
+   * A registry of custom element definitions.
+   *
+   * See https://html.spec.whatwg.org/multipage/scripting.html#customelementsregistry
+   *
    * @constructor
-   * @property {Map<String, CustomElementDefinition>} _defintions
-   * @property {MutationObserver} _observer
-   * @property {MutationObserver} _attributeObserver
-   * @property {HTMLElement} _newInstance
-   * @property {boolean} polyfilled
+   * @property {boolean} polyfilled Whether this registry is polyfilled
+   * @property {boolean} enableFlush Set to true to enable the flush() method
+   *   to work. This should only be done for tests, as it causes a memory leak.
    */
   function CustomElementsRegistry() {
+    /** @private {Map<string, CustomElementDefinition>} **/
     this._definitions = new Map();
+
+    /** @private {Map<Function, CustomElementDefinition>} **/
     this._constructors = new Map();
+
     this._whenDefinedMap = new Map();
+
+    /** @private {Set<MutationObserver>} **/
     this._observers = new Set();
+
+    /** @private {MutationObserver} **/
     this._attributeObserver =
         new MutationObserver(this._handleAttributeChange.bind(this));
+
+    /** @private {HTMLElement} **/
     this._newInstance = null;
+
     this.polyfilled = true;
     this.enableFlush = false;
 
@@ -96,57 +101,82 @@ var CustomElementDefinition;
 
   CustomElementsRegistry.prototype = {
 
+    // HTML spec part 4.13.4
+    // https://html.spec.whatwg.org/multipage/scripting.html#dom-customelementsregistry-define
     define: function(name, constructor, options) {
-      // 2.4.1
+      name = name.toString().toLowerCase();
+
+      // 1:
       if (typeof constructor !== 'function') {
         throw new TypeError('constructor must be a Constructor');
       }
 
-      // 2.4.2
-      name = name.toString().toLowerCase();
+      // 2. If constructor is an interface object whose corresponding interface
+      //    either is HTMLElement or has HTMLElement in its set of inherited
+      //    interfaces, throw a TypeError and abort these steps.
+      //
+      // It doesn't appear possible to check this condition from script
 
-      // 2.4.3
-      if (!customNameValidation.test(name)) {
-        throw new SyntaxError(`CustomElementRegistry.define: The element name '${name}' is not valid.`);
-      }
-      if (isReservedTag(name)) {
-        throw new SyntaxError(`CustomElementRegistry.define: The element name '${name}' is reserved.`);
+      // 3:
+      if (!isValidCustomElementName(name)) {
+        throw new SyntaxError(`The element name '${name}' is not valid.`);
       }
 
-      // 2.4.4
+      // 4, 5:
+      // Note: we don't track being-defined names and constructors because
+      // define() isn't normally reentrant. The only time user code can run
+      // during define() is when getting callbacks off the prototype, which
+      // would be highly-unusual. We can make define() reentrant-safe if needed.
       if (this._definitions.has(name)) {
-        throw new Error(`NotSupportedError: CustomElementRegistry.define: An element with name '${name}' is already defined`);
+        throw new Error(`An element with name '${name}' is already defined`);
       }
 
-      // 2.4.5
+      // 6, 7:
       if (this._constructors.has(constructor)) {
-        throw new Error(`NotSupportedError: CustomElementRegistry.define failed for '${name}'. The constructor is already used.`);
+        throw new Error(`Definition failed for '${name}': ` +
+            `The constructor is already used.`);
       }
 
-      // 2.4.6
+      // 8:
       var localName = name;
 
-      // 2.4.7 & 2.4.8: not supporting extends
+      // 9, 10: We do not support extends currently.
 
-      // 2.4.9, 2.4.10
-      var observedAttributes = constructor['observedAttributes'] || [];
+      // 11, 12, 13: Our define() isn't rentrant-safe
 
-      // 2.4.11
+      // 14.1:
       var prototype = constructor.prototype;
 
-      // 2.4.12
+      // 14.2:
       if (typeof prototype !== 'object') {
-        throw new TypeError('CustomElementRegistry.define: type of prototype is not "object"');
+        throw new TypeError(`Definition failed for '${name}': ` +
+            `constructor.prototype must be an object`);
       }
 
-      // 2.4.13 & 2.4.14
-      var connectedCallback = getCallback(prototype, 'connectedCallback', localName);
-      // 2.4.15 & 2.4.16
-      var disconnectedCallback = getCallback(prototype, 'disconnectedCallback', localName);
-      // 2.4.17 & 2.4.18
-      var attributeChangedCallback = getCallback(prototype, 'attributeChangedCallback', localName);
+      function getCallback(calllbackName) {
+        var callback = prototype[calllbackName];
+        if (callback !== undefined && typeof callback !== 'function') {
+          throw new Error(`${localName} '${calllbackName}' is not a Function`);
+        }
+        return callback;
+      }
 
-      // 2.4.19
+      // 3, 4:
+      var connectedCallback = getCallback('connectedCallback');
+
+      // 5, 6:
+      var disconnectedCallback = getCallback('disconnectedCallback');
+
+      // Divergence from spec: we always throw if attributeChangedCallback is
+      // not a function, and always get observedAttributes.
+
+      // 7, 9.1:
+      var attributeChangedCallback = getCallback('attributeChangedCallback');
+
+      // 8, 9.2, 9.3:
+      var observedAttributes = constructor['observedAttributes'] || [];
+
+      // 15:
       // @type {CustomElementDefinition}
       var definition = {
         name: name,
@@ -158,14 +188,14 @@ var CustomElementDefinition;
         observedAttributes: observedAttributes,
       };
 
-      // 2.4.20
+      // 16:
       this._definitions.set(localName, definition);
       this._constructors.set(constructor, localName);
 
-      // this causes an upgrade of the document
+      // 17, 18, 19:
       this._addNodes(doc.childNodes);
 
-      // resolve whenDefined Promises
+      // 20:
       var deferred = this._whenDefinedMap.get(localName);
       if (deferred) {
         deferred.resolve(undefined);
@@ -173,17 +203,32 @@ var CustomElementDefinition;
       }
     },
 
-    // https://html.spec.whatwg.org/multipage/scripting.html#custom-elements-api
-    get: function(localName) {
-      var def = this._definitions.get(localName);
+    /**
+     * Returns the constructor defined for `name`, or `null`.
+     *
+     * @param {string} name
+     * @return {Function|undefined}
+     */
+    get: function(name) {
+      // https://html.spec.whatwg.org/multipage/scripting.html#custom-elements-api
+      var def = this._definitions.get(name);
       return def ? def.constructor : undefined;
     },
 
-    whenDefined: function(localName) {
-      if (!customNameValidation.test(localName)) {
-        return Promise.reject(new SyntaxError(`CustomElementRegistry.whenDefined: The element name '${localName}' is not valid.`));
+    /**
+     * Returns a `Promise` that resolves when a custom element for `name` has
+     * been defined.
+     *
+     * @param {string} name
+     * @return {Promise}
+     */
+    whenDefined: function(name) {
+      // https://html.spec.whatwg.org/multipage/scripting.html#dom-customelementsregistry-whendefined
+      if (!customNameValidation.test(name)) {
+        return Promise.reject(
+          new SyntaxError(`The element name '${name}' is not valid.`));
       }
-      if (this._definitions.has(localName)) {
+      if (this._definitions.has(name)) {
         return Promise.resolve();
       }
       var deferred = {
@@ -192,10 +237,15 @@ var CustomElementDefinition;
       deferred.promise = new Promise(function(resolve, _) {
        deferred.resolve = resolve;
       });
-      this._whenDefinedMap.set(localName, deferred);
+      this._whenDefinedMap.set(name, deferred);
       return deferred.promise;
     },
 
+    /**
+     * Causes all pending mutation records to be processed, and thus all
+     * customization, upgrades and custom element reactions to be called.
+     * `enableFlush` must be true for this to work. Only use during tests!
+     */
     flush: function() {
       if (this.enableFlush) {
         console.warn("flush!!!");
@@ -209,6 +259,10 @@ var CustomElementDefinition;
       this._newInstance = instance;
     },
 
+    /**
+     * Observes a DOM root for mutations that trigger upgrades and reactions.
+     * @private
+     */
     _observeRoot: function(root) {
       root.__observer = new MutationObserver(this._handleMutations.bind(this));
       root.__observer.observe(root, {childList: true, subtree: true});
@@ -218,6 +272,9 @@ var CustomElementDefinition;
       }
     },
 
+    /**
+     * @private
+     */
     _unobserveRoot: function(root) {
       if (root.__observer) {
         root.__observer.disconnect();
@@ -228,10 +285,15 @@ var CustomElementDefinition;
       }
     },
 
+    /**
+     * @private
+     */
     _handleMutations: function(mutations) {
       for (var i = 0; i < mutations.length; i++) {
         var mutation = mutations[i];
         if (mutation.type === 'childList') {
+          // Note: we can't get an ordering between additions and removals, and
+          // so might diverge from spec reaction ordering
           this._addNodes(mutation.addedNodes);
           this._removeNodes(mutation.removedNodes);
         }
@@ -240,6 +302,7 @@ var CustomElementDefinition;
 
     /**
      * @param {NodeList} nodeList
+     * @private
      */
     _addNodes: function(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
@@ -249,6 +312,7 @@ var CustomElementDefinition;
           continue;
         }
 
+        // Since we're adding this node to an observed tree, we can unobserve
         this._unobserveRoot(root);
 
         var walker = createTreeWalker(root);
@@ -267,6 +331,8 @@ var CustomElementDefinition;
             }
           }
           if (node.shadowRoot) {
+            // TODO(justinfagnani): do we need to check that the shadowRoot
+            // is observed?
             this._addNodes(node.shadowRoot.childNodes);
           }
           if (node.tagName === 'LINK') {
@@ -290,6 +356,7 @@ var CustomElementDefinition;
 
     /**
      * @param {NodeList} nodeList
+     * @private
      */
     _removeNodes: function(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
@@ -298,7 +365,13 @@ var CustomElementDefinition;
         if (!isElement(root)) {
           continue;
         }
+
+        // Since we're detatching this element from an observed root, we need to
+        // reobserve it.
+        // TODO(justinfagnani): can we do this in a microtask so we don't thrash
+        // on creating and destroying MutationObservers on batch DOM mutations?
         this._observeRoot(root);
+
         var walker = createTreeWalker(root);
         do {
           var node = walker.currentNode;
@@ -314,9 +387,12 @@ var CustomElementDefinition;
     },
 
     /**
+     * Upgrades or customizes a custom element.
+     *
      * @param {HTMLElement} element
      * @param {CustomElementDefinition} definition
      * @param {boolean} callConstructor
+     * @private
      */
     _upgradeElement: function(element, definition, callConstructor) {
       var prototype = definition.constructor.prototype;
@@ -337,12 +413,14 @@ var CustomElementDefinition;
         });
 
         // Trigger attributeChangedCallback for existing attributes.
-        // https://html.spec.whatwg.org/multipage/scripting.html#upgrades - part 1
-        observedAttributes.forEach(function (name) {
+        // https://html.spec.whatwg.org/multipage/scripting.html#upgrades
+        for (var i = 0; i < observedAttributes.length; i++) {
+          var name = observedAttributes[i];
           if (element.hasAttribute(name)) {
-            element.attributeChangedCallback(name, null, element.getAttribute(name));
+            var value = element.getAttribute(name);
+            element.attributeChangedCallback(name, null, value);
           }
-        });
+        }
       }
     },
 
@@ -367,8 +445,11 @@ var CustomElementDefinition;
   // Closure Compiler Exports
   window['CustomElementsRegistry'] = CustomElementsRegistry;
   CustomElementsRegistry.prototype['define'] = CustomElementsRegistry.prototype.define;
+  CustomElementsRegistry.prototype['get'] = CustomElementsRegistry.prototype.get;
+  CustomElementsRegistry.prototype['whenDefined'] = CustomElementsRegistry.prototype.whenDefined;
   CustomElementsRegistry.prototype['flush'] = CustomElementsRegistry.prototype.flush;
   CustomElementsRegistry.prototype['polyfilled'] = CustomElementsRegistry.prototype.polyfilled;
+  CustomElementsRegistry.prototype['enableFlush'] = CustomElementsRegistry.prototype.enableFlush;
 
   // patch window.HTMLElement
 
@@ -499,7 +580,7 @@ var CustomElementDefinition;
 
   // patch Element.attachShadow
 
-  var _origAttachShadow = Element.prototype.attachShadow;
+  var _origAttachShadow = Element.prototype['attachShadow'];
   if (_origAttachShadow) {
     Object.defineProperty(Element.prototype, 'attachShadow', {
       value: function(options) {
