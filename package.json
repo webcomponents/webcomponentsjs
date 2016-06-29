@@ -2,7 +2,7 @@
   "name": "webcomponents.js",
   "version": "0.7.21",
   "description": "webcomponents.js",
-  "main": "webcomponents.js",
+  "main": "dist/webcomponents.js",
   "directories": {
     "test": "tests"
   },
@@ -16,7 +16,8 @@
     "url": "https://github.com/webcomponents/webcomponentsjs/issues"
   },
   "scripts": {
-    "test": "wct"
+    "test": "wct",
+    "prepublish": "gulp build"
   },
   "homepage": "http://webcomponents.org",
   "devDependencies": {
