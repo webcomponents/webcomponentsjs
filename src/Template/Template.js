@@ -144,6 +144,17 @@
       return el;
     };
 
+    // Patch document.createElementNS to ensure newly created templates have content
+    var createElementNS = document.createElementNS;
+    document.createElementNS = function() {
+      'use strict';
+      var el = createElementNS.apply(document, arguments);
+      if (el.namespaceURI === 'http://www.w3.org/1999/xhtml' && el.localName === 'template') {
+        TemplateImpl.decorate(el);
+      }
+      return el;
+    };
+
     var escapeDataRegExp = /[&\u00A0<>]/g;
 
     function escapeReplace(c) {
