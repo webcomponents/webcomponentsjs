@@ -29,6 +29,8 @@ var CustomElementDefinition;
   var doc = document;
   var win = window;
 
+  var walkId = 0;
+
   // name validation
   // https://html.spec.whatwg.org/multipage/scripting.html#valid-custom-element-name
 
@@ -180,6 +182,7 @@ var CustomElementDefinition;
       // @type {CustomElementDefinition}
       var definition = {
         name: name,
+        extends: constructor.extends,
         localName: localName,
         constructor: constructor,
         connectedCallback: connectedCallback,
@@ -193,7 +196,7 @@ var CustomElementDefinition;
       this._constructors.set(constructor, localName);
 
       // 17, 18, 19:
-      this._addNodes(doc.childNodes);
+      this._addNodes(doc.childNodes, true);
 
       // 20:
       var deferred = this._whenDefinedMap.get(localName);
@@ -264,7 +267,7 @@ var CustomElementDefinition;
      * @private
      */
     _observeRoot: function(root) {
-      root.__observer = new MutationObserver(this._handleMutations.bind(this));
+      root.__observer = new MutationObserver(this._handleMutations.bind(this, root));
       root.__observer.observe(root, {childList: true, subtree: true});
       if (this.enableFlush) {
         // this is memory leak, only use in tests
@@ -288,13 +291,15 @@ var CustomElementDefinition;
     /**
      * @private
      */
-    _handleMutations: function(mutations) {
+    _handleMutations: function(root, mutations) {
+      var shouldAttach = (root == document) ||
+        (root.host && root.host.__attached);
       for (var i = 0; i < mutations.length; i++) {
         var mutation = mutations[i];
         if (mutation.type === 'childList') {
           // Note: we can't get an ordering between additions and removals, and
           // so might diverge from spec reaction ordering
-          this._addNodes(mutation.addedNodes);
+          this._addNodes(mutation.addedNodes, shouldAttach);
           this._removeNodes(mutation.removedNodes);
         }
       }
@@ -304,7 +309,11 @@ var CustomElementDefinition;
      * @param {NodeList} nodeList
      * @private
      */
-    _addNodes: function(nodeList) {
+    _addNodes: function(nodeList, shouldAttach) {
+      this.__addNodes(nodeList, shouldAttach, walkId++);
+    },
+
+    __addNodes: function(nodeList, shouldAttach, currWalkId) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
 
@@ -313,17 +322,19 @@ var CustomElementDefinition;
         }
 
         // Since we're adding this node to an observed tree, we can unobserve
-        this._unobserveRoot(root);
+        // this._unobserveRoot(root);
 
         var walker = createTreeWalker(root);
         do {
           var node = /** @type {HTMLElement} */ (walker.currentNode);
-          var definition = this._definitions.get(node.localName);
-          if (definition) {
+          var is = node.getAttribute('is');
+          var name = is ? is : node.localName;
+          var definition = this._definitions.get(name);
+          if (definition && (!definition.extends || node.localName == definition.extends)) {
             if (!node.__upgraded) {
               this._upgradeElement(node, definition, true);
             }
-            if (node.__upgraded && !node.__attached) {
+            if (shouldAttach && node.__upgraded && !node.__attached) {
               node.__attached = true;
               if (definition && definition.connectedCallback) {
                 definition.connectedCallback.call(node);
@@ -333,17 +344,18 @@ var CustomElementDefinition;
           if (node.shadowRoot) {
             // TODO(justinfagnani): do we need to check that the shadowRoot
             // is observed?
-            this._addNodes(node.shadowRoot.childNodes);
+            this.__addNodes(node.shadowRoot.childNodes, shouldAttach, currWalkId);
           }
-          if (node.tagName === 'LINK') {
-            var onLoad = (function() {
-              var link = node;
-              return function() {
+          if (node.tagName === 'LINK' && node.rel.toLowerCase() == 'import') {
+            var onLoad = function onLoad(link, currWalkId) {
+              if (!link.import.__ceLastWalkId ||
+                  link.import.__ceLastWalkId < currWalkId) {
                 link.removeEventListener('load', onLoad);
                 this._observeRoot(link.import);
-                this._addNodes(link.import.childNodes);
-              }.bind(this);
-            }).bind(this)();
+                link.import.__ceLastWalkId = currWalkId;
+                this.__addNodes(link.import.childNodes, false, currWalkId);
+              }
+            }.bind(this, node, currWalkId);
             if (node.import) {
               onLoad();
             } else {
@@ -370,7 +382,7 @@ var CustomElementDefinition;
         // reobserve it.
         // TODO(justinfagnani): can we do this in a microtask so we don't thrash
         // on creating and destroying MutationObservers on batch DOM mutations?
-        this._observeRoot(root);
+        // this._observeRoot(root);
 
         var walker = createTreeWalker(root);
         do {
@@ -453,22 +465,26 @@ var CustomElementDefinition;
 
   // patch window.HTMLElement
 
-  var origHTMLElement = win.HTMLElement;
-  win.HTMLElement = function HTMLElement() {
-    var customElements = win['customElements'];
-    if (customElements._newInstance) {
-      var i = customElements._newInstance;
-      customElements._newInstance = null;
-      return i;
+  function patchConstructor(name) {
+    var orig = win[name];
+    var patched = win[name] = function PatchedElement() {
+      var customElements = win['customElements'];
+      if (customElements._newInstance) {
+        var i = customElements._newInstance;
+        customElements._newInstance = null;
+        return i;
+      }
+      if (this.constructor) {
+        var tagName = customElements._constructors.get(this.constructor);
+        return doc._createElement(tagName, false);
+      }
+      throw new Error('unknown constructor. Did you call customElements.define()?');
     }
-    if (this.constructor) {
-      var tagName = customElements._constructors.get(this.constructor);
-      return doc._createElement(tagName, false);
-    }
-    throw new Error('unknown constructor. Did you call customElements.define()?');
+    patched.prototype = Object.create(orig.prototype);
+    Object.defineProperty(patched.prototype, 'constructor', {value: patched});
   }
-  win.HTMLElement.prototype = Object.create(origHTMLElement.prototype);
-  Object.defineProperty(win.HTMLElement.prototype, 'constructor', {value: win.HTMLElement});
+
+  patchConstructor('HTMLElement');
 
   // patch all built-in subclasses of HTMLElement to inherit from the new HTMLElement
   // See https://html.spec.whatwg.org/multipage/indices.html#element-interfaces
@@ -549,6 +565,10 @@ var CustomElementDefinition;
     }
   }
 
+  // For now, just patch critical common type-extension elements
+  patchConstructor('HTMLStyleElement');
+  patchConstructor('HTMLTemplateElement');
+
   // patch doc.createElement
 
   var rawCreateElement = doc.createElement;
@@ -559,7 +579,7 @@ var CustomElementDefinition;
     if (definition) {
       customElements._upgradeElement(element, definition, callConstructor);
     }
-    customElements._observeRoot(element);
+    // customElements._observeRoot(element);
     return element;
   };
   doc.createElement = function(tagName) {
@@ -576,6 +596,16 @@ var CustomElementDefinition;
     } else {
       return _origCreateElementNS.call(document, namespaceURI, qualifiedName);
     }
+  };
+
+  // patch doc.importNode
+
+  var rawImportNode = doc.importNode;
+  doc.importNode = function(node, deep) {
+    var clone = rawImportNode.call(doc, node, deep);
+    var customElements = win['customElements'];
+    customElements._addNodes(isElement(clone) ? [clone] : clone.childNodes);
+    return clone;
   };
 
   // patch Element.attachShadow
