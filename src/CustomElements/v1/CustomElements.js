@@ -86,7 +86,7 @@ var CustomElementDefinition;
     this._whenDefinedMap = new Map();
 
     /** @private {Set<MutationObserver>} **/
-    this._observers = new Set();
+    this._observers = new Map();
 
     /** @private {MutationObserver} **/
     this._attributeObserver =
@@ -96,9 +96,21 @@ var CustomElementDefinition;
     this._newInstance = null;
 
     this.polyfilled = true;
-    this.enableFlush = false;
 
     this._observeRoot(document);
+
+    //TODO(kschaaf): rough WebComponentsReady event shim, probably not correct
+    var wcr = function() {
+      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
+    };
+    if (window.HTMLImports) {
+      HTMLImports.whenReady(function() {
+        requestAnimationFrame(wcr);
+      });
+    } else {
+      requestAnimationFrame(wcr);
+    }
+
   }
 
   CustomElementsRegistry.prototype = {
@@ -250,12 +262,9 @@ var CustomElementDefinition;
      * `enableFlush` must be true for this to work. Only use during tests!
      */
     flush: function() {
-      if (this.enableFlush) {
-        console.warn("flush!!!");
-        this._observers.forEach(function(observer) {
-          this._handleMutations(observer.takeRecords());
-        }, this);
-      }
+      this._observers.forEach(function(observer, root) {
+        this._handleMutations(root, observer.takeRecords());
+      }, this);
     },
 
     _setNewInstance: function(instance) {
@@ -267,11 +276,11 @@ var CustomElementDefinition;
      * @private
      */
     _observeRoot: function(root) {
-      root.__observer = new MutationObserver(this._handleMutations.bind(this, root));
-      root.__observer.observe(root, {childList: true, subtree: true});
-      if (this.enableFlush) {
+      if (!root.__observer) {
+        root.__observer = new MutationObserver(this._handleMutations.bind(this, root));
+        root.__observer.observe(root, {childList: true, subtree: true});
         // this is memory leak, only use in tests
-        this._observers.add(root.__observer);
+        this._observers.set(root, root.__observer);
       }
     },
 
@@ -282,9 +291,7 @@ var CustomElementDefinition;
       if (root.__observer) {
         root.__observer.disconnect();
         root.__observer = null;
-        if (this.enableFlush) {
-          this._observers.delete(root.__observer);
-        }
+        this._observers.delete(root);
       }
     },
 
@@ -320,9 +327,6 @@ var CustomElementDefinition;
         if (!isElement(root)) {
           continue;
         }
-
-        // Since we're adding this node to an observed tree, we can unobserve
-        // this._unobserveRoot(root);
 
         var walker = createTreeWalker(root);
         do {
@@ -378,12 +382,6 @@ var CustomElementDefinition;
           continue;
         }
 
-        // Since we're detatching this element from an observed root, we need to
-        // reobserve it.
-        // TODO(justinfagnani): can we do this in a microtask so we don't thrash
-        // on creating and destroying MutationObservers on batch DOM mutations?
-        // this._observeRoot(root);
-
         var walker = createTreeWalker(root);
         do {
           var node = walker.currentNode;
@@ -393,6 +391,9 @@ var CustomElementDefinition;
             if (definition && definition.disconnectedCallback) {
               definition.disconnectedCallback.call(node);
             }
+          }
+          if (node.__observer) {
+            this._unobserveRoot(node);
           }
         } while (walker.nextNode())
       }
@@ -461,7 +462,6 @@ var CustomElementDefinition;
   CustomElementsRegistry.prototype['whenDefined'] = CustomElementsRegistry.prototype.whenDefined;
   CustomElementsRegistry.prototype['flush'] = CustomElementsRegistry.prototype.flush;
   CustomElementsRegistry.prototype['polyfilled'] = CustomElementsRegistry.prototype.polyfilled;
-  CustomElementsRegistry.prototype['enableFlush'] = CustomElementsRegistry.prototype.enableFlush;
 
   // patch window.HTMLElement
 
@@ -579,7 +579,6 @@ var CustomElementDefinition;
     if (definition) {
       customElements._upgradeElement(element, definition, callConstructor);
     }
-    // customElements._observeRoot(element);
     return element;
   };
   doc.createElement = function(tagName) {
@@ -624,4 +623,12 @@ var CustomElementDefinition;
 
   /** @type {CustomElementsRegistry} */
   window['customElements'] = new CustomElementsRegistry();
+
+  // Temporary, for backward-compatibility
+  window.CustomElements = {
+    takeRecords: function() {
+      customElements.flush();
+    }
+  }
+
 })();
