@@ -101,4 +101,22 @@
     window.Event.prototype = origEvent.prototype;
   }
 
+  // Implement WebComponents.whenReady
+  var ready = false;
+  var callbacks = [];
+  scope.whenReady = function(callback) {
+    if (!ready) {
+      callbacks.push(callback);
+    } else {
+      callback();
+    }
+  }
+  window.addEventListener('WebComponentsReady', function() {
+    ready = true;
+    for (var i=0; i<callbacks.length; i++) {
+      callbacks[i]();
+    }
+    callbacks = null;
+  });
+
 })(window.WebComponents);

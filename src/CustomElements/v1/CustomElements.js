@@ -95,20 +95,24 @@ var CustomElementDefinition;
     /** @private {HTMLElement} **/
     this._newInstance = null;
 
+    this.ready = false;
+
     this.polyfilled = true;
 
     this._observeRoot(document);
 
-    //TODO(kschaaf): rough WebComponentsReady event shim, probably not correct
+    // Add event for firing WebComponentsReady and enabling upgrades
+    var self = this;
     var wcr = function() {
+      self.ready = true;
+      self._addNodes(document.childNodes, true);
+      console.info('WebComponentsReady');
       window.dispatchEvent(new CustomEvent('WebComponentsReady'));
     };
     if (window.HTMLImports) {
-      HTMLImports.whenReady(function() {
-        requestAnimationFrame(wcr);
-      });
+      HTMLImports.whenReady(wcr);
     } else {
-      requestAnimationFrame(wcr);
+      document.addEventListener('DOMContentLoaded', wcr);
     }
 
   }
@@ -208,7 +212,9 @@ var CustomElementDefinition;
       this._constructors.set(constructor, localName);
 
       // 17, 18, 19:
-      this._addNodes(doc.childNodes, true);
+      if (this.ready) {
+        this._addNodes(doc.childNodes, true);
+      }
 
       // 20:
       var deferred = this._whenDefinedMap.get(localName);
@@ -299,15 +305,17 @@ var CustomElementDefinition;
      * @private
      */
     _handleMutations: function(root, mutations) {
-      var shouldAttach = (root == document) ||
-        (root.host && root.host.__attached);
-      for (var i = 0; i < mutations.length; i++) {
-        var mutation = mutations[i];
-        if (mutation.type === 'childList') {
-          // Note: we can't get an ordering between additions and removals, and
-          // so might diverge from spec reaction ordering
-          this._addNodes(mutation.addedNodes, shouldAttach);
-          this._removeNodes(mutation.removedNodes);
+      if (this.ready) {
+        var shouldAttach = (root == document) ||
+          (root.host && root.host.__attached);
+        for (var i = 0; i < mutations.length; i++) {
+          var mutation = mutations[i];
+          if (mutation.type === 'childList') {
+            // Note: we can't get an ordering between additions and removals, and
+            // so might diverge from spec reaction ordering
+            this._addNodes(mutation.addedNodes, shouldAttach);
+            this._removeNodes(mutation.removedNodes);
+          }
         }
       }
     },
@@ -565,7 +573,7 @@ var CustomElementDefinition;
     }
   }
 
-  // For now, just patch critical common type-extension elements
+  //TODO(kschaaf): For now, just patch critical common type-extension elements
   patchConstructor('HTMLStyleElement');
   patchConstructor('HTMLTemplateElement');
 
@@ -624,7 +632,7 @@ var CustomElementDefinition;
   /** @type {CustomElementsRegistry} */
   window['customElements'] = new CustomElementsRegistry();
 
-  // Temporary, for backward-compatibility
+  //TODO(kschaaf): Temporary, for backward-compatibility
   window.CustomElements = {
     takeRecords: function() {
       customElements.flush();
