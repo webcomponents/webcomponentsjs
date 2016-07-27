@@ -102,7 +102,11 @@ suite('Range', function() {
 
   function createShadowDom(element, shadowDomContentsArray) {
     shadowDomContentsArray.forEach(function(shadowDomContent) {
-      element.createShadowRoot().innerHTML = shadowDomContent;
+      if (typeof shadowDomContent == 'string') {
+        element.createShadowRoot().innerHTML = shadowDomContent;
+      } else {
+        wrapIfNeeded(element).createShadowRoot().appendChild(shadowDomContent);
+      }
     });
     return element;
   }
@@ -237,12 +241,16 @@ suite('Range', function() {
     range.setEnd(span2TextNode, 1);
     selection.removeAllRanges();
     selection.addRange(range);
+    assert.strictEqual(range.startContainer, span0TextNode);
+    assert.strictEqual(range.endContainer, span2TextNode);
     assert.strictEqual(range.toString(), "neTwoT");
   }
 
   function testRangeWithHosts(hosts) {
     hosts.forEach(function(host) {
-      document.body.appendChild(wrapIfNeeded(host));
+      if (!host.parentNode) {
+        document.body.appendChild(wrapIfNeeded(host));
+      }
       testRangeWith3SpansHTML(host);
     });
   }
@@ -395,6 +403,19 @@ suite('Range', function() {
       shadowDomContent += "<div>after</div>";
       hosts = createHostsWithShadowDom([shadowDomContent], "div");
       testRangeWithHosts(hosts);
+    });
+
+    test("div - <content> wrapped nested in Shadow DOM", function() {
+      var shadowDomContent = "<div>before</div>";
+      shadowDomContent += "<div id='container'><content></content></div>";
+      shadowDomContent += "<div>after</div>";
+      var childHosts = createHostsWithShadowDom([shadowDomContent], "div");
+      hosts = createHostsWithShadowDom([''], "div");
+      for (var i = 0; i < childHosts.length; ++i) {
+        hosts[i].shadowRoot.appendChild(childHosts[i]);
+        document.body.appendChild(wrapIfNeeded(hosts[i]));
+      }
+      testRangeWithHosts(childHosts);
     });
 
   });
