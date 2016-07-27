@@ -189,32 +189,32 @@ suite('Range', function() {
     range.setEnd(host, 2);
     selection.addRange(range);
 
-    assert.isTrue(range.startContainer === host);
-    assert.isTrue(range.endContainer === host);
-    assert.isTrue(range.commonAncestorContainer === host);
-    assert.isTrue(range.toString() === "OneTwo");
+    assert.strictEqual(range.startContainer, host);
+    assert.strictEqual(range.endContainer, host);
+    assert.strictEqual(range.commonAncestorContainer, host);
+    assert.strictEqual(range.toString(), "OneTwo");
 
     range.setStart(host, 0);
     range.setEnd(host, 1);
-    assert.isTrue(range.toString() === "One");
+    assert.strictEqual(range.toString(), "One");
     selection.removeAllRanges();
     selection.addRange(range);
 
     range.setStart(host, 1);
     range.setEnd(host, 2);
-    assert.isTrue(range.toString() === "Two");
+    assert.strictEqual(range.toString(), "Two");
     selection.removeAllRanges();
     selection.addRange(range);
 
     range.setStart(host, 2);
     range.setEnd(host, 3);
-    assert.isTrue(range.toString() === "Three");
+    assert.strictEqual(range.toString(), "Three");
     selection.removeAllRanges();
     selection.addRange(range);
 
     range.setStart(host, 0);
     range.setEnd(host, 3);
-    assert.isTrue(range.toString() === "OneTwoThree");
+    assert.strictEqual(range.toString(), "OneTwoThree");
     selection.removeAllRanges();
     selection.addRange(range);
 
@@ -225,7 +225,7 @@ suite('Range', function() {
     var span2 = host.childNodes[2];
     range.setStart(span0, 1);
     range.setEnd(span2, 0);
-    assert.isTrue(range.toString() === "Two");
+    assert.strictEqual(range.toString(), "Two");
     selection.removeAllRanges();
     selection.addRange(range);
 
@@ -237,7 +237,7 @@ suite('Range', function() {
     range.setEnd(span2TextNode, 1);
     selection.removeAllRanges();
     selection.addRange(range);
-    assert.isTrue(range.toString() === "neTwoT");
+    assert.strictEqual(range.toString(), "neTwoT");
   }
 
   function testRangeWithHosts(hosts) {
@@ -498,10 +498,10 @@ suite('Range', function() {
       range.setStart(host, 0);
       range.setEnd(host, host.childNodes.length + 1);
 
-      assert.isTrue(range.startContainer === host);
-      assert.isTrue(range.endContainer === host);
-      assert.isTrue(range.commonAncestorContainer === host);
-      //assert.isTrue(range.toString() === "bold1italic1");
+      assert.strictEqual(range.startContainer, host);
+      assert.strictEqual(range.endContainer, host);
+      assert.strictEqual(range.commonAncestorContainer, host);
+      //assert.strictEqual(range.toString(), "bold1italic1");
     }
 
     test.skip("div with multiple <content> wrapped", function() {
