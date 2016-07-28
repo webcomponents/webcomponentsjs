@@ -335,7 +335,7 @@ var CustomElementDefinition;
             // is observed?
             this._addNodes(node.shadowRoot.childNodes);
           }
-          if (node.tagName === 'LINK') {
+          if (node.tagName === 'LINK' && node.rel === 'import') {
             var onLoad = (function() {
               var link = node;
               return function() {
