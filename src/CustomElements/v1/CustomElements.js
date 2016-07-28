@@ -106,7 +106,6 @@ var CustomElementDefinition;
     var wcr = function() {
       self.ready = true;
       self._addNodes(document.childNodes, true);
-      console.info('WebComponentsReady');
       window.dispatchEvent(new CustomEvent('WebComponentsReady'));
     };
     if (window.HTMLImports) {
@@ -420,8 +419,9 @@ var CustomElementDefinition;
       element.__proto__ = prototype;
       if (callConstructor) {
         this._setNewInstance(element);
-        element.__upgraded = true;
+        element.__upgraded = 'upgrading';
         new (definition.constructor)();
+        element.__upgraded = true;
         console.assert(this._newInstance == null);
       }
 
@@ -456,8 +456,11 @@ var CustomElementDefinition;
           var oldValue = mutation.oldValue;
           var target = mutation.target;
           var newValue = target.getAttribute(name);
-          var namespace = mutation.attributeNamespace;
-          target['attributeChangedCallback'](name, oldValue, newValue, namespace);
+          // Skip changes that were handled synchronously by setAttribute
+          if (newValue !== oldValue) {
+            var namespace = mutation.attributeNamespace;
+            target['attributeChangedCallback'](name, oldValue, newValue, namespace);
+          }
         }
       }
     },
@@ -627,6 +630,33 @@ var CustomElementDefinition;
         return root;
       },
     });
+  }
+
+  // patch Element.setAttribute & removeAttribute
+
+  var _origSetAttribute = Element.prototype.setAttribute;
+  Element.prototype.setAttribute = function(name, value) {
+    changeAttribute(this, name, value, _origSetAttribute);
+  };
+  var _origRemoveAttribute = Element.prototype.removeAttribute;
+  Element.prototype.removeAttribute = function(name) {
+    changeAttribute(this, name, null, _origRemoveAttribute);
+  };
+
+  function changeAttribute(element, name, value, operation) {
+    name = name.toLowerCase();
+    var oldValue = element.getAttribute(name);
+    operation.call(element, name, value);
+    // Bail if this wasn't a fully upgraded custom element
+    if (element.__upgraded == true) {
+      var definition = customElements._definitions.get(element.is || element.localName);
+      if (definition.observedAttributes.indexOf(name) >= 0) {
+        var newValue = element.getAttribute(name);
+        if (newValue !== oldValue) {
+          element.attributeChangedCallback(name, oldValue, newValue);
+        }
+      }
+    }
   }
 
   /** @type {CustomElementsRegistry} */
