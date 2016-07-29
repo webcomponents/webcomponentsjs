@@ -61,6 +61,11 @@
     'WebComponents/unresolved.js'
   ];
 
+  // TODO(kschaaf): Remove later? Allow forcing fallback to V0 CE
+  if (flags.ce == 'v0') {
+    Object.defineProperty(window, 'customElements', {value: null});
+  }
+
   var src = script.getAttribute('src');
   var path = src.slice(0, src.lastIndexOf(file));
 
