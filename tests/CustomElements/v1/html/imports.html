@@ -34,9 +34,19 @@
     <script src="../../../../src/CustomElements/v1/CustomElements.js"></script>
     <script src="../../../../../web-component-tester/browser.js"></script>
     <link rel="import" href="imported-doc.html" id="import">
+    <link rel="not-import" href="imported-doc.html" id="import">
     <script>
       customElements.enableFlush = true;
       var elementsCreated = 0;
+      var nonImportDocumentAccessed = false;
+
+      var nonImportLink = document.querySelector('link[rel="not-import"]');
+      Object.defineProperty(nonImportLink, 'import', {
+        get: function() {
+          nonImportDocumentAccessed = true;
+        },
+        enumberable: true,
+      });
 
       class XFoo extends HTMLElement {
         constructor() {
@@ -52,7 +62,11 @@
         test('CustomElements upgrade from HTML Imports', function() {
           chai.assert.equal(2, elementsCreated, 'HTML hook allows main document and import document to upgrade');
         });
-        
+
+        test('CustomElements only attempt to upgrade <link rel=import>', function() {
+          chai.assert.isFalse(nonImportDocumentAccessed, 'CustomElements is trying to upgrade a non-import link');
+        });
+
       });
     </script>
   </head>
