@@ -29,6 +29,15 @@ var CustomElementDefinition;
   var doc = document;
   var win = window;
 
+  if (win.customElements) {
+    if (win.customElements.enableFlush) {
+      win.customElements.flush = () => console.log('flush');
+    }
+    if (!win.customElements.forcePolyfill) {
+      return;
+    }
+  }
+
   // name validation
   // https://html.spec.whatwg.org/multipage/scripting.html#valid-custom-element-name
 
