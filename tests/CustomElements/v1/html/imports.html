@@ -12,8 +12,12 @@
   <head>
     <title>Custom Elements: imports integration</title>
     <script>
+      // document.head.addEventListener('DOMNodeInserted', function(e) {
+      //   console.log('DOMNodeInserted', e);
+      // });
       var _HTMLImportsLoaded = false;
       addEventListener('HTMLImportsLoaded', function() {
+        console.log('HTMLImportsLoaded');
         _HTMLImportsLoaded = true;
       });
 
@@ -37,11 +41,14 @@
     <link rel="import" href="imported-doc.html" id="import">
     <link rel="not-import" href="imported-doc.html" id="not-import">
     <script>
-      customElements.enableFlush = true;
-      var elementsCreated = 0;
-      var nonImportDocumentAccessed = false;
-      var subImportDocumentAccessCount = 0;
 
+    customElements.enableFlush = true;
+    var elementsCreated = 0;
+    var nonImportDocumentAccessed = false;
+    var subImportDocumentAccessCount = 0;
+
+    // suiteSetup(function() {
+      console.log('suiteSetup');
       // To tell if CustomElementsRegistry tries to import a non-import link
       // we fail if the .import accessor is read.
       var nonImportLink = document.querySelector('#not-import');
@@ -55,6 +62,7 @@
       var subImportLink = document.querySelector('#sub-import');
       Object.defineProperty(subImportLink, 'import', {
         get: function() {
+          console.log('subImportDocumentAccess');
           subImportDocumentAccessCount++;
         },
         enumberable: true,
@@ -69,6 +77,7 @@
         }
       }
       customElements.define('x-foo', XFoo);
+    // });
 
       suite('HTML Imports Integration', function() {
 

@@ -351,6 +351,7 @@ var CustomElementDefinition;
           if (node.tagName === 'LINK' &&
               node.rel.toLowerCase() === 'import' &&
               !visitedNodes.has(node)) {
+            console.log('import:', node);
             // visitedNodes.add(node);
             var onLoad = (function() {
               var link = node;
