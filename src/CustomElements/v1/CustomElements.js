@@ -31,7 +31,9 @@ var CustomElementDefinition;
 
   if (win.customElements) {
     if (win.customElements.enableFlush) {
-      win.customElements.flush = () => console.log('flush');
+      win.customElements.flush = function() {
+        console.log('CustomElements flush');
+      };
     }
     if (!win.customElements.forcePolyfill) {
       return;
