@@ -33,20 +33,33 @@
     <script src="../../../../dist/HTMLImports.js"></script>
     <script src="../../../../src/CustomElements/v1/CustomElements.js"></script>
     <script src="../../../../../web-component-tester/browser.js"></script>
+    <link rel="import" href="sub-import.html" id="sub-import">
     <link rel="import" href="imported-doc.html" id="import">
-    <link rel="not-import" href="imported-doc.html" id="import">
+    <link rel="not-import" href="imported-doc.html" id="not-import">
     <script>
       customElements.enableFlush = true;
       var elementsCreated = 0;
       var nonImportDocumentAccessed = false;
+      var subImportDocumentAccessCount = 0;
 
-      var nonImportLink = document.querySelector('link[rel="not-import"]');
+      // To tell if CustomElementsRegistry tries to import a non-import link
+      // we fail if the .import accessor is read.
+      var nonImportLink = document.querySelector('#not-import');
       Object.defineProperty(nonImportLink, 'import', {
         get: function() {
           nonImportDocumentAccessed = true;
         },
         enumberable: true,
       });
+
+      var subImportLink = document.querySelector('#sub-import');
+      Object.defineProperty(subImportLink, 'import', {
+        get: function() {
+          subImportDocumentAccessCount++;
+        },
+        enumberable: true,
+      });
+
 
       class XFoo extends HTMLElement {
         constructor() {
@@ -65,6 +78,10 @@
 
         test('CustomElements only attempt to upgrade <link rel=import>', function() {
           chai.assert.isFalse(nonImportDocumentAccessed, 'CustomElements is trying to upgrade a non-import link');
+        });
+
+        test('CustomElements only upgrades a <link rel=import> once', function() {
+          chai.assert.equal(subImportDocumentAccessCount, 1);
         });
 
       });

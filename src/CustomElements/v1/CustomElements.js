@@ -311,9 +311,11 @@ var CustomElementDefinition;
 
     /**
      * @param {NodeList} nodeList
+     * @param {Set<Node>=} visitedNodes
      * @private
      */
-    _addNodes: function(nodeList) {
+    _addNodes: function(nodeList, visitedNodes) {
+      visitedNodes = visitedNodes || new Set();
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
 
@@ -342,15 +344,18 @@ var CustomElementDefinition;
           if (node.shadowRoot) {
             // TODO(justinfagnani): do we need to check that the shadowRoot
             // is observed?
-            this._addNodes(node.shadowRoot.childNodes);
+            this._addNodes(node.shadowRoot.childNodes, visitedNodes);
           }
-          if (node.tagName === 'LINK' && node.rel.toLowerCase() === 'import') {
+          if (node.tagName === 'LINK' &&
+              node.rel.toLowerCase() === 'import' &&
+              !visitedNodes.has(node)) {
+            // visitedNodes.add(node);
             var onLoad = (function() {
               var link = node;
               return function() {
                 link.removeEventListener('load', onLoad);
                 this._observeRoot(link.import);
-                this._addNodes(link.import.childNodes);
+                this._addNodes(link.import.childNodes, visitedNodes);
               }.bind(this);
             }).bind(this)();
             if (node.import) {
