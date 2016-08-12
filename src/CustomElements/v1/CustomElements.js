@@ -577,6 +577,8 @@ var CustomElementDefinition;
   //TODO(kschaaf): For now, just patch critical common type-extension elements
   patchConstructor('HTMLStyleElement');
   patchConstructor('HTMLTemplateElement');
+  patchConstructor('HTMLButtonElement');
+  patchConstructor('HTMLInputElement');
 
   // patch doc.createElement
 
