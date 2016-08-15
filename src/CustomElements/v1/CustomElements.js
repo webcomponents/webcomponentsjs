@@ -103,7 +103,7 @@ var CustomElementDefinition;
 
     // HTML spec part 4.13.4
     // https://html.spec.whatwg.org/multipage/scripting.html#dom-customelementsregistry-define
-    define: function(name, constructor, options) {
+    define: function(name, constructor, options = {}) {
       name = name.toString().toLowerCase();
 
       // 1:
@@ -139,8 +139,6 @@ var CustomElementDefinition;
 
       // 8:
       var localName = name;
-
-      // 9, 10: We do not support extends currently.
 
       // 11, 12, 13: Our define() isn't rentrant-safe
 
@@ -179,6 +177,7 @@ var CustomElementDefinition;
       // 15:
       // @type {CustomElementDefinition}
       var definition = {
+        extends: options.extends,
         name: name,
         localName: localName,
         constructor: constructor,
@@ -318,7 +317,7 @@ var CustomElementDefinition;
         var walker = createTreeWalker(root);
         do {
           var node = /** @type {HTMLElement} */ (walker.currentNode);
-          var definition = this._definitions.get(node.localName);
+          var definition = this._getDefinitionForNode(node);
           if (definition) {
             if (!node.__upgraded) {
               this._upgradeElement(node, definition, true);
@@ -440,6 +439,10 @@ var CustomElementDefinition;
         }
       }
     },
+      
+    _getDefinitionForNode: function(node) {
+      return this._definitions.get(node.getAttribute('is') || node.localName);
+    }
   }
 
   // Closure Compiler Exports
@@ -463,7 +466,8 @@ var CustomElementDefinition;
     }
     if (this.constructor) {
       var tagName = customElements._constructors.get(this.constructor);
-      return doc._createElement(tagName, false);
+      var definition = customElements._definitions.get(tagName);
+      return doc._createElement(definition.extends || tagName, false, definition.extends ? tagName : null);
     }
     throw new Error('unknown constructor. Did you call customElements.define()?');
   }
@@ -543,27 +547,35 @@ var CustomElementDefinition;
   ];
 
   for (var i = 0; i < htmlElementSubclasses.length; i++) {
-    var ctor = window['HTML' + htmlElementSubclasses[i] + 'Element'];
+    const name = 'HTML' + htmlElementSubclasses[i] + 'Element';
+    const ctor = window[name];
     if (ctor) {
-      ctor.prototype.__proto__ = win.HTMLElement.prototype;
+      win[name] = class extends HTMLElement {};
+
+      // Required so that document.createElement() instanceof checks pass.
+      ctor.prototype.__proto__ = HTMLElement.prototype;
+      ctor.prototype.__proto__ = win[name].prototype;
     }
   }
 
   // patch doc.createElement
 
   var rawCreateElement = doc.createElement;
-  doc._createElement = function(tagName, callConstructor) {
+  doc._createElement = function(tagName, callConstructor, tagIs) {
     var customElements = win['customElements'];
     var element = rawCreateElement.call(doc, tagName);
-    var definition = customElements._definitions.get(tagName.toLowerCase());
-    if (definition) {
+    var definition = customElements._definitions.get((tagIs || tagName).toLowerCase());
+    if (definition && (!tagIs || tagName === definition.extends)) {
+      if (tagIs) {
+        element.setAttribute('is', tagIs);
+      }
       customElements._upgradeElement(element, definition, callConstructor);
     }
     customElements._observeRoot(element);
     return element;
   };
-  doc.createElement = function(tagName) {
-    return doc._createElement(tagName, true);
+  doc.createElement = function(tagName, { is } = {}) {
+    return doc._createElement(tagName, true, is);
   }
 
   // patch doc.createElementNS
