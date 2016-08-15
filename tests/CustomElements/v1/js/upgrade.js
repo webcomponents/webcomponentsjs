@@ -61,4 +61,32 @@ suite('Upgrades', function() {
     assert.instanceOf(e2, X2);
   });
 
+  suite('customised build-in elements', function() {
+    let a = 0;
+
+    class SuperA extends HTMLAnchorElement {
+      constructor() {
+        super();
+        this._constructed = true;
+      }
+    };
+
+    customElements.define(`super-a`, SuperA, { extends: 'a' });
+
+    function assertIsSuperA(el) {
+      assert.instanceOf(el, HTMLElement);
+      assert.instanceOf(el, HTMLAnchorElement);
+      assert.instanceOf(el, SuperA);
+      assert.equal(el._constructed, true);
+    }
+
+    test('document.createElement', function() {
+      assertIsSuperA(document.createElement('a', { is: 'super-a' }));
+    });
+
+    test('constructor', function() {
+      assertIsSuperA(new SuperA());
+    });
+  });
+
 });
