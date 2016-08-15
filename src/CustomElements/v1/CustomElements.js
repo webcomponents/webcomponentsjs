@@ -550,11 +550,9 @@ var CustomElementDefinition;
     const name = 'HTML' + htmlElementSubclasses[i] + 'Element';
     const ctor = window[name];
     if (ctor) {
-      win[name] = class extends HTMLElement {
-        constructor() {
-          super()
-        }
-      };
+      win[name] = class extends HTMLElement {};
+
+      // Required so that document.createElement() instanceof checks pass.
       ctor.prototype.__proto__ = HTMLElement.prototype;
       ctor.prototype.__proto__ = win[name].prototype;
     }
