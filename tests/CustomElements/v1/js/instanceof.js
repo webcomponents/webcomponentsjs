@@ -45,7 +45,7 @@ suite('Built-in Element instanceof', function() {
       'datalist',
       // 'dd',
       'del',
-      'details',
+      // 'details', // doesn't work on Safari 9
       // 'dfn',
       'dialog',
       'div',
@@ -124,7 +124,7 @@ suite('Built-in Element instanceof', function() {
       'tfoot',
       'th',
       'thead',
-      'time',
+      // 'time', // doesn't work on Safari 9
       'title',
       'tr',
       'track',
@@ -134,13 +134,6 @@ suite('Built-in Element instanceof', function() {
       'video',
       // 'wbr',
     ];
-
-    console.log("HTMLElement", HTMLElement);
-
-    var d = document.createElement('abbr');
-    console.log(d);
-    console.log(d.__proto__);
-    console.log(d instanceof HTMLElement);
 
     for (var i = 0; i < elements.length; i++) {
       var tag = elements[i];
