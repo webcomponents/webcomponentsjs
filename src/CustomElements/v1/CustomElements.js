@@ -75,6 +75,12 @@ var CustomElementDefinition;
     return node.nodeType === Node.ELEMENT_NODE
   }
 
+  function isHtmlImport(element) {
+    return element.tagName === 'LINK' &&
+        element.rel &&
+        element.rel.toLowerCase().split(' ').indexOf('import') !== -1;
+  }
+
   /**
    * A registry of custom element definitions.
    *
@@ -103,6 +109,8 @@ var CustomElementDefinition;
 
     /** @private {HTMLElement} **/
     this._newInstance = null;
+
+    this._pendingHtmlImportUrls = new Set();
 
     this.polyfilled = true;
     this.enableFlush = false;
@@ -275,6 +283,7 @@ var CustomElementDefinition;
      * @private
      */
     _observeRoot: function(root) {
+      console.assert(!root.__observer);
       root.__observer = new MutationObserver(this._handleMutations.bind(this));
       root.__observer.observe(root, {childList: true, subtree: true});
       if (this.enableFlush) {
@@ -318,6 +327,7 @@ var CustomElementDefinition;
      */
     _addNodes: function(nodeList, visitedNodes) {
       visitedNodes = visitedNodes || new Set();
+
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
 
@@ -331,43 +341,76 @@ var CustomElementDefinition;
         var walker = createTreeWalker(root);
         do {
           var node = /** @type {HTMLElement} */ (walker.currentNode);
-          var definition = this._definitions.get(node.localName);
-          if (definition) {
-            if (!node.__upgraded) {
-              this._upgradeElement(node, definition, true);
-            }
-            if (node.__upgraded && !node.__attached) {
-              node.__attached = true;
-              if (definition && definition.connectedCallback) {
-                definition.connectedCallback.call(node);
-              }
-            }
-          }
-          if (node.shadowRoot) {
-            // TODO(justinfagnani): do we need to check that the shadowRoot
-            // is observed?
-            this._addNodes(node.shadowRoot.childNodes, visitedNodes);
-          }
-          if (node.tagName === 'LINK' &&
-              node.rel.toLowerCase() === 'import' &&
-              !visitedNodes.has(node)) {
-            console.log('import:', node);
-            // visitedNodes.add(node);
-            var onLoad = (function() {
-              var link = node;
-              return function() {
-                link.removeEventListener('load', onLoad);
-                this._observeRoot(link.import);
-                this._addNodes(link.import.childNodes, visitedNodes);
-              }.bind(this);
-            }).bind(this)();
-            if (node.import) {
-              onLoad();
-            } else {
-              node.addEventListener('load', onLoad);
-            }
-          }
+          this._addElement(node, visitedNodes);
         } while (walker.nextNode())
+      }
+    },
+
+    _addElement(element, visitedNodes) {
+      if (visitedNodes.has(element)) return;
+      visitedNodes.add(element);
+
+      var definition = this._definitions.get(element.localName);
+      if (definition) {
+        if (!element.__upgraded) {
+          this._upgradeElement(element, definition, true);
+        }
+        if (element.__upgraded && !element.__attached) {
+          element.__attached = true;
+          if (definition.connectedCallback) {
+            definition.connectedCallback.call(element);
+          }
+        }
+      }
+      if (element.shadowRoot) {
+        // TODO(justinfagnani): do we need to check that the shadowRoot
+        // is observed?
+        this._addNodes(element.shadowRoot.childNodes, visitedNodes);
+      }
+      if (isHtmlImport(element)) {
+        this._addImport(element, visitedNodes);
+      }
+    },
+
+    _addImport(link, visitedNodes) {
+      // During a tree walk to add or upgrade nodes, we may encounter multiple
+      // HTML imports that reference the same document, and may encounter
+      // imports in various states of loading.
+
+      // First, we only want to process the first import for a document in a
+      // walk, so we check visitedNodes for the document, not the link.
+      //
+      // Second, for documents that haven't loaded yet, we only want to add one
+      // listener, regardless of the number of links or walks, so we track
+      // pending loads in _pendingHtmlImportUrls.
+
+      // Check to see if the import is loaded
+      var _import = link.import;
+      if (_import) {
+        // The import is loaded, but only process the first link element
+        if (visitedNodes.has(_import)) return;
+        visitedNodes.add(_import);
+
+        // The import is loaded observe it
+        if (!_import.__observer) this._observeRoot(_import);
+
+        // walk the document
+        this._addNodes(_import.childNodes, visitedNodes);
+      } else {
+        // The import is not loaded, so wait for it
+        var importUrl = link.href;
+        if (this._pendingHtmlImportUrls.has(importUrl)) return;
+        this._pendingHtmlImportUrls.add(importUrl);
+
+        var _this = this;
+        var onLoad = function() {
+          link.removeEventListener('load', onLoad);
+          if (!link.import.__observer) _this._observeRoot(link.import);
+          // We don't pass visitedNodes because this is async and not part of
+          // the current tree walk.
+          _this._addNodes(link.import.childNodes);
+        };
+        link.addEventListener('load', onLoad);
       }
     },
 

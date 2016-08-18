@@ -12,12 +12,8 @@
   <head>
     <title>Custom Elements: imports integration</title>
     <script>
-      // document.head.addEventListener('DOMNodeInserted', function(e) {
-      //   console.log('DOMNodeInserted', e);
-      // });
       var _HTMLImportsLoaded = false;
       addEventListener('HTMLImportsLoaded', function() {
-        console.log('HTMLImportsLoaded');
         _HTMLImportsLoaded = true;
       });
 
@@ -34,63 +30,63 @@
       };
 
     </script>
+    <script src="../../../../../web-component-tester/browser.js"></script>
     <script src="../../../../dist/HTMLImports.js"></script>
     <script src="../../../../src/CustomElements/v1/CustomElements.js"></script>
-    <script src="../../../../../web-component-tester/browser.js"></script>
     <link rel="import" href="sub-import.html" id="sub-import">
     <link rel="import" href="imported-doc.html" id="import">
     <link rel="not-import" href="imported-doc.html" id="not-import">
     <script>
 
-    customElements.enableFlush = true;
-    var elementsCreated = 0;
-    var nonImportDocumentAccessed = false;
-    var subImportDocumentAccessCount = 0;
+      customElements.enableFlush = true;
+      var elementsCreated = 0;
+      var addedLinks = [];
+      var observedRoots = [];
 
-    // suiteSetup(function() {
-      console.log('suiteSetup');
-      // To tell if CustomElementsRegistry tries to import a non-import link
-      // we fail if the .import accessor is read.
-      var nonImportLink = document.querySelector('#not-import');
-      Object.defineProperty(nonImportLink, 'import', {
-        get: function() {
-          nonImportDocumentAccessed = true;
-        },
-        enumberable: true,
-      });
+      // Patch customElements._addNode so we can spy on link nodes being
+      // processed.
+      var origAddImport = customElements._addImport;
+      customElements._addImport = function(link, visitedNodes) {
+        addedLinks.push(link);
+        origAddImport.call(customElements, link, visitedNodes);
+      }
 
-      var subImportLink = document.querySelector('#sub-import');
-      Object.defineProperty(subImportLink, 'import', {
-        get: function() {
-          console.log('subImportDocumentAccess');
-          subImportDocumentAccessCount++;
-        },
-        enumberable: true,
-      });
+      var origObserveRoot = customElements._observeRoot;
+      customElements._observeRoot = function(root) {
+        observedRoots.push(root);
+        origObserveRoot.call(customElements, root);
+      }
 
 
+      // This element is used in the imports
       class XFoo extends HTMLElement {
         constructor() {
-          console.log("XFoo");
           super();
           elementsCreated++;
         }
       }
       customElements.define('x-foo', XFoo);
-    // });
 
       suite('HTML Imports Integration', function() {
 
         test('CustomElements upgrade from HTML Imports', function() {
-          chai.assert.equal(2, elementsCreated, 'HTML hook allows main document and import document to upgrade');
+          chai.assert.equal(elementsCreated, 2, 'HTML hook allows main document and import document to upgrade');
         });
 
         test('CustomElements only attempt to upgrade <link rel=import>', function() {
-          chai.assert.isFalse(nonImportDocumentAccessed, 'CustomElements is trying to upgrade a non-import link');
+          var nonImportLink = document.querySelector('#not-import');
+          var addedIds = addedLinks.map(function(n) {
+            return n.id;
+          });
+          chai.assert.notInclude(addedIds, 'not-import');
         });
 
         test('CustomElements only upgrades a <link rel=import> once', function() {
-          chai.assert.equal(subImportDocumentAccessCount, 1);
+          var observedSubImports = observedRoots.filter(function(n) {
+            return n.baseURI.endsWith('sub-import.html');
+          });
+          // check that we only observe an imported document once
+          chai.assert.equal(observedSubImports.length, 1);
         });
 
       });
