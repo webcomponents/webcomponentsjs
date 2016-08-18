@@ -516,16 +516,19 @@ var CustomElementDefinition;
   var origHTMLElement = win.HTMLElement;
   win.HTMLElement = function HTMLElement() {
     var customElements = win['customElements'];
+
+    // If there's an being upgraded, return that
     if (customElements._newInstance) {
       var i = customElements._newInstance;
       customElements._newInstance = null;
       return i;
     }
     if (this.constructor) {
+      // Find the tagname of the constructor and create a new element with it
       var tagName = customElements._constructors.get(this.constructor);
       return doc._createElement(tagName, false);
     }
-    throw new Error('unknown constructor. Did you call customElements.define()?');
+    throw new Error('Unknown constructor. Did you call customElements.define()?');
   }
   win.HTMLElement.prototype = Object.create(origHTMLElement.prototype);
   Object.defineProperty(win.HTMLElement.prototype, 'constructor', {value: win.HTMLElement});
