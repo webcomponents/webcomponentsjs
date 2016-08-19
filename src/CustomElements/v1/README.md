@@ -3,21 +3,18 @@
 ## Status
 
 The polyfill should be mostly feature complete now. It supports defining
-custom elements, the custom element reactions, upgrades, and integrates with
-native Shadow DOM v1, and native and polyfilled HTML Imports.
+custom elements, the custom element reactions, and upgrading existing elements. It integrates with native Shadow DOM v1, and native and polyfilled HTML Imports.
 
 The implementation could use more tests, especially around ordering of
 reactions. The source references old versions of the spec.
 
 ### To do
 
-  1. Implement CustomElementsRegistry#whenDefined
-  2. Implement Node#isConnected
-  3. Re-write spec references
-  4. Add reaction callback ordering tests
-  5. Reorganize tests to be closer to spec structure
-  6. Performance tests
-  7. Clarify integration with HTML Imports
+  1. Implement Node#isConnected
+  2. Implement built-in element extension (is=)
+  3. Add reaction callback ordering tests
+  4. Reorganize tests to be closer to spec structure
+  5. Performance tests
 
 ## Implementation approach and browser support
 
@@ -39,7 +36,7 @@ The HTMLElement constructor is also specified to look up the tag name associated
 
 `new.target` isn't even feature detectable, since it's a syntax error in ES5. Because of this, the polyfill can't check `new.target` first and fallback to `this.constructor`. This also means that ES5-style constructors can't conditionally make a "super" call to the HTMLElement constructor (with `Reflect.construct`) in non-ES6 environments to be compatible with native Custom Elements.
 
-To allow for elements that work in both ES5 and ES6 environments, we provide a shim that overrides the HTMLElement constructor and calls `Reflect.construct` with either the value of `new.target` or `this.constructor`. This shim can only be executed in ES6 environments.
+To allow for elements that work in both ES5 and ES6 environments, we provide a shim to be used in browsers that have native Custom Elements v1 support, that overrides the HTMLElement constructor and calls `Reflect.construct` with either the value of `new.target` or `this.constructor`. This shim can only be executed in ES6 environments that support `new.target`, and so should be conditionally loaded. The shim and the polyfill should not be loaded at the same time.
 
 ## Building
 
