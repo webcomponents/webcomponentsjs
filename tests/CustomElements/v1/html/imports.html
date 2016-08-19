@@ -33,11 +33,7 @@
     <script src="../../../../../web-component-tester/browser.js"></script>
     <script src="../../../../dist/HTMLImports.js"></script>
     <script src="../../../../src/CustomElements/v1/CustomElements.js"></script>
-    <link rel="import" href="sub-import.html" id="sub-import">
-    <link rel="import" href="imported-doc.html" id="import">
-    <link rel="not-import" href="imported-doc.html" id="not-import">
     <script>
-
       customElements.enableFlush = true;
       var elementsCreated = 0;
       var addedLinks = [];
@@ -56,7 +52,11 @@
         observedRoots.push(root);
         origObserveRoot.call(customElements, root);
       }
-
+    </script>
+    <link rel="import" href="sub-import.html" id="sub-import">
+    <link rel="import" href="imported-doc.html" id="import">
+    <link rel="not-import" href="imported-doc.html" id="not-import">
+    <script>
 
       // This element is used in the imports
       class XFoo extends HTMLElement {
