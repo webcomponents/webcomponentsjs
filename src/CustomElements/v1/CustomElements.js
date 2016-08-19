@@ -355,6 +355,7 @@ var CustomElementDefinition;
         if (!element.__upgraded) {
           this._upgradeElement(element, definition, true);
         }
+        // TODO(justinfagnani): check that the element is in the document
         if (element.__upgraded && !element.__attached) {
           element.__attached = true;
           if (definition.connectedCallback) {

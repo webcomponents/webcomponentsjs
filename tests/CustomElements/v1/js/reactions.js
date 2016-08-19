@@ -239,29 +239,36 @@ suite('Custom Element Reactions', function() {
   });
 
   suite('connectedCallback', function() {
+    var connectedCount;
+    class XConnected extends HTMLElement {
+      connectedCallback() {
+        connectedCount++;
+      }
+    }
+    customElements.define('x-connected', XBoo);
+
+    setup(function() {
+      connectedCount = 0;
+    });
+
+    test('is not called for disconnected custom elements', function() {
+      new XConnected();
+      assert.equal(connectedCount, 0);
+    });
 
     test('called when appended to main document', function() {
-      var inserted = 0;
-      class XBoo extends HTMLElement {
-        connectedCallback() {
-          inserted++;
-        }
-      }
-      customElements.define('x-boo-at', XBoo);
-
-      var xboo = new XBoo();
-      assert.equal(inserted, 0, 'inserted must be 0');
+      var xboo = new XConnected();
 
       work.appendChild(xboo);
       customElements.flush();
-      assert.equal(inserted, 1, 'inserted must be 1');
+      assert.equal(connectedCount, 1);
 
       work.removeChild(xboo);
       customElements.flush();
       assert(!xboo.parentNode);
       work.appendChild(xboo);
       customElements.flush();
-      assert.equal(inserted, 2, 'inserted must be 2');
+      assert.equal(connectedCount, 2);
     });
 
     test('called in tree order', function() {
