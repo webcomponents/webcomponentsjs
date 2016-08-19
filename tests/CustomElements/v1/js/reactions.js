@@ -245,7 +245,7 @@ suite('Custom Element Reactions', function() {
         connectedCount++;
       }
     }
-    customElements.define('x-connected', XBoo);
+    customElements.define('x-connected', XConnected);
 
     setup(function() {
       connectedCount = 0;
@@ -256,17 +256,25 @@ suite('Custom Element Reactions', function() {
       assert.equal(connectedCount, 0);
     });
 
-    test('called when appended to main document', function() {
-      var xboo = new XConnected();
+    test('is not called for deeply disconnected custom elements', function() {
+      var parent = new XConnected();
+      var child = new XConnected();
+      parent.appendChild(child);
+      customElements.flush();
+      assert.equal(connectedCount, 0);
+    });
 
-      work.appendChild(xboo);
+    test('called when appended to main document', function() {
+      work.appendChild(new XConnected());
       customElements.flush();
       assert.equal(connectedCount, 1);
+    });
 
-      work.removeChild(xboo);
-      customElements.flush();
-      assert(!xboo.parentNode);
-      work.appendChild(xboo);
+    test('called when re-appended to main document', function() {
+      var el = new XConnected();
+      work.appendChild(el);
+      work.removeChild(el);
+      work.appendChild(el);
       customElements.flush();
       assert.equal(connectedCount, 2);
     });
@@ -292,7 +300,7 @@ suite('Custom Element Reactions', function() {
           '</x-ordering>';
 
       customElements.flush();
-      assert.deepEqual(['a', 'b', 'c', 'd', 'e'], log);
+      assert.deepEqual(log, ['a', 'b', 'c', 'd', 'e']);
     });
 
   });
@@ -488,9 +496,10 @@ suite('Custom Element Reactions', function() {
       customElements.define('x-ad', XAD);
       var el = document.createElement('x-ad');
       work.appendChild(el);
+      customElements.flush();
       work.removeChild(el);
       customElements.flush();
-      assert.deepEqual(['connected', 'disconnected'], log);
+      assert.deepEqual(log, ['connected', 'disconnected']);
     });
 
     test('disconnected then re-connected in same task', function() {
@@ -511,7 +520,7 @@ suite('Custom Element Reactions', function() {
       work.removeChild(el);
       work.appendChild(el);
       customElements.flush();
-      assert.deepEqual(['disconnected', 'connected'], log);
+      assert.deepEqual(log, ['disconnected', 'connected']);
     });
 
   });

@@ -36,6 +36,7 @@
     <script>
       customElements.enableFlush = true;
       var elementsCreated = 0;
+      var connectedCount = 0;
       var addedLinks = [];
       var observedRoots = [];
 
@@ -64,13 +65,22 @@
           super();
           elementsCreated++;
         }
+
+        connectedCallback() {
+          connectedCount++;
+        }
       }
       customElements.define('x-foo', XFoo);
 
       suite('HTML Imports Integration', function() {
 
-        test('CustomElements upgrade from HTML Imports', function() {
-          chai.assert.equal(elementsCreated, 2, 'HTML hook allows main document and import document to upgrade');
+        test('CustomElements upgrade', function() {
+          chai.assert.equal(elementsCreated, 2);
+        });
+
+        test('CustomElements do not have connectedCallback called', function() {
+          // only the instance in the main document should be connected
+          chai.assert.equal(connectedCount, 1);
         });
 
         test('CustomElements only attempt to upgrade <link rel=import>', function() {

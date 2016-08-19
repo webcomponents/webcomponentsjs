@@ -81,6 +81,15 @@ var CustomElementDefinition;
         element.rel.toLowerCase().split(' ').indexOf('import') !== -1;
   }
 
+  function isConnected(element) {
+    var n = element;
+    do {
+      if (n.__attached || n === document) return true;
+      n = n.parentNode || n.nodeType === Node.DOCUMENT_FRAGMENT_NODE && n.host;
+    } while(n);
+    return false;
+  }
+
   /**
    * A registry of custom element definitions.
    *
@@ -356,7 +365,7 @@ var CustomElementDefinition;
           this._upgradeElement(element, definition, true);
         }
         // TODO(justinfagnani): check that the element is in the document
-        if (element.__upgraded && !element.__attached) {
+        if (element.__upgraded && !element.__attached && isConnected(element)) {
           element.__attached = true;
           if (definition.connectedCallback) {
             definition.connectedCallback.call(element);
