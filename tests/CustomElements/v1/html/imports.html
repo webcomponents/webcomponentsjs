@@ -32,7 +32,7 @@
     </script>
     <script src="../../../../../web-component-tester/browser.js"></script>
     <script src="../../../../dist/HTMLImports.js"></script>
-    <script src="../../../../src/CustomElements/v1/CustomElements.js"></script>
+    <script src="../../../../dist/CustomElementsV1.min.js"></script>
     <script>
       customElements.enableFlush = true;
       var elementsCreated = 0;
@@ -43,13 +43,19 @@
       // Patch customElements._addNode so we can spy on link nodes being
       // processed.
       var origAddImport = customElements._addImport;
-      customElements._addImport = function(link, visitedNodes) {
+      // To patch a compiled method that's called internally in the class, we
+      // need to get the compiled, not exported, name:
+      var origAddImportName = origAddImport.name;
+      customElements[origAddImportName] = function(link, visitedNodes) {
         addedLinks.push(link);
         origAddImport.call(customElements, link, visitedNodes);
       }
 
       var origObserveRoot = customElements._observeRoot;
-      customElements._observeRoot = function(root) {
+      // To patch a compiled method that's called internally in the class, we
+      // need to get the compiled, not exported, name:
+      var origObserveRootName = origObserveRoot.name;
+      customElements[origObserveRootName] = function(root) {
         observedRoots.push(root);
         origObserveRoot.call(customElements, root);
       }

@@ -30,7 +30,7 @@ var CustomElementDefinition;
   var win = window;
 
   if (win.customElements) {
-    if (win.customElements.enableFlush) {
+    if (win.customElements['enableFlush']) {
       win.customElements.flush = function() {
         console.log('CustomElements flush');
       };
@@ -122,7 +122,7 @@ var CustomElementDefinition;
     this._pendingHtmlImportUrls = new Set();
 
     this.polyfilled = true;
-    this.enableFlush = false;
+    this['enableFlush'] = false;
 
     this._observeRoot(document);
   }
@@ -181,10 +181,10 @@ var CustomElementDefinition;
             `constructor.prototype must be an object`);
       }
 
-      function getCallback(calllbackName) {
-        var callback = prototype[calllbackName];
+      function getCallback(callbackName) {
+        var callback = prototype[callbackName];
         if (callback !== undefined && typeof callback !== 'function') {
-          throw new Error(`${localName} '${calllbackName}' is not a Function`);
+          throw new Error(`${localName} '${callbackName}' is not a Function`);
         }
         return callback;
       }
@@ -275,7 +275,7 @@ var CustomElementDefinition;
      * `enableFlush` must be true for this to work. Only use during tests!
      */
     flush: function() {
-      if (this.enableFlush) {
+      if (this['enableFlush']) {
         console.warn("flush!!!");
         this._observers.forEach(function(observer) {
           this._handleMutations(observer.takeRecords());
@@ -295,7 +295,7 @@ var CustomElementDefinition;
       console.assert(!root.__observer);
       root.__observer = new MutationObserver(this._handleMutations.bind(this));
       root.__observer.observe(root, {childList: true, subtree: true});
-      if (this.enableFlush) {
+      if (this['enableFlush']) {
         // this is memory leak, only use in tests
         this._observers.add(root.__observer);
       }
@@ -308,7 +308,7 @@ var CustomElementDefinition;
       if (root.__observer) {
         root.__observer.disconnect();
         root.__observer = null;
-        if (this.enableFlush) {
+        if (this['enableFlush']) {
           this._observers.delete(root.__observer);
         }
       }
@@ -475,7 +475,8 @@ var CustomElementDefinition;
       }
 
       var observedAttributes = definition.observedAttributes;
-      if (definition.attributeChangedCallback && observedAttributes.length > 0) {
+      var attributeChangedCallback = definition.attributeChangedCallback;
+      if (attributeChangedCallback && observedAttributes.length > 0) {
         this._attributeObserver.observe(element, {
           attributes: true,
           attributeOldValue: true,
@@ -488,7 +489,7 @@ var CustomElementDefinition;
           var name = observedAttributes[i];
           if (element.hasAttribute(name)) {
             var value = element.getAttribute(name);
-            element.attributeChangedCallback(name, null, value);
+            attributeChangedCallback.call(element, name, null, value);
           }
         }
       }
@@ -501,12 +502,15 @@ var CustomElementDefinition;
       for (var i = 0; i < mutations.length; i++) {
         var mutation = mutations[i];
         if (mutation.type === 'attributes') {
+          var target = mutation.target;
+          // We should be gaurenteed to have a definition because this mutation
+          // observer is only observing custom elements observedAttributes
+          var definition = this._definitions.get(target.localName);
           var name = mutation.attributeName;
           var oldValue = mutation.oldValue;
-          var target = mutation.target;
           var newValue = target.getAttribute(name);
           var namespace = mutation.attributeNamespace;
-          target['attributeChangedCallback'](name, oldValue, newValue, namespace);
+          definition.attributeChangedCallback.call(target, name, oldValue, newValue, namespace);
         }
       }
     },
@@ -519,7 +523,9 @@ var CustomElementDefinition;
   CustomElementsRegistry.prototype['whenDefined'] = CustomElementsRegistry.prototype.whenDefined;
   CustomElementsRegistry.prototype['flush'] = CustomElementsRegistry.prototype.flush;
   CustomElementsRegistry.prototype['polyfilled'] = CustomElementsRegistry.prototype.polyfilled;
-  CustomElementsRegistry.prototype['enableFlush'] = CustomElementsRegistry.prototype.enableFlush;
+  // TODO(justinfagnani): remove these in production code
+  CustomElementsRegistry.prototype['_observeRoot'] = CustomElementsRegistry.prototype._observeRoot;
+  CustomElementsRegistry.prototype['_addImport'] = CustomElementsRegistry.prototype._addImport;
 
   // patch window.HTMLElement
 
