@@ -72,7 +72,7 @@ var CustomElementDefinition;
   }
 
   function isElement(node) {
-    return node.nodeType === Node.ELEMENT_NODE
+    return node.nodeType === Node.ELEMENT_NODE;
   }
 
   function isHtmlImport(element) {
@@ -205,7 +205,7 @@ var CustomElementDefinition;
       var observedAttributes = constructor['observedAttributes'] || [];
 
       // 15:
-      // @type {CustomElementDefinition}
+      /** @type {CustomElementDefinition} */
       var definition = {
         name: name,
         localName: localName,
