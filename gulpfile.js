@@ -145,7 +145,8 @@ gulp.task('CustomElementsV1', function () {
 });
 
 gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements',
-  'HTMLImports', 'ShadowDOM', 'copy-bower', 'MutationObserver']);
+  'CustomElementsV1', 'HTMLImports', 'ShadowDOM', 'copy-bower',
+  'MutationObserver']);
 
 gulp.task('release', function(cb) {
   isRelease = true;
