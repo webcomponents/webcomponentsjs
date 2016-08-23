@@ -339,7 +339,7 @@ var CustomElementDefinition;
           var is = node.getAttribute('is');
           var name = is ? is : node.localName;
           var definition = this._definitions.get(name);
-          if (definition && (!definition.extends || node.localName == definition.extends)) {
+          if (definition && (!is || (node.localName == definition.extends))) {
             if (!node.__upgraded) {
               this._upgradeElement(node, definition, true);
             }
