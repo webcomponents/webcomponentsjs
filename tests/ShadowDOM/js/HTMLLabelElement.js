@@ -13,7 +13,9 @@ suite('HTMLLabelElement', function() {
   test('form', function() {
     var form = document.createElement('form');
     var label = document.createElement('label');
+    var input = document.createElement('input');
     form.appendChild(label);
+    label.appendChild(input);
     assert.equal(label.form, form);
   });
 
