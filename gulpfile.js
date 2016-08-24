@@ -129,7 +129,7 @@ defineBuildTask('HTMLImports');
 defineBuildTask('ShadowDOM');
 defineBuildTask('MutationObserver');
 
-gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements', 
+gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements',
   'HTMLImports', 'ShadowDOM', 'copy-bower', 'MutationObserver']);
 
 gulp.task('release', function(cb) {
@@ -140,3 +140,18 @@ gulp.task('release', function(cb) {
 gulp.task('default', function(cb) {
   runseq('build', 'audit', cb);
 });
+
+gulp.task('closure', function() {
+  var closure = require('google-closure-compiler').gulp();
+  return gulp.src('./src/ShadyStyling/*.js', {base: './'})
+    .pipe(closure({
+      compilation_level: 'SIMPLE',
+      // compilation_level: 'ADVANCED',
+      language_in: 'ECMASCRIPT6_STRICT',
+      language_out: 'ECMASCRIPT5_STRICT',
+      js_output_file: 'ShadyStyling.min.js'
+    }))
+    .on('error', function(e){ console.error(e); })
+    .pipe(gulp.dest('./dist'))
+});
+
