@@ -186,3 +186,12 @@ let RX = {
 let VAR_START = '--';
 let MEDIA_START = '@media';
 let AT_START = '@';
+
+if (window.WCT) {
+  window['CssParse'] = {
+    parse,
+    stringify,
+    types,
+    removeCustomPropAssignment
+  };
+}
