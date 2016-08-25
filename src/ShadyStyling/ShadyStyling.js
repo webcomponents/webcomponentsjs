@@ -17,7 +17,7 @@ import {templateMap} from './template-map'
 
 let STYLEHOST = Symbol('stylehost');
 
-export let StyleLib = {
+export let ShadyStyling = {
   scopeCounter: {},
   nativeShadow: nativeShadow,
   nativeCss: nativeCssVariables,
@@ -265,4 +265,4 @@ export let StyleLib = {
   }
 }
 
-window['StyleLib'] = StyleLib;
+window['ShadyStyling'] = ShadyStyling;
