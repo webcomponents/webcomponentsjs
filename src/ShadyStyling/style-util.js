@@ -8,7 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 import {nativeShadow, nativeCssVariables} from './style-settings'
-import CssParse from './css-parse'
+import * as CssParse from './css-parse'
 
 export function toCssText (rules, callback) {
   if (typeof rules === 'string') {
@@ -124,15 +124,12 @@ export function getCssBuildType(element) {
 function findMatchingParen(text, start) {
   let level = 0;
   for (let i=start, l=text.length; i < l; i++) {
-    switch (text[i]) {
-      case '(':
-        level++;
-        break;
-      case ')':
-        if (--level === 0) {
-          return i;
-        }
-        break;
+    if (text[i] === '(') {
+      level++;
+    } else if (text[i] === ')') {
+      if (--level === 0) {
+        return i;
+      }
     }
   }
   return -1;

@@ -10,9 +10,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import {parse} from './css-parse'
 import {nativeShadow, nativeCssVariables, nativeCssApply} from './style-settings'
 import {StyleTransformer} from './style-transformer'
-import StyleUtil from './style-util'
+import * as StyleUtil from './style-util'
 import {StyleProperties} from './style-properties'
 import {ApplyShim} from './apply-shim'
+import {templateMap} from './template-map'
+
+let STYLEHOST = Symbol('stylehost');
 
 export let StyleLib = {
   scopeCounter: {},
@@ -24,21 +27,30 @@ export let StyleLib = {
     let id = this.scopeCounter[name] = (this.scopeCounter[name] || 0) + 1;
     return name + '-' + id;
   },
-  applyStylePlaceHolder(name) {
-    return StyleUtil.applyStylePlaceHolder(name);
+  gatherStyles(template) {
+    let styles = template.content.querySelectorAll('style');
+    let cssText = [];
+    for (let i = 0; i < styles.length; i++) {
+      let s = styles[i];
+      cssText.push(s.textContent);
+      s.parentNode.removeChild(s);
+    }
+    return cssText.join('');
   },
   prepareTemplate(host, template) {
     if (template._prepared) {
       return;
     }
     template._prepared = true;
-    let cssText = StyleGather.cssFromElement(template);
+    template.name = host.is;
+    templateMap[host.is] = template;
+    let cssText = this.gatherStyles(template);
     if (!this.nativeShadow) {
       StyleTransformer.dom(template.content, host.is);
     }
     let ast = parse(cssText);
     if (this.nativeCss && !this.nativeCssApply) {
-      ApplyShim.transformRules(ast);
+      ApplyShim.transformRules(ast, host.is);
     }
     template._styleAst = ast;
 
@@ -56,10 +68,12 @@ export let StyleLib = {
     template._ownPropertyNames = ownPropertyNames;
     template._prepared = true;
   },
-  prepareHost(host, template) {
+  prepareHost(host) {
+    let template = templateMap[host.is];
     if (template) {
       host.__styleRules = template._styleAst;
     }
+    host[STYLEHOST] = true;
     host.__placeholder = host.constructor.__placeholder;
     host.__overrideStyleProperties = {};
     if (!this.nativeCss) {
@@ -72,9 +86,16 @@ export let StyleLib = {
     }
   },
   applyStyle(host, overrideProps) {
+    if (!host[STYLEHOST]) {
+      this.prepareHost(host);
+    }
     this._ensureDocumentApplied();
     Object.assign(host.__overrideStyleProperties, overrideProps);
     if (this.nativeCss) {
+      let template = templateMap[host.is];
+      if (template.__applyShimInvalid) {
+        ApplyShim.transformRules(host.__styleRules, host.is);
+      }
       this._updateNativeProperties(host, host.__overrideStyleProperties);
     } else {
       this._updateProperties(host, host.__overrideStyleProperties);
@@ -134,10 +155,10 @@ export let StyleLib = {
     }
   },
   _styleOwnerForNode(node) {
-    let root = Polymer.Utils.getRootNode(node);
+    let root = node.getRootNode();
     let host = root.host;
     if (host) {
-      if (host instanceof Polymer.Element) {
+      if (host[STYLEHOST]) {
         return host;
       } else {
         return this._styleOwnerForNode(host);

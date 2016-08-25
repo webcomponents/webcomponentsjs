@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import {removeCustomPropAssignment} from './css-parse'
 import {nativeShadow} from './style-settings'
 import {StyleTransformer} from './style-transformer'
-import StyleUtil from './style-util'
+import * as StyleUtil from './style-util'
 
 // TODO: dedupe with shady
 let p = window.Element.prototype;

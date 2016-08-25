@@ -68,10 +68,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  * `@apply` properties.
 
 */
-import StyleUtil from './style-util'
+import {rx, forEachRule, processVariableAndFallback} from './style-util'
+import {templateMap} from './template-map'
 
-  let MIXIN_MATCH = StyleUtil.rx.MIXIN_MATCH;
-  let VAR_ASSIGN = StyleUtil.rx.VAR_ASSIGN;
+  let MIXIN_MATCH = rx.MIXIN_MATCH;
+  let VAR_ASSIGN = rx.VAR_ASSIGN;
 
   let APPLY_NAME_CLEAN = /;\s*/m;
   let INITIAL_INHERIT = /^\s*(initial)|(inherit)\s*$/;
@@ -139,10 +140,8 @@ import StyleUtil from './style-util'
   }
 
   function invalidateMixinEntry(mixinEntry) {
-    let currentProto = ApplyShim.__currentElementProto;
-    let currentElementName = currentProto && currentProto.is;
     for (let elementName in mixinEntry.dependants) {
-      if (elementName !== currentElementName) {
+      if (elementName !== currentTemplate) {
         mixinEntry.dependants[elementName].__applyShimInvalid = true;
       }
     }
@@ -152,7 +151,7 @@ import StyleUtil from './style-util'
     // handle case where property value is a mixin
     if (valueProperty) {
       // form: --mixin2: var(--mixin1), where --mixin1 is in the map
-      StyleUtil.processVariableAndFallback(valueProperty, function(prefix, value) {
+      processVariableAndFallback(valueProperty, function(prefix, value) {
         if (value && mapGet(value)) {
           valueMixin = '@apply ' + value + ';';
         }
@@ -227,9 +226,8 @@ import StyleUtil from './style-util'
       mixinEntry = mapGet(mixinName);
     }
     if (mixinEntry) {
-      let currentProto = ApplyShim.__currentElementProto;
-      if (currentProto) {
-        mixinEntry.dependants[currentProto.is] = currentProto;
+      if (currentTemplate) {
+        mixinEntry.dependants[currentTemplate.name] = currentTemplate;
       }
       let p, parts, f;
       for (p in mixinEntry.properties) {
@@ -270,17 +268,18 @@ import StyleUtil from './style-util'
     return text;
   }
 
+  let currentTemplate = null;
+
   export let ApplyShim = {
     _measureElement: null,
     _map: mixinMap,
     _separator: MIXIN_VAR_SEP,
-    transformRules: function(rules, elementProto) {
-      this.__currentElementProto = elementProto;
-      StyleUtil.forEachRule(rules, this._boundTransformRule);
-      if (elementProto) {
-        elementProto.__applyShimInvalid = false;
+    transformRules: function(rules, elementName) {
+      currentTemplate = templateMap[elementName];
+      forEachRule(rules, (r) => { this.transformRule(r); });
+      if (currentTemplate) {
+        currentTemplate.__applyShimInvalid = false;
       }
-      this.__currentElementProto = null;
     },
     transformRule: function(rule) {
       rule.cssText = this.transformCssText(rule.parsedCssText);
@@ -306,5 +305,3 @@ import StyleUtil from './style-util'
       return window.getComputedStyle(this._measureElement).getPropertyValue(property);
     }
   };
-
-  ApplyShim._boundTransformRule = ApplyShim.transformRule.bind(ApplyShim);

@@ -15,12 +15,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // given a string of css, return a simple rule tree
 export function parse(text) {
-  text = _clean(text);
-  return _parseCss(lex(text), text);
+  text = clean(text);
+  return parseCss(lex(text), text);
 }
 
 // remove stuff we don't care about that may hinder parsing
-function _clean(cssText) {
+function clean(cssText) {
   return cssText.replace(RX.comments, '').replace(RX.port, '');
 }
 
@@ -53,7 +53,7 @@ function lex(text) {
 }
 
 // add selectors/cssText to node tree
-function _parseCss(node, text) {
+function parseCss(node, text) {
   let t = text.substring(node.start, node.end - 1);
   node.parsedCssText = node.cssText = t.trim();
   if (node.parent) {
@@ -87,7 +87,7 @@ function _parseCss(node, text) {
   if (r$) {
     for (let i = 0, l = r$.length, r;
       (i < l) && (r = r$[i]); i++) {
-      _parseCss(r, text);
+      parseCss(r, text);
     }
   }
   return node;

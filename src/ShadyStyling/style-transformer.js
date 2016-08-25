@@ -8,7 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-import StyleUtil from './style-util'
+import * as StyleUtil from './style-util'
 import {nativeShadow} from './style-settings'
 
 /* Transforms ShadowDOM styling into ShadyDOM styling
