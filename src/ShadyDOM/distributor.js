@@ -82,10 +82,8 @@ export default class {
       // scope invalidates their distribution.
       // only get logical parent.
       var parent = tree.Logical.getParentNode(p);
-      // TODO(sorvell): why is the clean check needed?
       if (parent && parent.shadyRoot &&
-          this.hasInsertionPoint(parent.shadyRoot) /*&&
-          parent.shadyRoot._clean*/) {
+          this.hasInsertionPoint(parent.shadyRoot)) {
         dirtyRoots.push(parent.shadyRoot);
       }
     }
@@ -133,7 +131,6 @@ export default class {
     child._assignedSlot = insertionPoint;
   }
 
-  // TODO(sorvell): this currently needs to be no-op'd for v0, which is odd.
   setDistributedNodesOnInsertionPoint(insertionPoint) {
     var n$ = insertionPoint._assignedNodes;
     insertionPoint._distributedNodes = [];
