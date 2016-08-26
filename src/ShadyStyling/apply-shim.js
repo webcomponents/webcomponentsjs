@@ -108,7 +108,7 @@ class ApplyShim {
     this._separator = MIXIN_VAR_SEP;
     this._boundProduceCssProperties = (
       matchText, propertyName, valueProperty, valueMixin) => {
-        this._produceCssProperties(
+        return this._produceCssProperties(
           matchText, propertyName, valueProperty, valueMixin);
       };
   }
