@@ -25,9 +25,8 @@ export class ShadyRoot {
     if (!host) {
       throw 'Must provide a host';
     }
-    // TODO(sorvell): this strange construction is necessary because
+    // NOTE: this strange construction is necessary because
     // DocumentFragment cannot be subclassed on older browsers.
-    // Still necessary?
     let frag = document.createDocumentFragment();
     frag.__proto__ = ShadyFragmentMixin;
     frag._init(host);
@@ -54,9 +53,6 @@ let ShadyMixin = {
     this._hasRendered = false;
     this._distributor = new Distributor(this);
     this.update();
-    // TODO(sorvell): without calling update here,
-    // initial distribution will not occur unless an element has been
-    // TODO(sorvell): host state flags were set here next, needed?
   },
 
   // async render the "top" distributor (this is all that is needed to

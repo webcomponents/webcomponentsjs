@@ -110,8 +110,6 @@ export function getOuterHTML(node, parentNode, composed) {
 }
 
 export function getInnerHTML(node, composed) {
-  // TODO(sorvell):  instanceof doesn't work with the CE V1 polyfill.
-  //if (node instanceof HTMLTemplateElement)
   if (node.localName === 'template') {
     node = node.content;
   }

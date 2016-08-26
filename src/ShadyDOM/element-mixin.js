@@ -86,8 +86,7 @@ let mixinImpl = {
       // remove node from root and distribute it iff needed
       if (ownerRoot && (this._removeDistributedChildren(ownerRoot, node) ||
         logicalParent.localName === ownerRoot.getInsertionPointTag())) {
-        // TODO(sorvell): invalidation flipped
-        ownerRoot._invalidInsertionPoints = true;
+        ownerRoot._skipUpdateInsertionPoints = false;
         ownerRoot.update();
       }
     }
@@ -665,15 +664,6 @@ Object.defineProperties(FragmentMixin, {
 });
 
 let ElementMixin = {
-
-  getDestinationInsertionPoints: function() {
-    return this._destinationInsertionPoints || [];
-  },
-
-  // TODO(sorvell): should only exist on <content>
-  getDistributedNodes: function() {
-    return this._distributedNodes || [];
-  },
 
   // TODO(sorvell): should only exist on <slot>
   assignedNodes: function(options) {
