@@ -237,7 +237,7 @@ let mixinImpl = {
     for (let i=0; i<ip$.length; i++) {
       let insertionPoint = ip$[i];
       if (this._contains(container, insertionPoint)) {
-        let dc$ = insertionPoint.getDistributedNodes();
+        let dc$ = insertionPoint.assignedNodes({flatten: true});
         for (let j=0; j<dc$.length; j++) {
           hostNeedsDist = true;
           let node = dc$[j];
@@ -275,7 +275,7 @@ let mixinImpl = {
   // question is pending; this is expected to be exceedingly rare, but if
   // the issue comes up, we can force a flush in this case.
   firstComposedNode: function(insertionPoint) {
-    let n$ = insertionPoint.getDistributedNodes();
+    let n$ = insertionPoint.assignedNodes({flatten: true});
     let root = this.getRootNode(insertionPoint);
     for (let i=0, l=n$.length, n; (i<l) && (n=n$[i]); i++) {
       // means that we're composed to this spot.
