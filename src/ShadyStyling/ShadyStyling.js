@@ -47,24 +47,26 @@ export let ShadyStyling = {
     template._prepared = true;
     template.name = host.is;
     templateMap[host.is] = template;
-    let cssText = this._gatherStyles(template);
+    let cssText = this._gatherStyles(template).trim();
     if (!this.nativeShadow) {
       StyleTransformer.dom(template.content, host.is);
     }
-    let ast = parse(cssText);
-    if (this.nativeCss && !this.nativeCssApply) {
+    let ast = cssText && parse(cssText);
+    if (ast && this.nativeCss && !this.nativeCssApply) {
       ApplyShim.transformRules(ast, host.is);
     }
-    template._styleAst = ast;
-
     let ownPropertyNames = [];
-    if (!this.nativeCss) {
-      ownPropertyNames = StyleProperties.decorateStyles(template._styleAst, host);
-    }
-    if (!ownPropertyNames.length || this.nativeCss) {
-      let root = this.nativeShadow ? template.content : null;
-      let placeholder = placeholderMap[host.is];
-      this._generateStaticStyle(host, template._styleAst, root, placeholder);
+    if (ast) {
+      template._styleAst = ast;
+      if (!this.nativeCss) {
+        ownPropertyNames = StyleProperties.decorateStyles(
+          template._styleAst, host);
+      }
+      if (!ownPropertyNames.length || this.nativeCss) {
+        let root = this.nativeShadow ? template.content : null;
+        let placeholder = placeholderMap[host.is];
+        this._generateStaticStyle(host, template._styleAst, root, placeholder);
+      }
     }
     template._ownPropertyNames = ownPropertyNames;
   },
@@ -97,7 +99,7 @@ export let ShadyStyling = {
     Object.assign(host.__overrideStyleProperties, overrideProps);
     if (this.nativeCss) {
       let template = templateMap[host.is];
-      if (template && template.__applyShimInvalid) {
+      if (template && template._styleAst && template.__applyShimInvalid) {
         // update template
         ApplyShim.transformRules(template._styleAst, host.is);
         let target = this.nativeShadow ? template.content : null;
