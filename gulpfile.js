@@ -143,7 +143,9 @@ gulp.task('default', function(cb) {
 
 gulp.task('ShadyStyling', function() {
   var closure = require('google-closure-compiler').gulp();
+  var sourcemaps = require('gulp-sourcemaps');
   return gulp.src('./src/ShadyStyling/*.js', {base: './'})
+    .pipe(sourcemaps.init())
     .pipe(closure({
       compilation_level: 'SIMPLE',
       language_in: 'ECMASCRIPT6_STRICT',
@@ -151,12 +153,15 @@ gulp.task('ShadyStyling', function() {
       js_output_file: 'ShadyStyling.min.js'
     }))
     .on('error', function(e){ console.error(e); })
+    .pipe(sourcemaps.write('/'))
     .pipe(gulp.dest('./dist'))
 });
 
 gulp.task('ShadyDOM', function() {
   var closure = require('google-closure-compiler').gulp();
+  var sourcemaps = require('gulp-sourcemaps');
   return gulp.src('./src/ShadyDOM/*.js', {base: './'})
+    .pipe(sourcemaps.init())
     .pipe(closure({
       compilation_level: 'SIMPLE',
       language_in: 'ECMASCRIPT6_STRICT',
@@ -164,5 +169,8 @@ gulp.task('ShadyDOM', function() {
       js_output_file: 'ShadyDOM.min.js'
     }))
     .on('error', function(e){ console.error(e); })
+    .pipe(sourcemaps.write('/'))
     .pipe(gulp.dest('./dist'))
 });
+
+gulp.task('modules', ['ShadyDOM', 'ShadyStyling']);
