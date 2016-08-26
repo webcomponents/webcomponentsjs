@@ -156,3 +156,29 @@ gulp.task('release', function(cb) {
 gulp.task('default', function(cb) {
   runseq('build', 'audit', cb);
 });
+
+gulp.task('ShadyStyling', function() {
+  var closure = require('google-closure-compiler').gulp();
+  return gulp.src('./src/ShadyStyling/*.js', {base: './'})
+    .pipe(closure({
+      compilation_level: 'SIMPLE',
+      language_in: 'ECMASCRIPT6_STRICT',
+      language_out: 'ECMASCRIPT5_STRICT',
+      js_output_file: 'ShadyStyling.min.js'
+    }))
+    .on('error', function(e){ console.error(e); })
+    .pipe(gulp.dest('./dist'))
+});
+
+gulp.task('ShadyDOM', function() {
+  var closure = require('google-closure-compiler').gulp();
+  return gulp.src('./src/ShadyDOM/*.js', {base: './'})
+    .pipe(closure({
+      compilation_level: 'SIMPLE',
+      language_in: 'ECMASCRIPT6_STRICT',
+      language_out: 'ECMASCRIPT5_STRICT',
+      js_output_file: 'ShadyDOM.min.js'
+    }))
+    .on('error', function(e){ console.error(e); })
+    .pipe(gulp.dest('./dist'))
+});

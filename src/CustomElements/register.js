@@ -91,6 +91,10 @@ function register(name, options) {
   }
   // record name
   definition.__name = name.toLowerCase();
+  // ensure extended name is also treated case-insensitively
+  if (definition.extends) {
+    definition.extends = definition.extends.toLowerCase();
+  }
   // ensure a lifecycle object so we don't have to null test it
   definition.lifecycle = definition.lifecycle || {};
   // build a list of ancestral custom elements (for native base detection)
@@ -349,27 +353,6 @@ function wrapDomMethodToForceUpgrade(obj, methodName) {
 
 wrapDomMethodToForceUpgrade(Node.prototype, 'cloneNode');
 wrapDomMethodToForceUpgrade(document, 'importNode');
-
-// Patch document.importNode to work around IE11 bug that
-// casues children of a document fragment imported while
-// there is a mutation observer to not have a parentNode (!?!)
-if (isIE) {
-  (function() {
-    var importNode = document.importNode;
-    document.importNode = function() {
-      var n = importNode.apply(document, arguments);
-      // Copy all children to a new document fragment since
-      // this one may be broken
-      if (n.nodeType == n.DOCUMENT_FRAGMENT_NODE) {
-        var f = document.createDocumentFragment();
-        f.appendChild(n);
-        return f;
-      } else {
-        return n;
-      }
-    };
-  })();
-}
 
 // exports
 document.registerElement = register;

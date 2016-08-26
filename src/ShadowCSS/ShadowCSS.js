@@ -586,7 +586,7 @@ var selectorRe = /([^{]*)({[\s\S]*?})/gim,
       /\/shadow\//g, // former ::shadow
       /\/shadow-deep\//g, // former /deep/
       /\^\^/g,     // former /shadow/
-      /\^/g        // former /shadow-deep/
+      /\^(?!=)/g   // former /shadow-deep/
     ];
 
 function stylesToCssText(styles, preserveComments) {

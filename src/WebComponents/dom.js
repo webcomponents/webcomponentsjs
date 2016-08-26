@@ -14,7 +14,8 @@
 
   // polyfill performance.now
 
-  if (!window.performance) {
+  // Note: old Safari has performance, but not now().
+  if (!(window.performance && window.performance.now)) {
     var start = Date.now();
     // only at millisecond precision
     window.performance = {now: function(){ return Date.now() - start; }};

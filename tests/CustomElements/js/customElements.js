@@ -183,9 +183,9 @@ suite('customElements', function() {
   });
 
   test('document.registerElement with type extension treats names as case insensitive', function() {
-    var proto = {prototype: Object.create(HTMLButtonElement.prototype), extends: 'button'};
+    var proto = {prototype: Object.create(HTMLButtonElement.prototype), extends: 'butTON'};
     proto.prototype.isXCase = true;
-    var XCase = document.registerElement('X-EXTEND-CASE', proto);
+    var XCase = document.registerElement('X-extend-CASE', proto);
     // createElement
     var x = document.createElement('button', 'X-EXTEND-CASE');
     assert.equal(x.isXCase, true);
