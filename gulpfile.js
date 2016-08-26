@@ -12,17 +12,21 @@
 
 'use strict';
 
-var
-  audit = require('gulp-audit'),
-  concat = require('gulp-concat'),
-  exec = require('child_process').exec,
-  fs = require('fs'),
-  gulp = require('gulp'),
-  header = require('gulp-header'),
-  path = require('path'),
-  runseq = require('run-sequence'),
-  uglify = require('gulp-uglify')
-;
+var audit = require('gulp-audit');
+var compilerPackage = require('google-closure-compiler');
+var concat = require('gulp-concat');
+var exec = require('child_process').exec;
+var fs = require('fs');
+var gulp = require('gulp');
+var header = require('gulp-header');
+var path = require('path');
+var rename = require('gulp-rename');
+var runseq = require('run-sequence');
+var uglify = require('gulp-uglify');
+
+var sourcemaps = require('gulp-sourcemaps');
+
+var closureCompiler = compilerPackage.gulp();
 
 // init tests with gulp
 require('web-component-tester').gulp.init(gulp);
@@ -142,14 +146,13 @@ gulp.task('default', function(cb) {
 });
 
 gulp.task('ShadyStyling', function() {
-  var closure = require('google-closure-compiler').gulp();
-  var sourcemaps = require('gulp-sourcemaps');
   return gulp.src('./src/ShadyStyling/*.js', {base: './'})
     .pipe(sourcemaps.init())
-    .pipe(closure({
+    .pipe(closureCompiler({
       compilation_level: 'SIMPLE',
       language_in: 'ECMASCRIPT6_STRICT',
       language_out: 'ECMASCRIPT5_STRICT',
+      output_wrapper: '(function(){\n%output%\n}).call(this)',
       js_output_file: 'ShadyStyling.min.js'
     }))
     .on('error', function(e){ console.error(e); })
@@ -158,14 +161,13 @@ gulp.task('ShadyStyling', function() {
 });
 
 gulp.task('ShadyDOM', function() {
-  var closure = require('google-closure-compiler').gulp();
-  var sourcemaps = require('gulp-sourcemaps');
   return gulp.src('./src/ShadyDOM/*.js', {base: './'})
     .pipe(sourcemaps.init())
-    .pipe(closure({
+    .pipe(closureCompiler({
       compilation_level: 'SIMPLE',
       language_in: 'ECMASCRIPT6_STRICT',
       language_out: 'ECMASCRIPT5_STRICT',
+      output_wrapper: '(function(){\n%output%\n}).call(this)',
       js_output_file: 'ShadyDOM.min.js'
     }))
     .on('error', function(e){ console.error(e); })
