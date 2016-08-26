@@ -220,14 +220,14 @@ let mixinImpl = {
   _removedNode: function() {},
   /*
   _addedNode: function(node, root) {
-    // if (ShadyDom.addedNode) {
-    //   ShadyDom.addedNode(node, root);
+    // if (ShadyDOM.addedNode) {
+    //   ShadyDOM.addedNode(node, root);
     // }
   },
 
   _removedNode: function(node, root) {
-    if (ShadyDom.removedNode) {
-      ShadyDom.removedNode(node, root);
+    if (ShadyDOM.removedNode) {
+      ShadyDOM.removedNode(node, root);
     }
   },
   */

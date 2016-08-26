@@ -102,7 +102,7 @@ let ShadyMixin = {
         this._insertionPoints = [];
       }
       this._skipUpdateInsertionPoints = false;
-      // TODO(sorvell): previous ShadyDom had a fast path here
+      // TODO(sorvell): previous ShadyDOM had a fast path here
       // that would avoid distribution for initial render if
       // no insertion points exist. We cannot currently do this because
       // it relies on elements being in the physical shadowRoot element

@@ -21,7 +21,7 @@ let nativeAppendChild = Element.prototype.appendChild;
 let nativeRemoveChild = Element.prototype.removeChild;
 
 /**
- * `tree` is a dom manipulation library used by ShadyDom to
+ * `tree` is a dom manipulation library used by ShadyDOM to
  * manipulate composed and logical trees.
  */
 export let tree = {
