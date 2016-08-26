@@ -24,6 +24,8 @@ var rename = require('gulp-rename');
 var runseq = require('run-sequence');
 var uglify = require('gulp-uglify');
 
+var sourcemaps = require('gulp-sourcemaps');
+
 var closureCompiler = compilerPackage.gulp();
 
 // init tests with gulp
@@ -158,14 +160,13 @@ gulp.task('default', function(cb) {
 });
 
 gulp.task('ShadyStyling', function() {
-  var closure = require('google-closure-compiler').gulp();
-  var sourcemaps = require('gulp-sourcemaps');
   return gulp.src('./src/ShadyStyling/*.js', {base: './'})
     .pipe(sourcemaps.init())
-    .pipe(closure({
+    .pipe(closureCompiler({
       compilation_level: 'SIMPLE',
       language_in: 'ECMASCRIPT6_STRICT',
       language_out: 'ECMASCRIPT5_STRICT',
+      output_wrapper: '(function(){\n%output%\n}).call(this)',
       js_output_file: 'ShadyStyling.min.js'
     }))
     .on('error', function(e){ console.error(e); })
@@ -174,14 +175,13 @@ gulp.task('ShadyStyling', function() {
 });
 
 gulp.task('ShadyDOM', function() {
-  var closure = require('google-closure-compiler').gulp();
-  var sourcemaps = require('gulp-sourcemaps');
   return gulp.src('./src/ShadyDOM/*.js', {base: './'})
     .pipe(sourcemaps.init())
-    .pipe(closure({
+    .pipe(closureCompiler({
       compilation_level: 'SIMPLE',
       language_in: 'ECMASCRIPT6_STRICT',
       language_out: 'ECMASCRIPT5_STRICT',
+      output_wrapper: '(function(){\n%output%\n}).call(this)',
       js_output_file: 'ShadyDOM.min.js'
     }))
     .on('error', function(e){ console.error(e); })
