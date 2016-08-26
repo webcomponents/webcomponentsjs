@@ -94,7 +94,7 @@ export let ShadyStyling = {
     Object.assign(host.__overrideStyleProperties, overrideProps);
     if (this.nativeCss) {
       let template = templateMap[host.is];
-      if (template.__applyShimInvalid) {
+      if (template && template.__applyShimInvalid) {
         // update template
         ApplyShim.transformRules(template._styleAst, host.is);
         let target = this.nativeShadow ? template.content : null;

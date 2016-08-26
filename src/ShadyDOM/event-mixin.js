@@ -153,12 +153,15 @@ let EventMixin = {
 };
 
 function mixinComposedFlag(Base) {
-  let klazz = class extends Base {
-    constructor(type, options) {
-      super(type, options);
-      this.__composed = options && Boolean(options.composed);
-    }
+  // NOTE: avoiding use of `class` here so that transpiled output does not
+  // try to do `Base.call` with a dom construtor.
+  let klazz = function(type, options) {
+    let event = new Base(type, options);
+    event.__composed = options && Boolean(options.composed);
+    return event;
   }
+
+  klazz.prototype = Base.prototype;
   return klazz;
 }
 
