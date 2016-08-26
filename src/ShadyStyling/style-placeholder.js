@@ -9,11 +9,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 import {applyStylePlaceHolder} from './style-util'
 
+export let placeholderMap = {};
+
 let ce = window.customElements;
 if (ce) {
   const origDefine = ce.define;
   ce.define = function() {
-    origDefine.apply(this, arguments);
-    applyStylePlaceHolder(arguments[0]);
+    let name = arguments[0];
+    placeholderMap[name] = applyStylePlaceHolder(name);
+    return origDefine.apply(this, arguments);
   };
 }

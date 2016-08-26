@@ -13,6 +13,7 @@ import {StyleTransformer} from './style-transformer'
 import * as StyleUtil from './style-util'
 import {StyleProperties} from './style-properties'
 import {templateMap} from './template-map'
+import {placeholderMap} from './style-placeholder'
 
 // TODO(dfreedm): split into separate global
 import ApplyShim from './apply-shim'
@@ -61,13 +62,15 @@ export let ShadyStyling = {
       ownPropertyNames = StyleProperties.decorateStyles(template._styleAst, host);
     }
     if (!ownPropertyNames.length || this.nativeCss) {
-      this._generateStaticStyle(host, template);
+      let root = this.nativeShadow ? template.content : null;
+      let placeholder = placeholderMap[host.is];
+      this._generateStaticStyle(host, template._styleAst, root, placeholder);
     }
     template._ownPropertyNames = ownPropertyNames;
   },
-  _generateStaticStyle(host, rules, target) {
+  _generateStaticStyle(host, rules, shadowroot, placeholder) {
     let cssText = StyleTransformer.elementStyles(host, rules);
-    StyleUtil.applyCss(cssText, host.is, target, host.__placeholder);
+    StyleUtil.applyCss(cssText, host.is, shadowroot, placeholder);
   },
   _prepareHost(host) {
     let template = templateMap[host.is];
@@ -75,7 +78,7 @@ export let ShadyStyling = {
       host.__styleRules = template._styleAst;
     }
     host[STYLEHOST] = true;
-    host.__placeholder = host.constructor.__placeholder;
+    host.__placeholder = placeholderMap[host.is];
     host.__overrideStyleProperties = {};
     if (!this.nativeCss) {
       host.__styleProperties = null;
