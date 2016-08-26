@@ -93,8 +93,8 @@ export let StyleProperties = {
       while ((m = rx.exec(cssText))) {
         // note: group 2 is var, 3 is mixin
         value = (m[2] || m[3]).trim();
-        // value of 'inherit' is equivalent to not setting the property here
-        if (value !== 'inherit') {
+        // value of 'inherit' or 'unset' is equivalent to not setting the property here
+        if (value !== 'inherit' || value !== 'unset') {
           properties[m[1].trim()] = value;
         }
         any = true;
@@ -156,12 +156,15 @@ export let StyleProperties = {
         // case (2) variable
         let self = this;
         let fn = function(prefix, value, fallback, suffix) {
+          if (!value) {
+            return prefix + suffix;
+          }
           let propertyValue = self.valueForProperty(props[value], props);
           // if value is "initial", then the variable should be treated as unset
           if (!propertyValue || propertyValue === 'initial') {
             // fallback may be --a or var(--a) or literal
             propertyValue = self.valueForProperty(props[fallback] || fallback, props) ||
-            fallback;
+            fallback || 'unset';
           } else if (propertyValue === 'apply-shim-inherit') {
             // CSS build will replace `inherit` with `apply-shim-inherit`
             // for use with native css variables.

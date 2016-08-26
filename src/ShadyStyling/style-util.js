@@ -8,21 +8,21 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 import {nativeShadow, nativeCssVariables} from './style-settings'
-import * as CssParse from './css-parse'
+import {parse, stringify, types} from './css-parse'
 
 export function toCssText (rules, callback) {
   if (typeof rules === 'string') {
-    rules = CssParse.parse(rules);
+    rules = parse(rules);
   }
   if (callback) {
     forEachRule(rules, callback);
   }
-  return CssParse.stringify(rules, nativeCssVariables);
+  return stringify(rules, nativeCssVariables);
 }
 
 export function rulesForStyle(style) {
   if (!style.__cssRules && style.textContent) {
-    style.__cssRules = CssParse.parse(style.textContent);
+    style.__cssRules = parse(style.textContent);
   }
   return style.__cssRules;
 }
@@ -32,7 +32,7 @@ export function rulesForStyle(style) {
 // for example).
 export function isKeyframesSelector(rule) {
   return rule.parent &&
-  rule.parent.type === CssParse.types.KEYFRAMES_RULE;
+  rule.parent.type === types.KEYFRAMES_RULE;
 }
 
 export function forEachRule(node, styleRuleCallback, keyframesRuleCallback, onlyActiveRules) {
@@ -41,7 +41,7 @@ export function forEachRule(node, styleRuleCallback, keyframesRuleCallback, only
   }
   let skipRules = false;
   if (onlyActiveRules) {
-    if (node.type === CssParse.types.MEDIA_RULE) {
+    if (node.type === types.MEDIA_RULE) {
       let matchMedia = node.selector.match(rx.MEDIA_MATCH);
       if (matchMedia) {
         // if rule is a non matching @media rule, skip subrules
@@ -51,12 +51,12 @@ export function forEachRule(node, styleRuleCallback, keyframesRuleCallback, only
       }
     }
   }
-  if (node.type === CssParse.types.STYLE_RULE) {
+  if (node.type === types.STYLE_RULE) {
     styleRuleCallback(node);
   } else if (keyframesRuleCallback &&
-    node.type === CssParse.types.KEYFRAMES_RULE) {
+    node.type === types.KEYFRAMES_RULE) {
     keyframesRuleCallback(node);
-  } else if (node.type === CssParse.types.MIXIN_RULE) {
+  } else if (node.type === types.MIXIN_RULE) {
     skipRules = true;
   }
   let r$ = node.rules;
