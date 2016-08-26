@@ -20,7 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 'use strict';
 import * as utils from './utils'
-import {ShadyRoot, flush} from './shady'
+import {ShadyRoot, flush, enqueue} from './shady'
 import * as patch from './patch'
 import {getRootNode} from './element-mixin'
 import * as events from './event-mixin'
@@ -30,6 +30,7 @@ window.ShadyDOM = {
   isPatched: patch.isNodePatched,
   unpatch: patch.unpatchNode,
   isShadyRoot: utils.isShadyRoot,
+  enqueue: enqueue,
   flush: flush,
   inUse: utils.settings.inUse
 };
