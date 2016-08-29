@@ -83,7 +83,7 @@ let plaintextParents = makeSet([
 
 export function getOuterHTML(node, parentNode, composed) {
   switch (node.nodeType) {
-    case Node.ELEMENT_NODE:
+    case Node.ELEMENT_NODE: {
       let tagName = node.localName;
       let s = '<' + tagName;
       let attrs = node.attributes;
@@ -95,17 +95,21 @@ export function getOuterHTML(node, parentNode, composed) {
         return s;
       }
       return s + getInnerHTML(node, composed) + '</' + tagName + '>';
-    case Node.TEXT_NODE:
+    }
+    case Node.TEXT_NODE: {
       let data = node.data;
       if (parentNode && plaintextParents[parentNode.localName]) {
         return data;
       }
       return escapeData(data);
-    case Node.COMMENT_NODE:
+    }
+    case Node.COMMENT_NODE: {
       return '<!--' + node.data + '-->';
-    default:
+    }
+    default: {
       window.console.error(node);
       throw new Error('not implemented');
+    }
   }
 }
 
