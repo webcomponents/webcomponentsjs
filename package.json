@@ -20,7 +20,7 @@
   },
   "homepage": "http://webcomponents.org",
   "devDependencies": {
-    "google-closure-compiler": "^20160208.7.0",
+    "google-closure-compiler": "^20160822.1.0",
     "gulp": "^3.8.8",
     "gulp-audit": "^1.0.0",
     "gulp-concat": "^2.4.1",
