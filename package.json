@@ -16,6 +16,7 @@
     "url": "https://github.com/webcomponents/webcomponentsjs/issues"
   },
   "scripts": {
+    "build": "gulp build",
     "test": "wct"
   },
   "homepage": "http://webcomponents.org",

@@ -13,6 +13,7 @@ addons:
 before_script:
 - export PATH=$PWD/node_modules/.bin:$PATH
 script:
+- npm run build
 - xvfb-run wct
 - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct -s 'default'; fi
 env:
