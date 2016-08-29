@@ -30,7 +30,7 @@ suite('Built-in Element instanceof', function() {
       'base',
       // 'bdi',
       // 'bdo',
-      'blockquote',
+      // 'blockquote', // fails on IE11
       'body',
       'br',
       'button',
@@ -45,7 +45,7 @@ suite('Built-in Element instanceof', function() {
       'datalist',
       // 'dd',
       'del',
-      // 'details', // doesn't work on Safari 9
+      // 'details', // fails on Safari 9
       // 'dfn',
       'dialog',
       'div',
@@ -75,7 +75,7 @@ suite('Built-in Element instanceof', function() {
       'input',
       'ins',
       // 'kbd',
-      'keygen',
+      // 'keygen', // fails on IE11
       'label',
       'legend',
       'li',

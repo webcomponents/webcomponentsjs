@@ -375,7 +375,7 @@ suite('Custom Element Reactions', function() {
       customElements.flush();
       assert.instanceOf(original, XCloned);
 
-      var imported = document.importNode(original);
+      var imported = document.importNode(original, true);
       customElements.flush();
       assert.notInstanceOf(imported, XCloned);
     });
@@ -390,7 +390,7 @@ suite('Custom Element Reactions', function() {
       customElements.flush();
       assert.instanceOf(original, XImported);
 
-      var imported = document.importNode(original);
+      var imported = document.importNode(original, true);
       customElements.flush();
       assert.notInstanceOf(imported, XImported);
     });
@@ -405,7 +405,7 @@ suite('Custom Element Reactions', function() {
       // x-adopted is not defined in its document
       assert.notInstanceOf(original, XAdopted);
 
-      var imported = document.importNode(original);
+      var imported = document.importNode(original, true);
       customElements.flush();
       assert.notInstanceOf(imported, XAdopted);
     });
