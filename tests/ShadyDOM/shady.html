@@ -12,10 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <head>
   <meta charset="utf-8">
   <script src="../../../web-component-tester/browser.js"></script>
-  <script>
-    ShadyDOM = {force: true};
-  </script>
-  <script src="../../dist/ShadyDOM.min.js"></script>
+  <script src="../../webcomponents-lite.js" shadydom="true"></script>
 </head>
 <body>
 <script>
@@ -446,8 +443,8 @@ function getEffectiveChildNodes(node) {
   var list = [];
   var c$ = node.childNodes;
   for (var i=0, l=c$.length, c; (i<l) && (c=c$[i]); i++) {
-    if (c.localName && (c.localName === 'content' || c.localName === 'slot')) {
-      list = list.concat(c.getDistributedNodes());
+    if (c.localName && (c.localName === 'slot')) {
+      list = list.concat(c.assignedNodes({flatten: true}));
     } else {
       list.push(c);
     }
