@@ -14,14 +14,22 @@
  * @typedef {{
  *  name: string,
  *  localName: string,
- *  constructor: Function,
- *  connectedCallback: Function,
- *  disconnectedCallback: Function,
- *  attributeChangedCallback: Function,
+ *  constructor: function(new:HTMLElement),
+ *  connectedCallback: (Function|undefined),
+ *  disconnectedCallback: (Function|undefined),
+ *  attributeChangedCallback: (Function|undefined),
  *  observedAttributes: Array<string>,
  * }}
  */
 var CustomElementDefinition;
+
+/**
+ * @typedef {{
+ *  resolve: !function(undefined),
+ *  promise: !Promise<undefined>,
+ * }}
+ */
+var Deferred;
 
 (function() {
   'use strict';
@@ -29,13 +37,14 @@ var CustomElementDefinition;
   var doc = document;
   var win = window;
 
-  if (win.customElements) {
-    if (win.customElements['enableFlush']) {
-      win.customElements.flush = function() {
-        console.log('CustomElements flush');
+
+  if (win['customElements']) {
+    if (win['customElements']['enableFlush']) {
+      win['customElements'].flush = function() {
+        console.log('CustomElements#flush()');
       };
     }
-    if (!win.customElements.forcePolyfill) {
+    if (!win['customElements']['forcePolyfill']) {
       return;
     }
   }
@@ -117,7 +126,6 @@ var CustomElementDefinition;
    * See https://html.spec.whatwg.org/multipage/scripting.html#customelementsregistry
    *
    * @constructor
-   * @property {boolean} polyfilled Whether this registry is polyfilled
    * @property {boolean} enableFlush Set to true to enable the flush() method
    *   to work. This should only be done for tests, as it causes a memory leak.
    */
@@ -129,6 +137,7 @@ var CustomElementDefinition;
     /** @private {!Map<Function, string>} **/
     this._constructors = new Map();
 
+    /** @private {!Map<string, !Deferred>} **/
     this._whenDefinedMap = new Map();
 
     /** @private {!Set<!MutationObserver>} **/
@@ -143,9 +152,6 @@ var CustomElementDefinition;
 
     /** @private {!Set<string>} **/
     this._pendingHtmlImportUrls = new Set();
-
-    /** @type {boolean} **/
-    this.polyfilled = true;
 
     /** @type {boolean} **/
     this['enableFlush'] = false;
@@ -216,7 +222,7 @@ var CustomElementDefinition;
 
       /**
        * @param {string} callbackName
-       * @return {Function}
+       * @return {Function|undefined}
        */
       function getCallback(callbackName) {
         var callback = prototype[callbackName];
@@ -261,6 +267,7 @@ var CustomElementDefinition;
       this._addNodes(doc.childNodes);
 
       // 20:
+      /** @type {Deferred} **/
       var deferred = this._whenDefinedMap.get(localName);
       if (deferred) {
         deferred.resolve(undefined);
@@ -296,12 +303,13 @@ var CustomElementDefinition;
       if (this._definitions.has(name)) {
         return Promise.resolve();
       }
-      /** @type {function(undefined)} */
       var resolve;
-      var promise = new Promise(function(resolve, _) {
-       resolve = resolve;
+      var promise = new Promise(function(_resolve, _) {
+       resolve = _resolve;
       });
-      this._whenDefinedMap.set(name, {promise, resolve});
+      /** @type {Deferred} **/
+      var deferred = {promise, resolve};
+      this._whenDefinedMap.set(name, deferred);
       return promise;
     },
 
@@ -313,9 +321,14 @@ var CustomElementDefinition;
     flush: function() {
       if (this['enableFlush']) {
         console.warn("flush!!!");
-        this._observers.forEach(function(observer) {
-          this._handleMutations(observer.takeRecords());
-        }, this);
+        this._observers.forEach(
+          /**
+           * @param {!MutationObserver} observer
+           * @this {CustomElementsRegistry}
+           */
+          function(observer) {
+            this._handleMutations(observer.takeRecords());
+          }, this);
       }
     },
 
@@ -469,9 +482,13 @@ var CustomElementDefinition;
         if (this._pendingHtmlImportUrls.has(importUrl)) return;
         this._pendingHtmlImportUrls.add(importUrl);
 
+        /**
+         * @const
+         * @type {CustomElementsRegistry}
+         */
         var _this = this;
         var onLoad = function() {
-          link.removeEventListener('load', onLoad);
+          link.removeEventListener('load', /** @type {function(Event)} */(onLoad));
           if (!link.import.__observer) _this._observeRoot(link.import);
           // We don't pass visitedNodes because this is async and not part of
           // the current tree walk.
@@ -560,11 +577,11 @@ var CustomElementDefinition;
       for (var i = 0; i < mutations.length; i++) {
         var mutation = mutations[i];
         if (mutation.type === 'attributes') {
-          var target = mutation.target;
+          var target = /** @type {HTMLElement} */(mutation.target);
           // We should be gaurenteed to have a definition because this mutation
           // observer is only observing custom elements observedAttributes
           var definition = this._definitions.get(target.localName);
-          var name = mutation.attributeName;
+          var name = /** @type {!string} */(mutation.attributeName);
           var oldValue = mutation.oldValue;
           var newValue = target.getAttribute(name);
           var namespace = mutation.attributeNamespace;
@@ -580,15 +597,19 @@ var CustomElementDefinition;
   CustomElementsRegistry.prototype['get'] = CustomElementsRegistry.prototype.get;
   CustomElementsRegistry.prototype['whenDefined'] = CustomElementsRegistry.prototype.whenDefined;
   CustomElementsRegistry.prototype['flush'] = CustomElementsRegistry.prototype.flush;
-  CustomElementsRegistry.prototype['polyfilled'] = CustomElementsRegistry.prototype.polyfilled;
+  CustomElementsRegistry.prototype['polyfilled'] = true;
   // TODO(justinfagnani): remove these in production code
   CustomElementsRegistry.prototype['_observeRoot'] = CustomElementsRegistry.prototype._observeRoot;
   CustomElementsRegistry.prototype['_addImport'] = CustomElementsRegistry.prototype._addImport;
 
   // patch window.HTMLElement
 
+  /** @const */
   var origHTMLElement = win.HTMLElement;
-  win.HTMLElement = function HTMLElement() {
+  /**
+   * @type {function(new: HTMLElement)}
+   */
+  var newHTMLElement = function HTMLElement() {
     var customElements = win['customElements'];
 
     // If there's an being upgraded, return that
@@ -604,6 +625,7 @@ var CustomElementDefinition;
     }
     throw new Error('Unknown constructor. Did you call customElements.define()?');
   }
+  win.HTMLElement = newHTMLElement;
   win.HTMLElement.prototype = Object.create(origHTMLElement.prototype);
   Object.defineProperty(win.HTMLElement.prototype, 'constructor', {value: win.HTMLElement});
 
@@ -688,8 +710,13 @@ var CustomElementDefinition;
 
   // patch doc.createElement
 
+  /**
+   * @type {function(string): HTMLElement}
+   * @const
+   */
   var rawCreateElement = doc.createElement;
   doc._createElement = function(tagName, callConstructor) {
+    /** @type {CustomElementsRegistry} */
     var customElements = win['customElements'];
     var element = rawCreateElement.call(doc, tagName);
     var definition = customElements._definitions.get(tagName.toLowerCase());
@@ -705,7 +732,12 @@ var CustomElementDefinition;
 
   // patch doc.createElementNS
 
+  /** @const */
   var HTMLNS = 'http://www.w3.org/1999/xhtml';
+  /**
+   * @type {function(string, string): HTMLElement}
+   * @const
+   */
   var _origCreateElementNS = doc.createElementNS;
   doc.createElementNS = function(namespaceURI, qualifiedName) {
     if (namespaceURI === 'http://www.w3.org/1999/xhtml') {
@@ -717,11 +749,16 @@ var CustomElementDefinition;
 
   // patch Element.attachShadow
 
+  /**
+   * @type {function({closed: boolean})}
+   * @const
+   */
   var _origAttachShadow = Element.prototype['attachShadow'];
   if (_origAttachShadow) {
     Object.defineProperty(Element.prototype, 'attachShadow', {
       value: function(options) {
         var root = _origAttachShadow.call(this, options);
+        /** @type {CustomElementsRegistry} */
         var customElements = win['customElements'];
         customElements._observeRoot(root);
         return root;

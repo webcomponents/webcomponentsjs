@@ -139,7 +139,9 @@ gulp.task('CustomElementsV1', function () {
           language_in: 'ECMASCRIPT6_STRICT',
           language_out: 'ECMASCRIPT5_STRICT',
           externs: 'externs/html5.js',
-          js_output_file: 'CustomElementsV1.min.js'
+          js_output_file: 'CustomElementsV1.min.js',
+          new_type_inf: true,
+          rewrite_polyfills: false,
         }))
       .pipe(gulp.dest('./dist'));
 });
