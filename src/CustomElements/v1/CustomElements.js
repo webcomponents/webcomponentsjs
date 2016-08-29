@@ -60,10 +60,19 @@ var CustomElementDefinition;
 
   /** @const */
   var customNameValidation = /^[a-z][.0-9_a-z]*-[\-.0-9_a-z]*$/;
+
+  /**
+   * @param {!string} name
+   * @return {boolean}
+   */
   function isValidCustomElementName(name) {
     return customNameValidation.test(name) && reservedTagList.indexOf(name) === -1;
   }
 
+  /**
+   * @param {!Node} root
+   * @return {TreeWalker}
+   */
   function createTreeWalker(root) {
     // IE 11 requires the third and fourth arguments be present. If the third
     // arg is null, it applies the default behaviour. However IE also requires
@@ -71,16 +80,28 @@ var CustomElementDefinition;
     return doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, null, false);
   }
 
+  /**
+   * @param {!Node} node
+   * @return {boolean}
+   */
   function isElement(node) {
     return node.nodeType === Node.ELEMENT_NODE;
   }
 
+  /**
+   * @param {!Element} element
+   * @return {boolean}
+   */
   function isHtmlImport(element) {
     return element.tagName === 'LINK' &&
         element.rel &&
         element.rel.toLowerCase().split(' ').indexOf('import') !== -1;
   }
 
+  /**
+   * @param {!Element} element
+   * @return {boolean}
+   */
   function isConnected(element) {
     var n = element;
     do {
@@ -101,27 +122,32 @@ var CustomElementDefinition;
    *   to work. This should only be done for tests, as it causes a memory leak.
    */
   function CustomElementsRegistry() {
-    /** @private {Map<string, CustomElementDefinition>} **/
+
+    /** @private {!Map<string, !CustomElementDefinition>} **/
     this._definitions = new Map();
 
-    /** @private {Map<Function, CustomElementDefinition>} **/
+    /** @private {!Map<Function, string>} **/
     this._constructors = new Map();
 
     this._whenDefinedMap = new Map();
 
-    /** @private {Set<MutationObserver>} **/
+    /** @private {!Set<!MutationObserver>} **/
     this._observers = new Set();
 
-    /** @private {MutationObserver} **/
+    /** @private {!MutationObserver} **/
     this._attributeObserver =
-        new MutationObserver(this._handleAttributeChange.bind(this));
+        new MutationObserver(/** @type {function(Array<MutationRecord>, MutationObserver)} */(this._handleAttributeChange.bind(this)));
 
-    /** @private {HTMLElement} **/
+    /** @private {?HTMLElement} **/
     this._newInstance = null;
 
+    /** @private {!Set<string>} **/
     this._pendingHtmlImportUrls = new Set();
 
+    /** @type {boolean} **/
     this.polyfilled = true;
+
+    /** @type {boolean} **/
     this['enableFlush'] = false;
 
     this._observeRoot(document);
@@ -131,6 +157,12 @@ var CustomElementDefinition;
 
     // HTML spec part 4.13.4
     // https://html.spec.whatwg.org/multipage/scripting.html#dom-customelementsregistry-define
+    /**
+     * @param {string} name
+     * @param {function(new:HTMLElement)} constructor
+     * @param {{extends: string}} options
+     * @return {undefined}
+     */
     define: function(name, constructor, options) {
       name = name.toString().toLowerCase();
 
@@ -166,6 +198,7 @@ var CustomElementDefinition;
       }
 
       // 8:
+      /** @type {string} */
       var localName = name;
 
       // 9, 10: We do not support extends currently.
@@ -181,6 +214,10 @@ var CustomElementDefinition;
             `constructor.prototype must be an object`);
       }
 
+      /**
+       * @param {string} callbackName
+       * @return {Function}
+       */
       function getCallback(callbackName) {
         var callback = prototype[callbackName];
         if (callback !== undefined && typeof callback !== 'function') {
@@ -248,7 +285,7 @@ var CustomElementDefinition;
      * been defined.
      *
      * @param {string} name
-     * @return {Promise}
+     * @return {!Promise}
      */
     whenDefined: function(name) {
       // https://html.spec.whatwg.org/multipage/scripting.html#dom-customelementsregistry-whendefined
@@ -259,14 +296,13 @@ var CustomElementDefinition;
       if (this._definitions.has(name)) {
         return Promise.resolve();
       }
-      var deferred = {
-        promise: null,
-      };
-      deferred.promise = new Promise(function(resolve, _) {
-       deferred.resolve = resolve;
+      /** @type {function(undefined)} */
+      var resolve;
+      var promise = new Promise(function(resolve, _) {
+       resolve = resolve;
       });
-      this._whenDefinedMap.set(name, deferred);
-      return deferred.promise;
+      this._whenDefinedMap.set(name, {promise, resolve});
+      return promise;
     },
 
     /**
@@ -283,17 +319,22 @@ var CustomElementDefinition;
       }
     },
 
+    /**
+     * @param {?HTMLElement} instance
+     * @private
+     */
     _setNewInstance: function(instance) {
       this._newInstance = instance;
     },
 
     /**
      * Observes a DOM root for mutations that trigger upgrades and reactions.
+     * @param {Node} root
      * @private
      */
     _observeRoot: function(root) {
       console.assert(!root.__observer);
-      root.__observer = new MutationObserver(this._handleMutations.bind(this));
+      root.__observer = new MutationObserver(/** @type {function(Array<MutationRecord>, MutationObserver)} */(this._handleMutations.bind(this)));
       root.__observer.observe(root, {childList: true, subtree: true});
       if (this['enableFlush']) {
         // this is memory leak, only use in tests
@@ -302,36 +343,41 @@ var CustomElementDefinition;
     },
 
     /**
+     * @param {Node} root
      * @private
      */
     _unobserveRoot: function(root) {
       if (root.__observer) {
         root.__observer.disconnect();
-        root.__observer = null;
         if (this['enableFlush']) {
           this._observers.delete(root.__observer);
         }
+        root.__observer = null;
       }
     },
 
     /**
+     * @param {!Array<!MutationRecord>} mutations
      * @private
      */
     _handleMutations: function(mutations) {
       for (var i = 0; i < mutations.length; i++) {
+        /** @type {!MutationRecord} */
         var mutation = mutations[i];
         if (mutation.type === 'childList') {
           // Note: we can't get an ordering between additions and removals, and
           // so might diverge from spec reaction ordering
-          this._addNodes(mutation.addedNodes);
-          this._removeNodes(mutation.removedNodes);
+          var addedNodes = /** @type {!NodeList<!Node>} */(mutation.addedNodes);
+          var removedNodes = /** @type {!NodeList<!Node>} */(mutation.removedNodes);
+          this._addNodes(addedNodes);
+          this._removeNodes(removedNodes);
         }
       }
     },
 
     /**
-     * @param {NodeList} nodeList
-     * @param {Set<Node>=} visitedNodes
+     * @param {!NodeList<!Node>} nodeList
+     * @param {?Set<Node>=} visitedNodes
      * @private
      */
     _addNodes: function(nodeList, visitedNodes) {
@@ -349,16 +395,21 @@ var CustomElementDefinition;
 
         var walker = createTreeWalker(root);
         do {
-          var node = /** @type {HTMLElement} */ (walker.currentNode);
+          var node = /** @type {!HTMLElement} */ (walker.currentNode);
           this._addElement(node, visitedNodes);
         } while (walker.nextNode())
       }
     },
 
+    /**
+     * @param {!HTMLElement} element
+     * @param {!Set<Node>=} visitedNodes
+     */
     _addElement(element, visitedNodes) {
       if (visitedNodes.has(element)) return;
       visitedNodes.add(element);
 
+      /** @type {?CustomElementDefinition} */
       var definition = this._definitions.get(element.localName);
       if (definition) {
         if (!element.__upgraded) {
@@ -378,10 +429,14 @@ var CustomElementDefinition;
         this._addNodes(element.shadowRoot.childNodes, visitedNodes);
       }
       if (isHtmlImport(element)) {
-        this._addImport(element, visitedNodes);
+        this._addImport(/** @type {!HTMLLinkElement} */(element), visitedNodes);
       }
     },
 
+    /**
+     * @param {!HTMLLinkElement} link
+     * @param {!Set<Node>=} visitedNodes
+     */
     _addImport(link, visitedNodes) {
       // During a tree walk to add or upgrade nodes, we may encounter multiple
       // HTML imports that reference the same document, and may encounter
@@ -395,6 +450,7 @@ var CustomElementDefinition;
       // pending loads in _pendingHtmlImportUrls.
 
       // Check to see if the import is loaded
+      /** @type {?Document} */
       var _import = link.import;
       if (_import) {
         // The import is loaded, but only process the first link element
@@ -408,6 +464,7 @@ var CustomElementDefinition;
         this._addNodes(_import.childNodes, visitedNodes);
       } else {
         // The import is not loaded, so wait for it
+        /** @type {string} */
         var importUrl = link.href;
         if (this._pendingHtmlImportUrls.has(importUrl)) return;
         this._pendingHtmlImportUrls.add(importUrl);
@@ -496,6 +553,7 @@ var CustomElementDefinition;
     },
 
     /**
+     * @param {!Array<!MutationRecord>} mutations
      * @private
      */
     _handleAttributeChange: function(mutations) {
