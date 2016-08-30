@@ -23,7 +23,7 @@ const EDIT_UPDATE = 1;
 const EDIT_ADD = 2;
 const EDIT_DELETE = 3;
 
-export default {
+let ArraySplice = {
 
   // Note: This function is *based* on the computation of the Levenshtein
   // "edit" distance. The one change is that "updates" are treated as two
@@ -36,30 +36,30 @@ export default {
   // With 1-edit updates, the shortest path would be just to update all seven
   // characters. With 2-edit updates, we delete 4, leave 3, and add 4. This
   // leaves the substring '123' intact.
-  calcEditDistances: function(current, currentStart, currentEnd,
+  calcEditDistances(current, currentStart, currentEnd,
                               old, oldStart, oldEnd) {
     // "Deletion" columns
-    var rowCount = oldEnd - oldStart + 1;
-    var columnCount = currentEnd - currentStart + 1;
-    var distances = new Array(rowCount);
+    let rowCount = oldEnd - oldStart + 1;
+    let columnCount = currentEnd - currentStart + 1;
+    let distances = new Array(rowCount);
 
     // "Addition" rows. Initialize null column.
-    for (var i = 0; i < rowCount; i++) {
+    for (let i = 0; i < rowCount; i++) {
       distances[i] = new Array(columnCount);
       distances[i][0] = i;
     }
 
     // Initialize null row
-    for (var j = 0; j < columnCount; j++)
+    for (let j = 0; j < columnCount; j++)
       distances[0][j] = j;
 
-    for (i = 1; i < rowCount; i++) {
-      for (j = 1; j < columnCount; j++) {
+    for (let i = 1; i < rowCount; i++) {
+      for (let j = 1; j < columnCount; j++) {
         if (this.equals(current[currentStart + j - 1], old[oldStart + i - 1]))
           distances[i][j] = distances[i - 1][j - 1];
         else {
-          var north = distances[i - 1][j] + 1;
-          var west = distances[i][j - 1] + 1;
+          let north = distances[i - 1][j] + 1;
+          let west = distances[i][j - 1] + 1;
           distances[i][j] = north < west ? north : west;
         }
       }
@@ -71,11 +71,11 @@ export default {
   // This starts at the final weight, and walks "backward" by finding
   // the minimum previous weight recursively until the origin of the weight
   // matrix.
-  spliceOperationsFromEditDistances: function(distances) {
-    var i = distances.length - 1;
-    var j = distances[0].length - 1;
-    var current = distances[i][j];
-    var edits = [];
+  spliceOperationsFromEditDistances(distances) {
+    let i = distances.length - 1;
+    let j = distances[0].length - 1;
+    let current = distances[i][j];
+    let edits = [];
     while (i > 0 || j > 0) {
       if (i == 0) {
         edits.push(EDIT_ADD);
@@ -87,11 +87,11 @@ export default {
         i--;
         continue;
       }
-      var northWest = distances[i - 1][j - 1];
-      var west = distances[i - 1][j];
-      var north = distances[i][j - 1];
+      let northWest = distances[i - 1][j - 1];
+      let west = distances[i - 1][j];
+      let north = distances[i][j - 1];
 
-      var min;
+      let min;
       if (west < north)
         min = west < northWest ? west : northWest;
       else
@@ -145,12 +145,13 @@ export default {
    *   l: The length of the current array
    *   p: The length of the old array
    */
-  calcSplices: function(current, currentStart, currentEnd,
+  calcSplices(current, currentStart, currentEnd,
                         old, oldStart, oldEnd) {
-    var prefixCount = 0;
-    var suffixCount = 0;
+    let prefixCount = 0;
+    let suffixCount = 0;
+    let splice;
 
-    var minLength = Math.min(currentEnd - currentStart, oldEnd - oldStart);
+    let minLength = Math.min(currentEnd - currentStart, oldEnd - oldStart);
     if (currentStart == 0 && oldStart == 0)
       prefixCount = this.sharedPrefix(current, old, minLength);
 
@@ -166,7 +167,7 @@ export default {
       return [];
 
     if (currentStart == currentEnd) {
-      var splice = newSplice(currentStart, [], 0);
+      splice = newSplice(currentStart, [], 0);
       while (oldStart < oldEnd)
         splice.removed.push(old[oldStart++]);
 
@@ -174,15 +175,15 @@ export default {
     } else if (oldStart == oldEnd)
       return [ newSplice(currentStart, [], currentEnd - currentStart) ];
 
-    var ops = this.spliceOperationsFromEditDistances(
+    let ops = this.spliceOperationsFromEditDistances(
         this.calcEditDistances(current, currentStart, currentEnd,
                                old, oldStart, oldEnd));
 
     splice = undefined;
-    var splices = [];
-    var index = currentStart;
-    var oldIndex = oldStart;
-    for (var i = 0; i < ops.length; i++) {
+    let splices = [];
+    let index = currentStart;
+    let oldIndex = oldStart;
+    for (let i = 0; i < ops.length; i++) {
       switch(ops[i]) {
         case EDIT_LEAVE:
           if (splice) {
@@ -226,30 +227,33 @@ export default {
     return splices;
   },
 
-  sharedPrefix: function(current, old, searchLength) {
-    for (var i = 0; i < searchLength; i++)
+  sharedPrefix(current, old, searchLength) {
+    for (let i = 0; i < searchLength; i++)
       if (!this.equals(current[i], old[i]))
         return i;
     return searchLength;
   },
 
-  sharedSuffix: function(current, old, searchLength) {
-    var index1 = current.length;
-    var index2 = old.length;
-    var count = 0;
+  sharedSuffix(current, old, searchLength) {
+    let index1 = current.length;
+    let index2 = old.length;
+    let count = 0;
     while (count < searchLength && this.equals(current[--index1], old[--index2]))
       count++;
 
     return count;
   },
 
-  calculateSplices: function(current, previous) {
+  calculateSplices(current, previous) {
     return this.calcSplices(current, 0, current.length, previous, 0,
                             previous.length);
   },
 
-  equals: function(currentValue, previousValue) {
+  equals(currentValue, previousValue) {
     return currentValue === previousValue;
   }
 
 };
+
+export let calculateSplices = (current, previous) =>
+  ArraySplice.calculateSplices(current, previous);

@@ -34,13 +34,13 @@ export default class {
 
   reset() {
     // light children
-    var children = tree.Logical.getChildNodes(this.root.host);
-    for (var i = 0; i < children.length; i++) {
+    let children = tree.Logical.getChildNodes(this.root.host);
+    for (let i = 0; i < children.length; i++) {
       this.resetChild(children[i]);
     }
     // insertion points
-    var p$ = this.root._insertionPoints;
-    for (var j = 0; j < p$.length; j++) {
+    let p$ = this.root._insertionPoints;
+    for (let j = 0; j < p$.length; j++) {
       this.resetInsertionPoint(p$[j]);
     }
   }
@@ -73,15 +73,15 @@ export default class {
   // instead elements are distributed into a `content._distributedNodes`
   // array where applicable.
   distributePool(node, pool) {
-    var dirtyRoots = [];
-    var p$ = this.root._insertionPoints;
-    for (var i=0, l=p$.length, p; (i<l) && (p=p$[i]); i++) {
+    let dirtyRoots = [];
+    let p$ = this.root._insertionPoints;
+    for (let i=0, l=p$.length, p; (i<l) && (p=p$[i]); i++) {
       this.distributeInsertionPoint(p, pool);
       // provoke redistribution on insertion point parents
       // must do this on all candidate hosts since distribution in this
       // scope invalidates their distribution.
       // only get logical parent.
-      var parent = tree.Logical.getParentNode(p);
+      let parent = tree.Logical.getParentNode(p);
       if (parent && parent.shadyRoot &&
           this.hasInsertionPoint(parent.shadyRoot)) {
         dirtyRoots.push(parent.shadyRoot);
@@ -92,8 +92,8 @@ export default class {
 
   distributeInsertionPoint(insertionPoint, pool) {
     // distribute nodes from the pool that this selector matches
-    var anyDistributed = false;
-    for (var i=0, l=pool.length, node; i < l; i++) {
+    let anyDistributed = false;
+    for (let i=0, l=pool.length, node; i < l; i++) {
       node=pool[i];
       // skip nodes that were already used
       if (!node) {
@@ -110,8 +110,8 @@ export default class {
     }
     // Fallback content if nothing was distributed here
     if (!anyDistributed) {
-      var children = tree.Logical.getChildNodes(insertionPoint);
-      for (var j = 0; j < children.length; j++) {
+      let children = tree.Logical.getChildNodes(insertionPoint);
+      for (let j = 0; j < children.length; j++) {
         this.distributeNodeInto(children[j], insertionPoint);
       }
     }
@@ -119,9 +119,9 @@ export default class {
   }
 
   matchesInsertionPoint(node, insertionPoint) {
-    var slotName = insertionPoint.getAttribute('name');
+    let slotName = insertionPoint.getAttribute('name');
     slotName = slotName ? slotName.trim() : '';
-    var slot = node.getAttribute && node.getAttribute('slot');
+    let slot = node.getAttribute && node.getAttribute('slot');
     slot = slot ? slot.trim() : '';
     return (slot == slotName);
   }
@@ -132,13 +132,13 @@ export default class {
   }
 
   setDistributedNodesOnInsertionPoint(insertionPoint) {
-    var n$ = insertionPoint._assignedNodes;
+    let n$ = insertionPoint._assignedNodes;
     insertionPoint._distributedNodes = [];
-    for (var i=0, n; (i<n$.length) && (n=n$[i]) ; i++) {
+    for (let i=0, n; (i<n$.length) && (n=n$[i]) ; i++) {
       if (this.isInsertionPoint(n)) {
-        var d$ = n._distributedNodes;
+        let d$ = n._distributedNodes;
         if (d$) {
-          for (var j=0; j < d$.length; j++) {
+          for (let j=0; j < d$.length; j++) {
             insertionPoint._distributedNodes.push(d$[j]);
           }
         }
@@ -153,8 +153,8 @@ export default class {
   }
 
   rendered() {
-    var ip$ = this.root._insertionPoints;
-    for (var i=0, slot; i < ip$.length; i++) {
+    let ip$ = this.root._insertionPoints;
+    for (let i=0, slot; i < ip$.length; i++) {
       slot = ip$[i];
       if (slot.__eventListenerCount) {
         // NOTE: cannot bubble correctly here so not setting bubbles: true

@@ -18,7 +18,7 @@ let mixinImpl = {
 
   // Try to add node. Record logical info, track insertion points, perform
   // distribution iff needed. Return true if the add is handled.
-  addNode: function(container, node, ref_node) {
+  addNode(container, node, ref_node) {
     let ownerRoot = this.ownerShadyRootForNode(container);
     if (ownerRoot) {
       // optimization: special insertion point tracking
@@ -73,7 +73,7 @@ let mixinImpl = {
   // needed. Return true if the removal has been handled.
   // note that it's possible for both the node's host and its parent
   // to require distribution... both cases are handled here.
-  removeNode: function(node) {
+  removeNode(node) {
     // important that we want to do this only if the node has a logical parent
     let logicalParent = tree.Logical.hasParentNode(node) &&
       tree.Logical.getParentNode(node);
@@ -97,7 +97,7 @@ let mixinImpl = {
     return distributed;
   },
 
-  removeNodeFromParent: function(node, parent) {
+  removeNodeFromParent(node, parent) {
     if (parent) {
       // TODO(sorvell): notify
       // if (DomApi.hasApi(parent)) {
@@ -109,11 +109,11 @@ let mixinImpl = {
     }
   },
 
-  _hasCachedOwnerRoot: function(node) {
+  _hasCachedOwnerRoot(node) {
     return Boolean(node.__ownerShadyRoot !== undefined);
   },
 
-  getRootNode: function(node) {
+  getRootNode(node) {
     if (!node || !node.nodeType) {
       return;
     }
@@ -137,14 +137,14 @@ let mixinImpl = {
     return root;
   },
 
-  ownerShadyRootForNode: function(node) {
+  ownerShadyRootForNode(node) {
     let root = this.getRootNode(node);
     if (utils.isShadyRoot(root)) {
       return root;
     }
   },
 
-  _maybeDistribute: function(node, container, ownerRoot) {
+  _maybeDistribute(node, container, ownerRoot) {
     // TODO(sorvell): technically we should check non-fragment nodes for
     // <content> children but since this case is assumed to be exceedingly
     // rare, we avoid the cost and will address with some specific api
@@ -186,7 +186,7 @@ let mixinImpl = {
 
   /* note: parent argument is required since node may have an out
   of date parent at this point; returns true if a <content> is being added */
-  _maybeAddInsertionPoint: function(node, parent, root) {
+  _maybeAddInsertionPoint(node, parent, root) {
     let added;
     let insertionPointTag = root.getInsertionPointTag();
     if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
@@ -209,29 +209,29 @@ let mixinImpl = {
     return added;
   },
 
-  _nodeNeedsDistribution: function(node) {
+  _nodeNeedsDistribution(node) {
     return node && node.shadyRoot &&
       node.shadyRoot.hasInsertionPoint();
   },
 
   // TODO(sorvell): needed for style scoping, use MO?
-  _addedNode: function() {},
-  _removedNode: function() {},
+  _addedNode() {},
+  _removedNode() {},
   /*
-  _addedNode: function(node, root) {
-    // if (ShadyDom.addedNode) {
-    //   ShadyDom.addedNode(node, root);
+  _addedNode(node, root) {
+    // if (ShadyDOM.addedNode) {
+    //   ShadyDOM.addedNode(node, root);
     // }
   },
 
-  _removedNode: function(node, root) {
-    if (ShadyDom.removedNode) {
-      ShadyDom.removedNode(node, root);
+  _removedNode(node, root) {
+    if (ShadyDOM.removedNode) {
+      ShadyDOM.removedNode(node, root);
     }
   },
   */
 
-  _removeDistributedChildren: function(root, container) {
+  _removeDistributedChildren(root, container) {
     let hostNeedsDist;
     let ip$ = root._insertionPoints;
     for (let i=0; i<ip$.length; i++) {
@@ -251,7 +251,7 @@ let mixinImpl = {
     return hostNeedsDist;
   },
 
-  _contains: function(container, node) {
+  _contains(container, node) {
     while (node) {
       if (node == container) {
         return true;
@@ -260,7 +260,7 @@ let mixinImpl = {
     }
   },
 
-  _removeOwnerShadyRoot: function(node) {
+  _removeOwnerShadyRoot(node) {
     // optimization: only reset the tree if node is actually in a root
     if (this._hasCachedOwnerRoot(node)) {
       let c$ = tree.Logical.getChildNodes(node);
@@ -274,7 +274,7 @@ let mixinImpl = {
   // TODO(sorvell): This will fail if distribution that affects this
   // question is pending; this is expected to be exceedingly rare, but if
   // the issue comes up, we can force a flush in this case.
-  firstComposedNode: function(insertionPoint) {
+  firstComposedNode(insertionPoint) {
     let n$ = insertionPoint.assignedNodes({flatten: true});
     let root = this.getRootNode(insertionPoint);
     for (let i=0, l=n$.length, n; (i<l) && (n=n$[i]); i++) {
@@ -285,13 +285,13 @@ let mixinImpl = {
     }
   },
 
-  clearNode: function(node) {
+  clearNode(node) {
     while (node.firstChild) {
       node.removeChild(node.firstChild);
     }
   },
 
-  maybeDistributeParent: function(node) {
+  maybeDistributeParent(node) {
     let parent = tree.Logical.getParentNode(node);
     if (this._nodeNeedsDistribution(parent)) {
       parent.shadyRoot.update();
@@ -299,7 +299,7 @@ let mixinImpl = {
     }
   },
 
-  maybeDistributeAttributeChange: function(node, name) {
+  maybeDistributeAttributeChange(node, name) {
     let distribute = (node.localName === 'slot' && name === 'name');
     if (distribute) {
       let root = this.getRootNode(node);
@@ -312,14 +312,14 @@ let mixinImpl = {
   // NOTE: `query` is used primarily for ShadyDOM's querySelector impl,
   // but it's also generally useful to recurse through the element tree
   // and is used by Polymer's styling system.
-  query: function(node, matcher, halter) {
+  query(node, matcher, halter) {
     let list = [];
     this._queryElements(tree.Logical.getChildNodes(node), matcher,
       halter, list);
     return list;
   },
 
-  _queryElements: function(elements, matcher, halter, list) {
+  _queryElements(elements, matcher, halter, list) {
     for (let i=0, l=elements.length, c; (i<l) && (c=elements[i]); i++) {
       if (c.nodeType === Node.ELEMENT_NODE &&
           this._queryElement(c, matcher, halter, list)) {
@@ -328,7 +328,7 @@ let mixinImpl = {
     }
   },
 
-  _queryElement: function(node, matcher, halter, list) {
+  _queryElement(node, matcher, halter, list) {
     let result = matcher(node);
     if (result) {
       list.push(node);
@@ -340,7 +340,7 @@ let mixinImpl = {
       halter, list);
   },
 
-  activeElementForNode: function(node) {
+  activeElementForNode(node) {
     let active = document.activeElement;
     if (!active) {
       return null;
@@ -441,7 +441,7 @@ Object.defineProperties(NodeMixin, {
 
 let FragmentMixin = {
 
-  appendChild: function(node) {
+  appendChild(node) {
     return this.insertBefore(node);
   },
 
@@ -451,7 +451,7 @@ let FragmentMixin = {
   // 2. container is a shadyRoot (don't distribute, instead set
   // container to container.host.
   // 3. node is <content> (host of container needs distribution)
-  insertBefore: function(node, ref_node) {
+  insertBefore(node, ref_node) {
     if (ref_node && tree.Logical.getParentNode(ref_node) !== this) {
       throw Error('The ref_node to be inserted before is not a child ' +
         'of this node');
@@ -489,7 +489,7 @@ let FragmentMixin = {
     Removes the given `node` from the element's `lightChildren`.
     This method also performs dom composition.
   */
-  removeChild: function(node) {
+  removeChild(node) {
     if (tree.Logical.getParentNode(node) !== this) {
       throw Error('The node to be removed is not a child of this node: ' +
         node);
@@ -511,14 +511,14 @@ let FragmentMixin = {
     return node;
   },
 
-  replaceChild: function(node, ref_node) {
+  replaceChild(node, ref_node) {
     this.insertBefore(node, ref_node);
     this.removeChild(ref_node);
     return node;
   },
 
   // TODO(sorvell): consider doing native QSA and filtering results.
-  querySelector: function(selector) {
+  querySelector(selector) {
     // match selector and halt on first result.
     let result = mixinImpl.query(this, function(n) {
       return utils.matchesSelector(n, selector);
@@ -528,13 +528,13 @@ let FragmentMixin = {
     return result || null;
   },
 
-  querySelectorAll: function(selector) {
+  querySelectorAll(selector) {
     return mixinImpl.query(this, function(n) {
       return utils.matchesSelector(n, selector);
     });
   },
 
-  cloneNode: function(deep) {
+  cloneNode(deep) {
     if (this.localName == 'template') {
       return nativeCloneNode.call(this, deep);
     } else {
@@ -550,7 +550,7 @@ let FragmentMixin = {
     }
   },
 
-  importNode: function(externalNode, deep) {
+  importNode(externalNode, deep) {
     // for convenience use this node's ownerDoc if the node isn't a document
     let doc = this instanceof Document ? this :
       this.ownerDocument;
@@ -666,20 +666,20 @@ Object.defineProperties(FragmentMixin, {
 let ElementMixin = {
 
   // TODO(sorvell): should only exist on <slot>
-  assignedNodes: function(options) {
+  assignedNodes(options) {
     return (options && options.flatten ? this._distributedNodes :
       this._assignedNodes) || [];
   },
 
 
-  setAttribute: function(name, value) {
+  setAttribute(name, value) {
     nativeSetAttribute.call(this, name, value);
     if (!mixinImpl.maybeDistributeParent(this)) {
       mixinImpl.maybeDistributeAttributeChange(this, name);
     }
   },
 
-  removeAttribute: function(name) {
+  removeAttribute(name) {
     nativeRemoveAttribute.call(this, name);
     if (!mixinImpl.maybeDistributeParent(this)) {
       mixinImpl.maybeDistributeAttributeChange(this, name);
