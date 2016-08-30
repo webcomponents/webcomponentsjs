@@ -639,8 +639,9 @@ var Deferred;
     throw new Error('Unknown constructor. Did you call customElements.define()?');
   }
   win.HTMLElement = newHTMLElement;
-  win.HTMLElement.prototype = Object.create(origHTMLElement.prototype);
-  Object.defineProperty(win.HTMLElement.prototype, 'constructor', {value: win.HTMLElement});
+  win.HTMLElement.prototype = Object.create(origHTMLElement.prototype, {
+    constructor: {value: win.HTMLElement, configurable: true, writable: true},
+  });
 
   // patch all built-in subclasses of HTMLElement to inherit from the new HTMLElement
   // See https://html.spec.whatwg.org/multipage/indices.html#element-interfaces
