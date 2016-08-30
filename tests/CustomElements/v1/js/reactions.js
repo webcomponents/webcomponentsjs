@@ -185,6 +185,14 @@ suite('Custom Element Reactions', function() {
 
     // TODO(justinfagnani): test for observedAttributes
 
+    test('if not defined, observedAttributes is not read', function() {
+      customElements.define('x-no-attr-callback', class extends HTMLElement {
+        static get observedAttributes() {
+          assert.fail();
+        }
+      });
+    });
+
     test('called when setting observed attribute via setAttribute', function(done) {
       class XBoo extends HTMLElement {
         static get observedAttributes() {

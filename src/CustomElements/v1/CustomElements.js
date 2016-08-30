@@ -251,13 +251,14 @@ var Deferred;
       var disconnectedCallback = getCallback('disconnectedCallback');
 
       // Divergence from spec: we always throw if attributeChangedCallback is
-      // not a function, and always get observedAttributes.
+      // not a function.
 
       // 7, 9.1:
       var attributeChangedCallback = getCallback('attributeChangedCallback');
 
       // 8, 9.2, 9.3:
-      var observedAttributes = constructor['observedAttributes'] || [];
+      var observedAttributes =
+          (attributeChangedCallback && constructor['observedAttributes']) || [];
 
       // 15:
       /** @type {CustomElementDefinition} */
