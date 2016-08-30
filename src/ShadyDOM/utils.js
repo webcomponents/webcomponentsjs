@@ -12,10 +12,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 export let settings = {};
 
-var requestedShadyDOM = window.WebComponents &&
+let requestedShadyDOM = window.WebComponents &&
   window.WebComponents.flags.shadydom;
 
-settings.inUse = requestedShadyDOM || !Element.prototype.attachShadow;
+settings.inUse = requestedShadyDOM ||  !Element.prototype.attachShadow;
 
 export function isShadyRoot(obj) {
   return Boolean(obj.__localName === 'ShadyRoot');

@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 'use strict';
 
-import ArraySplice from './array-splice'
+import {calculateSplices} from './array-splice'
 import * as utils from './utils'
 import {tree} from './tree'
 import Distributor from './distributor'
@@ -37,7 +37,7 @@ export class ShadyRoot {
 
 let ShadyMixin = {
 
-  _init: function(host) {
+  _init(host) {
     // TODO(sorvell): set a fake local name so this element can be
     // distinguished from a DocumentFragment when patching.
     // FF doesn't allow this to be `localName`
@@ -57,7 +57,7 @@ let ShadyMixin = {
 
   // async render the "top" distributor (this is all that is needed to
   // distribute this host).
-  update: function() {
+  update() {
     let distributionRoot = this._findDistributionRoot(this.host);
     //console.log('update from', this.host, 'root', distributionRoot.host, distributionRoot._clean);
     if (distributionRoot._clean) {
@@ -69,7 +69,7 @@ let ShadyMixin = {
   },
 
   // returns the host that's the top of this host's distribution tree
-  _findDistributionRoot: function(element) {
+  _findDistributionRoot(element) {
     let root = element.shadyRoot;
     while (element && this._elementNeedsDistribution(element)) {
       root = element.getRootNode();
@@ -80,7 +80,7 @@ let ShadyMixin = {
 
   // Return true if a host's children includes
   // an insertion point that selects selectively
-  _elementNeedsDistribution: function(element) {
+  _elementNeedsDistribution(element) {
     let c$ = tree.Logical.getChildNodes(element);
     for (let i=0, c; i < c$.length; i++) {
       c = c$[i];
@@ -90,7 +90,7 @@ let ShadyMixin = {
     }
   },
 
-  render: function() {
+  render() {
     if (!this._clean) {
       if (!this._skipUpdateInsertionPoints) {
         this.updateInsertionPoints();
@@ -121,19 +121,19 @@ let ShadyMixin = {
     }
   },
 
-  forceRender: function() {
+  forceRender() {
     this._clean = false;
     this.render();
   },
 
-  distribute: function() {
+  distribute() {
     let dirtyRoots = this._distributor.distribute();
     for (let i=0; i<dirtyRoots.length; i++) {
       dirtyRoots[i].forceRender();
     }
   },
 
-  updateInsertionPoints: function() {
+  updateInsertionPoints() {
     let i$ = this._insertionPoints = this._distributor.getInsertionPoints();
     // ensure insertionPoints's and their parents have logical dom info.
     // save logical tree info
@@ -158,11 +158,11 @@ let ShadyMixin = {
     this.__insertionPoints = insertionPoints;
   },
 
-  hasInsertionPoint: function() {
+  hasInsertionPoint() {
     return this._distributor.hasInsertionPoint();
   },
 
-  compose: function() {
+  compose() {
     // compose self
     // note: it's important to mark this clean before distribution
     // so that attachment that provokes additional distribution (e.g.
@@ -180,7 +180,7 @@ let ShadyMixin = {
 
   // Reify dom such that it is at its correct rendering position
   // based on logical distribution.
-  _composeTree: function() {
+  _composeTree() {
     this._updateChildNodes(this.host, this._composeNode(this.host));
     let p$ = this._insertionPoints || [];
     for (let i=0, l=p$.length, p, parent; (i<l) && (p=p$[i]); i++) {
@@ -192,7 +192,7 @@ let ShadyMixin = {
   },
 
   // Returns the list of nodes which should be rendered inside `node`.
-  _composeNode: function(node) {
+  _composeNode(node) {
     let children = [];
     let c$ = tree.Logical.getChildNodes(node.shadyRoot || node);
     for (let i = 0; i < c$.length; i++) {
@@ -213,15 +213,15 @@ let ShadyMixin = {
     return children;
   },
 
-  isFinalDestination: function(insertionPoint, node) {
+  isFinalDestination(insertionPoint, node) {
     return this._distributor.isFinalDestination(
       insertionPoint, node);
   },
 
   // Ensures that the rendered node list inside `container` is `children`.
-  _updateChildNodes: function(container, children) {
+  _updateChildNodes(container, children) {
     let composed = tree.Composed.getChildNodes(container);
-    let splices = ArraySplice.calculateSplices(children, composed);
+    let splices = calculateSplices(children, composed);
     // process removals
     for (let i=0, d=0, s; (i<splices.length) && (s=splices[i]); i++) {
       for (let j=0, n; (j < s.removed.length) && (n=s.removed[j]); j++) {
@@ -249,7 +249,7 @@ let ShadyMixin = {
   },
 
   // TODO(sorvell): util
-  getInsertionPointTag: function() {
+  getInsertionPointTag() {
     return this._distributor.insertionPointTag;
   }
 
