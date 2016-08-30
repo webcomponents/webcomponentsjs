@@ -13,6 +13,8 @@
     <title>Custom Elements: imports integration</title>
     <script>
       var _HTMLImportsLoaded = false;
+      var webComponentsReady = false;
+
       addEventListener('HTMLImportsLoaded', function() {
         _HTMLImportsLoaded = true;
       });
@@ -28,6 +30,10 @@
           }
         }
       };
+
+      addEventListener('WebComponentsReady', function(e) {
+        webComponentsReady = true;
+      });
 
     </script>
     <script src="../../../../../web-component-tester/browser.js"></script>
@@ -103,6 +109,17 @@
           });
           // check that we only observe an imported document once
           chai.assert.equal(observedSubImports.length, 1);
+        });
+
+        test('CustomElements fires WebComponentsReady event', function(done) {
+          if (webComponentsReady) {
+            done();
+            return;
+          }
+          this.timeout(200);
+          window.addEventListener('WebComponentsReady', function(e) {
+            done();
+          });
         });
 
       });

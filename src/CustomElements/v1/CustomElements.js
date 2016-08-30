@@ -157,6 +157,18 @@ var Deferred;
     this['enableFlush'] = false;
 
     this._observeRoot(document);
+
+    // TODO(kschaaf): rough WebComponentsReady event shim, probably not correct
+    var wcr = function() {
+      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
+    };
+    if (window['HTMLImports']) {
+      window['HTMLImports']['whenReady'](function() {
+        requestAnimationFrame(wcr);
+      });
+    } else {
+      requestAnimationFrame(wcr);
+    }
   }
 
   CustomElementsRegistry.prototype = {
