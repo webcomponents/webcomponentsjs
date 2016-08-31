@@ -68,6 +68,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  * `@apply` properties.
 
 */
+
+'use strict';
+
 import {rx, rulesForStyle, forEachRule, processVariableAndFallback} from './style-util'
 import {templateMap} from './template-map'
 

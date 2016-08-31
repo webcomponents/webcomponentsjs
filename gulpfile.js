@@ -149,6 +149,7 @@ gulp.task('ShadyCSS', function() {
   return gulp.src('./src/ShadyCSS/*.js', {base: './'})
     .pipe(sourcemaps.init())
     .pipe(closureCompiler({
+      new_type_inf: true,
       compilation_level: 'SIMPLE',
       language_in: 'ECMASCRIPT6_STRICT',
       language_out: 'ECMASCRIPT5_STRICT',
@@ -164,6 +165,7 @@ gulp.task('ShadyDOM', function() {
   return gulp.src('./src/ShadyDOM/*.js', {base: './'})
     .pipe(sourcemaps.init())
     .pipe(closureCompiler({
+      new_type_inf: true,
       compilation_level: 'SIMPLE',
       language_in: 'ECMASCRIPT6_STRICT',
       language_out: 'ECMASCRIPT5_STRICT',
