@@ -24,7 +24,7 @@ To use ShadyStyling:
 
 The following example uses ShadyStyling and ShadyDOM to define a custom element.
 
-```
+```html
 <template id="myElementTemplate">
   <style>
     :host {
@@ -62,14 +62,14 @@ The following example uses ShadyStyling and ShadyDOM to define a custom element.
 
 ```
 
-##Limitations
+## Limitations
 
- ###Selector scoping
+#### Selector scoping
 
  You must have a selector to the left of the `::slotted`
  pseudo-element.
 
- ###Custom properties and `@apply`
+#### Custom properties and `@apply`
 
  Dynamic changes are not automatically applied. If elements change such that they
  conditionally match selectors they did not previously, `ShadyStyling.updateStyles()`
