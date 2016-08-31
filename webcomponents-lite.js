@@ -59,8 +59,8 @@
     // these scripts are loaded here due to polyfill timing issues
     'WebComponents/dom.js',
     'WebComponents/unresolved.js',
-    '../dist/ShadyDOM.min.js',
-    '../dist/ShadyStyling.min.js'
+    'ShadyDOM/ShadyDOM.min.js',
+    'ShadyCSS/ShadyCSS.min.js'
   ];
 
   // TODO(kschaaf): Remove later? Allow forcing fallback to V0 CE
