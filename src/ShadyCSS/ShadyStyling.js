@@ -20,7 +20,7 @@ import ApplyShim from './apply-shim'
 
 let STYLEHOST = Symbol('stylehost');
 
-export let ShadyStyling = {
+export let ShadyCSS = {
   scopeCounter: {},
   nativeShadow: nativeShadow,
   nativeCss: nativeCssVariables,
@@ -277,4 +277,4 @@ export let ShadyStyling = {
   }
 }
 
-window['ShadyStyling'] = ShadyStyling;
+window['ShadyCSS'] = ShadyCSS;

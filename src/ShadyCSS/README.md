@@ -1,7 +1,7 @@
-ShadyStyling
-============
+ShadyCSS
+========
 
-ShadyStyling provides a shim for ShadowDOM V1 style encapsulation and
+ShadyCSS provides a shim for ShadowDOM V1 style encapsulation and
 css custom properties with `@apply` support. It is intended to be used in
 conjunction with the ShadyDOM shim.
 
@@ -12,17 +12,17 @@ If native ShadowDOM is available, no scoping will be applied. If native custom
 properties are available, they will be used and `@apply` will be simulated
 via native custom properties.
 
-To use ShadyStyling:
+To use ShadyCSS:
 
- 1. First, call `ShadyStyling.prepareTemplate(name, template)` on a
+ 1. First, call `ShadyCSS.prepareTemplate(name, template)` on a
  `<template>` element that will be imported into a `shadowRoot`.
 
  2. Then, after the shadowRoot is created and whenever dynamic
- updates are required, call `ShadyStyling.applyStyle(element)`.
+ updates are required, call `ShadyCSS.applyStyle(element)`.
 
 ##Example
 
-The following example uses ShadyStyling and ShadyDOM to define a custom element.
+The following example uses ShadyCSS and ShadyDOM to define a custom element.
 
 ```html
 <template id="myElementTemplate">
@@ -47,13 +47,13 @@ The following example uses ShadyStyling and ShadyDOM to define a custom element.
   </div>
 </template>
 <script>
-  ShadyStyling.prepareTemplate('my-element', myElementTemplate);
+  ShadyCSS.prepareTemplate('my-element', myElementTemplate);
   class MyElement extends HTMLElement {
     connectedCallback() {
       this.attachShadow({mode: 'open'});
       this.shadowRoot.appendChild(
         document.importNode(myElementTemplate.content, true));
-      ShadyStyling.applyStyle(this);
+      ShadyCSS.applyStyle(this);
     }
   }
 
@@ -72,7 +72,7 @@ The following example uses ShadyStyling and ShadyDOM to define a custom element.
 #### Custom properties and `@apply`
 
  Dynamic changes are not automatically applied. If elements change such that they
- conditionally match selectors they did not previously, `ShadyStyling.updateStyles()`
+ conditionally match selectors they did not previously, `ShadyCSS.updateStyles()`
  must be called.
 
  For a given element's shadowRoot, only 1 value is allowed

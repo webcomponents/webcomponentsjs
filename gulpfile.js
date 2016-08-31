@@ -145,19 +145,19 @@ gulp.task('default', function(cb) {
   runseq('build', 'audit', cb);
 });
 
-gulp.task('ShadyStyling', function() {
-  return gulp.src('./src/ShadyStyling/*.js', {base: './'})
+gulp.task('ShadyCSS', function() {
+  return gulp.src('./src/ShadyCSS/*.js', {base: './'})
     .pipe(sourcemaps.init())
     .pipe(closureCompiler({
       compilation_level: 'SIMPLE',
       language_in: 'ECMASCRIPT6_STRICT',
       language_out: 'ECMASCRIPT5_STRICT',
       output_wrapper: '(function(){\n%output%\n}).call(this)',
-      js_output_file: 'ShadyStyling.min.js'
+      js_output_file: 'ShadyCSS.min.js'
     }))
     .on('error', function(e){ console.error(e); })
     .pipe(sourcemaps.write('/'))
-    .pipe(gulp.dest('./dist'))
+    .pipe(gulp.dest('./src/ShadyCSS'))
 });
 
 gulp.task('ShadyDOM', function() {
@@ -172,7 +172,7 @@ gulp.task('ShadyDOM', function() {
     }))
     .on('error', function(e){ console.error(e); })
     .pipe(sourcemaps.write('/'))
-    .pipe(gulp.dest('./dist'))
+    .pipe(gulp.dest('./src/ShadyDOM'))
 });
 
-gulp.task('modules', ['ShadyDOM', 'ShadyStyling']);
+gulp.task('modules', ['ShadyDOM', 'ShadyCSS']);
