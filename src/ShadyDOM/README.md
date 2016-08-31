@@ -17,7 +17,7 @@ the url query string `?shadydom=true`.
 
 ##Example
 
-```
+```html
 <div id="host"></div>
 <script>
   host.attachShadow({mode: 'open');
