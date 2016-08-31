@@ -30,6 +30,7 @@ import {nativeShadow} from './style-settings'
 
  * :host-context(...): scopeName..., ... scopeName
 
+ * ::slotted(...) -> scopeName > ...
 */
 export let StyleTransformer = {
 
@@ -202,12 +203,26 @@ export let StyleTransformer = {
     if (selector.indexOf(CONTENT) >= 0) {
       combinator = '';
     }
+    // mark ::slotted() scope jump to replace with descendant selector + arg
+    // also ignore left-side combinator
+    let slotted = false;
+    if (selector.indexOf(SLOTTED) >= 0) {
+      combinator = '';
+      slotted = true;
+    }
     // process scope jumping selectors up to the scope jump and then stop
-    // e.g. .zonk ::content > .foo ==> .zonk.scope > .foo
     let stop;
     if (jumpIndex >= 0) {
-      selector = selector.replace(SCOPE_JUMP, ' ');
       stop = true;
+      if (slotted) {
+        // .zonk ::slotted(.foo) -> .zonk.scope > .foo
+        selector = selector.replace(SLOTTED_PAREN, function (m, inside) {
+          return ' > ' + inside;
+        });
+      } else {
+        // e.g. .zonk ::content > .foo ==> .zonk.scope > .foo
+        selector = selector.replace(SCOPE_JUMP, ' ');
+      }
     }
     return {value: selector, combinator: combinator, stop: stop,
       hostContext: hostContext};
@@ -290,8 +305,11 @@ let HOST_CONTEXT = ':host-context';
 let HOST_CONTEXT_PAREN = /(.*)(?::host-context)(?:\(((?:\([^)(]*\)|[^)(]*)+?)\))(.*)/;
 // BREAKME: replace with '::slotted()'
 let CONTENT = '::content';
+let SLOTTED = '::slotted';
+// similar to HOST_PAREN
+let SLOTTED_PAREN = /(?:::slotted)(?:\(((?:\([^)(]*\)|[^)(]*)+?)\))/;
 // BREAKME: replace with '::slotted()'
-let SCOPE_JUMP = /::content|::shadow|\/deep\//;
+let SCOPE_JUMP = /::slotted|::content|::shadow|\/deep\//;
 let CSS_CLASS_PREFIX = '.';
 let PSEUDO_PREFIX = ':';
 let CLASS = 'class';

@@ -13,13 +13,14 @@ import {StyleTransformer} from './style-transformer'
 import * as StyleUtil from './style-util'
 import {StyleProperties} from './style-properties'
 import {templateMap} from './template-map'
+import {placeholderMap} from './style-placeholder'
 
 // TODO(dfreedm): split into separate global
 import ApplyShim from './apply-shim'
 
 let STYLEHOST = Symbol('stylehost');
 
-export let ShadyStyling = {
+export let ShadyCSS = {
   scopeCounter: {},
   nativeShadow: nativeShadow,
   nativeCss: nativeCssVariables,
@@ -46,28 +47,32 @@ export let ShadyStyling = {
     template._prepared = true;
     template.name = host.is;
     templateMap[host.is] = template;
-    let cssText = this._gatherStyles(template);
+    let cssText = this._gatherStyles(template).trim();
     if (!this.nativeShadow) {
       StyleTransformer.dom(template.content, host.is);
     }
-    let ast = parse(cssText);
-    if (this.nativeCss && !this.nativeCssApply) {
+    let ast = cssText && parse(cssText);
+    if (ast && this.nativeCss && !this.nativeCssApply) {
       ApplyShim.transformRules(ast, host.is);
     }
-    template._styleAst = ast;
-
     let ownPropertyNames = [];
-    if (!this.nativeCss) {
-      ownPropertyNames = StyleProperties.decorateStyles(template._styleAst, host);
-    }
-    if (!ownPropertyNames.length || this.nativeCss) {
-      this._generateStaticStyle(host, template);
+    if (ast) {
+      template._styleAst = ast;
+      if (!this.nativeCss) {
+        ownPropertyNames = StyleProperties.decorateStyles(
+          template._styleAst, host);
+      }
+      if (!ownPropertyNames.length || this.nativeCss) {
+        let root = this.nativeShadow ? template.content : null;
+        let placeholder = placeholderMap[host.is];
+        this._generateStaticStyle(host, template._styleAst, root, placeholder);
+      }
     }
     template._ownPropertyNames = ownPropertyNames;
   },
-  _generateStaticStyle(host, rules, target) {
+  _generateStaticStyle(host, rules, shadowroot, placeholder) {
     let cssText = StyleTransformer.elementStyles(host, rules);
-    StyleUtil.applyCss(cssText, host.is, target, host.__placeholder);
+    StyleUtil.applyCss(cssText, host.is, shadowroot, placeholder);
   },
   _prepareHost(host) {
     let template = templateMap[host.is];
@@ -75,7 +80,7 @@ export let ShadyStyling = {
       host.__styleRules = template._styleAst;
     }
     host[STYLEHOST] = true;
-    host.__placeholder = host.constructor.__placeholder;
+    host.__placeholder = placeholderMap[host.is];
     host.__overrideStyleProperties = {};
     if (!this.nativeCss) {
       host.__styleProperties = null;
@@ -94,7 +99,7 @@ export let ShadyStyling = {
     Object.assign(host.__overrideStyleProperties, overrideProps);
     if (this.nativeCss) {
       let template = templateMap[host.is];
-      if (template.__applyShimInvalid) {
+      if (template && template._styleAst && template.__applyShimInvalid) {
         // update template
         ApplyShim.transformRules(template._styleAst, host.is);
         let target = this.nativeShadow ? template.content : null;
@@ -274,4 +279,4 @@ export let ShadyStyling = {
   }
 }
 
-window['ShadyStyling'] = ShadyStyling;
+window['ShadyCSS'] = ShadyCSS;

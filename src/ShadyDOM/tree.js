@@ -21,13 +21,13 @@ let nativeAppendChild = Element.prototype.appendChild;
 let nativeRemoveChild = Element.prototype.removeChild;
 
 /**
- * `tree` is a dom manipulation library used by ShadyDom to
+ * `tree` is a dom manipulation library used by ShadyDOM to
  * manipulate composed and logical trees.
  */
 export let tree = {
 
   // sad but faster than slice...
-  arrayCopyChildNodes: function(parent) {
+  arrayCopyChildNodes(parent) {
     let copy=[], i=0;
     for (let n=parent.firstChild; n; n=n.nextSibling) {
       copy[i++] = n;
@@ -35,7 +35,7 @@ export let tree = {
     return copy;
   },
 
-  arrayCopyChildren: function(parent) {
+  arrayCopyChildren(parent) {
     let copy=[], i=0;
     for (let n=parent.firstElementChild; n; n=n.nextElementSibling) {
       copy[i++] = n;
@@ -43,7 +43,7 @@ export let tree = {
     return copy;
   },
 
-  arrayCopy: function(a$) {
+  arrayCopy(a$) {
     let l = a$.length;
     let copy = new Array(l);
     for (let i=0; i < l; i++) {
@@ -52,7 +52,7 @@ export let tree = {
     return copy;
   },
 
-  saveChildNodes: function(node) {
+  saveChildNodes(node) {
     tree.Logical.saveChildNodes(node);
     if (!tree.Composed.hasParentNode(node)) {
       tree.Composed.saveComposedData(node);
@@ -65,15 +65,15 @@ export let tree = {
 
 tree.Logical = {
 
-  hasParentNode: function(node) {
+  hasParentNode(node) {
     return Boolean(node.__dom && node.__dom.parentNode);
   },
 
-  hasChildNodes: function(node) {
+  hasChildNodes(node) {
     return Boolean(node.__dom && node.__dom.childNodes !== undefined);
   },
 
-  getChildNodes: function(node) {
+  getChildNodes(node) {
     // note: we're distinguishing here between undefined and false-y:
     // hasChildNodes uses undefined check to see if this element has logical
     // children; the false-y check indicates whether or not we should rebuild
@@ -82,7 +82,7 @@ tree.Logical = {
       tree.Composed.getChildNodes(node);
   },
 
-  _getChildNodes: function(node) {
+  _getChildNodes(node) {
     if (!node.__dom.childNodes) {
       node.__dom.childNodes = [];
       for (let n=this.getFirstChild(node); n; n=this.getNextSibling(n)) {
@@ -98,38 +98,38 @@ tree.Logical = {
   // will store parentNode, nextSibling, previousSibling. This means that
   // the mere existence of __dom is not enough to know if the requested
   // logical data is available and instead we do an explicit undefined check.
-  getParentNode: function(node) {
+  getParentNode(node) {
     return node.__dom && node.__dom.parentNode !== undefined ?
       node.__dom.parentNode : tree.Composed.getParentNode(node);
   },
 
-  getFirstChild: function(node) {
+  getFirstChild(node) {
     return node.__dom && node.__dom.firstChild !== undefined ?
       node.__dom.firstChild : tree.Composed.getFirstChild(node);
   },
 
-  getLastChild: function(node) {
+  getLastChild(node) {
     return node.__dom && node.__dom.lastChild  !== undefined ?
       node.__dom.lastChild : tree.Composed.getLastChild(node);
   },
 
-  getNextSibling: function(node) {
+  getNextSibling(node) {
     return node.__dom && node.__dom.nextSibling  !== undefined ?
       node.__dom.nextSibling : tree.Composed.getNextSibling(node);
   },
 
-  getPreviousSibling: function(node) {
+  getPreviousSibling(node) {
     return node.__dom && node.__dom.previousSibling  !== undefined ?
       node.__dom.previousSibling : tree.Composed.getPreviousSibling(node);
   },
 
-  getFirstElementChild: function(node) {
+  getFirstElementChild(node) {
     return node.__dom && node.__dom.firstChild !== undefined ?
       this._getFirstElementChild(node) :
       tree.Composed.getFirstElementChild(node);
   },
 
-  _getFirstElementChild: function(node) {
+  _getFirstElementChild(node) {
     let n = node.__dom.firstChild;
     while (n && n.nodeType !== Node.ELEMENT_NODE) {
       n = n.__dom.nextSibling;
@@ -137,13 +137,13 @@ tree.Logical = {
     return n;
   },
 
-  getLastElementChild: function(node) {
+  getLastElementChild(node) {
     return node.__dom && node.__dom.lastChild !== undefined ?
       this._getLastElementChild(node) :
       tree.Composed.getLastElementChild(node);
   },
 
-  _getLastElementChild: function(node) {
+  _getLastElementChild(node) {
     let n = node.__dom.lastChild;
     while (n && n.nodeType !== Node.ELEMENT_NODE) {
       n = n.__dom.previousSibling;
@@ -151,13 +151,13 @@ tree.Logical = {
     return n;
   },
 
-  getNextElementSibling: function(node) {
+  getNextElementSibling(node) {
     return node.__dom && node.__dom.nextSibling !== undefined ?
       this._getNextElementSibling(node) :
       tree.Composed.getNextElementSibling(node);
   },
 
-  _getNextElementSibling: function(node) {
+  _getNextElementSibling(node) {
     let n = node.__dom.nextSibling;
     while (n && n.nodeType !== Node.ELEMENT_NODE) {
       n = this.getNextSibling(n);
@@ -165,13 +165,13 @@ tree.Logical = {
     return n;
   },
 
-  getPreviousElementSibling: function(node) {
+  getPreviousElementSibling(node) {
     return node.__dom && node.__dom.previousSibling !== undefined ?
       this._getPreviousElementSibling(node) :
       tree.Composed.getPreviousElementSibling(node);
   },
 
-  _getPreviousElementSibling: function(node) {
+  _getPreviousElementSibling(node) {
     let n = node.__dom.previousSibling;
     while (n && n.nodeType !== Node.ELEMENT_NODE) {
       n = this.getPreviousSibling(n);
@@ -185,7 +185,7 @@ tree.Logical = {
   // source of truth for the light children of the element. This element's
   // actual children will be treated as the rendered state once this function
   // has been called.
-  saveChildNodes: function(node) {
+  saveChildNodes(node) {
     if (!this.hasChildNodes(node)) {
       node.__dom = node.__dom || {};
       node.__dom.firstChild = node.firstChild;
@@ -204,7 +204,7 @@ tree.Logical = {
   // TODO(sorvell): may need to patch saveChildNodes iff the tree has
   // already been distributed.
   // NOTE: ensure `node` is patched...
-  recordInsertBefore: function(node, container, ref_node) {
+  recordInsertBefore(node, container, ref_node) {
     container.__dom.childNodes = null;
     // handle document fragments
     if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
@@ -221,7 +221,7 @@ tree.Logical = {
     }
   },
 
-  _linkNode: function(node, container, ref_node) {
+  _linkNode(node, container, ref_node) {
     utils.common.patchNode(node);
     ref_node = ref_node || null;
     node.__dom = node.__dom || {};
@@ -256,7 +256,7 @@ tree.Logical = {
     container.__dom.childNodes = null;
   },
 
-  recordRemoveChild: function(node, container) {
+  recordRemoveChild(node, container) {
     node.__dom = node.__dom || {};
     container.__dom = container.__dom || {};
     if (node === container.__dom.firstChild) {
@@ -292,20 +292,20 @@ tree.Logical = {
 // to the tree for optional patching pluggability.
 tree.Composed = {
 
-  hasParentNode: function(node) {
+  hasParentNode(node) {
     return Boolean(node.__dom && node.__dom.$parentNode !== undefined);
   },
 
-  hasChildNodes: function(node) {
+  hasChildNodes(node) {
     return Boolean(node.__dom && node.__dom.$childNodes !== undefined);
   },
 
-  getChildNodes: function(node) {
+  getChildNodes(node) {
     return this.hasChildNodes(node) ? this._getChildNodes(node) :
       (!node.__patched && tree.arrayCopy(node.childNodes));
   },
 
-  _getChildNodes: function(node) {
+  _getChildNodes(node) {
     if (!node.__dom.$childNodes) {
       node.__dom.$childNodes = [];
       for (let n=node.__dom.$firstChild; n; n=n.__dom.$nextSibling) {
@@ -315,37 +315,37 @@ tree.Composed = {
     return node.__dom.$childNodes;
   },
 
-  getComposedChildNodes: function(node) {
+  getComposedChildNodes(node) {
     return node.__dom.$childNodes;
   },
 
-  getParentNode: function(node) {
+  getParentNode(node) {
     return this.hasParentNode(node) ? node.__dom.$parentNode :
       (!node.__patched && node.parentNode);
   },
 
-  getFirstChild: function(node) {
+  getFirstChild(node) {
     return node.__patched ? node.__dom.$firstChild : node.firstChild;
   },
 
-  getLastChild: function(node) {
+  getLastChild(node) {
     return node.__patched ? node.__dom.$lastChild : node.lastChild;
   },
 
-  getNextSibling: function(node) {
+  getNextSibling(node) {
     return node.__patched ? node.__dom.$nextSibling : node.nextSibling;
   },
 
-  getPreviousSibling: function(node) {
+  getPreviousSibling(node) {
     return node.__patched ? node.__dom.$previousSibling : node.previousSibling;
   },
 
-  getFirstElementChild: function(node) {
+  getFirstElementChild(node) {
     return node.__patched ? this._getFirstElementChild(node) :
       node.firstElementChild;
   },
 
-  _getFirstElementChild: function(node) {
+  _getFirstElementChild(node) {
     let n = node.__dom.$firstChild;
     while (n && n.nodeType !== Node.ELEMENT_NODE) {
       n = n.__dom.$nextSibling;
@@ -353,12 +353,12 @@ tree.Composed = {
     return n;
   },
 
-  getLastElementChild: function(node) {
+  getLastElementChild(node) {
     return node.__patched ? this._getLastElementChild(node) :
       node.lastElementChild;
   },
 
-  _getLastElementChild: function(node) {
+  _getLastElementChild(node) {
     let n = node.__dom.$lastChild;
     while (n && n.nodeType !== Node.ELEMENT_NODE) {
       n = n.__dom.$previousSibling;
@@ -366,12 +366,12 @@ tree.Composed = {
     return n;
   },
 
-  getNextElementSibling: function(node) {
+  getNextElementSibling(node) {
     return node.__patched ? this._getNextElementSibling(node) :
       node.nextElementSibling;
   },
 
-  _getNextElementSibling: function(node) {
+  _getNextElementSibling(node) {
     let n = node.__dom.$nextSibling;
     while (n && n.nodeType !== Node.ELEMENT_NODE) {
       n = this.getNextSibling(n);
@@ -379,12 +379,12 @@ tree.Composed = {
     return n;
   },
 
-  getPreviousElementSibling: function(node) {
+  getPreviousElementSibling(node) {
     return node.__patched ? this._getPreviousElementSibling(node) :
       node.previousElementSibling;
   },
 
-  _getPreviousElementSibling: function(node) {
+  _getPreviousElementSibling(node) {
     let n = node.__dom.$previousSibling;
     while (n && n.nodeType !== Node.ELEMENT_NODE) {
       n = this.getPreviousSibling(n);
@@ -392,7 +392,7 @@ tree.Composed = {
     return n;
   },
 
-  saveChildNodes: function(node) {
+  saveChildNodes(node) {
     if (!this.hasChildNodes(node)) {
       node.__dom = node.__dom || {};
       node.__dom.$firstChild = node.firstChild;
@@ -404,7 +404,7 @@ tree.Composed = {
     }
   },
 
-  saveComposedData: function(node) {
+  saveComposedData(node) {
     node.__dom = node.__dom || {};
     if (node.__dom.$parentNode === undefined) {
       node.__dom.$parentNode = node.parentNode;
@@ -417,7 +417,7 @@ tree.Composed = {
     }
   },
 
-  recordInsertBefore: function(node, container, ref_node) {
+  recordInsertBefore(node, container, ref_node) {
     container.__dom.$childNodes = null;
     // handle document fragments
     if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
@@ -432,7 +432,7 @@ tree.Composed = {
     }
   },
 
-  _linkNode: function(node, container, ref_node) {
+  _linkNode(node, container, ref_node) {
     node.__dom = node.__dom || {};
     container.__dom = container.__dom || {};
     if (ref_node) {
@@ -465,7 +465,7 @@ tree.Composed = {
     container.__dom.$childNodes = null;
   },
 
-  recordRemoveChild: function(node, container) {
+  recordRemoveChild(node, container) {
     node.__dom = node.__dom || {};
     container.__dom = container.__dom || {};
     if (node === container.__dom.$firstChild) {
@@ -490,7 +490,7 @@ tree.Composed = {
     container.__dom.$childNodes = null;
   },
 
-  clearChildNodes: function(node) {
+  clearChildNodes(node) {
     let c$ = this.getChildNodes(node);
     for (let i=0, c; i < c$.length; i++) {
       c = c$[i];
@@ -499,25 +499,25 @@ tree.Composed = {
     }
   },
 
-  saveParentNode: function(node) {
+  saveParentNode(node) {
     node.__dom = node.__dom || {};
     node.__dom.$parentNode = node.parentNode;
   },
 
-  insertBefore: function(parentNode, newChild, refChild) {
+  insertBefore(parentNode, newChild, refChild) {
     this.saveChildNodes(parentNode);
     // remove from current location.
     this._addChild(parentNode, newChild, refChild);
     return nativeInsertBefore.call(parentNode, newChild, refChild || null);
   },
 
-  appendChild: function(parentNode, newChild) {
+  appendChild(parentNode, newChild) {
     this.saveChildNodes(parentNode);
     this._addChild(parentNode, newChild);
     return nativeAppendChild.call(parentNode, newChild);
   },
 
-  removeChild: function(parentNode, node) {
+  removeChild(parentNode, node) {
     let currentParent = this.getParentNode(node);
     this.saveChildNodes(parentNode);
     this._removeChild(parentNode, node);
@@ -526,7 +526,7 @@ tree.Composed = {
     }
   },
 
-  _addChild: function(parentNode, newChild, refChild) {
+  _addChild(parentNode, newChild, refChild) {
     let isFrag = (newChild.nodeType === Node.DOCUMENT_FRAGMENT_NODE);
     let oldParent = this.getParentNode(newChild);
     if (oldParent) {
@@ -545,7 +545,7 @@ tree.Composed = {
     }
   },
 
-  _removeChild: function(parentNode, node) {
+  _removeChild(parentNode, node) {
     this.recordRemoveChild(node, parentNode);
   }
 

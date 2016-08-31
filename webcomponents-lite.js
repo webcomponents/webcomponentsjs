@@ -58,7 +58,9 @@
     'CustomElements/' + (flags.ce == 'v0' ? '' : 'v1/') + 'CustomElements.js',
     // these scripts are loaded here due to polyfill timing issues
     'WebComponents/dom.js',
-    'WebComponents/unresolved.js'
+    'WebComponents/unresolved.js',
+    'ShadyDOM/ShadyDOM.min.js',
+    'ShadyCSS/ShadyCSS.min.js'
   ];
 
   // TODO(kschaaf): Remove later? Allow forcing fallback to V0 CE

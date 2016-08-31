@@ -10,13 +10,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 'use strict';
 
-export let settings = window.ShadyDom || {};
+export let settings = {};
 
-if (!settings.force) {
-  settings.force = (location.search.indexOf('forceShadyDom=true') >= 0);
-}
+let requestedShadyDOM = window.WebComponents &&
+  window.WebComponents.flags.shadydom;
 
-settings.inUse = settings.force ||  !Element.prototype.attachShadow;
+settings.inUse = requestedShadyDOM ||  !Element.prototype.attachShadow;
 
 export function isShadyRoot(obj) {
   return Boolean(obj.__localName === 'ShadyRoot');

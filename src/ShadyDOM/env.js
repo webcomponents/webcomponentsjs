@@ -19,8 +19,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  */
 
 'use strict';
-import {settings} from './utils'
-import {ShadyRoot, isShadyRoot, flush} from './shady'
+import * as utils from './utils'
+import {ShadyRoot, flush, enqueue} from './shady'
 import * as patch from './patch'
 import {getRootNode} from './element-mixin'
 import * as events from './event-mixin'
@@ -29,11 +29,13 @@ window.ShadyDOM = {
   patch: patch.patchNode,
   isPatched: patch.isNodePatched,
   unpatch: patch.unpatchNode,
-  isShadyRoot: isShadyRoot,
-  flush: flush
+  isShadyRoot: utils.isShadyRoot,
+  enqueue: enqueue,
+  flush: flush,
+  inUse: utils.settings.inUse
 };
 
-if (settings.inUse) {
+if (utils.settings.inUse) {
 
   let createRootAndEnsurePatched = function(node) {
     // TODO(sorvell): need to ensure ancestors are patched but this introduces

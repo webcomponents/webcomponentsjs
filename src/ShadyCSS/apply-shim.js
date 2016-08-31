@@ -106,6 +106,10 @@ class ApplyShim {
     this._measureElement = null;
     this._map = new MixinMap();
     this._separator = MIXIN_VAR_SEP;
+    this._boundProduceCssProperties = (
+      matchText, propertyName, valueProperty, valueMixin) =>
+        this._produceCssProperties(
+          matchText, propertyName, valueProperty, valueMixin);
   }
   transformStyle(style, elementName) {
     this.transformRulse(rulesForStyle(style), elementName);
@@ -129,7 +133,7 @@ class ApplyShim {
   }
   transformCssText(cssText) {
     // produce variables
-    cssText = cssText.replace(VAR_ASSIGN, this._produceCssProperties);
+    cssText = cssText.replace(VAR_ASSIGN, this._boundProduceCssProperties);
     // consume mixins
     return this._consumeCssProperties(cssText);
   }
@@ -250,7 +254,7 @@ class ApplyShim {
     // handle case where property value is a mixin
     if (valueProperty) {
       // form: --mixin2: var(--mixin1), where --mixin1 is in the map
-      processVariableAndFallback(valueProperty, function(prefix, value) {
+      processVariableAndFallback(valueProperty, (prefix, value) => {
         if (value && this._map.get(value)) {
           valueMixin = '@apply ' + value + ';';
         }
