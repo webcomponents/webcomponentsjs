@@ -27,7 +27,7 @@
     return Reflect.construct(origHTMLElement, [], newTarget);
   }
   HTMLElement.prototype = Object.create(origHTMLElement.prototype, {
-    constructor, {value: HTMLElement, configurable: true, writable: true},
+    constructor: {value: HTMLElement, configurable: true, writable: true},
   });
   // TODO(justinfagnani): patch all native subclasses of HTMLElement
 })();
