@@ -78,13 +78,14 @@ export let ShadyCSS = {
     if (!ownPropertyNames.length || this.nativeCss) {
       let root = this.nativeShadow ? template.content : null;
       let placeholder = placeholderMap[elementName];
-      this._generateStaticStyle(info, template._styleAst, root, placeholder);
+      let style = this._generateStaticStyle(info, template._styleAst, root, placeholder);
+      template._style = style;
     }
     template._ownPropertyNames = ownPropertyNames;
   },
   _generateStaticStyle(info, rules, shadowroot, placeholder) {
     let cssText = StyleTransformer.elementStyles(info, rules);
-    StyleUtil.applyCss(cssText, info.is, shadowroot, placeholder);
+    return StyleUtil.applyCss(cssText, info.is, shadowroot, placeholder);
   },
   _prepareHost(host) {
     let is = host.getAttribute('is') || host.localName;
@@ -96,9 +97,11 @@ export let ShadyCSS = {
     let template = templateMap[is];
     let ast;
     let ownStylePropertyNames;
+    let cssBuild;
     if (template) {
       ast = template._styleAst;
       ownStylePropertyNames = template._ownPropertyNames;
+      cssBuild = template._cssBuild;
     }
     return StyleInfo.set(host,
       new StyleInfo(
@@ -107,7 +110,7 @@ export let ShadyCSS = {
         ownStylePropertyNames,
         is,
         typeExtension,
-        template._cssBuild
+        cssBuild
       )
     );
   },
@@ -135,10 +138,18 @@ export let ShadyCSS = {
         // update template
         ApplyShim.transformRules(template._styleAst, is);
         let target = this.nativeShadow ? template.content : null;
-        this._generateStaticStyle(host, template._styleAst, target);
+        let placeholder = placeholderMap[is];
+        if (template._style) {
+          let s = template._style;
+          s.parentNode.removeChild(s);
+          template._style = null;
+        }
+        template._style = this._generateStaticStyle(host, template._styleAst, target, placeholder);
         // update instance if native shadowdom
         if (this.nativeShadow) {
-          this._generateStaticStyle(host, template._styleAst, host.shadowRoot);
+          let style = host.shadowRoot.querySelector('style');
+          style.parentNode.removeChild(style);
+          this._generateStaticStyle(host, template._styleAst, host.shadowRoot, placeholder);
         }
         styleInfo.styleRules = template._styleAst;
       }
