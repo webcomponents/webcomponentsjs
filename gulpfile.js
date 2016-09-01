@@ -146,7 +146,7 @@ gulp.task('default', function(cb) {
 });
 
 gulp.task('ShadyCSS', function() {
-  return gulp.src('./src/ShadyCSS/*.js', {base: './'})
+  return gulp.src(['./src/ShadyCSS/*.js', '!./src/ShadyCSS/ShadyCSS.min.js'], {base: './'})
     .pipe(sourcemaps.init())
     .pipe(closureCompiler({
       new_type_inf: true,
@@ -162,7 +162,7 @@ gulp.task('ShadyCSS', function() {
 });
 
 gulp.task('ShadyDOM', function() {
-  return gulp.src('./src/ShadyDOM/*.js', {base: './'})
+  return gulp.src(['./src/ShadyDOM/*.js', '!./src/ShadyDOM/ShadyDOM.min.js'], {base: './'})
     .pipe(sourcemaps.init())
     .pipe(closureCompiler({
       new_type_inf: true,
