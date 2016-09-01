@@ -62,6 +62,12 @@ function CustomStyle() {
 }
 
 Object.defineProperties(CustomStyle, {
+  /*
+  CustomStyle.processHook is provided to customize the <style> element child of
+  a <custom-style> element before the <style> is processed by ShadyCSS
+
+  The function must take a <style> element as input, and return nothing.
+  */
   processHook: {
     get() {
       return hookFn;
