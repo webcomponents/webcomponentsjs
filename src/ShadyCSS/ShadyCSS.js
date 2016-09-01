@@ -246,7 +246,7 @@ export let ShadyCSS = {
   /* Custom Style operations */
   _transformCustomStyleForDocument(style) {
     let ast = StyleUtil.rulesForStyle(style);
-    StyleUtil.forEachRule(ast, function(rule) {
+    StyleUtil.forEachRule(ast, (rule) => {
       if (nativeShadow) {
         StyleTransformer.normalizeRootSelector(rule);
       } else {
@@ -257,7 +257,7 @@ export let ShadyCSS = {
       }
     });
     if (this.nativeCss) {
-      this._style.textContent = StyleUtil.toCssText(ast);
+      style.textContent = StyleUtil.toCssText(ast);
     } else {
       this._documentOwnerStyleInfo.styleRules.rules.push(ast);
     }

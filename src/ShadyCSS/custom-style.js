@@ -9,7 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 /*
-Wrapper over <style> elements to co-operate with ShadyStyling
+Wrapper over <style> elements to co-operate with ShadyCSS
 
 Example:
 <shady-style>
@@ -21,7 +21,7 @@ Example:
 
 'use strict';
 
-let ShadyStyling = window.ShadyStyling;
+let ShadyCSS = window.ShadyCSS;
 
 let enqueued = false;
 
@@ -49,7 +49,7 @@ function enqueueDocumentValidation() {
 
 function validateDocument() {
   if (enqueued) {
-    ShadyStyling.updateStyles();
+    ShadyCSS.updateStyles();
     enqueued = false;
   }
 }
@@ -124,15 +124,15 @@ CustomStyle.prototype._findStyle = function() {
     if (hookFn) {
       hookFn(this._style);
     }
-    ShadyStyling._transformCustomStyleForDocument(this._style);
+    ShadyCSS._transformCustomStyleForDocument(this._style);
   } else {
-    ShadyStyling._revalidateApplyShim(this._style);
+    ShadyCSS._revalidateApplyShim(this._style);
   }
 };
 
 CustomStyle.prototype._applyStyle = function() {
   if (this._style) {
-    ShadyStyling._applyCustomStyle(this._style);
+    ShadyCSS._applyCustomStyleToDocument(this._style);
   }
 };
 
