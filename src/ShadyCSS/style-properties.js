@@ -371,7 +371,7 @@ export let StyleProperties = {
       hostSelector;
     let hostRx = new RegExp(this.rx.HOST_PREFIX + rxHostSelector +
       this.rx.HOST_SUFFIX);
-    let rules = element.__styleRules;
+    let rules = StyleInfo.get(element).styleRules;
     let keyframeTransforms =
       this._elementKeyframeTransforms(element, rules, scopeSelector);
     return StyleTransformer.elementStyles(element, rules, function(rule) {

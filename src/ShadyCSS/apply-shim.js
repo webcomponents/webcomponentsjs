@@ -71,7 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 'use strict';
 
-import {rx, rulesForStyle, forEachRule, processVariableAndFallback} from './style-util'
+import {rx, forEachRule, processVariableAndFallback} from './style-util'
 import {templateMap} from './template-map'
 
 let MIXIN_MATCH = rx.MIXIN_MATCH;
@@ -113,9 +113,6 @@ class ApplyShim {
       matchText, propertyName, valueProperty, valueMixin) =>
         this._produceCssProperties(
           matchText, propertyName, valueProperty, valueMixin);
-  }
-  transformStyle(style, elementName) {
-    this.transformRulse(rulesForStyle(style), elementName);
   }
   transformRules(rules, elementName) {
     this._currentTemplate = templateMap[elementName];
