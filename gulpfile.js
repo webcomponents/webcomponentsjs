@@ -23,7 +23,7 @@ var path = require('path');
 var rename = require('gulp-rename');
 var runseq = require('run-sequence');
 var uglify = require('gulp-uglify');
-
+var sourcemaps = require('gulp-sourcemaps');
 var closureCompiler = compilerPackage.gulp();
 
 // init tests with gulp
@@ -133,6 +133,7 @@ defineBuildTask('MutationObserver');
 
 gulp.task('CustomElementsV1', function () {
   return gulp.src('./src/CustomElements/v1/CustomElements.js', {base: './'})
+      .pipe(sourcemaps.init())
       .pipe(closureCompiler({
           compilation_level: 'ADVANCED',
           warning_level: 'VERBOSE',
@@ -143,6 +144,7 @@ gulp.task('CustomElementsV1', function () {
           new_type_inf: true,
           rewrite_polyfills: false,
         }))
+      .pipe(sourcemaps.write('/'))
       .pipe(gulp.dest('./dist'));
 });
 
