@@ -375,20 +375,7 @@ suite('Custom Element Reactions', function() {
 
   suite('clone/import/adopt', function() {
 
-    test('cloned custom elements are not customized', function() {
-      class XCloned extends HTMLElement {}
-      customElements.define('x-cloned', XCloned);
-
-      var original = document.createElement('x-cloned');
-      customElements.flush();
-      assert.instanceOf(original, XCloned);
-
-      var imported = document.importNode(original, true);
-      customElements.flush();
-      assert.notInstanceOf(imported, XCloned);
-    });
-
-    test('imported custom elements are not customized', function() {
+    test('imported custom elements are customized', function() {
       class XImported extends HTMLElement {}
       customElements.define('x-imported', XImported);
 
@@ -400,10 +387,23 @@ suite('Custom Element Reactions', function() {
 
       var imported = document.importNode(original, true);
       customElements.flush();
-      assert.notInstanceOf(imported, XImported);
+      assert.instanceOf(imported, XImported);
     });
 
-    test('adopted custom elements are not customized', function() {
+    test.skip('cloned custom elements are customized', function() {
+      class XCloned extends HTMLElement {}
+      customElements.define('x-cloned', XCloned);
+
+      var original = document.createElement('x-cloned');
+      customElements.flush();
+      assert.instanceOf(original, XCloned);
+
+      var imported = original.cloneNode(true);
+      customElements.flush();
+      assert.instanceOf(imported, XCloned);
+    });
+
+    test.skip('adopted custom elements are customized', function() {
       class XAdopted extends HTMLElement {}
       customElements.define('x-adopted', XAdopted);
 
@@ -413,7 +413,7 @@ suite('Custom Element Reactions', function() {
       // x-adopted is not defined in its document
       assert.notInstanceOf(original, XAdopted);
 
-      var imported = document.importNode(original, true);
+      var imported = document.adoptNode(original);
       customElements.flush();
       assert.notInstanceOf(imported, XAdopted);
     });

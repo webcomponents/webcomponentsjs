@@ -402,7 +402,7 @@ var Deferred;
     },
 
     /**
-     * @param {!NodeList<!Node>} nodeList
+     * @param {!(NodeList<!Node>|Array<!Node>)} nodeList
      * @param {?Set<Node>=} visitedNodes
      * @private
      */
@@ -556,8 +556,8 @@ var Deferred;
       element.__proto__ = prototype;
       if (callConstructor) {
         this._setNewInstance(element);
-        element.__upgraded = true;
         new (definition.constructor)();
+        element.__upgraded = true;
         console.assert(this._newInstance == null);
       }
 
@@ -597,8 +597,11 @@ var Deferred;
           var name = /** @type {!string} */(mutation.attributeName);
           var oldValue = mutation.oldValue;
           var newValue = target.getAttribute(name);
-          var namespace = mutation.attributeNamespace;
-          definition.attributeChangedCallback.call(target, name, oldValue, newValue, namespace);
+          // Skip changes that were handled synchronously by setAttribute
+          if (newValue !== oldValue) {
+            var namespace = mutation.attributeNamespace;
+            definition.attributeChangedCallback.call(target, name, oldValue, newValue, namespace);
+          }
         }
       }
     },
@@ -780,6 +783,50 @@ var Deferred;
     });
   }
 
+  // patch doc.importNode
+
+  var rawImportNode = doc.importNode;
+  doc.importNode = function(node, deep) {
+    var clone = rawImportNode.call(doc, node, deep);
+    var customElements = win['customElements'];
+    /** @type {CustomElementsRegistry} */(window['customElements'])._addNodes(isElement(clone) ? [clone] : clone.childNodes);
+    return clone;
+  };
+
+  // patch Element.setAttribute & removeAttribute
+
+  var _origSetAttribute = Element.prototype.setAttribute;
+  Element.prototype['setAttribute'] = function(name, value) {
+    changeAttribute(this, name, value, _origSetAttribute);
+  };
+  var _origRemoveAttribute = Element.prototype.removeAttribute;
+  Element.prototype['removeAttribute'] = function(name) {
+    changeAttribute(this, name, null, _origRemoveAttribute);
+  };
+
+  function changeAttribute(element, name, value, operation) {
+    name = name.toLowerCase();
+    var oldValue = element.getAttribute(name);
+    operation.call(element, name, value);
+    // Bail if this wasn't a fully upgraded custom element
+    if (element.__upgraded == true) {
+      var definition = window['customElements']._definitions.get(element.localName);
+      if (definition.observedAttributes.indexOf(name) >= 0) {
+        var newValue = element.getAttribute(name);
+        if (newValue !== oldValue) {
+          element.attributeChangedCallback(name, oldValue, newValue);
+        }
+      }
+    }
+  }
+
   /** @type {CustomElementsRegistry} */
   window['customElements'] = new CustomElementsRegistry();
+
+  // // TODO(justinfagnani): Remove. Temporary for backward-compatibility
+  window['CustomElements'] = {
+    takeRecords() {
+      if (window['customElements'].flush) window['customElements'].flush();
+    }
+  }
 })();
