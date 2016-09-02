@@ -37,6 +37,9 @@ var Deferred;
   var doc = document;
   var win = window;
 
+  const _observerProp = '__CustomElements_observer__';
+  const _attachedProp = '__CustomElements_attached__';
+  const _upgradedProp = '__CustomElements_upgraded__';
 
   if (win['customElements']) {
     if (win['customElements']['enableFlush']) {
@@ -114,7 +117,7 @@ var Deferred;
   function isConnected(element) {
     var n = element;
     do {
-      if (n.__attached || n === document) return true;
+      if (n['_attachedProp'] || n === document) return true;
       n = n.parentNode || n.nodeType === Node.DOCUMENT_FRAGMENT_NODE && n.host;
     } while(n);
     return false;
@@ -154,9 +157,10 @@ var Deferred;
     this._pendingHtmlImportUrls = new Set();
 
     /** @type {boolean} **/
-    this['enableFlush'] = false;
+    this['enableFlush'] = true;
 
-    this._observeRoot(document);
+    /** @type {MutationObserver} **/
+    this._mainDocumentObserver = this._observeRoot(document);
 
     // TODO(kschaaf): rough WebComponentsReady event shim, probably not correct
     var wcr = function() {
@@ -333,7 +337,8 @@ var Deferred;
      */
     flush: function() {
       if (this['enableFlush']) {
-        console.warn("flush!!!");
+        // console.warn("flush!!!");
+        this._handleMutations(this._mainDocumentObserver.takeRecords());
         this._observers.forEach(
           /**
            * @param {!MutationObserver} observer
@@ -359,13 +364,18 @@ var Deferred;
      * @private
      */
     _observeRoot: function(root) {
-      console.assert(!root.__observer);
-      root.__observer = new MutationObserver(/** @type {function(Array<MutationRecord>, MutationObserver)} */(this._handleMutations.bind(this)));
-      root.__observer.observe(root, {childList: true, subtree: true});
+      // console.assert(!root['_observerProp']);
+      if (root['_observerProp'] != null) {
+        console.warn(`Root ${root} is already observed`);
+        return root['_observerProp'];
+      }
+      root['_observerProp'] = new MutationObserver(/** @type {function(Array<MutationRecord>, MutationObserver)} */(this._handleMutations.bind(this)));
+      root['_observerProp'].observe(root, {childList: true, subtree: true});
       if (this['enableFlush']) {
         // this is memory leak, only use in tests
-        this._observers.add(root.__observer);
+        this._observers.add(root['_observerProp']);
       }
+      return root['_observerProp'];
     },
 
     /**
@@ -373,12 +383,12 @@ var Deferred;
      * @private
      */
     _unobserveRoot: function(root) {
-      if (root.__observer) {
-        root.__observer.disconnect();
+      if (root['_observerProp'] != null) {
+        root['_observerProp'].disconnect();
         if (this['enableFlush']) {
-          this._observers.delete(root.__observer);
+          this._observers.delete(root['_observerProp']);
         }
-        root.__observer = null;
+        root['_observerProp'] = null;
       }
     },
 
@@ -438,12 +448,12 @@ var Deferred;
       /** @type {?CustomElementDefinition} */
       var definition = this._definitions.get(element.localName);
       if (definition) {
-        if (!element.__upgraded) {
+        if (!element['_upgradedProp']) {
           this._upgradeElement(element, definition, true);
         }
         // TODO(justinfagnani): check that the element is in the document
-        if (element.__upgraded && !element.__attached && isConnected(element)) {
-          element.__attached = true;
+        if (element['_upgradedProp'] && !element['_attachedProp'] && isConnected(element)) {
+          element['_attachedProp'] = true;
           if (definition.connectedCallback) {
             definition.connectedCallback.call(element);
           }
@@ -484,7 +494,7 @@ var Deferred;
         visitedNodes.add(_import);
 
         // The import is loaded observe it
-        if (!_import.__observer) this._observeRoot(_import);
+        if (!_import['_observerProp']) this._observeRoot(_import);
 
         // walk the document
         this._addNodes(_import.childNodes, visitedNodes);
@@ -502,7 +512,7 @@ var Deferred;
         var _this = this;
         var onLoad = function() {
           link.removeEventListener('load', /** @type {function(Event)} */(onLoad));
-          if (!link.import.__observer) _this._observeRoot(link.import);
+          if (!link.import['_observerProp']) _this._observeRoot(link.import);
           // We don't pass visitedNodes because this is async and not part of
           // the current tree walk.
           _this._addNodes(link.import.childNodes);
@@ -532,8 +542,8 @@ var Deferred;
         var walker = createTreeWalker(root);
         do {
           var node = walker.currentNode;
-          if (node.__upgraded && node.__attached) {
-            node.__attached = false;
+          if (node['_upgradedProp'] && node['_attachedProp']) {
+            node['_attachedProp'] = false;
             var definition = this._definitions.get(node.localName);
             if (definition && definition.disconnectedCallback) {
               definition.disconnectedCallback.call(node);
@@ -557,7 +567,7 @@ var Deferred;
       if (callConstructor) {
         this._setNewInstance(element);
         new (definition.constructor)();
-        element.__upgraded = true;
+        element['_upgradedProp'] = true;
         console.assert(this._newInstance == null);
       }
 
@@ -808,13 +818,16 @@ var Deferred;
     name = name.toLowerCase();
     var oldValue = element.getAttribute(name);
     operation.call(element, name, value);
+
     // Bail if this wasn't a fully upgraded custom element
-    if (element.__upgraded == true) {
+    if (element['_upgradedProp'] == true) {
       var definition = window['customElements']._definitions.get(element.localName);
-      if (definition.observedAttributes.indexOf(name) >= 0) {
+      var observedAttributes = definition.observedAttributes;
+      var attributeChangedCallback = definition.attributeChangedCallback;
+      if (attributeChangedCallback && observedAttributes.indexOf(name) >= 0) {
         var newValue = element.getAttribute(name);
         if (newValue !== oldValue) {
-          element.attributeChangedCallback(name, oldValue, newValue);
+          attributeChangedCallback.call(element, name, oldValue, newValue);
         }
       }
     }
