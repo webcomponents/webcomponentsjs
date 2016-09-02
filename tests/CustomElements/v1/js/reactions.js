@@ -59,7 +59,7 @@ suite('Custom Element Reactions', function() {
       // 2) HTMLElement.prototype must be on the prototype chain
       XES5.prototype = Object.create(HTMLElement.prototype);
       // 3) The `constructor` property must point to the classes constructor
-      Object.defineProperty(XES5.prototype, 'constructor', {value: XES5});
+      Object.defineProperty(XES5.prototype, 'constructor', {value: XES5, configurable: true, writable: true,});
 
       customElements.define('x-es5', XES5);
 
@@ -112,7 +112,7 @@ suite('Custom Element Reactions', function() {
         return HTMLElement.call(this);
       }
       XBarES5.prototype = Object.create(HTMLElement.prototype);
-      Object.defineProperty(XBarES5.prototype, 'constructor', {value: XBarES5});
+      Object.defineProperty(XBarES5.prototype, 'constructor', {value: XBarES5, configurable: true, writable: true});
       customElements.define('x-bar-es5', XBarES5);
       var xbar = document.createElement('x-bar-es5');
       assert.equal(xbar.localName, 'x-bar-es5');
