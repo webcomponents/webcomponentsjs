@@ -27,7 +27,7 @@ var CustomElementDefinition;
   'use strict';
 
   if (window.customElements &&
-      !(WebComponents.flags.ce == 'v1' && WebComponents.flags.register)) {
+      !(window.WebComponents.flags.ce == 'v1' && window.WebComponents.flags.register)) {
     return;
   }
 
@@ -649,7 +649,7 @@ var CustomElementDefinition;
     operation.call(element, name, value);
     // Bail if this wasn't a fully upgraded custom element
     if (element.__upgraded == true) {
-      var definition = customElements._definitions.get(element.getAttribute('is') || element.localName);
+      var definition = window.customElements._definitions.get(element.getAttribute('is') || element.localName);
       if (definition.observedAttributes.indexOf(name) >= 0) {
         var newValue = element.getAttribute(name);
         if (newValue !== oldValue) {
@@ -674,7 +674,7 @@ var CustomElementDefinition;
   window.CustomElements = {
     takeRecords: function() {
       if (window.customElements.flush) {
-        customElements.flush();
+        window.customElements.flush();
       }
     }
   }
@@ -687,7 +687,7 @@ var CustomElementDefinition;
     document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
   };
   if (window.HTMLImports) {
-    HTMLImports.whenReady(wcr);
+    window.HTMLImports.whenReady(wcr);
   } else {
     document.addEventListener('DOMContentLoaded', wcr);
   }
