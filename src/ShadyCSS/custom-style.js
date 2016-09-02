@@ -29,6 +29,12 @@ let customStyles = [];
 
 let hookFn = null;
 
+/*
+If a page only has <custom-style> elements, it will flash unstyled content,
+as all the instances will boot asynchronously after page load.
+
+Calling ShadyCSS.updateStyles() will force the work to happen synchronously
+*/
 function enqueueDocumentValidation() {
   if (enqueued) {
     return;
@@ -55,7 +61,13 @@ function validateDocument() {
 }
 
 function CustomStyle() {
-  const self = HTMLElement.call(this);
+  /*
+  Use Reflect to invoke the HTMLElement constructor, or rely on the
+  CustomElement polyfill replacement that can be `.call`ed
+  */
+  const self = (window.Reflect && Reflect.construct)
+    ? Reflect.construct(HTMLElement, [], this.constructor || CustomStyle)
+    : HTMLElement.call(this);
   customStyles.push(self);
   enqueueDocumentValidation();
   return self;
@@ -99,6 +111,15 @@ CustomStyle.findStyles = function() {
   }
 };
 
+CustomStyle._revalidateApplyShim = function() {
+  for (let i = 0; i < customStyles.length; i++) {
+    let s = customStyles[i];
+    if (s._style) {
+      ShadyCSS._revalidateApplyShim(s._style);
+    }
+  }
+}
+
 CustomStyle.applyStyles = function() {
   for (let i = 0; i < customStyles.length; i++) {
     customStyles[i]._applyStyle();
@@ -107,7 +128,9 @@ CustomStyle.applyStyles = function() {
 
 CustomStyle.prototype = Object.create(HTMLElement.prototype, {
   'constructor': {
-    value: CustomStyle
+    value: CustomStyle,
+    configurable: true,
+    writable: true
   }
 });
 
@@ -131,8 +154,6 @@ CustomStyle.prototype._findStyle = function() {
       hookFn(this._style);
     }
     ShadyCSS._transformCustomStyleForDocument(this._style);
-  } else {
-    ShadyCSS._revalidateApplyShim(this._style);
   }
 };
 

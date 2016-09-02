@@ -121,6 +121,8 @@ export let ShadyCSS = {
         CS.findStyles();
         if (!this.nativeCss) {
           this._updateProperties(this._documentOwner, this._documentOwnerStyleInfo);
+        } else if (!this.nativeCssApply) {
+          CS._revalidateApplyShim();
         }
         CS.applyStyles();
         CS._documentDirty = false;
@@ -137,19 +139,11 @@ export let ShadyCSS = {
       if (template && template.__applyShimInvalid) {
         // update template
         ApplyShim.transformRules(template._styleAst, is);
-        let target = this.nativeShadow ? template.content : null;
-        let placeholder = placeholderMap[is];
-        if (template._style) {
-          let s = template._style;
-          s.parentNode.removeChild(s);
-          template._style = null;
-        }
-        template._style = this._generateStaticStyle(host, template._styleAst, target, placeholder);
+        template._style.textContent = StyleTransformer.elementStyles(host, styleInfo.styleRules);
         // update instance if native shadowdom
         if (this.nativeShadow) {
           let style = host.shadowRoot.querySelector('style');
-          style.parentNode.removeChild(style);
-          this._generateStaticStyle(host, template._styleAst, host.shadowRoot, placeholder);
+          style.textContent = StyleTransformer.elementStyles(host, styleInfo.styleRules);
         }
         styleInfo.styleRules = template._styleAst;
       }
