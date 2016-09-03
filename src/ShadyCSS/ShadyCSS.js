@@ -45,7 +45,10 @@ export let ShadyCSS = {
   },
   _getCssBuild(template) {
     let style = template.content.querySelector('style');
-    return style.getAttribute('css-build');
+    if (!style) {
+      return '';
+    }
+    return style.getAttribute('css-build') || '';
   },
   prepareTemplate(template, elementName, typeExtension) {
     if (template._prepared) {
