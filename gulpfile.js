@@ -139,7 +139,7 @@ gulp.task('CustomElementsV1', function () {
           warning_level: 'VERBOSE',
           language_in: 'ECMASCRIPT6_STRICT',
           language_out: 'ECMASCRIPT5_STRICT',
-          externs: 'externs/html5.js',
+          externs: ['externs/html5.js', 'externs/custom-elements.js'],
           js_output_file: 'CustomElementsV1.min.js',
           new_type_inf: true,
           rewrite_polyfills: false,
