@@ -128,57 +128,55 @@ var Deferred;
    *
    * See https://html.spec.whatwg.org/multipage/scripting.html#customelementsregistry
    *
-   * @constructor
    * @property {boolean} enableFlush Set to true to enable the flush() method
    *   to work. This should only be done for tests, as it causes a memory leak.
    */
-  function CustomElementsRegistry() {
+  class CustomElementsRegistry {
 
-    /** @private {!Map<string, !CustomElementDefinition>} **/
-    this._definitions = new Map();
+    constructor() {
+      /** @private {!Map<string, !CustomElementDefinition>} **/
+      this._definitions = new Map();
 
-    /** @private {!Map<Function, string>} **/
-    this._constructors = new Map();
+      /** @private {!Map<Function, string>} **/
+      this._constructors = new Map();
 
-    /** @private {!Map<string, !Deferred>} **/
-    this._whenDefinedMap = new Map();
+      /** @private {!Map<string, !Deferred>} **/
+      this._whenDefinedMap = new Map();
 
-    /** @private {!Set<!MutationObserver>} **/
-    this._observers = new Set();
+      /** @private {!Set<!MutationObserver>} **/
+      this._observers = new Set();
 
-    /** @private {!MutationObserver} **/
-    this._attributeObserver =
-        new MutationObserver(/** @type {function(Array<MutationRecord>, MutationObserver)} */(this._handleAttributeChange.bind(this)));
+      /** @private {!MutationObserver} **/
+      this._attributeObserver =
+          new MutationObserver(/** @type {function(Array<MutationRecord>, MutationObserver)} */(this._handleAttributeChange.bind(this)));
 
-    /** @private {?HTMLElement} **/
-    this._newInstance = null;
+      /** @private {?HTMLElement} **/
+      this._newInstance = null;
 
-    /** @private {!Set<string>} **/
-    this._pendingHtmlImportUrls = new Set();
+      /** @private {!Set<string>} **/
+      this._pendingHtmlImportUrls = new Set();
 
-    /** @type {boolean} **/
-    this['enableFlush'] = true;
+      /** @type {boolean} **/
+      this['enableFlush'] = true;
 
-    /** @private {boolean} **/
-    this._ready = false;
+      /** @private {boolean} **/
+      this._ready = false;
 
-    /** @type {MutationObserver} **/
-    this._mainDocumentObserver = this._observeRoot(document);
+      /** @type {MutationObserver} **/
+      this._mainDocumentObserver = this._observeRoot(document);
 
-    // TODO(justinfagnani): Possibly remove WebComponentsReady event
-    var onReady = () => {
-      this._ready = true;
-      this._addNodes(doc.childNodes);
-      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
-    };
-    if (window['HTMLImports']) {
-      window['HTMLImports']['whenReady'](onReady);
-    } else {
-      onReady();
+      // TODO(justinfagnani): Possibly remove WebComponentsReady event
+      var onReady = () => {
+        this._ready = true;
+        this._addNodes(doc.childNodes);
+        window.dispatchEvent(new CustomEvent('WebComponentsReady'));
+      };
+      if (window['HTMLImports']) {
+        window['HTMLImports']['whenReady'](onReady);
+      } else {
+        onReady();
+      }
     }
-  }
-
-  CustomElementsRegistry.prototype = {
 
     // HTML spec part 4.13.4
     // https://html.spec.whatwg.org/multipage/scripting.html#dom-customelementsregistry-define
@@ -188,7 +186,7 @@ var Deferred;
      * @param {{extends: string}} options
      * @return {undefined}
      */
-    define: function(name, constructor, options) {
+    define(name, constructor, options) {
       name = name.toString().toLowerCase();
 
       // 1:
@@ -293,7 +291,7 @@ var Deferred;
         deferred.resolve(undefined);
         this._whenDefinedMap.delete(localName);
       }
-    },
+    }
 
     /**
      * Returns the constructor defined for `name`, or `null`.
@@ -301,11 +299,11 @@ var Deferred;
      * @param {string} name
      * @return {Function|undefined}
      */
-    get: function(name) {
+    get(name) {
       // https://html.spec.whatwg.org/multipage/scripting.html#custom-elements-api
       var def = this._definitions.get(name);
       return def ? def.constructor : undefined;
-    },
+    }
 
     /**
      * Returns a `Promise` that resolves when a custom element for `name` has
@@ -314,7 +312,7 @@ var Deferred;
      * @param {string} name
      * @return {!Promise}
      */
-    whenDefined: function(name) {
+    whenDefined(name) {
       // https://html.spec.whatwg.org/multipage/scripting.html#dom-customelementsregistry-whendefined
       if (!customNameValidation.test(name)) {
         return Promise.reject(
@@ -331,14 +329,14 @@ var Deferred;
       var deferred = {promise, resolve};
       this._whenDefinedMap.set(name, deferred);
       return promise;
-    },
+    }
 
     /**
      * Causes all pending mutation records to be processed, and thus all
      * customization, upgrades and custom element reactions to be called.
      * `enableFlush` must be true for this to work. Only use during tests!
      */
-    flush: function() {
+    flush() {
       if (this['enableFlush']) {
         // console.warn("flush!!!");
         this._handleMutations(this._mainDocumentObserver.takeRecords());
@@ -351,22 +349,23 @@ var Deferred;
             this._handleMutations(observer.takeRecords());
           }, this);
       }
-    },
+    }
 
     /**
      * @param {?HTMLElement} instance
      * @private
      */
-    _setNewInstance: function(instance) {
+    _setNewInstance(instance) {
       this._newInstance = instance;
-    },
+    }
 
     /**
      * Observes a DOM root for mutations that trigger upgrades and reactions.
      * @param {Node} root
      * @private
      */
-    _observeRoot: function(root) {
+    _observeRoot(root) {
+      console.log('_observeRoot', root, root.baseURI);
       // console.assert(!root['_observerProp']);
       if (root['_observerProp'] != null) {
         console.warn(`Root ${root} is already observed`);
@@ -379,13 +378,13 @@ var Deferred;
         this._observers.add(root['_observerProp']);
       }
       return root['_observerProp'];
-    },
+    }
 
     /**
      * @param {Node} root
      * @private
      */
-    _unobserveRoot: function(root) {
+    _unobserveRoot(root) {
       if (root['_observerProp'] != null) {
         root['_observerProp'].disconnect();
         if (this['enableFlush']) {
@@ -393,13 +392,13 @@ var Deferred;
         }
         root['_observerProp'] = null;
       }
-    },
+    }
 
     /**
      * @param {!Array<!MutationRecord>} mutations
      * @private
      */
-    _handleMutations: function(mutations) {
+    _handleMutations(mutations) {
       for (var i = 0; i < mutations.length; i++) {
         /** @type {!MutationRecord} */
         var mutation = mutations[i];
@@ -412,14 +411,14 @@ var Deferred;
           this._removeNodes(removedNodes);
         }
       }
-    },
+    }
 
     /**
      * @param {!(NodeList<!Node>|Array<!Node>)} nodeList
      * @param {?Set<Node>=} visitedNodes
      * @private
      */
-    _addNodes: function(nodeList, visitedNodes) {
+    _addNodes(nodeList, visitedNodes) {
       visitedNodes = visitedNodes || new Set();
 
       for (var i = 0; i < nodeList.length; i++) {
@@ -438,7 +437,7 @@ var Deferred;
           this._addElement(node, visitedNodes);
         } while (walker.nextNode())
       }
-    },
+    }
 
     /**
      * @param {!HTMLElement} element
@@ -470,7 +469,7 @@ var Deferred;
       if (isHtmlImport(element)) {
         this._addImport(/** @type {!HTMLLinkElement} */(element), visitedNodes);
       }
-    },
+    }
 
     /**
      * @param {!HTMLLinkElement} link
@@ -522,13 +521,13 @@ var Deferred;
         };
         link.addEventListener('load', onLoad);
       }
-    },
+    }
 
     /**
      * @param {NodeList} nodeList
      * @private
      */
-    _removeNodes: function(nodeList) {
+    _removeNodes(nodeList) {
       for (var i = 0; i < nodeList.length; i++) {
         var root = nodeList[i];
 
@@ -554,7 +553,7 @@ var Deferred;
           }
         } while (walker.nextNode())
       }
-    },
+    }
 
     /**
      * Upgrades or customizes a custom element.
@@ -564,7 +563,7 @@ var Deferred;
      * @param {boolean} callConstructor
      * @private
      */
-    _upgradeElement: function(element, definition, callConstructor) {
+    _upgradeElement(element, definition, callConstructor) {
       var prototype = definition.constructor.prototype;
       element.__proto__ = prototype;
       if (callConstructor) {
@@ -593,13 +592,13 @@ var Deferred;
           }
         }
       }
-    },
+    }
 
     /**
      * @param {!Array<!MutationRecord>} mutations
      * @private
      */
-    _handleAttributeChange: function(mutations) {
+    _handleAttributeChange(mutations) {
       for (var i = 0; i < mutations.length; i++) {
         var mutation = mutations[i];
         if (mutation.type === 'attributes') {
@@ -617,7 +616,7 @@ var Deferred;
           }
         }
       }
-    },
+    }
   }
 
   // Closure Compiler Exports

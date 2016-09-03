@@ -46,24 +46,29 @@
       var addedLinks = [];
       var observedRoots = [];
 
-      // Patch customElements._addNode so we can spy on link nodes being
-      // processed.
-      var origAddImport = customElements._addImport;
+      // Patch _addNode and _observeRoot so we can spy on link nodes being
+      // processed. All this is hack so we can test compiled code
+      var origAddImport = CustomElementsRegistry.prototype._addImport;
+      var origObserveRoot = CustomElementsRegistry.prototype._observeRoot;
+      var origObserveRootName;
+      var origAddImportName;
       // To patch a compiled method that's called internally in the class, we
       // need to get the compiled, not exported, name:
-      var origAddImportName = origAddImport.name;
+      for (var i in CustomElementsRegistry.prototype) {
+        var method = CustomElementsRegistry.prototype[i];
+        if (i !== '_addImport' && method === origAddImport) {
+          origAddImportName = i;
+        } else if (i !== '_observeRoot' && method === origObserveRoot) {
+          origObserveRootName = i;
+        }
+      }
       customElements[origAddImportName] = function(link, visitedNodes) {
         addedLinks.push(link);
-        origAddImport.call(customElements, link, visitedNodes);
+        return origAddImport.call(customElements, link, visitedNodes);
       }
-
-      var origObserveRoot = customElements._observeRoot;
-      // To patch a compiled method that's called internally in the class, we
-      // need to get the compiled, not exported, name:
-      var origObserveRootName = origObserveRoot.name;
       customElements[origObserveRootName] = function(root) {
         observedRoots.push(root);
-        origObserveRoot.call(customElements, root);
+        return origObserveRoot.call(customElements, root);
       }
     </script>
     <link rel="import" href="sub-import.html" id="sub-import">
