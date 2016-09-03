@@ -7,17 +7,19 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
+
+'use strict';
+
 import {applyStylePlaceHolder} from './style-util'
 import {nativeShadow} from './style-settings'
 
 export let placeholderMap = {};
 
-let ce = window.customElements;
+const ce = window.customElements;
 if (ce && !nativeShadow) {
   const origDefine = ce.define;
-  ce.define = function() {
-    let name = arguments[0];
+  ce.define = function(name, ...args) {
     placeholderMap[name] = applyStylePlaceHolder(name);
-    return origDefine.apply(this, arguments);
+    return origDefine.call(ce, name, ...args);
   };
 }

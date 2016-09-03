@@ -7,10 +7,14 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
+
+'use strict';
+
 import {removeCustomPropAssignment} from './css-parse'
 import {nativeShadow} from './style-settings'
 import {StyleTransformer} from './style-transformer'
 import * as StyleUtil from './style-util'
+import StyleInfo from './style-info'
 
 // TODO: dedupe with shady
 let p = window.Element.prototype;
@@ -28,6 +32,7 @@ export let StyleProperties = {
     let self = this, props = {}, keyframes = [], ruleIndex = 0;
     let scopeSelector = StyleTransformer._calcHostScope(scope.is, scope.extends);
     let cssBuild = rules.__cssBuild;
+    let styleInfo = StyleInfo.get(scope);
     StyleUtil.forEachRule(rules, function(rule) {
       self.decorateRule(rule);
       // mark in-order position of ast rule in styles block, used for cache key
@@ -35,7 +40,7 @@ export let StyleProperties = {
       self.whenHostOrRootRule(scope, rule, cssBuild, function(info) {
         // we can't cache styles with :host and :root props in @media rules
         if (rule.parent.type === StyleUtil.ruleTypes.MEDIA_RULE) {
-          scope.__notStyleScopeCacheable = true;
+          styleInfo.notStyleScopeCacheable = true;
         }
         if (info.isHost) {
           // check if the selector is in the form of `:host-context()` or `:host()`
@@ -43,7 +48,7 @@ export let StyleProperties = {
           let hostContextOrFunction = info.selector.split(' ').some(function(s) {
             return s.indexOf(scopeSelector) === 0 && s.length !== scopeSelector.length;
           });
-          scope.__notStyleScopeCacheable = scope.__notStyleScopeCacheable || hostContextOrFunction;
+          styleInfo.notStyleScopeCacheable = styleInfo.notStyleScopeCacheable || hostContextOrFunction;
         }
       });
       self.collectPropertiesInCssText(rule.propertyInfo.cssText, props);
@@ -366,7 +371,7 @@ export let StyleProperties = {
       hostSelector;
     let hostRx = new RegExp(this.rx.HOST_PREFIX + rxHostSelector +
       this.rx.HOST_SUFFIX);
-    let rules = element.__styleRules;
+    let rules = StyleInfo.get(element).styleRules;
     let keyframeTransforms =
       this._elementKeyframeTransforms(element, rules, scopeSelector);
     return StyleTransformer.elementStyles(element, rules, function(rule) {
@@ -455,7 +460,8 @@ export let StyleProperties = {
     let cssText = style ? style.textContent || '' :
       this.transformStyles(element, properties, selector);
     // if shady and we have a cached style that is not style, decrement
-    let s = element.__customStyle;
+    let styleInfo = StyleInfo.get(element);
+    let s = styleInfo.customStyle;
     if (s && !nativeShadow && (s !== style)) {
       s._useCount--;
       if (s._useCount <= 0 && s.parentNode) {
@@ -466,15 +472,15 @@ export let StyleProperties = {
     // or the cached style is not in document(!)
     if (nativeShadow) {
       // update existing style only under native
-      if (element.__customStyle) {
-        element.__customStyle.textContent = cssText;
-        style = element.__customStyle;
+      if (styleInfo.customStyle) {
+        styleInfo.customStyle.textContent = cssText;
+        style = styleInfo.customStyle;
       // otherwise, if we have css to apply, do so
       } else if (cssText) {
         // apply css after the scope style of the element to help with
         // style precedence rules.
         style = StyleUtil.applyCss(cssText, selector, element.shadowRoot,
-          element.__placeholder);
+          styleInfo.placeholder);
       }
     } else {
       // shady and no cache hit
@@ -483,11 +489,11 @@ export let StyleProperties = {
         // style precedence rules.
         if (cssText) {
           style = StyleUtil.applyCss(cssText, selector, null,
-            element.__placeholder);
+            styleInfo.placeholder);
         }
       // shady and cache hit but not in document
       } else if (!style.parentNode) {
-        StyleUtil.applyStyle(style, null, element.__placeholder);
+        StyleUtil.applyStyle(style, null, styleInfo.placeholder);
       }
 
     }
@@ -495,10 +501,10 @@ export let StyleProperties = {
     if (style) {
       style._useCount = style._useCount || 0;
       // increment use count if we changed styles
-      if (element.__customStyle != style) {
+      if (styleInfo.customStyle != style) {
         style._useCount++;
       }
-      element.__customStyle = style;
+      styleInfo.customStyle = style;
     }
     // @media rules may be stale in IE 10 and 11
     if (IS_IE) {
@@ -530,7 +536,6 @@ export let StyleProperties = {
 
   rx: StyleUtil.rx,
   XSCOPE_NAME: 'x-scope'
-
 };
 
 function addToBitMask(n, bits) {
