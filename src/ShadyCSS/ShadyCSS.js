@@ -88,7 +88,9 @@ export let ShadyCSS = {
   },
   _generateStaticStyle(info, rules, shadowroot, placeholder) {
     let cssText = StyleTransformer.elementStyles(info, rules);
-    return StyleUtil.applyCss(cssText, info.is, shadowroot, placeholder);
+    if (cssText.length) {
+      return StyleUtil.applyCss(cssText, info.is, shadowroot, placeholder);
+    }
   },
   _prepareHost(host) {
     let is = host.getAttribute('is') || host.localName;
@@ -139,7 +141,7 @@ export let ShadyCSS = {
     Object.assign(styleInfo.overrideStyleProperties, overrideProps);
     if (this.nativeCss) {
       let template = templateMap[is];
-      if (template && template.__applyShimInvalid) {
+      if (template && template.__applyShimInvalid && template._style) {
         // update template
         ApplyShim.transformRules(template._styleAst, is);
         template._style.textContent = StyleTransformer.elementStyles(host, styleInfo.styleRules);
