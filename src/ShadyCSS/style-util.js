@@ -7,6 +7,9 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
+
+'use strict';
+
 import {nativeShadow, nativeCssVariables} from './style-settings'
 import {parse, stringify, types} from './css-parse'
 

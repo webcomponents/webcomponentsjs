@@ -9,9 +9,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 /*
- * Extremely simple css parser. Intended to be not more than what we need
- * and definitely not necessarily correct =).
- */
+Extremely simple css parser. Intended to be not more than what we need
+and definitely not necessarily correct =).
+*/
+
+'use strict';
 
 // given a string of css, return a simple rule tree
 export function parse(text) {
