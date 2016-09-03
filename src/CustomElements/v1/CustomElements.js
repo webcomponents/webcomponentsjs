@@ -159,19 +159,22 @@ var Deferred;
     /** @type {boolean} **/
     this['enableFlush'] = true;
 
+    /** @private {boolean} **/
+    this._ready = false;
+
     /** @type {MutationObserver} **/
     this._mainDocumentObserver = this._observeRoot(document);
 
-    // TODO(kschaaf): rough WebComponentsReady event shim, probably not correct
-    var wcr = function() {
+    // TODO(justinfagnani): Possibly remove WebComponentsReady event
+    var onReady = () => {
+      this._ready = true;
+      this._addNodes(doc.childNodes);
       window.dispatchEvent(new CustomEvent('WebComponentsReady'));
     };
     if (window['HTMLImports']) {
-      window['HTMLImports']['whenReady'](function() {
-        requestAnimationFrame(wcr);
-      });
+      window['HTMLImports']['whenReady'](onReady);
     } else {
-      requestAnimationFrame(wcr);
+      onReady();
     }
   }
 
@@ -281,7 +284,7 @@ var Deferred;
       this._constructors.set(constructor, localName);
 
       // 17, 18, 19:
-      this._addNodes(doc.childNodes);
+      if (this._ready) this._addNodes(doc.childNodes);
 
       // 20:
       /** @type {Deferred} **/
