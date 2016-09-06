@@ -74,15 +74,13 @@ let Deferred;
     'missing-glyph',
   ];
 
-  /** @const */
-  const customNameValidation = /^[a-z][.0-9_a-z]*-[\-.0-9_a-z]*$/;
-
   /**
    * @param {!string} name
    * @return {boolean}
    */
   function isValidCustomElementName(name) {
-    return customNameValidation.test(name) && reservedTagList.indexOf(name) === -1;
+    return /^[a-z][.0-9_a-z]*-[\-.0-9_a-z]*$/.test(name) &&
+        reservedTagList.indexOf(name) === -1;
   }
 
   /**
@@ -320,7 +318,7 @@ let Deferred;
      */
     whenDefined(name) {
       // https://html.spec.whatwg.org/multipage/scripting.html#dom-customelementsregistry-whendefined
-      if (!customNameValidation.test(name)) {
+      if (!isValidCustomElementName(name)) {
         return Promise.reject(
           new SyntaxError(`The element name '${name}' is not valid.`));
       }
