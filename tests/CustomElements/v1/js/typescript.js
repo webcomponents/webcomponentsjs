@@ -38,7 +38,7 @@ suite('TypeScript ES5 Output', function() {
     assert.instanceOf(e, XTypescript);
   });
 
-  test('TypeScript generated ES5 works via createElement', function() {
+  test.skip('TypeScript generated ES5 works via createElement', function() {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
