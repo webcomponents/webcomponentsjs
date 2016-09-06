@@ -37,17 +37,25 @@ let Deferred;
   const doc = document;
   const win = window;
 
+  /**
+   * Gets 'customElement' from window so that it could be modified after
+   * the polyfill loads.
+   * @function
+   * @return {CustomElementsRegistry}
+   */
+  const _customElements = () => win['customElements'];
+
   const _observerProp = '__CustomElements_observer__';
   const _attachedProp = '__CustomElements_attached__';
   const _upgradedProp = '__CustomElements_upgraded__';
 
-  if (win['customElements']) {
-    if (win['customElements'].enableFlush) {
-      win['customElements'].flush = function() {
+  if (_customElements()) {
+    if (_customElements().enableFlush) {
+      _customElements().flush = function() {
         console.log('CustomElements#flush()');
       };
     }
-    if (!win['customElements']['forcePolyfill']) {
+    if (!_customElements().forcePolyfill) {
       return;
     }
   }
@@ -117,7 +125,7 @@ let Deferred;
   function isConnected(element) {
     let n = element;
     do {
-      if (n['_attachedProp'] || n === document) return true;
+      if (n['_attachedProp'] || n === doc) return true;
       n = n.parentNode || n.nodeType === Node.DOCUMENT_FRAGMENT_NODE && n.host;
     } while(n);
     return false;
@@ -147,8 +155,9 @@ let Deferred;
       this._observers = new Set();
 
       /** @private {!MutationObserver} **/
-      this._attributeObserver =
-          new MutationObserver(/** @type {function(Array<MutationRecord>, MutationObserver)} */(this._handleAttributeChange.bind(this)));
+      this._attributeObserver = new MutationObserver(
+        /** @type {function(Array<MutationRecord>, MutationObserver)} */
+        (this._handleAttributeChange.bind(this)));
 
       /** @private {?HTMLElement} **/
       this._newInstance = null;
@@ -163,7 +172,7 @@ let Deferred;
       this._ready = false;
 
       /** @type {MutationObserver} **/
-      this._mainDocumentObserver = this._observeRoot(document);
+      this._mainDocumentObserver = this._observeRoot(doc);
 
       // TODO(justinfagnani): Possibly remove WebComponentsReady event
       const onReady = () => {
@@ -372,7 +381,9 @@ let Deferred;
         console.warn(`Root ${root} is already observed`);
         return root['_observerProp'];
       }
-      root['_observerProp'] = new MutationObserver(/** @type {function(Array<MutationRecord>, MutationObserver)} */(this._handleMutations.bind(this)));
+      root['_observerProp'] = new MutationObserver(
+        /** @type {function(Array<MutationRecord>, MutationObserver)} */
+        (this._handleMutations.bind(this)));
       root['_observerProp'].observe(root, {childList: true, subtree: true});
       if (this.enableFlush) {
         // this is memory leak, only use in tests
@@ -639,7 +650,7 @@ let Deferred;
    * @type {function(new: HTMLElement)}
    */
   const newHTMLElement = function HTMLElement() {
-    const customElements = win['customElements'];
+    const customElements = _customElements();
 
     // If there's an being upgraded, return that
     if (customElements._newInstance) {
@@ -650,7 +661,7 @@ let Deferred;
     if (this.constructor) {
       // Find the tagname of the constructor and create a new element with it
       const tagName = customElements._constructors.get(this.constructor);
-      return doc._createElement(tagName, false);
+      return _createElement(doc, tagName, undefined, false);
     }
     throw new Error('Unknown constructor. Did you call customElements.define()?');
   }
@@ -739,15 +750,25 @@ let Deferred;
   }
 
   // patch doc.createElement
+  // TODO(justinfagnani): why is the cast neccessary?
+  // Can we fix the Closure DOM externs?
+  const _origCreateElement =
+    /** @type {function(this:Document, string, (Object|undefined)): !HTMLElement}}*/
+    (doc.createElement);
 
   /**
-   * @type {function(this:Document, string, (string|undefined)): !Element}
+   * Creates a new element and upgrades it if it's a custom element.
+   * @param {!Document} doc
+   * @param {!string} tagName
+   * @param {Object|undefined} options
+   * @param {boolean} callConstructor whether or not to call the elements
+   *   constructor after upgrading. If an element is created by calling its
+   *   constructor, then `callConstructor` should be false to prevent double
+   *   initialization.
    */
-  const rawCreateElement = doc.createElement;
-  doc._createElement = function(tagName, options, callConstructor) {
-    /** @type {CustomElementsRegistry} */
-    const customElements = win['customElements'];
-    const element = /** @type {!HTMLElement} **/(rawCreateElement.call(doc, tagName, options));
+  function _createElement(doc, tagName, options, callConstructor) {
+    const customElements = _customElements();
+    const element = _origCreateElement.call(doc, tagName, options);
     const definition = customElements._definitions.get(tagName.toLowerCase());
     if (definition) {
       customElements._upgradeElement(element, definition, callConstructor);
@@ -756,7 +777,7 @@ let Deferred;
     return element;
   };
   doc.createElement = function(tagName, options) {
-    return doc._createElement(tagName, options, true);
+    return _createElement(doc, tagName, options, true);
   }
 
   // patch doc.createElementNS
@@ -771,7 +792,7 @@ let Deferred;
       if (namespaceURI === 'http://www.w3.org/1999/xhtml') {
         return doc.createElement(qualifiedName);
       } else {
-        return _origCreateElementNS.call(document, namespaceURI, qualifiedName);
+        return _origCreateElementNS.call(doc, namespaceURI, qualifiedName);
       }
     });
 
@@ -785,7 +806,7 @@ let Deferred;
         /** @type {!Node} */
         const root = _origAttachShadow.call(this, options);
         /** @type {CustomElementsRegistry} */
-        const customElements = win['customElements'];
+        const customElements = _customElements();
         customElements._observeRoot(root);
         return root;
       },
@@ -797,9 +818,9 @@ let Deferred;
   const rawImportNode = doc.importNode;
   doc.importNode = function(node, deep) {
     const clone = /** @type{!Node} */(rawImportNode.call(doc, node, deep));
-    const customElements = win['customElements'];
+    const customElements = _customElements();
     const nodes = isElement(clone) ? [clone] : clone.childNodes;
-    /** @type {CustomElementsRegistry} */(window['customElements'])._addNodes(nodes);
+    /** @type {CustomElementsRegistry} */(_customElements())._addNodes(nodes);
     return clone;
   };
 
@@ -821,7 +842,7 @@ let Deferred;
 
     // Bail if this wasn't a fully upgraded custom element
     if (element['_upgradedProp'] == true) {
-      const definition = window['customElements']._definitions.get(element.localName);
+      const definition = _customElements()._definitions.get(element.localName);
       const observedAttributes = definition.observedAttributes;
       const attributeChangedCallback = definition.attributeChangedCallback;
       if (attributeChangedCallback && observedAttributes.indexOf(name) >= 0) {
@@ -836,10 +857,10 @@ let Deferred;
   /** @type {CustomElementsRegistry} */
   window['customElements'] = new CustomElementsRegistry();
 
-  // // TODO(justinfagnani): Remove. Temporary for backward-compatibility
+  // TODO(justinfagnani): Remove. Temporary for backward-compatibility
   window['CustomElements'] = {
     takeRecords() {
-      if (window['customElements'].flush) window['customElements'].flush();
+      if (_customElements().flush) _customElements().flush();
     }
   }
 })();
