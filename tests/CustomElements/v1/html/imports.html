@@ -95,9 +95,9 @@
           chai.assert.equal(elementsCreated, 2);
         });
 
-        test('CustomElements do not have connectedCallback called', function() {
+        test('CustomElements do have connectedCallback called', function() {
           // only the instance in the main document should be connected
-          chai.assert.equal(connectedCount, 1);
+          chai.assert.equal(connectedCount, 2);
         });
 
         test('CustomElements only attempt to upgrade <link rel=import>', function() {

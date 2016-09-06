@@ -121,7 +121,7 @@ let Deferred;
   function isConnected(element) {
     let n = element;
     do {
-      if (n[_attachedProp] || n === doc) return true;
+      if (n[_attachedProp] || n.nodeType === Node.DOCUMENT_NODE) return true;
       n = n.parentNode || n.nodeType === Node.DOCUMENT_FRAGMENT_NODE && n.host;
     } while(n);
     return false;
