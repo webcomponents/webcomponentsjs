@@ -76,11 +76,13 @@ let Deferred;
 
   /**
    * @param {!string} name
-   * @return {boolean}
+   * @return {!Error|undefined}
    */
-  function isValidCustomElementName(name) {
-    return /^[a-z][.0-9_a-z]*-[\-.0-9_a-z]*$/.test(name) &&
-        reservedTagList.indexOf(name) === -1;
+  function checkValidCustomElementName(name) {
+    if (!(/^[a-z][.0-9_a-z]*-[\-.0-9_a-z]*$/.test(name) &&
+        reservedTagList.indexOf(name) === -1)) {
+      return new Error(`The element name '${name}' is not valid.`)
+    }
   }
 
   /**
@@ -204,9 +206,8 @@ let Deferred;
       // It doesn't appear possible to check this condition from script
 
       // 3:
-      if (!isValidCustomElementName(name)) {
-        throw new SyntaxError(`The element name '${name}' is not valid.`);
-      }
+      const nameError = checkValidCustomElementName(name);
+      if (nameError) throw nameError;
 
       // 4, 5:
       // Note: we don't track being-defined names and constructors because
@@ -318,19 +319,19 @@ let Deferred;
      */
     whenDefined(name) {
       // https://html.spec.whatwg.org/multipage/scripting.html#dom-customelementsregistry-whendefined
-      if (!isValidCustomElementName(name)) {
-        return Promise.reject(
-          new SyntaxError(`The element name '${name}' is not valid.`));
-      }
-      if (this._definitions.has(name)) {
-        return Promise.resolve();
-      }
+      const nameError = checkValidCustomElementName(name);
+      if (nameError) return Promise.reject(nameError);
+      if (this._definitions.has(name)) return Promise.resolve();
+
+      /** @type {Deferred} **/
+      let deferred = this._whenDefinedMap.get(name);
+      if (deferred) return deferred.promise;
+      
       let resolve;
       const promise = new Promise(function(_resolve, _) {
        resolve = _resolve;
       });
-      /** @type {Deferred} **/
-      const deferred = {promise, resolve};
+      deferred = {promise, resolve};
       this._whenDefinedMap.set(name, deferred);
       return promise;
     }
