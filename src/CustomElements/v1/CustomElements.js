@@ -41,7 +41,7 @@ let Deferred;
    * Gets 'customElement' from window so that it could be modified after
    * the polyfill loads.
    * @function
-   * @return {CustomElementsRegistry}
+   * @return {CustomElementRegistry}
    */
   const _customElements = () => win['customElements'];
 
@@ -135,7 +135,7 @@ let Deferred;
    * @property {boolean} enableFlush Set to true to enable the flush() method
    *   to work. This should only be done for tests, as it causes a memory leak.
    */
-  class CustomElementsRegistry {
+  class CustomElementRegistry {
 
     constructor() {
       /** @private {!Map<string, !CustomElementDefinition>} **/
@@ -346,7 +346,7 @@ let Deferred;
         this._observers.forEach(
           /**
            * @param {!MutationObserver} observer
-           * @this {CustomElementsRegistry}
+           * @this {CustomElementRegistry}
            */
           function(observer) {
             this._handleMutations(observer.takeRecords());
@@ -513,7 +513,7 @@ let Deferred;
 
         /**
          * @const
-         * @type {CustomElementsRegistry}
+         * @type {CustomElementRegistry}
          */
         const _this = this;
         const onLoad = function() {
@@ -624,15 +624,15 @@ let Deferred;
   }
 
   // Closure Compiler Exports
-  window['CustomElementsRegistry'] = CustomElementsRegistry;
-  CustomElementsRegistry.prototype['define'] = CustomElementsRegistry.prototype.define;
-  CustomElementsRegistry.prototype['get'] = CustomElementsRegistry.prototype.get;
-  CustomElementsRegistry.prototype['whenDefined'] = CustomElementsRegistry.prototype.whenDefined;
-  CustomElementsRegistry.prototype['flush'] = CustomElementsRegistry.prototype.flush;
-  CustomElementsRegistry.prototype['polyfilled'] = true;
+  window['CustomElementRegistry'] = CustomElementRegistry;
+  CustomElementRegistry.prototype['define'] = CustomElementRegistry.prototype.define;
+  CustomElementRegistry.prototype['get'] = CustomElementRegistry.prototype.get;
+  CustomElementRegistry.prototype['whenDefined'] = CustomElementRegistry.prototype.whenDefined;
+  CustomElementRegistry.prototype['flush'] = CustomElementRegistry.prototype.flush;
+  CustomElementRegistry.prototype['polyfilled'] = true;
   // TODO(justinfagnani): remove these in production code
-  CustomElementsRegistry.prototype['_observeRoot'] = CustomElementsRegistry.prototype._observeRoot;
-  CustomElementsRegistry.prototype['_addImport'] = CustomElementsRegistry.prototype._addImport;
+  CustomElementRegistry.prototype['_observeRoot'] = CustomElementRegistry.prototype._observeRoot;
+  CustomElementRegistry.prototype['_addImport'] = CustomElementRegistry.prototype._addImport;
 
   // patch window.HTMLElement
 
@@ -797,7 +797,7 @@ let Deferred;
       value: function(options) {
         /** @type {!Node} */
         const root = _origAttachShadow.call(this, options);
-        /** @type {CustomElementsRegistry} */
+        /** @type {CustomElementRegistry} */
         const customElements = _customElements();
         customElements._observeRoot(root);
         return root;
@@ -812,7 +812,7 @@ let Deferred;
     const clone = /** @type{!Node} */(rawImportNode.call(doc, node, deep));
     const customElements = _customElements();
     const nodes = isElement(clone) ? [clone] : clone.childNodes;
-    /** @type {CustomElementsRegistry} */(_customElements())._addNodes(nodes);
+    /** @type {CustomElementRegistry} */(_customElements())._addNodes(nodes);
     return clone;
   };
 
@@ -846,8 +846,8 @@ let Deferred;
     }
   }
 
-  /** @type {CustomElementsRegistry} */
-  window['customElements'] = new CustomElementsRegistry();
+  /** @type {CustomElementRegistry} */
+  window['customElements'] = new CustomElementRegistry();
 
   // TODO(justinfagnani): Remove. Temporary for backward-compatibility
   window['CustomElements'] = {

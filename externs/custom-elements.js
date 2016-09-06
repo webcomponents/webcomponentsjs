@@ -1,3 +1,3 @@
-var CustomElementsRegistry;
-CustomElementsRegistry.prototype.enableFlush = false;
-CustomElementsRegistry.prototype.forcePolyfill = false;
+var CustomElementRegistry;
+CustomElementRegistry.prototype.enableFlush = false;
+CustomElementRegistry.prototype.forcePolyfill = false;

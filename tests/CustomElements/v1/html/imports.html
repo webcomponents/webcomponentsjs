@@ -48,14 +48,14 @@
 
       // Patch _addNode and _observeRoot so we can spy on link nodes being
       // processed. All this is hack so we can test compiled code
-      var origAddImport = CustomElementsRegistry.prototype._addImport;
-      var origObserveRoot = CustomElementsRegistry.prototype._observeRoot;
+      var origAddImport = CustomElementRegistry.prototype._addImport;
+      var origObserveRoot = CustomElementRegistry.prototype._observeRoot;
       var origObserveRootName;
       var origAddImportName;
       // To patch a compiled method that's called internally in the class, we
       // need to get the compiled, not exported, name:
-      for (var i in CustomElementsRegistry.prototype) {
-        var method = CustomElementsRegistry.prototype[i];
+      for (var i in CustomElementRegistry.prototype) {
+        var method = CustomElementRegistry.prototype[i];
         if (i !== '_addImport' && method === origAddImport) {
           origAddImportName = i;
         } else if (i !== '_observeRoot' && method === origObserveRoot) {
