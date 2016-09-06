@@ -45,9 +45,9 @@ let Deferred;
    */
   const _customElements = () => win['customElements'];
 
-  const _observerProp = '__CustomElements_observer__';
-  const _attachedProp = '__CustomElements_attached__';
-  const _upgradedProp = '__CustomElements_upgraded__';
+  const _observerProp = '__$CE_observer';
+  const _attachedProp = '__$CE_attached';
+  const _upgradedProp = '__$CE_upgraded';
 
   if (_customElements()) {
     if (_customElements().enableFlush) {
@@ -125,7 +125,7 @@ let Deferred;
   function isConnected(element) {
     let n = element;
     do {
-      if (n['_attachedProp'] || n === doc) return true;
+      if (n[_attachedProp] || n === doc) return true;
       n = n.parentNode || n.nodeType === Node.DOCUMENT_FRAGMENT_NODE && n.host;
     } while(n);
     return false;
@@ -376,20 +376,20 @@ let Deferred;
      */
     _observeRoot(root) {
       console.log('_observeRoot', root, root.baseURI);
-      // console.assert(!root['_observerProp']);
-      if (root['_observerProp'] != null) {
+      // console.assert(!root[_observerProp]);
+      if (root[_observerProp] != null) {
         console.warn(`Root ${root} is already observed`);
-        return root['_observerProp'];
+        return root[_observerProp];
       }
-      root['_observerProp'] = new MutationObserver(
+      root[_observerProp] = new MutationObserver(
         /** @type {function(Array<MutationRecord>, MutationObserver)} */
         (this._handleMutations.bind(this)));
-      root['_observerProp'].observe(root, {childList: true, subtree: true});
+      root[_observerProp].observe(root, {childList: true, subtree: true});
       if (this.enableFlush) {
         // this is memory leak, only use in tests
-        this._observers.add(root['_observerProp']);
+        this._observers.add(root[_observerProp]);
       }
-      return root['_observerProp'];
+      return root[_observerProp];
     }
 
     /**
@@ -397,12 +397,12 @@ let Deferred;
      * @private
      */
     _unobserveRoot(root) {
-      if (root['_observerProp'] != null) {
-        root['_observerProp'].disconnect();
+      if (root[_observerProp] != null) {
+        root[_observerProp].disconnect();
         if (this.enableFlush) {
-          this._observers.delete(root['_observerProp']);
+          this._observers.delete(root[_observerProp]);
         }
-        root['_observerProp'] = null;
+        root[_observerProp] = null;
       }
     }
 
@@ -462,12 +462,11 @@ let Deferred;
       /** @type {?CustomElementDefinition} */
       const definition = this._definitions.get(element.localName);
       if (definition) {
-        if (!element['_upgradedProp']) {
+        if (!element[_upgradedProp]) {
           this._upgradeElement(element, definition, true);
         }
-        // TODO(justinfagnani): check that the element is in the document
-        if (element['_upgradedProp'] && !element['_attachedProp'] && isConnected(element)) {
-          element['_attachedProp'] = true;
+        if (element[_upgradedProp] && !element[_attachedProp] && isConnected(element)) {
+          element[_attachedProp] = true;
           if (definition.connectedCallback) {
             definition.connectedCallback.call(element);
           }
@@ -508,7 +507,7 @@ let Deferred;
         visitedNodes.add(_import);
 
         // The import is loaded observe it
-        if (!_import['_observerProp']) this._observeRoot(_import);
+        if (!_import[_observerProp]) this._observeRoot(_import);
 
         // walk the document
         this._addNodes(_import.childNodes, visitedNodes);
@@ -526,7 +525,7 @@ let Deferred;
         const _this = this;
         const onLoad = function() {
           link.removeEventListener('load', /** @type {function(Event)} */(onLoad));
-          if (!link.import['_observerProp']) _this._observeRoot(link.import);
+          if (!link.import[_observerProp]) _this._observeRoot(link.import);
           // We don't pass visitedNodes because this is async and not part of
           // the current tree walk.
           _this._addNodes(link.import.childNodes);
@@ -556,8 +555,8 @@ let Deferred;
         const walker = createTreeWalker(root);
         do {
           const node = walker.currentNode;
-          if (node['_upgradedProp'] && node['_attachedProp']) {
-            node['_attachedProp'] = false;
+          if (node[_upgradedProp] && node[_attachedProp]) {
+            node[_attachedProp] = false;
             const definition = this._definitions.get(node.localName);
             if (definition && definition.disconnectedCallback) {
               definition.disconnectedCallback.call(node);
@@ -581,7 +580,7 @@ let Deferred;
       if (callConstructor) {
         this._setNewInstance(element);
         new (definition.constructor)();
-        element['_upgradedProp'] = true;
+        element[_upgradedProp] = true;
         console.assert(this._newInstance == null);
       }
 
@@ -841,7 +840,7 @@ let Deferred;
     operation.call(element, name, value);
 
     // Bail if this wasn't a fully upgraded custom element
-    if (element['_upgradedProp'] == true) {
+    if (element[_upgradedProp] == true) {
       const definition = _customElements()._definitions.get(element.localName);
       const observedAttributes = definition.observedAttributes;
       const attributeChangedCallback = definition.attributeChangedCallback;
