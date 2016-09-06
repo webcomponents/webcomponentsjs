@@ -50,11 +50,7 @@ let Deferred;
   const _upgradedProp = '__$CE_upgraded';
 
   if (_customElements()) {
-    if (_customElements().enableFlush) {
-      _customElements().flush = function() {
-        console.log('CustomElements#flush()');
-      };
-    }
+    _customElements().flush = function() {};
     if (!_customElements().forcePolyfill) {
       return;
     }
