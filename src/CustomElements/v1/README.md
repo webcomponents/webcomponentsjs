@@ -16,6 +16,37 @@ reactions. The source references old versions of the spec.
   4. Reorganize tests to be closer to spec structure
   5. Performance tests
 
+## Building & Running Tests
+
+  1. Install web-component-tester
+
+    ```bash
+    $ npm i -g web-component-tester
+    ```
+
+  2. Checkout the webcomponentsjs v1 branch
+
+    ```bash
+    $ git clone https://github.com/webcomponents/webcomponentsjs.git
+    $ cd webcomponentsjs
+    $ npm i
+    $ gulp build
+    ```
+
+  3. Run tests
+
+    ```bash
+    $ wct tests/CustomElements/v1/index.html -l chrome
+    ```
+
+  4. Bower link to use in another project
+
+    ```bash
+    $ bower link
+    $ cd {your project directory}
+    $ bower link webcomponentsjs
+    ```
+
 ## Implementation approach and browser support
 
 The polyfill leans heavily on MutationObservers to drive custom element creation and reactions. This means that the polyfill requires native or polyfilled MutationObservers. The polyfill also uses Map and Set, though those would be easy to polyfill or remove.
