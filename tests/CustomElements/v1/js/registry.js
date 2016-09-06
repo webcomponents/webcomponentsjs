@@ -60,13 +60,9 @@ suite('CustomElementsRegistry', function() {
       }, '', 'customElements.define failed to throw when called multiple times with the same element name');
     });
 
-    test('names are case-insensitive', function() {
+    test('names are case-sensitive', function() {
       class XCase extends HTMLElement {}
-      customElements.define('X-CASE', XCase);
-      var x = document.createElement('X-CASE');
-      assert.instanceOf(x, XCase);
-      x = document.createElement('x-case');
-      assert.instanceOf(x, XCase);
+      assert.throws(function() { customElements.define('X-CASE', XCase); });
     });
 
     test('requires a constructor argument', function() {

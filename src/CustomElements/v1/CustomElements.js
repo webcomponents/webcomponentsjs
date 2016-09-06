@@ -192,8 +192,6 @@ let Deferred;
      * @return {undefined}
      */
     define(name, constructor, options) {
-      name = name.toString().toLowerCase();
-
       // 1:
       if (typeof constructor !== 'function') {
         throw new TypeError('constructor must be a Constructor');
@@ -326,7 +324,7 @@ let Deferred;
       /** @type {Deferred} **/
       let deferred = this._whenDefinedMap.get(name);
       if (deferred) return deferred.promise;
-      
+
       let resolve;
       const promise = new Promise(function(_resolve, _) {
        resolve = _resolve;
