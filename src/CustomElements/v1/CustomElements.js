@@ -767,8 +767,11 @@ let Deferred;
     }
   }
 
-  /** @type {CustomElementRegistry} */
-  window['customElements'] = new CustomElementRegistry();
+  Object.defineProperty(window, 'customElements', {
+    value: new CustomElementRegistry(),
+    configurable: true,
+    enumerable: true,
+  })
 
   // TODO(justinfagnani): Remove. Temporary for backward-compatibility
   window['CustomElements'] = {
