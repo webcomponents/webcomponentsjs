@@ -13,7 +13,6 @@
 'use strict';
 
 var audit = require('gulp-audit');
-var compilerPackage = require('google-closure-compiler');
 var concat = require('gulp-concat');
 var exec = require('child_process').exec;
 var fs = require('fs');
@@ -23,8 +22,6 @@ var path = require('path');
 var rename = require('gulp-rename');
 var runseq = require('run-sequence');
 var uglify = require('gulp-uglify');
-var sourcemaps = require('gulp-sourcemaps');
-var closureCompiler = compilerPackage.gulp();
 
 // init tests with gulp
 require('web-component-tester').gulp.init(gulp);
@@ -126,30 +123,11 @@ gulp.task('copy-bower', function() {
 
 defineBuildTask('webcomponents', './src/WebComponents/build.json');
 defineBuildTask('webcomponents-lite', './src/WebComponents/build-lite.json');
-defineBuildTask('CustomElements');
 defineBuildTask('HTMLImports');
 defineBuildTask('ShadowDOM');
 defineBuildTask('MutationObserver');
 
-gulp.task('CustomElementsV1', function () {
-  return gulp.src('./src/CustomElements/v1/CustomElements.js', {base: './'})
-      .pipe(sourcemaps.init())
-      .pipe(closureCompiler({
-          compilation_level: 'ADVANCED',
-          warning_level: 'VERBOSE',
-          language_in: 'ECMASCRIPT6_STRICT',
-          language_out: 'ECMASCRIPT5_STRICT',
-          externs: ['externs/html5.js', 'externs/custom-elements.js'],
-          js_output_file: 'CustomElementsV1.min.js',
-          new_type_inf: true,
-          rewrite_polyfills: false,
-        }))
-      .pipe(sourcemaps.write('/'))
-      .pipe(gulp.dest('./dist'));
-});
-
-gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements',
-  'CustomElementsV1', 'HTMLImports', 'ShadowDOM', 'copy-bower',
+gulp.task('build', ['webcomponents', 'webcomponents-lite', 'HTMLImports', 'ShadowDOM', 'copy-bower',
   'MutationObserver']);
 
 gulp.task('release', function(cb) {
