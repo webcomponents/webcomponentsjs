@@ -52,10 +52,13 @@
   var modules = [
     'URL/URL.js',
     'WeakMap/WeakMap.js',
-    'MutationObserver/MutationObserver.js',
     'Template/Template.js',
     'HTMLImports/HTMLImports.js',
-    'CustomElements/CustomElements.js',
+    'WebComponents/pre-polyfill.js',
+    '../../custom-elements/custom-elements.min.js',
+    '../../shadydom/shadydom.min.js',
+    '../../shadycss/shadycss.min.js',
+    'WebComponents/post-polyfill.js',
     // these scripts are loaded here due to polyfill timing issues
     'WebComponents/dom.js',
     'WebComponents/unresolved.js'
@@ -70,5 +73,6 @@
 
   // exports
   WebComponents.flags = flags;
+
 
 })();
