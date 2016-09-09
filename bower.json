@@ -14,9 +14,9 @@
     "webcomponents"
   ],
   "dependencies": {
-    "custom-elements": "webcomponentsjs/custom-elements#master",
-    "shadydom": "webcomponentsjs/shadydom#master",
-    "shadycss": "webcomponentsjs/shadycss#master"
+    "custom-elements": "webcomponents/custom-elements#master",
+    "shadydom": "webcomponents/shadydom#master",
+    "shadycss": "webcomponents/shadycss#master"
   },
   "license": "BSD",
   "ignore": [],
