@@ -5,7 +5,6 @@
   "../MutationObserver/MutationObserver.js",
   "../Template/Template.js",
   "../HTMLImports/build.json",
-
   "dom.js",
   "unresolved.js"
 ]
