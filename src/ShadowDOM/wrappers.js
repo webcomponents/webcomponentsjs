@@ -182,7 +182,7 @@ window.ShadowDOMPolyfill = {};
 
   function getDescriptor(source, name) {
     try {
-      return Object.getOwnPropertyDescriptor(source, name);
+      return Object.getOwnPropertyDescriptor(source, name) || dummyDescriptor;
     } catch (ex) {
       // JSC and V8 both use data properties instead of accessors which can
       // cause getting the property desciptor to throw an exception.
