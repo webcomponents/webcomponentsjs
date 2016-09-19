@@ -136,6 +136,7 @@
     var target = unsafeUnwrap(this);
     var list;
     var root = getTreeScope(this).root;
+    root = (!deep && root.shadowRoot) || root;
     if (root instanceof scope.wrappers.ShadowRoot) {
       // We are in the shadow tree and the logical tree is
       // going to be disconnected so we do a manual tree traversal
@@ -162,6 +163,7 @@
       var target = unsafeUnwrap(this);
       var wrappedItem;
       var root = getTreeScope(this).root;
+      root = (!deep && root.shadowRoot) || root;
       if (root instanceof scope.wrappers.ShadowRoot) {
         // We are in the shadow tree and the logical tree is
         // going to be disconnected so we do a manual tree traversal
@@ -220,6 +222,7 @@
     var target = unsafeUnwrap(this);
     var list;
     var root = getTreeScope(this).root;
+    root = root.shadowRoot || root;
     if (root instanceof scope.wrappers.ShadowRoot) {
       // We are in the shadow tree and the logical tree is
       // going to be disconnected so we do a manual tree traversal
@@ -243,6 +246,7 @@
     var target = unsafeUnwrap(this);
     var list;
     var root = getTreeScope(this).root;
+    root = root.shadowRoot || root;
     if (root instanceof scope.wrappers.ShadowRoot) {
       // We are in the shadow tree and the logical tree is
       // going to be disconnected so we do a manual tree traversal
