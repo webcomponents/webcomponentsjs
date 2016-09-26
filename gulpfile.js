@@ -126,11 +126,12 @@ defineBuildTask('webcomponents', './src/WebComponents/build.json');
 defineBuildTask('webcomponents-lite', './src/WebComponents/build-lite.json');
 defineBuildTask('CustomElements');
 defineBuildTask('HTMLImports');
+defineBuildTask('HTMLImportsCors');
 defineBuildTask('ShadowDOM');
 defineBuildTask('MutationObserver');
 
 gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements', 
-  'HTMLImports', 'ShadowDOM', 'copy-bower', 'MutationObserver']);
+  'HTMLImports', 'HTMLImportsCors', 'ShadowDOM', 'copy-bower', 'MutationObserver']);
 
 gulp.task('release', function(cb) {
   isRelease = true;
