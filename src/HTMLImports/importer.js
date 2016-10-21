@@ -74,7 +74,7 @@ var importer = {
         // generate an HTMLDocument from data
         doc = err ? null : makeDocument(resource, redirectedUrl || url);
         if (doc) {
-          doc.__importLink = elt;
+          doc.head.__importLink = elt;
           // note, we cannot use MO to detect parsed nodes because
           // SD polyfill does not report these as mutations.
           this.bootDocument(doc);

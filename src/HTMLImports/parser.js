@@ -161,8 +161,8 @@ var importParser = {
 
   rootImportForElement: function(elt) {
     var n = elt;
-    while (n.ownerDocument.__importLink) {
-      n = n.ownerDocument.__importLink;
+    while (n.ownerDocument.head.__importLink) {
+      n = n.ownerDocument.head.__importLink;
     }
     return n;
   },

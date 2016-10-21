@@ -40,7 +40,8 @@ Observer.prototype = {
   },
 
   observe: function(root) {
-    this.mo.observe(root, {childList: true, subtree: true});
+    this.mo.observe(root.head, {childList: true, subtree: true});
+    this.mo.observe(root.body, {childList: true, subtree: true});
   }
 
 };
