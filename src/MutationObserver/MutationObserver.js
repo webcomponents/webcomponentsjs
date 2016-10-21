@@ -567,9 +567,13 @@
   global.JsMutationObserver = JsMutationObserver;
 
   if (!global.MutationObserver) {
-    global.MutationObserver = JsMutationObserver;
-    // Explicltly mark MO as polyfilled for user reference.
-    JsMutationObserver._isPolyfilled = true;
+    if (global.WebKitMutationObserver) {
+      global.MutationObserver = global.WebKitMutationObserver;
+    } else {
+      global.MutationObserver = JsMutationObserver;
+      // Explicltly mark MO as polyfilled for user reference.
+      JsMutationObserver._isPolyfilled = true;
+    }
   }
 
 })(self);
