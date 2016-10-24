@@ -12,13 +12,15 @@
 
   'use strict';
 
-  if (scope.flags.shadydom) {
+  var forceShady = scope.flags.shadydom;
+  if (forceShady) {
     window.ShadyDOM = window.ShadyDOM || {};
-    ShadyDOM.force = scope.flags.shadydom;
+    ShadyDOM.force = forceShady;
   }
 
-  if (window.customElements) {
-    customElements.forcePolyfill = scope.flags.register;
+  var forceCE = scope.flags.register || scope.flags.ce;
+  if (forceCE && window.customElements) {
+    customElements.forcePolyfill = forceCE;
   }
 
 })(window.WebComponents);
