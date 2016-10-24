@@ -71,6 +71,7 @@ suite('TreeWalker', function() {
 
     assert(isWrapper(treeWalker.root));
     assert(isWrapper(treeWalker.nextNode()));
+    assert(isWrapper(treeWalker.nextSibling()));
     assert(isWrapper(treeWalker.parentNode()));
     assert(isWrapper(treeWalker.firstChild()));
     assert(isWrapper(treeWalker.lastChild()) ||
@@ -92,12 +93,12 @@ suite('TreeWalker', function() {
       acceptNode:function(node){
         assert(isWrapper(node));
         if (node.hasAttribute("title") && node.getAttribute("title")==='a'){
-          return NodeFilter.FILTER_ACCEPT;  
+          return NodeFilter.FILTER_ACCEPT;
         }
         return false;
       }
     });
-    
+
     assert.isNotNull(treeWalker.filter);
     // in FF and IE treeWalker.filter is just a js object
     //assert.instanceOf(treeWalker.filter, NodeFilter);
@@ -147,7 +148,7 @@ suite('TreeWalker', function() {
 
     treeWalker.lastChild();
     assert(treeWalker.currentNode.isEqualNode(c));
-    
+
 
     treeWalker.currentNode = a;
     assert(treeWalker.currentNode.isEqualNode(a));
