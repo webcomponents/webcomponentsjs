@@ -7,7 +7,6 @@
   "shadowdom.js",
   "../URL/URL.js",
   "../HTMLImports/build.json",
-  "../CustomElements/build.json",
   "lang.js",
   "dom.js",
   "unresolved.js",

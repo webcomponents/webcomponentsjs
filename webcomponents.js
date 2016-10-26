@@ -79,7 +79,6 @@
     [
       'URL/URL.js',
       'HTMLImports/HTMLImports.js',
-      'CustomElements/CustomElements.js',
       'WebComponents/lang.js',
       // these scripts are loaded here due to polyfill timing issues
       'WebComponents/dom.js',
