@@ -263,7 +263,7 @@ var forEach = Array.prototype.forEach.call.bind(Array.prototype.forEach);
 
 // observe a node tree; bail if it's already being observed.
 function observe(inRoot) {
-  if (inRoot.head.__observer) {
+  if (inRoot && inRoot.head && inRoot.head.__observer) {
     return;
   }
   // For each ShadowRoot, we create a new MutationObserver, so the root can be

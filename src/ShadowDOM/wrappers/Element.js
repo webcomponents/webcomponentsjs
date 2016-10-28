@@ -76,6 +76,9 @@
       var renderer = scope.getRendererForHost(this);
       renderer.invalidate();
 
+      newShadowRoot.head = document.createElement('head');
+      newShadowRoot.body = document.createElement('body');
+
       return newShadowRoot;
     },
 
