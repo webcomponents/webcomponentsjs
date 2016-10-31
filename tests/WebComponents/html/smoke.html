@@ -20,7 +20,9 @@
     <x-foo>plain</x-foo>
     <button is="x-baz">plain</button>
     <script>
+      var isNativeShadowDomSupported;
       test('smoke', function(done) {
+        isNativeShadowDomSupported = !!unwrap(document.createElement('div')).createShadowRoot;
         var p = Object.create(HTMLElement.prototype);
         p.createdCallback = function() {
           this.textContent = 'custom!';
@@ -57,8 +59,13 @@
           done();
         }
         var ob = new MutationObserver(handler);
-        ob.observe(root, {childList: true, subtree: true});
-        root.appendChild(xzot);
+        if( isNativeShadowDomSupported ) {
+          ob.observe(root, {childList: true, subtree: true});
+          root.appendChild(xzot);
+        } else {
+          ob.observe(root.body, {childList: true, subtree: true});
+          root.body.appendChild(xzot);
+        }
       });
     </script>
   </body>
