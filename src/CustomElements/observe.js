@@ -251,6 +251,10 @@ function takeRecords(node) {
   while (node.parentNode) {
     node = node.parentNode;
   }
+
+  // this needs to be on head or it will leak in IE
+  // IE does not like it when you have non-standard attributes on root dom's, so put
+  // the observer on the head element
   var observer = node.head.__observer;
   if (observer) {
     handler(node, observer.takeRecords());
@@ -263,6 +267,7 @@ var forEach = Array.prototype.forEach.call.bind(Array.prototype.forEach);
 
 // observe a node tree; bail if it's already being observed.
 function observe(inRoot) {
+  
   if (inRoot && inRoot.head && inRoot.head.__observer) {
     return;
   }
@@ -270,9 +275,17 @@ function observe(inRoot) {
   // garbage collected once all references to the `inRoot` node are gone.
   // Give the handler access to the root so that an 'in document' check can
   // be done.
+
+  // IE requires that you put an observer on child elements of the DOM or it will leak
+  // at this point inRoot == #document
   var observer = new MutationObserver(handler.bind(this, inRoot));
   observer.observe(inRoot.head, {childList: true, subtree: true});
   observer.observe(inRoot.body, {childList: true, subtree: true});
+
+  // this needs to be on head or it will leak in IE
+  // IE does not like it when you have non-standard attributes on root dom's, so put
+  // the observer on the head element
+  // this is used to check if the observer has been attached already (above)
   inRoot.head.__observer = observer;
 }
 
