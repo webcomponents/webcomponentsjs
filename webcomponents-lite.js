@@ -7,7 +7,7 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
-// @version 0.7.22
+// @version 0.7.23
 (function() {
   window.WebComponents = window.WebComponents || {
     flags: {}
@@ -165,7 +165,7 @@
           this._fragment = "#";
           state = "fragment";
         } else {
-          if (EOF != c && "	" != c && "\n" != c && "\r" != c) {
+          if (EOF != c && "\t" != c && "\n" != c && "\r" != c) {
             this._schemeData += percentEscape(c);
           }
         }
@@ -296,7 +296,7 @@
           seenAt = true;
           for (var i = 0; i < buffer.length; i++) {
             var cp = buffer[i];
-            if ("	" == cp || "\n" == cp || "\r" == cp) {
+            if ("\t" == cp || "\n" == cp || "\r" == cp) {
               err("Invalid whitespace in authority.");
               continue;
             }
@@ -330,7 +330,7 @@
             state = "relative path start";
           }
           continue;
-        } else if ("	" == c || "\n" == c || "\r" == c) {
+        } else if ("\t" == c || "\n" == c || "\r" == c) {
           err("Invalid whitespace in file host.");
         } else {
           buffer += c;
@@ -354,7 +354,7 @@
             break loop;
           }
           continue;
-        } else if ("	" != c && "\n" != c && "\r" != c) {
+        } else if ("\t" != c && "\n" != c && "\r" != c) {
           if ("[" == c) {
             seenBracket = true;
           } else if ("]" == c) {
@@ -382,7 +382,7 @@
           }
           state = "relative path start";
           continue;
-        } else if ("	" == c || "\n" == c || "\r" == c) {
+        } else if ("\t" == c || "\n" == c || "\r" == c) {
           err("Invalid code point in port: " + c);
         } else {
           invalid.call(this);
@@ -427,7 +427,7 @@
             this._fragment = "#";
             state = "fragment";
           }
-        } else if ("	" != c && "\n" != c && "\r" != c) {
+        } else if ("\t" != c && "\n" != c && "\r" != c) {
           buffer += percentEscape(c);
         }
         break;
@@ -436,13 +436,13 @@
         if (!stateOverride && "#" == c) {
           this._fragment = "#";
           state = "fragment";
-        } else if (EOF != c && "	" != c && "\n" != c && "\r" != c) {
+        } else if (EOF != c && "\t" != c && "\n" != c && "\r" != c) {
           this._query += percentEscapeQuery(c);
         }
         break;
 
        case "fragment":
-        if (EOF != c && "	" != c && "\n" != c && "\r" != c) {
+        if (EOF != c && "\t" != c && "\n" != c && "\r" != c) {
           this._fragment += c;
         }
         break;
@@ -1085,7 +1085,7 @@ if (typeof WeakMap === "undefined") {
 
 (function(scope) {
   "use strict";
-  if (!window.performance) {
+  if (!(window.performance && window.performance.now)) {
     var start = Date.now();
     window.performance = {
       now: function() {

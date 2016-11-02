@@ -7,7 +7,7 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
-// @version 0.7.22
+// @version 0.7.23
 if (typeof WeakMap === "undefined") {
   (function() {
     var defineProperty = Object.defineProperty;
@@ -165,6 +165,9 @@ window.ShadowDOMPolyfill = {};
   }
   function getDescriptor(source, name) {
     try {
+      if (source === window && name === "showModalDialog") {
+        return dummyDescriptor;
+      }
       return Object.getOwnPropertyDescriptor(source, name);
     } catch (ex) {
       return dummyDescriptor;
