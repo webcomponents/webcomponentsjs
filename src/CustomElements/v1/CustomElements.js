@@ -489,8 +489,10 @@ var CustomElementDefinition;
       }
       throw new Error('unknown constructor. Did you call customElements.define()?');
     }
-    patched.prototype = Object.create(orig.prototype);
-    Object.defineProperty(patched.prototype, 'constructor', {value: patched});
+    patched.prototype = Object.create(
+      orig.prototype,
+      {constructor: {configurable: true, value:patched, writable: true}}
+    );
   }
 
   patchConstructor('HTMLElement');
