@@ -251,7 +251,10 @@ function takeRecords(node) {
   while (node.parentNode) {
     node = node.parentNode;
   }
-  var observer = node.__observer;
+
+  // The node is a ShadowRoot, an IE will have a memory leak if you put the observer
+  // directly on the ShadowRoot, so put it on the head so it does not leak
+  var observer = node.head.__observer;
   if (observer) {
     handler(node, observer.takeRecords());
     takeMutations();
@@ -260,19 +263,29 @@ function takeRecords(node) {
 
 var forEach = Array.prototype.forEach.call.bind(Array.prototype.forEach);
 
-
 // observe a node tree; bail if it's already being observed.
 function observe(inRoot) {
-  if (inRoot.__observer) {
+  
+  if (inRoot && inRoot.head && inRoot.head.__observer) {
     return;
   }
   // For each ShadowRoot, we create a new MutationObserver, so the root can be
   // garbage collected once all references to the `inRoot` node are gone.
   // Give the handler access to the root so that an 'in document' check can
   // be done.
+
+  // originally the observer was on the ShadowRoot (inRoot) (single observer); 
+  // this causes a memory leak within IE.  To fix this, we must put a an observer
+  // on both the head and body nodes on the ShadowRoot
   var observer = new MutationObserver(handler.bind(this, inRoot));
-  observer.observe(inRoot, {childList: true, subtree: true});
-  inRoot.__observer = observer;
+  observer.observe(inRoot.head, {childList: true, subtree: true});
+  observer.observe(inRoot.body, {childList: true, subtree: true});
+
+  // this needs to be on head or it will leak in IE
+  // IE does not like it when you have non-standard attributes on root dom's, so put
+  // the observer on the head element
+  // this is used to check if the observer has been attached already (above)
+  inRoot.head.__observer = observer;
 }
 
 // upgrade an entire document and observe it for elements changes.

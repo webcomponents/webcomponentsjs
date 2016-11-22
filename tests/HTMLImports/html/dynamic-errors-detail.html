@@ -46,9 +46,10 @@
 
       test('HTMLImports whenready errors', function(done) {
         HTMLImports.whenReady(function(detail) {
-          chai.assert.equal(detail.allImports.length, 2);
+          var allImports = document.querySelectorAll('link[rel="import"]');
+          chai.assert.equal(detail.allImports.length, allImports.length);
           chai.assert.equal(detail.errorImports.length, 1);
-          chai.assert.equal(detail.loadedImports.length, 1);
+          chai.assert.equal(detail.loadedImports.length, allImports.length - 1);
 
           var errorImport = detail.errorImports[0];
           chai.expect(errorImport.href).to.contain('imports/load-does-not-exist.html');
