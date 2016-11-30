@@ -54,6 +54,7 @@
     'WeakMap/WeakMap.js',
     'Template/Template.js',
     'HTMLImports/HTMLImports.js',
+    'WebComponents/Promise.js',
     'WebComponents/pre-polyfill.js',
     '../../custom-elements/custom-elements.min.js',
     '../../shadydom/shadydom.min.js',
