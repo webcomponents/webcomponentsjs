@@ -99,7 +99,33 @@
       e.initEvent(inType, Boolean(params.bubbles), Boolean(params.cancelable));
       return e;
     };
+    if (origEvent) {
+      for (var i in origEvent) {
+        window.Event[i] = origEvent[i];
+      }
+    }
     window.Event.prototype = origEvent.prototype;
+  }
+
+  if (!window.MouseEvent || isIE && (typeof window.MouseEvent !== 'function')) {
+    var origMouseEvent = window.MouseEvent;
+    window.MouseEvent = function(inType, params) {
+      params = params || {};
+      var e = document.createEvent('MouseEvent');
+      e.initMouseEvent(inType,
+        Boolean(params.bubbles), Boolean(params.cancelable),
+        params.view || window, params.detail,
+        params.screenX, params.screenY, params.clientX, params.clientY,
+        params.ctrlKey, params.altKey, params.shiftKey, params.metaKey,
+        params.button, params.relatedTarget);
+      return e;
+    };
+    if (origMouseEvent) {
+      for (var i in origMouseEvent) {
+        window.MouseEvent[i] = origMouseEvent[i];
+      }
+    }
+    window.MouseEvent.prototype = origMouseEvent.prototype;
   }
 
 })(window.WebComponents);

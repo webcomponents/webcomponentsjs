@@ -54,12 +54,14 @@
     'WeakMap/WeakMap.js',
     'Template/Template.js',
     'HTMLImports/HTMLImports.js',
+    'WebComponents/Promise.js',
     'WebComponents/pre-polyfill.js',
     '../../custom-elements/custom-elements.min.js',
     '../../shadydom/shadydom.min.js',
     '../../shadycss/shadycss.min.js',
     'WebComponents/post-polyfill.js',
     // these scripts are loaded here due to polyfill timing issues
+    'WebComponents/lang.js',
     'WebComponents/dom.js',
     'WebComponents/unresolved.js'
   ];
