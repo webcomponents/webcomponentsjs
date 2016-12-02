@@ -116,7 +116,7 @@ var importParser = {
     }
     this.markParsingComplete(elt);
     // fire load event
-    if (elt.__resource && !elt.__error) {
+    if (elt.__resource != undefined && !elt.__error) {
       elt.dispatchEvent(new CustomEvent('load', {bubbles: false}));
     } else {
       elt.dispatchEvent(new CustomEvent('error', {bubbles: false}));
