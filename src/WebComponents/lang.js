@@ -33,7 +33,7 @@
   }
 
   if (!Object.assign) {
-    function assign(target, source) {
+    var assign = function(target, source) {
       var n$ = Object.getOwnPropertyNames(source);
       for (var i=0, p; i < n$.length; i++) {
         p = n$[i];
