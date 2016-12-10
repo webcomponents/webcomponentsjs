@@ -41,6 +41,148 @@
         });
 
       });
+
+      test('load event is fired when loading a new branch', function(done) {
+        var link = document.createElement('link');
+        link.rel = 'import';
+        link.href= 'imports/load-3.html';
+
+        var clear, onload, onerror;
+
+        clear = function() {
+          link.removeEventListener('load', onload);
+          link.removeEventListener('error', onerror);
+          document.head.removeChild(link);
+        }
+
+        onload = function() {
+          clear();
+          done();
+        }
+
+        onerror = function() {
+          clear();
+          chai.assert.fail('error event', 'load event', 'error event should not be fired');
+        }
+
+        link.addEventListener('load', onload);
+        link.addEventListener('error', onerror);
+
+        document.head.appendChild(link);
+
+      });
+
+      test('load event is fired when loading the same location twice', function(done) {
+
+        var createImportLink = function(done) {
+
+          var link = document.createElement('link');
+          link.rel = 'import';
+          link.href= 'imports/load-4.html';
+
+          var clear, onload, onerror;
+
+          clear = function() {
+            link.removeEventListener('load', onload);
+            link.removeEventListener('error', onerror);
+            document.head.removeChild(link);
+          }
+
+          onload = function() {
+            clear();
+            done();
+          }
+
+          onerror = function() {
+            clear();
+            chai.assert.fail('error event', 'load event', 'error event should not be fired');
+          }
+
+          link.addEventListener('load', onload);
+          link.addEventListener('error', onerror);
+
+          document.head.appendChild(link);
+
+        }
+
+        createImportLink(function() {
+          createImportLink(function() {
+            done();
+          });
+        });
+
+      });
+
+      test('error event is fired when loading a new branch failed', function(done) {
+        var link = document.createElement('link');
+        link.rel = 'import';
+        link.href= 'imports/error-3.html';
+
+        var clear, onload, onerror;
+
+        clear = function() {
+          link.removeEventListener('load', onload);
+          link.removeEventListener('error', onerror);
+          document.head.removeChild(link);
+        }
+
+        onerror = function() {
+          clear();
+          done();
+        }
+
+        onload = function() {
+          clear();
+          chai.assert.fail('load event', 'error event', 'load event should not be fired');
+        }
+
+        link.addEventListener('load', onload);
+        link.addEventListener('error', onerror);
+
+        document.head.appendChild(link);
+
+      });
+
+      test('error event is fired when loading the same location failed twice', function(done) {
+
+        var createImportLink = function(done) {
+
+          var link = document.createElement('link');
+          link.rel = 'import';
+          link.href= 'imports/error-4.html';
+
+          var clear, onload, onerror;
+
+          clear = function() {
+            link.removeEventListener('load', onload);
+            link.removeEventListener('error', onerror);
+            document.head.removeChild(link);
+          }
+
+          onerror = function() {
+            clear();
+            done();
+          }
+
+          onload = function() {
+            clear();
+            chai.assert.fail('load event', 'error event', 'load event should not be fired');
+          }
+
+          link.addEventListener('load', onload);
+          link.addEventListener('error', onerror);
+
+          document.head.appendChild(link);
+
+        }
+
+        createImportLink(function() {
+          createImportLink(function() {
+            done();
+          });
+        });
+
+      });
     </script>
   </body>
 </html>
