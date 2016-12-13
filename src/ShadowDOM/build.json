@@ -3,7 +3,6 @@
   "wrappers.js",
   "ArraySplice.js",
   "microtask.js",
-  "MutationObserver.js",
   "TreeScope.js",
   "wrappers/events.js",
   "wrappers/TouchEvent.js",

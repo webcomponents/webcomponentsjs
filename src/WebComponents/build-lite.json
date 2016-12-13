@@ -2,7 +2,6 @@
   "build/boot-lite.js",
   "../URL/URL.js",
   "../WeakMap/WeakMap.js",
-  "../MutationObserver/MutationObserver.js",
   "../Template/Template.js",
   "../HTMLImports/build.json",
   "../../es6-promise/es6-promise.auto.min.js",

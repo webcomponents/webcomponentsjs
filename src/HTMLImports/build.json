@@ -1,6 +1,5 @@
 [
   "../WeakMap/WeakMap.js",
-  "../MutationObserver/MutationObserver.js",
   "../WebComponents/dom.js",
   "base.js",
   "module.js",

@@ -11,9 +11,6 @@ A suite of polyfills supporting the [Web Components](http://webcomponents.org) s
 
 **Shadow DOM**: provides encapsulation by hiding DOM subtrees under shadow roots ([spec](https://w3c.github.io/webcomponents/spec/shadow/)).
 
-This also folds in polyfills for `MutationObserver` and `WeakMap`.
-
-
 ## Releases
 
 Pre-built (concatenated & minified) versions of the polyfills are maintained in the [tagged versions](https://github.com/webcomponents/webcomponentsjs/releases) of this repo. There are two variants:
@@ -75,9 +72,9 @@ Copyright (c) 2015 The Polymer Authors. All rights reserved.
 
 ### `WebComponentsReady`
 
-Under native HTML Imports, `<script>` tags in the main document block the loading of such imports. This is to ensure the imports have loaded and any registered elements in them have been upgraded. 
+Under native HTML Imports, `<script>` tags in the main document block the loading of such imports. This is to ensure the imports have loaded and any registered elements in them have been upgraded.
 
-The webcomponents.js and webcomponents-lite.js polyfills parse element definitions and handle their upgrade asynchronously. If prematurely fetching the element from the DOM before it has an opportunity to upgrade, you'll be working with an `HTMLUnknownElement`. 
+The webcomponents.js and webcomponents-lite.js polyfills parse element definitions and handle their upgrade asynchronously. If prematurely fetching the element from the DOM before it has an opportunity to upgrade, you'll be working with an `HTMLUnknownElement`.
 
 For these situations (or when you need an approximate replacement for the Polymer 0.5 `polymer-ready` behavior), you can use the `WebComponentsReady` event as a signal before interacting with the element. The criteria for this event to fire is all Custom Elements with definitions registered by the time HTML Imports available at load time have loaded have upgraded.
 
@@ -144,7 +141,7 @@ polyfill-next-selector { content: '.foo :host.bar, :host.foo.bar'; }
 ```
 
 ### ShadowCSS: :host(.zot:not(.bar:nth-child(2))) doesn't work <a id="nestedparens"></a>
-ShadowCSS `:host()` rules can only have (at most) 1-level of nested parentheses in its argument selector under ShadowCSS. For example, `:host(.zot)` and `:host(.zot:not(.bar))` both work, but `:host(.zot:not(.bar:nth-child(2)))` does not. 
+ShadowCSS `:host()` rules can only have (at most) 1-level of nested parentheses in its argument selector under ShadowCSS. For example, `:host(.zot)` and `:host(.zot:not(.bar))` both work, but `:host(.zot:not(.bar:nth-child(2)))` does not.
 
 ### HTML imports: document.currentScript doesn't work as expected <a id="currentscript"></a>
 In native HTML Imports, document.currentScript.ownerDocument references the import document itself. In the polyfill use document._currentScript.ownerDocument (note the underscore).

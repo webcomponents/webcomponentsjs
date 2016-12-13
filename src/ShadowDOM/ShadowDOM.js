@@ -26,7 +26,6 @@ Array.prototype.forEach.call(document.querySelectorAll('script[src]'), function(
   'wrappers.js',
   'ArraySplice.js',
   'microtask.js',
-  'MutationObserver.js',
   'TreeScope.js',
   'wrappers/events.js',
   'wrappers/TouchEvent.js',
