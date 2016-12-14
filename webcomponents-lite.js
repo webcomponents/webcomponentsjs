@@ -50,8 +50,8 @@
 
   // construct full dependency list
   var modules = [
-    '../../URL/URL.js',
-    '../../Template/template.js',
+    '../../URL/url.js',
+    '../../template/template.js',
     'HTMLImports/HTMLImports.js',
     '../../es6-promise/dist/es6-promise.auto.min.js',
     'WebComponents/pre-polyfill.js',

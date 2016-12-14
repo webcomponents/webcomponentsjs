@@ -6,7 +6,7 @@
   "../../shadydom/shadydom.min.js",
   "../../shadycss/shadycss.min.js",
   "../../webcomponents-platform/webcomponents-platform.js",
-  "../../URL/URL.js",
-  "../../Template/template.js",
+  "../../URL/url.js",
+  "../../template/template.js",
   "unresolved.js"
 ]

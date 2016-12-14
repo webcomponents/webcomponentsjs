@@ -19,7 +19,7 @@
     "shadydom": "webcomponents/shadydom#master",
     "shadycss": "webcomponents/shadycss#master",
     "template": "webcomponents/template#master",
-    "URL": "webcomponents/URL#^0.5.0",
+    "URL": "webcomponents/URL#master",
     "webcomponents-platform": "webcomponents/webcomponents-platform#master"
   },
   "license": "BSD",
