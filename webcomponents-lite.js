@@ -50,7 +50,6 @@
 
   // construct full dependency list
   var modules = [
-    'Template/Template.js',
     'HTMLImports/HTMLImports.js',
     'WebComponents/pre-polyfill.js',
     '../../custom-elements/custom-elements.min.js',

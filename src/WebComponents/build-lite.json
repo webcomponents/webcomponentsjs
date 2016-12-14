@@ -1,6 +1,5 @@
 [
   "build/boot-lite.js",
-  "../Template/Template.js",
   "../HTMLImports/build.json",
   "../../es6-promise/dist/es6-promise.auto.min.js",
   "../../custom-elements/custom-elements.min.js",
@@ -8,5 +7,6 @@
   "../../shadycss/shadycss.min.js",
   "../../webcomponents-platform/webcomponents-platform.js",
   "../../URL/URL.js",
+  "../../Template/template.js",
   "unresolved.js"
 ]
