@@ -52,7 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         test('links are imported when stamped', function(done) {
-          document.body.appendChild(document.importNode(templateTwo.content, true));
+          document.head.appendChild(document.importNode(templateTwo.content, true));
 
           var imp = document.querySelector('[href="imports/csp-import-1.html"]');
           imp.addEventListener('load', function() {
