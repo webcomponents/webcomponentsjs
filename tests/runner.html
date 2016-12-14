@@ -15,14 +15,9 @@
 <script src="../../web-component-tester/browser.js"></script>
 
 <script>
-  var suites = [
+  WCT.loadSuites([
     'template-and-CE.html',
     'template-and-imports.html',
     // 'WebComponents/runner.html'
-  ];
-  // MutationObserver tests can be false-failing with native MO
-  if (!window.MutationObserver) {
-    suites.splice(1, 0, 'MutationObserver/tests.html');
-  }
-  WCT.loadSuites(suites);
+  ]);
 </script>
