@@ -18,6 +18,7 @@
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
     "shadydom": "webcomponents/shadydom#master",
     "shadycss": "webcomponents/shadycss#master",
+    "URL": "webcomponents/URL#^0.5.0",
     "webcomponents-platform": "webcomponents/webcomponents-platform#master"
   },
   "license": "BSD",
