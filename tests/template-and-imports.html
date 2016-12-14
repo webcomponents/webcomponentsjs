@@ -11,32 +11,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <html>
   <head>
     <title>Template with HTMLImports Test</title>
-    <script src="../../../template/template.js"></script>
-    <script src="../../../html-imports/html-imports.min.js"></script>
+    <script src="../../template/template.js"></script>
+    <script src="../../html-imports/html-imports.min.js"></script>
     <script>
-      WCT = {
-        waitFor: function(callback) {
-          this.HTMLImports.whenReady(callback);
-        }
-      };
+      // WCT = {
+      //   waitFor: function(callback) {
+      //     this.HTMLImports.whenReady(callback);
+      //   }
+      // };
     </script>
-    <script src="../../../web-component-tester/browser.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
   </head>
   <body>
     <template id="one">
-      <link rel="import" href="../HTMLImports/html/imports/script-1.html">
+      <link rel="import" href="imports/script-1.html">
     </template>
 
     <template id="two">
-      <link rel="import" href="../HTMLImports/html/imports/csp-import-1.html">
+      <link rel="import" href="imports/csp-import-1.html">
     </template>
 
     <script>
-      suite('Template', function() {
+      suite('basic', function() {
         var templateOne;
         var templateTwo;
 
-        suiteSetup(function() {
+        setup(function() {
           templateOne = document.querySelector('template#one');
           templateTwo = document.querySelector('template#two');
         });
@@ -51,12 +51,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           assert.equal(window.externalScriptParsed1, undefined);
         });
 
-        test('links are imported when stmped', function(done) {
-          var imp;
-
+        test('links are imported when stamped', function(done) {
           document.body.appendChild(document.importNode(templateTwo.content, true));
 
-          imp = document.querySelector('[href="../HTMLImports/html/imports/csp-import-1.html"]');
+          var imp = document.querySelector('[href="imports/csp-import-1.html"]');
           imp.addEventListener('load', function() {
             assert.ok(window.externalScriptParsed1);
             done();

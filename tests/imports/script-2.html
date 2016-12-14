@@ -1,4 +1,3 @@
-<!doctype html>
 <!--
     @license
     Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -8,21 +7,9 @@
     Code distributed by Google as part of the polymer project is also
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<title>All WebComponents Tests</title>
-<meta charset="utf-8">
-
-<!-- WebComponents -->
-<script src="../../web-component-tester/browser.js"></script>
-
+<div>me2</div>
 <script>
-  var suites = [
-    'template-and-CE.html',
-    'template-and-imports.html',
-    // 'WebComponents/runner.html'
-  ];
-  // MutationObserver tests can be false-failing with native MO
-  if (!window.MutationObserver) {
-    suites.splice(1, 0, 'MutationObserver/tests.html');
-  }
-  WCT.loadSuites(suites);
+  var d = document._currentScript.ownerDocument.querySelector('div');
+  assert.equal(d.innerText, 'me2', '_currentScript can locate element in import')
 </script>
+<link rel="import" href="imports/script-2.html">

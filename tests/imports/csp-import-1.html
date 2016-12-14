@@ -1,4 +1,3 @@
-<!doctype html>
 <!--
     @license
     Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -8,21 +7,5 @@
     Code distributed by Google as part of the polymer project is also
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<title>All WebComponents Tests</title>
-<meta charset="utf-8">
-
-<!-- WebComponents -->
-<script src="../../web-component-tester/browser.js"></script>
-
-<script>
-  var suites = [
-    'template-and-CE.html',
-    'template-and-imports.html',
-    // 'WebComponents/runner.html'
-  ];
-  // MutationObserver tests can be false-failing with native MO
-  if (!window.MutationObserver) {
-    suites.splice(1, 0, 'MutationObserver/tests.html');
-  }
-  WCT.loadSuites(suites);
-</script>
+<link rel="import" href="csp-import-2.html">
+<script src="csp-script-1.js"></script>
