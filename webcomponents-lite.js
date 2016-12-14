@@ -54,13 +54,13 @@
     '../../template/template.js',
     '../../html-imports/html-imports.min.js',
     '../../es6-promise/dist/es6-promise.auto.min.js',
-    'WebComponents/pre-polyfill.js',
+    'pre-polyfill.js',
     '../../custom-elements/custom-elements.min.js',
     '../../shadydom/shadydom.min.js',
     '../../shadycss/shadycss.min.js',
-    'WebComponents/post-polyfill.js',
+    'post-polyfill.js',
     // these scripts are loaded here due to polyfill timing issues
-    'WebComponents/unresolved.js'
+    'unresolved.js'
   ];
 
   var src = script.getAttribute('src');
