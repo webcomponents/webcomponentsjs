@@ -12,14 +12,6 @@
 
   'use strict';
 
-  window.CustomElements = {
-    takeRecords: function() {
-      if (customElements.flush) {
-        customElements.flush();
-      }
-    }
-  }
-
   HTMLImports.whenReady(function() {
     requestAnimationFrame(function() {
       window.dispatchEvent(new CustomEvent('WebComponentsReady'));
