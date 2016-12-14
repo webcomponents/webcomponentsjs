@@ -1,5 +1,4 @@
 [
-  "../WeakMap/WeakMap.js",
   "wrappers.js",
   "ArraySplice.js",
   "microtask.js",

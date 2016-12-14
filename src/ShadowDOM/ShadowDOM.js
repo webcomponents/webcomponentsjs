@@ -22,7 +22,6 @@ Array.prototype.forEach.call(document.querySelectorAll('script[src]'), function(
 });
 
 [
-  '../WeakMap/WeakMap.js',
   'wrappers.js',
   'ArraySplice.js',
   'microtask.js',

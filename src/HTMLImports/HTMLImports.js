@@ -29,7 +29,6 @@ if (!flags.noOpts) {
 var file = 'HTMLImports.js';
 
 var modules = [
-  '../WeakMap/WeakMap.js',
   '../WebComponents/dom.js',
   'base.js',
   'module.js',

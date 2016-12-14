@@ -1,5 +1,4 @@
 [
-  "../WeakMap/WeakMap.js",
   "../WebComponents/dom.js",
   "base.js",
   "module.js",
