@@ -124,9 +124,8 @@ gulp.task('copy-bower', function() {
 defineBuildTask('webcomponents', './src/WebComponents/build.json');
 defineBuildTask('webcomponents-lite', './src/WebComponents/build-lite.json');
 defineBuildTask('HTMLImports');
-defineBuildTask('ShadowDOM');
 
-gulp.task('build', ['webcomponents', 'webcomponents-lite', 'HTMLImports', 'ShadowDOM', 'copy-bower']);
+gulp.task('build', ['webcomponents', 'webcomponents-lite', 'HTMLImports', 'copy-bower']);
 
 gulp.task('release', function(cb) {
   isRelease = true;
