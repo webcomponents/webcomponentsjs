@@ -56,7 +56,7 @@
     'HTMLImports/HTMLImports.js',
     'WebComponents/pre-polyfill.js',
     '../../custom-elements/custom-elements.min.js',
-    '../../es6-promise/es6-promise.auto.min.js',
+    '../../es6-promise/dist/es6-promise.auto.min.js',
     '../../shadydom/shadydom.min.js',
     '../../shadycss/shadycss.min.js',
     'WebComponents/post-polyfill.js',
