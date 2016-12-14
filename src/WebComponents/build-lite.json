@@ -1,5 +1,5 @@
 [
-  "build/boot-lite.js",
+  "boot-lite.js",
   "../HTMLImports/build.json",
   "../../es6-promise/dist/es6-promise.auto.min.js",
   "../../custom-elements/custom-elements.min.js",
