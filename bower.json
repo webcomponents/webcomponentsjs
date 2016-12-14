@@ -17,7 +17,8 @@
     "custom-elements": "webcomponents/custom-elements#master",
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
     "shadydom": "webcomponents/shadydom#master",
-    "shadycss": "webcomponents/shadycss#master"
+    "shadycss": "webcomponents/shadycss#master",
+    "webcomponents-platform": "webcomponents/webcomponents-platform#master"
   },
   "license": "BSD",
   "ignore": [],

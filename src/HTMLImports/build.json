@@ -1,5 +1,4 @@
 [
-  "../WebComponents/dom.js",
   "base.js",
   "module.js",
   "path.js",

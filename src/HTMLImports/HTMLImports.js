@@ -29,7 +29,6 @@ if (!flags.noOpts) {
 var file = 'HTMLImports.js';
 
 var modules = [
-  '../WebComponents/dom.js',
   'base.js',
   'module.js',
   'path.js',

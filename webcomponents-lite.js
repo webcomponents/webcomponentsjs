@@ -60,8 +60,6 @@
     '../../shadycss/shadycss.min.js',
     'WebComponents/post-polyfill.js',
     // these scripts are loaded here due to polyfill timing issues
-    'WebComponents/lang.js',
-    'WebComponents/dom.js',
     'WebComponents/unresolved.js'
   ];
 
