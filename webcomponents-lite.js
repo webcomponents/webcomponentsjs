@@ -52,7 +52,7 @@
   var modules = [
     '../../URL/url.js',
     '../../template/template.js',
-    'HTMLImports/HTMLImports.js',
+    '../../html-imports/html-imports.min.js',
     '../../es6-promise/dist/es6-promise.auto.min.js',
     'WebComponents/pre-polyfill.js',
     '../../custom-elements/custom-elements.min.js',
