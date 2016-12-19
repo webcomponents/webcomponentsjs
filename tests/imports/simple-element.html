@@ -9,18 +9,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <script>
+  // Kick off shady CSS.
+  var template = document.createElement('template');
+  template.innerHTML =
+    `
+      <style>:host {color: blue;} .red-text {color: red;} </style>
+      <p class="red-text">Shadow DOM</p>
+      <slot id="slot"></slot>
+    `;
+  if (template) {
+    window.ShadyCSS.prepareTemplate(template, 'simple-element');
+  }
+
   class SimpleElement extends HTMLElement {
     constructor() {
       super();
       this.bestName = 'batman';
+      window.ShadyCSS.applyStyle(this);
 
-      var shadowRoot = this.attachShadow({mode: 'open'});
-      shadowRoot.innerHTML = `
-        <style>:host {color: blue;} .red-text {color: red;} </style>
-        <p class="red-text">Shadow DOM</p>
-        <slot id="slot"></slot>
-      `;
+      if (template && !this.shadowRoot) {
+        this.attachShadow({mode: 'open'});
+        this.shadowRoot.appendChild(document.importNode(template.content, true));
+      }
     }
   }
+  
   window.customElements.define('simple-element', SimpleElement);
 </script>
