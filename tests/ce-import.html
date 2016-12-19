@@ -12,8 +12,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <head>
     <title></title>
     <meta charset="UTF-8">
-    <script src="../../../web-component-tester/browser.js"></script>
-    <script src="../../webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../webcomponents-lite.js"></script>
   </head>
   <body>
     <x-foo></x-foo>
@@ -24,7 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         var link = document.createElement('link');
         link.rel = 'import';
-        link.href = 'includes/element-import.html';
+        link.href = 'imports/element-import.html';
         document.head.appendChild(link);
 
         HTMLImports.whenReady(function() {

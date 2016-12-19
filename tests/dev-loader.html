@@ -12,13 +12,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <head>
     <title></title>
     <meta charset="UTF-8">
-    <script src="../../../web-component-tester/browser.js"></script>
-    <script src="../../webcomponents-lite.js?0.13513513" log="foo,boo" squid="never" spoo></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../webcomponents-lite.js" log="foo,boo" squid="never" spoo></script>
   </head>
   <body>
     <script>
-      test('loader swizzeled', function() {
-        assert(window.WebComponents, 'Platform scope missing');
+      test('loader', function() {
+        assert(window.WebComponents, 'WebComponents scope missing');
         assert.equal(WebComponents.flags.squid, 'never', '"squid" flag missing');
         assert(WebComponents.flags.spoo, '"spoo" flag missing');
         assert(WebComponents.flags.log, 'flags.log missing');
