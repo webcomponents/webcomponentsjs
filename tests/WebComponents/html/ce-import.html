@@ -13,8 +13,7 @@
     <title></title>
     <meta charset="UTF-8">
     <script src="../../../../web-component-tester/browser.js"></script>
-
-    <script src="../../../webcomponents.js"></script>
+    <script src="../../../webcomponents-lite.js"></script>
   </head>
   <body>
     <x-foo></x-foo>
@@ -26,15 +25,15 @@
           return;
         }
         var xfoo = document.querySelector('x-foo');
-        chai.assert.isUndefined(xfoo.isCreated);
+        assert.isUndefined(xfoo.isCreated);
         var link = document.createElement('link');
         link.rel = 'import';
         link.href = 'element-import.html';
         document.head.appendChild(link);
         HTMLImports.whenReady(function() {
-          chai.assert.isTrue(xfoo.isCreated, 'element in main document, registered in dynamic import is upgraded');
+          assert.isTrue(xfoo.isCreated, 'element in main document, registered in dynamic import is upgraded');
           var ix = link.import.querySelector('x-foo');
-          chai.assert.isTrue(ix.isCreated, 'element in import, registered in dynamic import is upgraded');
+          assert.isTrue(ix.isCreated, 'element in import, registered in dynamic import is upgraded');
           done();
         });
       });

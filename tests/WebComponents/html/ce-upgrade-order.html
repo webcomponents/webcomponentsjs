@@ -33,7 +33,7 @@
         order.push(this.id);
       }
       document.registerElement('x-foo', {prototype: proto});
-      chai.assert.deepEqual(order, ['import', 'main'], 'elements are upgraded in imports before main document');
+      assert.deepEqual(order, ['import', 'main'], 'elements are upgraded in imports before main document');
     });
   </script>
 </body>

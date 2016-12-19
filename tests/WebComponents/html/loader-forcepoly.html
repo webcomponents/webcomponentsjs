@@ -19,9 +19,9 @@
   <body>
     <script>
       test('force poly', function() {
-      chai.assert(window.WebComponents, 'WebComponents scope missing');
-      chai.assert.equal(WebComponents.flags.shadow, true, 'improper "shadow" flag');
-      chai.assert(window.ShadowDOMPolyfill, 'ShadowDOMPolyfill missing');
+      assert(window.WebComponents, 'WebComponents scope missing');
+      assert.equal(WebComponents.flags.shadow, true, 'improper "shadow" flag');
+      assert(window.ShadowDOMPolyfill, 'ShadowDOMPolyfill missing');
       });
     </script>
   </body>

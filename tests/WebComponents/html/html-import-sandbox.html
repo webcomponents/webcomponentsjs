@@ -15,7 +15,7 @@
 		<script>
 			window.addEventListener('message', function(e) {
 				if (e.data.type === 'test') {
-					chai.assert.equal(e.data.data, 'hello!');
+					assert.equal(e.data.data, 'hello!');
 					done();
 				} else {
 					e.source.postMessage({

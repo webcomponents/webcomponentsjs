@@ -37,7 +37,7 @@
     </element>
     <script>
       window.addEventListener('WebComponentsReady', function() {
-        var assert = chai.assert;
+        var assert = assert;
         var elt = document.querySelector('x-foo');
         assert.ok(elt, 'x-foo not found');
         assert.equal(elt.textContent, 'cordon bleu',

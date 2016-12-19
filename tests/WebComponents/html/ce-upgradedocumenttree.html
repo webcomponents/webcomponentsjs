@@ -43,9 +43,9 @@
           window.addEventListener('WebComponentsReady', function() {
             CustomElements.ready = false;
             register();
-            chai.assert.equal(created, 0, 'no elements created when ready explicitly set to false');
+            assert.equal(created, 0, 'no elements created when ready explicitly set to false');
             CustomElements.upgradeDocumentTree(document);
-            chai.assert.equal(created, 3, 'elements in document tree upgraded via CustomElements.upgradeDocumentTree');
+            assert.equal(created, 3, 'elements in document tree upgraded via CustomElements.upgradeDocumentTree');
             done();
           });
         }
