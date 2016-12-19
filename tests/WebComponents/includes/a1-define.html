@@ -1,4 +1,3 @@
-<!doctype html>
 <!--
     @license
     Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -8,20 +7,26 @@
     Code distributed by Google as part of the polymer project is also
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<html>
-	<head>
-		<link rel="import" href="dummy.html">
-		<script src="../../lib/patches-html-imports-csp.js"></script>
-		<script src="../../../webcomponents.js"></script>
-	</head>
-	<body>
-		<script>
-			window.addEventListener('HTMLImportsLoaded', function() {
-				parent.postMessage({
-					type: 'test',
-					data: document.querySelector('link[rel=import]').content.querySelector('body').innerHTML
-				}, '*');
-			});
-		</script>
-	</body>
-</html>
+<script>
+(function() {
+
+  window.a1DocsList = [];
+
+  class A1 extends HTMLElement {
+    connectedCallback() {
+      a1DocsList.push(this.ownerDocument.baseURI.split('/').pop());
+      this.isA1 = true;
+    }
+  }
+  window.customElements.define('a-1', A1);
+
+
+  class SpecialStyle extends HTMLStyleElement {
+    connectedCallback() {
+      window.styleAppliedToDocument = Boolean(this.__appliedElement);
+    }
+  }
+  window.customElements.define('special-style', SpecialStyle);
+
+})();
+</script>

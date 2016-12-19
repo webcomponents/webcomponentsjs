@@ -12,9 +12,9 @@
   <head>
     <title></title>
     <meta charset="UTF-8">
-    <script src="../../../../web-component-tester/browser.js"></script>
-    <script src="../../../webcomponents-lite.js"></script>
-    <link rel="import" href="a1-import.html">
+    <script src="../../../web-component-tester/browser.js"></script>
+    <script src="../../webcomponents-lite.js"></script>
+    <link rel="import" href="includes/a1-import.html">
   </head>
   <body>
     <script>
@@ -24,10 +24,7 @@
         assert.isTrue(isA1Upgraded);
         // order expected
         assert.deepEqual(a1DocsList, ['a1-instance.html', 'a1-reference.html']);
-        // style applied at upgrade time
-        if (!HTMLImports.useNative) {
-          assert.isTrue(styleAppliedToDocument);
-        }
+        assert.isTrue(styleAppliedToDocument);
       });
     </script>
   </body>

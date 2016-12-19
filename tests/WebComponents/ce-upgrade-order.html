@@ -12,27 +12,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Custom Element Upgrade Order</title>
-  <script src="../../../../web-component-tester/browser.js"></script>
-
-  <script src="../../../webcomponents.js"></script>
-  <link rel="import" href="import-upgrade-order.html">
+  <script src="../../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponents-lite.js"></script>
+  <link rel="import" href="includes/import-upgrade-order.html">
 </head>
 <body>
   <x-foo id="main"></x-foo>
   <script>
     test('upgrade order', function() {
-      // native CE will upgrade in creation order
-      // HTMLImports polyfill must be created after main document
-      // Therefore, skip this test in that scenario
-      if (CustomElements.useNative && !HTMLImports.useNative) {
-        return;
-      }
-      var proto = Object.create(HTMLElement.prototype);
       var order = [];
-      proto.createdCallback = function() {
-        order.push(this.id);
+      class XFoo extends HTMLElement {
+        connectedCallback() {
+          order.push(this.id);
+        }
       }
-      document.registerElement('x-foo', {prototype: proto});
+      window.customElements.define('x-foo', XFoo);
       assert.deepEqual(order, ['import', 'main'], 'elements are upgraded in imports before main document');
     });
   </script>

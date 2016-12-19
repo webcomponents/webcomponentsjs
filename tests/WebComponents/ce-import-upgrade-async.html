@@ -12,8 +12,8 @@
   <head>
     <title></title>
     <meta charset="UTF-8">
-    <script src="../../../../web-component-tester/browser.js"></script>
-    <script src="../../../webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+    <script src="../../webcomponents-lite.js"></script>
   </head>
   <body>
     <script>
@@ -36,7 +36,7 @@
         setTimeout(function() {
           var l = document.createElement('link');
           l.rel = 'import';
-          l.href = 'a1-import.html';
+          l.href = 'imports/a1-import.html';
           l.addEventListener('load', testImports);
           document.head.appendChild(l);
         });
