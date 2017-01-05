@@ -28,6 +28,6 @@
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.0.1",
     "run-sequence": "^1.0.1",
-    "web-component-tester": "^4.0.1"
+    "web-component-tester": "^6.0.0-prerelease.4"
   }
 }

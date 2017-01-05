@@ -1,1 +1,0 @@
-MutationObserver.prototype.takeRecords = function() {};

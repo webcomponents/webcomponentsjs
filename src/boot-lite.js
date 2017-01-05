@@ -48,30 +48,7 @@
     }
   }
 
-  // construct full dependency list
-  var modules = [
-    '../../webcomponents-platform/webcomponents-platform.js',
-    '../../URL/url.js',
-    '../../template/template.js',
-    '../../html-imports/src/html-imports.js',
-    '../../es6-promise/dist/es6-promise.auto.min.js',
-    'pre-polyfill.js',
-    '../../custom-elements/custom-elements.min.js',
-    '../../shadydom/shadydom.min.js',
-    '../../shadycss/shadycss.min.js',
-    'post-polyfill.js',
-    'unresolved.js'
-  ];
-
-  var src = script.getAttribute('src');
-  var path = src.slice(0, src.lastIndexOf(file));
-
-  modules.forEach(function(f) {
-    document.write('<script src="' + path + 'src/' + f + '"></script>');
-  });
-
   // exports
   WebComponents.flags = flags;
-
 
 })();

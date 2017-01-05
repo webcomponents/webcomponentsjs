@@ -121,14 +121,11 @@ gulp.task('copy-bower', function() {
   return gulp.src(['bower.json', 'package.json', 'README.md']).pipe(gulp.dest('dist/'));
 });
 
-defineBuildTask('webcomponents', './src/WebComponents/build.json');
-defineBuildTask('webcomponents-lite', './src/WebComponents/build-lite.json');
+defineBuildTask('webcomponents', './src/build.json');
+defineBuildTask('webcomponents-lite', './src/build-lite.json');
 defineBuildTask('HTMLImports');
-defineBuildTask('ShadowDOM');
-defineBuildTask('MutationObserver');
 
-gulp.task('build', ['webcomponents', 'webcomponents-lite', 'HTMLImports', 'ShadowDOM', 'copy-bower',
-  'MutationObserver']);
+gulp.task('build', ['webcomponents', 'webcomponents-lite', 'HTMLImports', 'copy-bower']);
 
 gulp.task('release', function(cb) {
   isRelease = true;
