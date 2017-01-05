@@ -48,12 +48,6 @@
     }
   }
 
-  // forward flags
-  if (flags.register) {
-    window.CustomElements = window.CustomElements || {flags: {}};
-    window.CustomElements.flags.register = flags.register;
-  }
-
   // exports
   WebComponents.flags = flags;
 
