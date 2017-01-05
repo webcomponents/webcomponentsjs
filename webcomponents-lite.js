@@ -50,6 +50,7 @@
 
   // construct full dependency list
   var modules = [
+    '../../webcomponents-platform/webcomponents-platform.js',
     '../../URL/url.js',
     '../../template/template.js',
     '../../html-imports/src/html-imports.js',
@@ -59,8 +60,6 @@
     '../../shadydom/shadydom.min.js',
     '../../shadycss/shadycss.min.js',
     'post-polyfill.js',
-    // these scripts are loaded here due to polyfill timing issues
-    '../../webcomponents-platform/webcomponents-platform.js',
     'unresolved.js'
   ];
 
