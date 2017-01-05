@@ -38,7 +38,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           childCreated = true;
         }
       }
-      window.customElements.define('x-child', XChild);
 
       class XAfter extends HTMLElement {
         constructor() {
@@ -51,7 +50,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
       }
-      window.customElements.define('x-after', XAfter);
+
+      // The template polyfill is asynchronous, so on IE11 we shouldn't
+      // try to upgrade before it's done its thing.
+      document.addEventListener('DOMContentLoaded', function() {
+        window.customElements.define('x-child', XChild);
+        window.customElements.define('x-after', XAfter);
+      });
 
       test('elements within templates not upgraded', function() {
         assert(!childCreated);
