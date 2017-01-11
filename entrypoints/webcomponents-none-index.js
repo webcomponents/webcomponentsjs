@@ -10,18 +10,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 'use strict';
 
 /*
- * Polyfills loaded: HTML Imports, Custom Elements, Shady DOM/Shady CSS, platform polyfills (URL/template)
- * Used in: IE 11
+ * Polyfills loaded: None
+ * Used in: Chrome
  */
 
-import '../bower_components/webcomponents-platform/webcomponents-platform.js'
-import '../bower_components/URL/url.js'
-import '../bower_components/template/template.js'
-import '../bower_components/html-imports/src/html-imports.js'
-import '../bower_components/es6-promise/dist/es6-promise.auto.min.js'
+// TODO: This needs to not exist at all.
+
 import '../src/pre-polyfill.js'
-import '../bower_components/custom-elements/custom-elements.min.js'
-import '../bower_components/shadydom/shadydom.min.js'
+//TODO(notwaldorf): this is temporary and should be removed.
 import '../bower_components/shadycss/src/ShadyCSS.js'
 import '../src/post-polyfill.js'
 import '../src/unresolved.js'

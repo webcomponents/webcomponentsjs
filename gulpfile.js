@@ -36,6 +36,22 @@ const babiliConfig = {
   shouldPrintComment: singleLicenseComment()
 };
 
+gulp.task('minify-none', () => {
+  return rollup({
+    entry: './entrypoints/webcomponents-none-index.js',
+    format: 'iife',
+    moduleName: 'webcomponentsjs',
+    sourceMap: true
+  })
+  .pipe(source('webcomponents-none-index.js'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init({loadMaps: true}))
+  // .pipe(babel(babiliConfig))
+  .pipe(rename('webcomponents-none.min.js'))
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest('./'))
+});
+
 gulp.task('minify-hi', () => {
   return rollup({
     entry: './entrypoints/webcomponents-hi-index.js',
@@ -46,7 +62,7 @@ gulp.task('minify-hi', () => {
   .pipe(source('webcomponents-hi-index.js'))
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
-  .pipe(babel(babiliConfig))
+  // .pipe(babel(babiliConfig))
   .pipe(rename('webcomponents-hi.min.js'))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('./'))
@@ -62,7 +78,7 @@ gulp.task('minify-hi-ce', () => {
   .pipe(source('webcomponents-hi-ce-index.js'))
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
-  .pipe(babel(babiliConfig))
+  // .pipe(babel(babiliConfig))
   .pipe(rename('webcomponents-hi-ce.min.js'))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('./'))
@@ -78,7 +94,7 @@ gulp.task('minify-hi-ce-sd', () => {
   .pipe(source('webcomponents-hi-ce-sd-index.js'))
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
-  .pipe(babel(babiliConfig))
+  // .pipe(babel(babiliConfig))
   .pipe(rename('webcomponents-hi-ce-sd.min.js'))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('./'))
@@ -94,10 +110,10 @@ gulp.task('minify-hi-ce-sd-pf', () => {
   .pipe(source('webcomponents-hi-ce-sd-pf-index.js'))
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
-  .pipe(babel(babiliConfig))
+  // .pipe(babel(babiliConfig))
   .pipe(rename('webcomponents-hi-ce-sd-pf.min.js'))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('./'))
 });
 
-gulp.task('default', ['minify-hi', 'minify-hi-ce', 'minify-hi-ce-sd', 'minify-hi-ce-sd-pf']);
+gulp.task('default', ['minify-none', 'minify-hi', 'minify-hi-ce', 'minify-hi-ce-sd', 'minify-hi-ce-sd-pf']);
