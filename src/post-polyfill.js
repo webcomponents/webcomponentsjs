@@ -12,10 +12,16 @@
 
   'use strict';
 
-  HTMLImports.whenReady(function() {
+  if (window.HTMLImports) {
+    HTMLImports.whenReady(function() {
+      requestAnimationFrame(function() {
+        window.dispatchEvent(new CustomEvent('WebComponentsReady'));
+      });
+    });
+  } else {
     requestAnimationFrame(function() {
       window.dispatchEvent(new CustomEvent('WebComponentsReady'));
     });
-  });
+  }
 
 })(window.WebComponents);
