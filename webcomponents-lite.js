@@ -9,69 +9,24 @@
  */
 
 (function() {
-
-  // Establish scope.
-  window.WebComponents = window.WebComponents || {flags:{}};
-
-  // loading script
-  var file = 'webcomponents-lite.js';
-  var script = document.querySelector('script[src*="' + file + '"]');
-
-  // Flags. Convert url arguments to flags
-  var flags = {};
-  if (!flags.noOpts) {
-    // from url
-    location.search.slice(1).split('&').forEach(function(option) {
-      var parts = option.split('=');
-      var match;
-      if (parts[0] && (match = parts[0].match(/wc-(.+)/))) {
-        flags[match[1]] = parts[1] || true;
-      }
-    });
-    // from script
-    if (script) {
-      for (var i=0, a; (a=script.attributes[i]); i++) {
-        if (a.name !== 'src') {
-          flags[a.name] = a.value || true;
-        }
-      }
-    }
-    // log flags
-    if (flags.log && flags.log.split) {
-      var parts = flags.log.split(',');
-      flags.log = {};
-      parts.forEach(function(f) {
-        flags.log[f] = true;
-      });
-    } else {
-      flags.log = {};
-    }
+  // Feature detect which polyfill needs to be imported.
+  let polyfills = [];
+  if (!('import' in document.createElement('link'))) {
+    polyfills.push('hi');
   }
-
-  // construct full dependency list
-  var modules = [
-    '../../webcomponents-platform/webcomponents-platform.js',
-    '../../URL/url.js',
-    '../../template/template.js',
-    '../../html-imports/src/html-imports.js',
-    '../../es6-promise/dist/es6-promise.auto.min.js',
-    'pre-polyfill.js',
-    '../../custom-elements/custom-elements.min.js',
-    '../../shadydom/shadydom.min.js',
-    '../../shadycss/shadycss.min.js',
-    'post-polyfill.js',
-    'unresolved.js'
-  ];
-
-  var src = script.getAttribute('src');
-  var path = src.slice(0, src.lastIndexOf(file));
-
-  modules.forEach(function(f) {
-    document.write('<script src="' + path + 'src/' + f + '"></script>');
-  });
-
-  // exports
-  WebComponents.flags = flags;
-
-
+  if (!window.customElements) {
+    polyfills.push('ce');
+  }
+  if (!('attachShadow' in Element.prototype)) {
+    polyfills.push('sd');
+  }
+  if (!('content' in document.createElement('template')) || !window.Promise || !window.URL) {
+    polyfills.push('pf');
+  }
+  if (polyfills.length) {
+    let script = document.createElement('script');
+    script.src = `/bower_components/webcomponentsjs/webcomponents-${polyfills.join('-')}.min.js`;
+    console.log('Loaded: ', script.src);
+    document.head.appendChild(script);
+  }
 })();
