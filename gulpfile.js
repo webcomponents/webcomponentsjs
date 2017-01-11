@@ -12,126 +12,92 @@
 
 'use strict';
 
-var audit = require('gulp-audit');
-var concat = require('gulp-concat');
-var exec = require('child_process').exec;
-var fs = require('fs');
-var gulp = require('gulp');
-var header = require('gulp-header');
-var path = require('path');
-var rename = require('gulp-rename');
-var runseq = require('run-sequence');
-var uglify = require('gulp-uglify');
+// Dan things
+const gulp = require('gulp');
+const sourcemaps = require('gulp-sourcemaps');
+const babel = require('gulp-babel');
+const buffer = require('vinyl-buffer');
+const rename = require('gulp-rename');
+const rollup = require('rollup-stream');
+const source = require('vinyl-source-stream');
 
-// init tests with gulp
-require('web-component-tester').gulp.init(gulp);
-
-var isRelease = process.env.RELEASE !== undefined;
-
-var banner = fs.readFileSync('banner.txt', 'utf8');
-
-var pkg;
-
-function defineBuildTask(name, manifest) {
-  (function() {
-
-    manifest = manifest || './src/' + name + '/build.json';
-    var output = name;
-    var list = readManifest(manifest);
-    gulp.task(name + '-debug', ['version'], function() {
-      return gulp.src(list)
-      .pipe(concat(output + '.js'))
-      .pipe(uglify({
-        mangle: false,
-        compress: false,
-        output: {
-          beautify: true,
-          indent_level: 2
-        }
-      }))
-      .pipe(header(banner, {pkg: pkg}))
-      .pipe(gulp.dest('dist/'))
-      ;
-    });
-
-    gulp.task(name, ['version', name + '-debug'], function() {
-      return gulp.src(list)
-      .pipe(concat(output + '.min.js'))
-      .pipe(uglify())
-      .pipe(header(banner, {pkg: pkg}))
-      .pipe(gulp.dest('dist/'))
-      ;
-    });
-
-  })();
-}
-
-function readJSON(filename) {
-  var blob = fs.readFileSync(filename, 'utf8');
-  return JSON.parse(blob);
-}
-
-gulp.task('audit', function() {
-  return gulp.src('dist/*.js')
-  .pipe(audit('build.log', {repos:['.']}))
-  .pipe(gulp.dest('dist/'));
-});
-
-gulp.task('version', function(cb) {
-  pkg = require('./package.json');
-  var cmd = ['git', 'rev-parse', '--short', 'HEAD'].join(' ');
-  if (!isRelease) {
-    exec(cmd, function(err, stdout, stderr) {
-      if (err) {
-        return cb(err);
-      }
-      if (stdout) {
-        stdout = stdout.trim();
-      }
-      pkg.version = pkg.version + '-' + stdout;
-      cb();
-    });
-  } else {
-    cb();
-  }
-});
-
-function readManifest(filename, modules) {
-  modules = modules || [];
-  var lines = readJSON(filename);
-  var dir = path.dirname(filename);
-  lines.forEach(function(line) {
-    var fullpath = path.join(dir, line);
-    if (line.slice(-5) == '.json') {
-      // recurse
-      modules = modules.concat(readManifest(fullpath, modules));
-    } else {
-      modules.push(fullpath);
+function singleLicenseComment() {
+  let hasLicense = false;
+  return (comment) => {
+    if (hasLicense) {
+      return false;
     }
-  });
-  var tmp = Object.create(null);
-  for (var i = 0; i < modules.length; i++) {
-    tmp[modules[i]] = 1;
+    return hasLicense = /@license/.test(comment);
   }
-  modules = Object.keys(tmp);
-  return modules;
 }
 
-gulp.task('copy-bower', function() {
-  return gulp.src(['bower.json', 'package.json', 'README.md']).pipe(gulp.dest('dist/'));
+const babiliConfig = {
+  presets: ['babili'],
+  shouldPrintComment: singleLicenseComment()
+};
+
+gulp.task('minify-hi', () => {
+  return rollup({
+    entry: './entrypoints/webcomponents-hi-index.js',
+    format: 'iife',
+    moduleName: 'webcomponentsjs',
+    sourceMap: true
+  })
+  .pipe(source('webcomponents-hi-index.js'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init({loadMaps: true}))
+  .pipe(babel(babiliConfig))
+  .pipe(rename('webcomponents-hi.min.js'))
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest('./'))
 });
 
-defineBuildTask('webcomponents', './src/build.json');
-defineBuildTask('webcomponents-lite', './src/build-lite.json');
-defineBuildTask('HTMLImports');
-
-gulp.task('build', ['webcomponents', 'webcomponents-lite', 'HTMLImports', 'copy-bower']);
-
-gulp.task('release', function(cb) {
-  isRelease = true;
-  runseq('build', 'audit', cb);
+gulp.task('minify-hi-ce', () => {
+  return rollup({
+    entry: './entrypoints/webcomponents-hi-ce-index.js',
+    format: 'iife',
+    moduleName: 'webcomponentsjs',
+    sourceMap: true
+  })
+  .pipe(source('webcomponents-hi-ce-index.js'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init({loadMaps: true}))
+  .pipe(babel(babiliConfig))
+  .pipe(rename('webcomponents-hi-ce.min.js'))
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest('./'))
 });
 
-gulp.task('default', function(cb) {
-  runseq('build', 'audit', cb);
+gulp.task('minify-hi-ce-sd', () => {
+  return rollup({
+    entry: './entrypoints/webcomponents-hi-ce-sd-index.js',
+    format: 'iife',
+    moduleName: 'webcomponentsjs',
+    sourceMap: true
+  })
+  .pipe(source('webcomponents-hi-ce-sd-index.js'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init({loadMaps: true}))
+  .pipe(babel(babiliConfig))
+  .pipe(rename('webcomponents-hi-ce-sd.min.js'))
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest('./'))
 });
+
+gulp.task('minify-hi-ce-sd-pf', () => {
+  return rollup({
+    entry: './entrypoints/webcomponents-hi-ce-sd-pf-index.js',
+    format: 'iife',
+    moduleName: 'webcomponentsjs',
+    sourceMap: true
+  })
+  .pipe(source('webcomponents-hi-ce-sd-pf-index.js'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init({loadMaps: true}))
+  .pipe(babel(babiliConfig))
+  .pipe(rename('webcomponents-hi-ce-sd-pf.min.js'))
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest('./'))
+});
+
+gulp.task('default', ['minify-hi', 'minify-hi-ce', 'minify-hi-ce-sd', 'minify-hi-ce-sd-pf']);
