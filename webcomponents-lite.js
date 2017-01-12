@@ -9,6 +9,47 @@
  */
 
 (function() {
+  // Establish scope.
+  window.WebComponents = window.WebComponents || {flags:{}};
+
+  // loading script
+  var file = 'webcomponents-lite.js';
+  var script = document.querySelector('script[src*="' + file + '"]');
+
+  // Flags. Convert url arguments to flags
+  var flags = {};
+  if (!flags.noOpts) {
+    // from url
+    location.search.slice(1).split('&').forEach(function(option) {
+      var parts = option.split('=');
+      var match;
+      if (parts[0] && (match = parts[0].match(/wc-(.+)/))) {
+        flags[match[1]] = parts[1] || true;
+      }
+    });
+    // from script
+    if (script) {
+      for (var i=0, a; (a=script.attributes[i]); i++) {
+        if (a.name !== 'src') {
+          flags[a.name] = a.value || true;
+        }
+      }
+    }
+    // log flags
+    if (flags.log && flags.log.split) {
+      var parts = flags.log.split(',');
+      flags.log = {};
+      parts.forEach(function(f) {
+        flags.log[f] = true;
+      });
+    } else {
+      flags.log = {};
+    }
+  }
+
+  // exports
+  WebComponents.flags = flags;
+  
   // Feature detect which polyfill needs to be imported.
   let polyfills = [];
   if (!('import' in document.createElement('link'))) {
@@ -23,9 +64,15 @@
   if (!('content' in document.createElement('template')) || !window.Promise || !window.URL) {
     polyfills.push('pf');
   }
+
+  // TODO(notwaldorf): This is a temporary hack because of pre/post-polyfill.js,
+  // and needs to not exist at all.
+  if (!polyfills.length) {
+    polyfills.push('none');
+  }
   if (polyfills.length) {
     let script = document.createElement('script');
-    script.src = `/bower_components/webcomponentsjs/webcomponents-${polyfills.join('-')}.min.js`;
+    script.src = `../webcomponents-${polyfills.join('-')}.min.js`;
     console.log('Loaded: ', script.src);
     document.head.appendChild(script);
   }
