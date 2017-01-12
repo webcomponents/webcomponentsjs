@@ -49,7 +49,7 @@
 
   // exports
   WebComponents.flags = flags;
-  
+
   // Feature detect which polyfill needs to be imported.
   let polyfills = [];
   if (!('import' in document.createElement('link'))) {
@@ -72,7 +72,10 @@
   }
   if (polyfills.length) {
     let script = document.createElement('script');
-    script.src = `../webcomponents-${polyfills.join('-')}.min.js`;
+    var url = document.currentScript.src.replace(
+        'webcomponentsjs/webcomponents-lite.js',
+        `webcomponentsjs/webcomponents-${polyfills.join('-')}.min.js`);
+    script.src = url;
     console.log('Loaded: ', script.src);
     document.head.appendChild(script);
   }
