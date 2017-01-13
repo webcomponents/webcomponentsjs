@@ -33,18 +33,21 @@ const babiliConfig = {
   shouldPrintComment: singleLicenseComment()
 };
 
-function minify(polyfill) {
+function minify(sourceName, fileName) {
+  if (!fileName)
+    fileName = sourceName;
+
   return rollup({
-    entry: './entrypoints/' + polyfill + '-index.js',
+    entry: './entrypoints/' + sourceName + '-index.js',
     format: 'iife',
     moduleName: 'webcomponentsjs',
     sourceMap: true
   })
-  .pipe(source(polyfill +'-index.js'))
+  .pipe(source(sourceName +'-index.js'))
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
   .pipe(babel(babiliConfig))
-  .pipe(rename(polyfill + '.min.js'))
+  .pipe(rename(fileName + '.js'))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('./'))
 }
@@ -66,7 +69,7 @@ gulp.task('minify-hi-ce-sd', () => {
 });
 
 gulp.task('minify-hi-ce-sd-pf', () => {
-  minify('webcomponents-hi-ce-sd-pf')
+  minify('webcomponents-hi-ce-sd-pf', 'webcomponents-lite')
 });
 
 gulp.task('default', ['minify-none', 'minify-hi', 'minify-hi-ce', 'minify-hi-ce-sd', 'minify-hi-ce-sd-pf']);
