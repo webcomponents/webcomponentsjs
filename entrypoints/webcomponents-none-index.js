@@ -16,8 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // TODO: This needs to not exist at all.
 
-import '../src/pre-polyfill.js'
 //TODO(notwaldorf): this is temporary and should be removed.
 import '../bower_components/shadycss/src/ShadyCSS.js'
-import '../src/post-polyfill.js'
 import '../src/unresolved.js'

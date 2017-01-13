@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+ * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
  * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
@@ -14,7 +14,7 @@
   window.WebComponents = window.WebComponents || {flags:{}};
 
   // loading script
-  var file = 'webcomponents-lite.js';
+  var file = 'webcomponents-debug.js';
   var script = document.querySelector('script[src*="' + file + '"]');
 
   // Flags. Convert url arguments to flags
@@ -55,11 +55,9 @@
     '../../template/template.js',
     '../../html-imports/src/html-imports.js',
     '../../es6-promise/dist/es6-promise.auto.min.js',
-    'pre-polyfill.js',
     '../../custom-elements/custom-elements.min.js',
     '../../shadydom/shadydom.min.js',
     '../../shadycss/shadycss.min.js',
-    'post-polyfill.js',
     'unresolved.js'
   ];
 
