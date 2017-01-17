@@ -53,6 +53,8 @@
   // load some things for now.
   if (!polyfills.length) {
     polyfills.push('none');
+  } else if (polyfills.length === 4) {  // hi-ce-sd-pf is actually called lite.
+    polyfills = ['lite'];
   }
 
   if (polyfills.length) {
