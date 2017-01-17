@@ -33,16 +33,24 @@ const babiliConfig = {
   shouldPrintComment: singleLicenseComment()
 };
 
-function minify(sourceName, fileName) {
+function minify(sourceName, fileName, needsContext) {
   if (!fileName)
     fileName = sourceName;
 
-  return rollup({
+  var options = {
     entry: './entrypoints/' + sourceName + '-index.js',
     format: 'iife',
     moduleName: 'webcomponentsjs',
     sourceMap: true
-  })
+  }
+
+  // The es6-promise polyfill needs to set the correct context.
+  // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
+  if (needsContext) {
+    options.context = 'window';
+  };
+
+  return rollup(options)
   .pipe(source(sourceName +'-index.js'))
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
@@ -69,7 +77,7 @@ gulp.task('minify-hi-ce-sd', () => {
 });
 
 gulp.task('minify-hi-ce-sd-pf', () => {
-  minify('webcomponents-hi-ce-sd-pf', 'webcomponents-lite')
+  minify('webcomponents-hi-ce-sd-pf', 'webcomponents-lite', true)
 });
 
 gulp.task('default', ['minify-none', 'minify-hi', 'minify-hi-ce', 'minify-hi-ce-sd', 'minify-hi-ce-sd-pf']);
