@@ -3,40 +3,36 @@ webcomponents.js
 
 [![Build Status](https://travis-ci.org/webcomponents/webcomponentsjs.svg?branch=master)](https://travis-ci.org/webcomponents/webcomponentsjs)
 
-A suite of polyfills supporting the [Web Components](http://webcomponents.org) specs:
+A suite of polyfills supporting the [Web Components](http://webcomponents.org) specs.
 
-**Custom Elements**: allows authors to define their own custom tags ([spec](https://w3c.github.io/webcomponents/spec/custom/)).
-
-**HTML Imports**: a way to include and reuse HTML documents via other HTML documents ([spec](https://w3c.github.io/webcomponents/spec/imports/)).
-
-**Shadow DOM**: provides encapsulation by hiding DOM subtrees under shadow roots ([spec](https://w3c.github.io/webcomponents/spec/shadow/)).
+- **Custom Elements**: allows authors to define their own custom tags ([spec](https://w3c.github.io/webcomponents/spec/custom/)).
+- **HTML Imports**: a way to include and reuse HTML documents via other HTML documents ([spec](https://w3c.github.io/webcomponents/spec/imports/)).
+- **Shadow DOM**: provides encapsulation by hiding DOM subtrees under shadow roots ([spec](https://w3c.github.io/webcomponents/spec/shadow/)).
 
 ## Releases
 
-Pre-built (concatenated & minified) versions of the polyfills are maintained in the [tagged versions](https://github.com/webcomponents/webcomponentsjs/releases) of this repo. There are two variants:
+Pre-built (concatenated & minified) versions of the polyfills are maintained in the [tagged versions](https://github.com/webcomponents/webcomponentsjs/releases) of this repo. There are several variants:
 
-`webcomponents.js` includes all of the polyfills.
-
-`webcomponents-lite.js` includes all polyfills except for shadow DOM.
-
+- `webcomponents-lite.js` includes all of the polyfills.
+- `webcomponents-loader.js` is a custom loader that dynamically load a minified polyfill
+bundle, using feature detection. The bundles that can be loaded are:
+  - `webcomponents-hi` -- HTML Imports (needed by Safari Tech Preview)
+  - `webcomponents-hi-ce` -- HTML Imports and Custom Elements (needed by Safari 10)
+  - `webcomponents-hi-ce-sd` -- HTML Imports, Custom Elements and Shady DOM/CSS (needed by Safari 9, Firefox, Edge)
+  - `webcomponents-lite` -- HTML Imports, Custom Elements, Shady DOM/CSS and generic platform polyfills (such as URL, Template, ES6 Promise, Constructable events, etc.) (needed by Internet Explorer 11)
 
 ## Browser Support
 
 Our polyfills are intended to work in the latest versions of evergreen browsers. See below
 for our complete browser support matrix:
 
-| Polyfill   | IE10 | IE11+ | Chrome* | Firefox* | Safari 7+* | Chrome Android* | Mobile Safari* |
-| ---------- |:----:|:-----:|:-------:|:--------:|:----------:|:---------------:|:--------------:|
-| Custom Elements | ~ | ✓ | ✓ | ✓ | ✓ | ✓| ✓ |
-| HTML Imports | ~ | ✓ | ✓ | ✓ | ✓| ✓| ✓ |
-| Shadow DOM | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Templates | ✓ | ✓ | ✓ | ✓| ✓ | ✓ | ✓ |
+| Polyfill   | IE11+ | Chrome* | Firefox* | Safari 9+* | Chrome Android* | Mobile Safari* |
+| ---------- |:-----:|:-------:|:--------:|:----------:|:---------------:|:--------------:|
+| Custom Elements | ✓ | ✓ | ✓ | ✓ | ✓| ✓ |
+| HTML Imports |  ✓ | ✓ | ✓ | ✓| ✓| ✓ |
+| Shady CSS/DOM |  ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
-
-*Indicates the current version of the browser
-
-~Indicates support may be flaky. If using Custom Elements or HTML Imports with Shadow DOM,
-you will get the non-flaky Mutation Observer polyfill that Shadow DOM includes.
+\*Indicates the current version of the browser
 
 The polyfills may work in older browsers, however require additional polyfills (such as classList)
 to be used. We cannot guarantee support for browsers outside of our compatibility matrix.
@@ -44,7 +40,7 @@ to be used. We cannot guarantee support for browsers outside of our compatibilit
 
 ### Manually Building
 
-If you wish to build the polyfills yourself, you'll need `node` and `gulp` on your system:
+If you wish to build the polyfills yourself, you'll need `node` and `npm` on your system:
 
  * install [node.js](http://nodejs.org/) using the instructions on their website
  * use `npm` to install [gulp.js](http://gulpjs.com/): `npm install -g gulp`
@@ -53,10 +49,11 @@ Now you are ready to build the polyfills with:
 
     # install dependencies
     npm install
+    bower install
     # build
     gulp build
 
-The builds will be placed into the `dist/` directory.
+The builds will be placed into the root directory.
 
 ## Contribute
 
@@ -74,7 +71,7 @@ Copyright (c) 2015 The Polymer Authors. All rights reserved.
 
 Under native HTML Imports, `<script>` tags in the main document block the loading of such imports. This is to ensure the imports have loaded and any registered elements in them have been upgraded.
 
-The webcomponents.js and webcomponents-lite.js polyfills parse element definitions and handle their upgrade asynchronously. If prematurely fetching the element from the DOM before it has an opportunity to upgrade, you'll be working with an `HTMLUnknownElement`.
+The `webcomponents-lite.js` polyfill parse element definitions and handle their upgrade asynchronously. If prematurely fetching the element from the DOM before it has an opportunity to upgrade, you'll be working with an `HTMLUnknownElement`.
 
 For these situations (or when you need an approximate replacement for the Polymer 0.5 `polymer-ready` behavior), you can use the `WebComponentsReady` event as a signal before interacting with the element. The criteria for this event to fire is all Custom Elements with definitions registered by the time HTML Imports available at load time have loaded have upgraded.
 
