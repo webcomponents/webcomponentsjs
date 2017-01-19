@@ -19,7 +19,7 @@ bundle, using feature detection. The bundles that can be loaded are:
   - `webcomponents-hi` -- HTML Imports (needed by Safari Tech Preview)
   - `webcomponents-hi-ce` -- HTML Imports and Custom Elements (needed by Safari 10)
   - `webcomponents-hi-ce-sd` -- HTML Imports, Custom Elements and Shady DOM/CSS (needed by Safari 9, Firefox, Edge)
-  - `webcomponents-lite` -- HTML Imports, Custom Elements, Shady DOM/CSS and generic platform polyfills (such as URL, Template, ES6 Promise, Constructable events, etc.) (needed by Internet Explorer 11)
+  - `webcomponents-lite` -- HTML Imports, Custom Elements, Shady DOM/CSS and generic platform polyfills (such as Template, ES6 Promise, Constructable events, etc.) (needed by Internet Explorer 11)
 
 ## Browser Support
 

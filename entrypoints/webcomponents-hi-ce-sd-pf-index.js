@@ -15,7 +15,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  */
 
 import '../bower_components/webcomponents-platform/webcomponents-platform.js'
-import '../bower_components/URL/url.js'
 import '../bower_components/template/template.js'
 import '../bower_components/es6-promise/dist/es6-promise.auto.min.js'
 import '../bower_components/html-imports/src/html-imports.js'
