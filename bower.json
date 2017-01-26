@@ -14,7 +14,7 @@
     "webcomponents"
   ],
   "dependencies": {
-    "custom-elements": "webcomponents/custom-elements#master",
+    "custom-elements": "webcomponents/custom-elements#remove-mo",
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
     "html-imports": "webcomponents/html-imports#cleanup",
     "shadydom": "webcomponents/shadydom#master",
@@ -27,5 +27,8 @@
   "ignore": [],
   "devDependencies": {
     "web-component-tester": "^4.0.1"
+  },
+  "resolutions": {
+    "custom-elements": "remove-mo"
   }
 }
