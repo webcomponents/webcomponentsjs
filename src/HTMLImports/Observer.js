@@ -40,10 +40,7 @@ Observer.prototype = {
   },
 
   observe: function(root) {
-    // IE will leak if you put an observer on a root shadow document
-    // so observe changes to both the head and body
-    this.mo.observe(root.head, {childList: true, subtree: true});
-    this.mo.observe(root.body, {childList: true, subtree: true});
+    this.mo.observe(root, {childList: true, subtree: true});
   }
 
 };

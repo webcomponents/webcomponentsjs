@@ -46,16 +46,11 @@
 
       test('HTMLImports whenready detail', function(done) {
         HTMLImports.whenReady(function(detail) {
+          chai.assert.equal(detail.allImports.length, 2);
+          chai.assert.equal(detail.loadedImports.length, 2);
 
-          var allImports = document.querySelectorAll('link[rel="import"]');
-
-          chai.assert.equal(detail.allImports.length, allImports.length);
-          chai.assert.equal(detail.loadedImports.length, allImports.length);
-
-          var importsArray = Array.prototype.slice.call(detail.allImports);
-
-          chai.expect(importsArray.filter(function(el){ return el.href.indexOf('imports/load-1.html') >= 0;}));
-          chai.expect(importsArray.filter(function(el){ return el.href.indexOf('imports/load-2.html') >= 0;}));
+          chai.expect(detail.allImports[0].href).to.contain('imports/load-1.html');
+          chai.expect(detail.allImports[1].href).to.contain('imports/load-2.html');
 
           done()
         });
