@@ -76,11 +76,6 @@
       var renderer = scope.getRendererForHost(this);
       renderer.invalidate();
 
-      // This is needed for IE - if you put elements directly on the root shadow
-      // IE will leak, create head and body so we can append observers, etc.
-      newShadowRoot.head = document.createElement('head');
-      newShadowRoot.body = document.createElement('body');
-
       return newShadowRoot;
     },
 

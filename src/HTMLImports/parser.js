@@ -161,10 +161,8 @@ var importParser = {
 
   rootImportForElement: function(elt) {
     var n = elt;
-    // IE will leak if you put the import link directly on the ownerDocument (shadow root)
-    // so the link is appended on the head element.
-    while (n.ownerDocument.head.__importLink) {
-      n = n.ownerDocument.head.__importLink;
+    while (n.ownerDocument.__importLink) {
+      n = n.ownerDocument.__importLink;
     }
     return n;
   },

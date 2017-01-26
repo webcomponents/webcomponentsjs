@@ -40,7 +40,7 @@
 
         function check() {
           clearTimeout(timeout);
-          chai.assert.equal(document.querySelector('link[href="imports/404-1.html"]').import, null, '404\'d link.import is null');
+          chai.assert.equal(document.querySelector('link').import, null, '404\'d link.import is null');
           chai.assert.equal(errors, 2, '404\'d generate error event');
           done();
         }

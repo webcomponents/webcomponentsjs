@@ -74,9 +74,7 @@ var importer = {
         // generate an HTMLDocument from data
         doc = err ? null : makeDocument(resource, redirectedUrl || url);
         if (doc) {
-          // IE will leak if you put the node directly on the ShadowRoot (doc)
-          // instead appending to ShadowRoot head for reference
-          doc.head.__importLink = elt;
+          doc.__importLink = elt;
           // note, we cannot use MO to detect parsed nodes because
           // SD polyfill does not report these as mutations.
           this.bootDocument(doc);
