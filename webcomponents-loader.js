@@ -18,6 +18,7 @@
 
   // Stub out HTMLImports if we're using native imports
   window.HTMLImports = {
+    useNative: useNativeImports,
     whenReady: function(callback) {
       if (useNativeImports) {
         // When native imports boot, the are "ready" the first rAF after
