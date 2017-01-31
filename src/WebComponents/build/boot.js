@@ -18,7 +18,6 @@
   var script = document.querySelector('script[src*="' + file + '"]');
 
   // Flags. Convert url arguments to flags
-  var flags = {};
   if (!flags.noOpts) {
     // from url
     location.search.slice(1).split('&').forEach(function(option) {
