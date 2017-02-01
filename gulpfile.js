@@ -72,12 +72,12 @@ gulp.task('minify-hi-ce', () => {
   minify('webcomponents-hi-ce')
 });
 
-gulp.task('minify-hi-ce-sd', () => {
-  minify('webcomponents-hi-ce-sd')
+gulp.task('minify-hi-sd-ce', () => {
+  minify('webcomponents-hi-sd-ce')
 });
 
-gulp.task('minify-hi-ce-sd-pf', () => {
-  minify('webcomponents-hi-ce-sd-pf', 'webcomponents-lite', true)
+gulp.task('minify-hi-sd-ce-pf', () => {
+  minify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', true)
 });
 
-gulp.task('default', ['minify-none', 'minify-hi', 'minify-hi-ce', 'minify-hi-ce-sd', 'minify-hi-ce-sd-pf']);
+gulp.task('default', ['minify-none', 'minify-hi', 'minify-hi-ce', 'minify-hi-sd-ce', 'minify-hi-sd-ce-pf']);

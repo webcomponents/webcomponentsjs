@@ -40,11 +40,11 @@
     }
   };
 
-  if (!window.customElements || window.customElements.forcePolyfill) {
-    polyfills.push('ce');
-  }
   if (!('attachShadow' in Element.prototype) || (window.ShadyDOM && window.ShadyDOM.force)) {
     polyfills.push('sd');
+  }
+  if (!window.customElements || window.customElements.forcePolyfill) {
+    polyfills.push('ce');
   }
   if (!('content' in document.createElement('template')) || !window.Promise || !window.URL) {
     polyfills.push('pf');
