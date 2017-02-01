@@ -18,7 +18,7 @@
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
     "html-imports": "webcomponents/html-imports#master",
     "shadydom": "webcomponents/shadydom#prototype-importNode",
-    "shadycss": "webcomponents/shadycss#master",
+    "shadycss": "webcomponents/shadycss#polyfill-integration",
     "template": "webcomponents/template#master",
     "URL": "webcomponents/URL#master",
     "webcomponents-platform": "webcomponents/webcomponents-platform#master"
