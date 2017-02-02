@@ -79,8 +79,20 @@
 
   var isIE = /Trident/.test(navigator.userAgent);
 
+  var copyOwnProperties = function(src, dest) {
+    var origPropertyNames = Object.getOwnPropertyNames(src);
+    for (var i = 0; i < origPropertyNames.length; i++) {
+      var origPropertyName = origPropertyNames[i];
+      var propertyDescriptor = Object.getOwnPropertyDescriptor(src, origPropertyName);
+      if (propertyDescriptor.writable) {
+        dest[origPropertyNames[i]] = src[origPropertyNames[i]];
+      }
+    }
+  };
+
   // CustomEvent constructor shim
   if (!window.CustomEvent || isIE && (typeof window.CustomEvent !== 'function')) {
+    var origCustomEvent = window.CustomEvent;
     window.CustomEvent = function(inType, params) {
       params = params || {};
       var e = document.createEvent('CustomEvent');
@@ -88,6 +100,7 @@
       return e;
     };
     window.CustomEvent.prototype = window.Event.prototype;
+    copyOwnProperties(origCustomEvent, window.CustomEvent);
   }
 
   // Event constructor shim
@@ -100,6 +113,7 @@
       return e;
     };
     window.Event.prototype = origEvent.prototype;
+    copyOwnProperties(origEvent, window.Event);
   }
 
 })(window.WebComponents);
