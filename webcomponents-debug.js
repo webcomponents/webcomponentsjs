@@ -56,8 +56,8 @@
     '../../es6-promise/dist/es6-promise.auto.min.js',
     '../../html-imports/src/html-imports.js',
     'pre-polyfill.js',
-    '../../custom-elements/custom-elements.min.js',
     '../../shadydom/shadydom.min.js',
+    '../../custom-elements/custom-elements.min.js',
     '../../shadycss/shadycss.min.js',
     'post-polyfill.js',
     'unresolved.js'
