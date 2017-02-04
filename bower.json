@@ -20,7 +20,6 @@
     "shadydom": "webcomponents/shadydom#prototype-importNode",
     "shadycss": "webcomponents/shadycss#polyfill-integration",
     "template": "webcomponents/template#patch-prototypes",
-    "URL": "webcomponents/URL#master",
     "webcomponents-platform": "webcomponents/webcomponents-platform#master"
   },
   "license": "BSD",
