@@ -18,5 +18,6 @@ import '../bower_components/html-imports/src/html-imports.js'
 import '../bower_components/custom-elements/custom-elements.min.js'
 //TODO(notwaldorf): this is temporary and should be removed.
 import '../bower_components/shadycss/src/ShadyCSS.js'
+import '../bower_components/shadycss/src/custom-style-element.js'
 import '../src/post-polyfill.js'
 import '../src/unresolved.js'

@@ -18,4 +18,5 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 //TODO(notwaldorf): this is temporary and should be removed.
 import '../bower_components/shadycss/src/ShadyCSS.js'
+import '../bower_components/shadycss/src/custom-style-element.js'
 import '../src/unresolved.js'
