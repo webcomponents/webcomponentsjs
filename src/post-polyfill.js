@@ -18,4 +18,8 @@
     });
   });
 
+  if (customElements && customElements.polyfillWrapFlushCallback) {
+    customElements.polyfillWrapFlushCallback(flush => HTMLImports.whenReady(flush));
+  }
+
 })(window.WebComponents);
