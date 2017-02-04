@@ -17,6 +17,9 @@ const buffer = require('vinyl-buffer');
 const rename = require('gulp-rename');
 const rollup = require('rollup-stream');
 const source = require('vinyl-source-stream');
+const del = require('del');
+const bower = require('bower');
+const runseq = require('run-sequence');
 
 function singleLicenseComment() {
   let hasLicense = false;
@@ -61,23 +64,36 @@ function minify(sourceName, fileName, needsContext) {
 }
 
 gulp.task('minify-none', () => {
-  minify('webcomponents-none')
+  return minify('webcomponents-none')
 });
 
 gulp.task('minify-hi', () => {
-  minify('webcomponents-hi')
+  return minify('webcomponents-hi')
 });
 
 gulp.task('minify-hi-ce', () => {
-  minify('webcomponents-hi-ce')
+  return minify('webcomponents-hi-ce')
 });
 
 gulp.task('minify-hi-sd-ce', () => {
-  minify('webcomponents-hi-sd-ce')
+  return minify('webcomponents-hi-sd-ce')
 });
 
 gulp.task('minify-hi-sd-ce-pf', () => {
-  minify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', true)
+  return minify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', true)
 });
 
-gulp.task('default', ['minify-none', 'minify-hi', 'minify-hi-ce', 'minify-hi-sd-ce', 'minify-hi-sd-ce-pf']);
+gulp.task('refresh-bower', () => {
+  return del('bower_components').then(() => {
+    let resolve, reject;
+    let p = new Promise((res, rej) => {resolve = res; reject = rej});
+    bower.commands.install().on('end', () => resolve()).on('error', (e) => reject(e));
+    return p;
+  });
+});
+
+gulp.task('default', (cb) => {
+  runseq('refresh-bower', 'build', cb);
+});
+
+gulp.task('build', ['minify-none', 'minify-hi', 'minify-hi-ce', 'minify-hi-sd-ce', 'minify-hi-sd-ce-pf']);
