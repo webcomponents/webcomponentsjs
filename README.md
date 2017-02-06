@@ -73,7 +73,7 @@ Under native HTML Imports, `<script>` tags in the main document block the loadin
 
 The `webcomponents-lite.js` polyfill parse element definitions and handle their upgrade asynchronously. If prematurely fetching the element from the DOM before it has an opportunity to upgrade, you'll be working with an `HTMLUnknownElement`.
 
-For these situations (or when you need an approximate replacement for the Polymer 0.5 `polymer-ready` behavior), you can use the `WebComponentsReady` event as a signal before interacting with the element. The criteria for this event to fire is all Custom Elements with definitions registered by the time HTML Imports available at load time have loaded have upgraded.
+For these situations, you can use the `WebComponentsReady` event as a signal before interacting with the element. The criteria for this event to fire is all Custom Elements with definitions registered by the time HTML Imports available at load time have loaded have upgraded.
 
 ```js
 window.addEventListener('WebComponentsReady', function(e) {
