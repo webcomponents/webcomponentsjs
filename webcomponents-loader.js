@@ -30,6 +30,10 @@
           }
           document.addEventListener('readystatechange', once);
         } else {
+          // TODO(sorvell): Ideally `whenReady` should return synchronously
+          // when imports are not pending but this would require a more
+          // robust implementation that should probably be a small complementary
+          // library available via the html-imports polyfill.
           requestAnimationFrame(function() {
             callback();
           });
@@ -51,7 +55,8 @@
   }
 
   // TODO(notwaldorf): This is a temporary hack because Chrome still needs to
-  // load some things for now.
+  // load some things for now. Addressing this is blocked on
+  // https://github.com/webcomponents/shadycss/issues/46.
   if (!polyfills.length) {
     polyfills.push('none');
   } else if (polyfills.length === 4) {  // hi-ce-sd-pf is actually called lite.
@@ -65,7 +70,6 @@
     var url = script.src.replace(
         'webcomponents-loader.js', `webcomponents-${polyfills.join('-')}.js`);
     newScript.src = url;
-    console.log('Loaded: ', newScript.src);
     document.head.appendChild(newScript);
   }
 
