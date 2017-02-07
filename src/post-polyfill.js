@@ -12,12 +12,6 @@
 
   'use strict';
 
-  HTMLImports.whenReady(function() {
-    requestAnimationFrame(function() {
-      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
-    });
-  });
-
   if (customElements && customElements.polyfillWrapFlushCallback) {
     // Here we ensure that the public `HTMLImports.whenReady`
     // always comes *after* custom elements have upgraded.
@@ -43,5 +37,11 @@
     }
 
   }
+
+  HTMLImports.whenReady(function() {
+    requestAnimationFrame(function() {
+      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
+    });
+  });
 
 })(window.WebComponents);
