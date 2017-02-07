@@ -58,12 +58,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         window.customElements.define('x-after', XAfter);
       });
 
-      test('elements within templates not upgraded', function() {
-        assert(!childCreated);
-      });
+      suite('template and custom elements', function() {
+        test('elements within templates not upgraded', function() {
+          assert(!childCreated);
+        });
 
-      test('templates before elements are bootstrapped before createdCallback', function() {
-        assert(foundTemplate);
+        test('templates before elements are bootstrapped before createdCallback', function() {
+          assert(foundTemplate);
+        });
       });
     </script>
   </body>

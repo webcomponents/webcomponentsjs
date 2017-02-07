@@ -26,12 +26,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </head>
   <body>
     <script>
-      test('expected boot', function() {
-        assert.ok(window.webComponentsReady, 'failed to fire WebComponentsReady');
-        if (!window.HTMLImports.useNative) {
-          assert.ok(window.importsOk, 'WebComponentsReady without HTMLImportsLoaded');
-        }
-        assert.ok(window.importTest, 'import failed to set global value');
+      suite('Loader', function() {
+        test('expected boot', function() {
+          assert.ok(window.webComponentsReady, 'failed to fire WebComponentsReady');
+          if (!window.HTMLImports.useNative) {
+            assert.ok(window.importsOk, 'WebComponentsReady without HTMLImportsLoaded');
+          }
+          assert.ok(window.importTest, 'import failed to set global value');
+        });
       });
     </script>
   </body>
