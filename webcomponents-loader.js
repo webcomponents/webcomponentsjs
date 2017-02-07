@@ -9,9 +9,11 @@
  */
 
 (function() {
+  'use strict';
+
   // Feature detect which polyfill needs to be imported.
-  let polyfills = [];
-  let useNativeImports = ('import' in document.createElement('link'));
+  var polyfills = [];
+  var useNativeImports = ('import' in document.createElement('link'));
   if (!useNativeImports) {
     polyfills.push('hi');
   }
@@ -65,10 +67,10 @@
 
   if (polyfills.length) {
     var script = document.querySelector('script[src*="webcomponents-loader.js"]');
-    let newScript = document.createElement('script');
-    // Load it from the right place.
-    var url = script.src.replace(
-        'webcomponents-loader.js', `webcomponents-${polyfills.join('-')}.js`);
+    var newScript = document.createElement('script');
+    // Load it from the right place.'
+    var src = 'webcomponents-' + polyfills.join('-') + '.js';
+    var url = script.src.replace('webcomponents-loader.js', src);
     newScript.src = url;
     document.head.appendChild(newScript);
   }

@@ -62,6 +62,7 @@ function minify(sourceName, outputName) {
     language_in: 'ES6_STRICT',
     language_out: 'ES5_STRICT',
     output_wrapper,
+    assume_function_wrapper: true,
     js_output_file: outputPath,
     create_source_map: outputMap,
     entry_point: `./entrypoints/${sourceName}-index.js`,
