@@ -16,7 +16,7 @@
   "dependencies": {
     "custom-elements": "webcomponents/custom-elements#remove-mo",
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
-    "html-imports": "webcomponents/html-imports#master",
+    "html-imports": "webcomponents/html-imports#remove-timeout",
     "shadydom": "webcomponents/shadydom#prototype-importNode",
     "shadycss": "webcomponents/shadycss#polyfill-integration",
     "template": "webcomponents/template#patch-prototypes",
