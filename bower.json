@@ -18,7 +18,7 @@
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
     "html-imports": "webcomponents/html-imports#remove-timeout",
     "shadydom": "webcomponents/shadydom#prototype-importNode",
-    "shadycss": "webcomponents/shadycss#polyfill-integration",
+    "shadycss": "webcomponents/shadycss#master",
     "template": "webcomponents/template#patch-prototypes",
     "URL": "webcomponents/URL#master",
     "webcomponents-platform": "webcomponents/webcomponents-platform#master"
