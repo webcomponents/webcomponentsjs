@@ -15,12 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  */
 
 import '../bower_components/html-imports/src/html-imports.js'
-import '../bower_components/custom-elements/custom-elements.min.js'
-
-// TODO(notwaldorf): Remove after this is addressed:
-// https://github.com/webcomponents/shadycss/issues/46
-import '../bower_components/shadycss/src/ShadyCSS.js'
-import '../bower_components/shadycss/src/custom-style-element.js'
+import '../bower_components/custom-elements/src/custom-elements.js'
 
 import '../src/post-polyfill.js'
 import '../src/unresolved.js'

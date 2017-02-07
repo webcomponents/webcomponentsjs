@@ -12,7 +12,6 @@
 
 const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
-const babel = require('gulp-babel');
 const buffer = require('vinyl-buffer');
 const rename = require('gulp-rename');
 const rollup = require('rollup-stream');
@@ -20,23 +19,10 @@ const source = require('vinyl-source-stream');
 const del = require('del');
 const bower = require('bower');
 const runseq = require('run-sequence');
+const closureCompiler = require('google-closure-compiler')
+const closure = closureCompiler.gulp();
 
-function singleLicenseComment() {
-  let hasLicense = false;
-  return (comment) => {
-    if (hasLicense) {
-      return false;
-    }
-    return hasLicense = /@license/.test(comment);
-  }
-}
-
-const babiliConfig = {
-  presets: ['babili'],
-  shouldPrintComment: singleLicenseComment()
-};
-
-function minify(sourceName, fileName, needsContext) {
+function debug(sourceName, fileName, needsContext) {
   if (!fileName)
     fileName = sourceName;
 
@@ -57,30 +43,78 @@ function minify(sourceName, fileName, needsContext) {
   .pipe(source(sourceName +'-index.js'))
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
-  .pipe(babel(babiliConfig))
   .pipe(rename(fileName + '.js'))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('./'))
 }
 
+function minify(sourceName, outputName) {
+  if (!outputName) {
+    outputName = sourceName;
+  }
+  const outputPath = outputName + '.js';
+  const outputMap = outputPath + '.map';
+  const output_wrapper = `(function(){\n%output%\n}).call(self)\n#// sourceMappingURL=${outputMap}`;
+  const options = {
+    js: ['entrypoints/*.js','src/*.js', 'bower_components/**/*.js'],
+    new_type_inf: true,
+    compilation_level: 'ADVANCED',
+    language_in: 'ES6_STRICT',
+    language_out: 'ES5_STRICT',
+    output_wrapper,
+    js_output_file: outputPath,
+    create_source_map: outputMap,
+    entry_point: `./entrypoints/${sourceName}-index.js`,
+    dependency_mode: 'STRICT',
+    warning_level: 'VERBOSE',
+    externs: [
+      'externs/closure-upstream-externs.js',
+      'externs/webcomponents-externs.js',
+      'externs/promise-externs.js'
+    ],
+    rewrite_polyfills: false,
+  };
+  return closure(options).src().pipe(gulp.dest('.'))
+}
+
+gulp.task('debug-none', () => {
+  return debug('webcomponents-none');
+});
+
 gulp.task('minify-none', () => {
-  return minify('webcomponents-none')
+  return minify('webcomponents-none');
+});
+
+gulp.task('debug-hi', () => {
+  return debug('webcomponents-hi')
 });
 
 gulp.task('minify-hi', () => {
-  return minify('webcomponents-hi')
+  return minify('webcomponents-hi');
+});
+
+gulp.task('debug-hi-ce', () => {
+  return debug('webcomponents-hi-ce')
 });
 
 gulp.task('minify-hi-ce', () => {
   return minify('webcomponents-hi-ce')
 });
 
+gulp.task('debug-hi-sd-ce', () => {
+  return debug('webcomponents-hi-sd-ce')
+});
+
 gulp.task('minify-hi-sd-ce', () => {
   return minify('webcomponents-hi-sd-ce')
 });
 
+gulp.task('debug-hi-sd-ce-pf', () => {
+  return debug('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', true)
+});
+
 gulp.task('minify-hi-sd-ce-pf', () => {
-  return minify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', true)
+  return minify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite')
 });
 
 gulp.task('refresh-bower', () => {
@@ -96,4 +130,16 @@ gulp.task('default', (cb) => {
   runseq('refresh-bower', 'build', cb);
 });
 
-gulp.task('build', ['minify-none', 'minify-hi', 'minify-hi-ce', 'minify-hi-sd-ce', 'minify-hi-sd-ce-pf']);
+const bundles = [
+  'none',
+  'hi',
+  'hi-ce',
+  'hi-sd-ce',
+  'hi-sd-ce-pf'
+];
+
+gulp.task('debug', bundles.map((b) => `debug-${b}`));
+
+gulp.task('build', (cb) => {
+  runseq(...(bundles.map((b) => `minify-${b}`)), cb)
+});
