@@ -12,6 +12,32 @@
 
   'use strict';
 
+  if (customElements && customElements.polyfillWrapFlushCallback) {
+    // Here we ensure that the public `HTMLImports.whenReady`
+    // always comes *after* custom elements have upgraded.
+    let flushCallback;
+    function runAndClearCallback() {
+      if (flushCallback) {
+        let cb = flushCallback;
+        flushCallback = null;
+        cb();
+      }
+    }
+    let origWhenReady = HTMLImports.whenReady;
+    customElements.polyfillWrapFlushCallback(function(cb) {
+      flushCallback = cb;
+      origWhenReady(runAndClearCallback);
+    });
+
+    HTMLImports.whenReady = function(cb) {
+      origWhenReady(function() {
+        runAndClearCallback();
+        cb();
+      });
+    }
+
+  }
+
   HTMLImports.whenReady(function() {
     requestAnimationFrame(function() {
       window.dispatchEvent(new CustomEvent('WebComponentsReady'));

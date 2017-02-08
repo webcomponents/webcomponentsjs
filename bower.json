@@ -1,7 +1,7 @@
 {
   "name": "webcomponentsjs",
   "main": "webcomponents.js",
-  "version": "0.7.22",
+  "version": "1.0.0",
   "homepage": "http://webcomponents.org",
   "authors": [
     "The Polymer Authors"
@@ -13,19 +13,17 @@
   "keywords": [
     "webcomponents"
   ],
-  "dependencies": {
+  "license": "BSD",
+  "ignore": [],
+  "devDependencies": {
+    "web-component-tester": "^5",
     "custom-elements": "webcomponents/custom-elements#master",
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
-    "html-imports": "webcomponents/html-imports#v0",
+    "html-imports": "webcomponents/html-imports#master",
     "shadydom": "webcomponents/shadydom#master",
     "shadycss": "webcomponents/shadycss#master",
     "template": "webcomponents/template#master",
     "URL": "webcomponents/URL#master",
     "webcomponents-platform": "webcomponents/webcomponents-platform#master"
-  },
-  "license": "BSD",
-  "ignore": [],
-  "devDependencies": {
-    "web-component-tester": "^4.0.1"
   }
 }
