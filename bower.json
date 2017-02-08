@@ -17,9 +17,9 @@
     "custom-elements": "webcomponents/custom-elements#remove-mo",
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
     "html-imports": "webcomponents/html-imports#master",
-    "shadydom": "webcomponents/shadydom#prototype-importNode",
+    "shadydom": "webcomponents/shadydom#master",
     "shadycss": "webcomponents/shadycss#master",
-    "template": "webcomponents/template#patch-prototypes",
+    "template": "webcomponents/template#master",
     "URL": "webcomponents/URL#master",
     "webcomponents-platform": "webcomponents/webcomponents-platform#master"
   },
