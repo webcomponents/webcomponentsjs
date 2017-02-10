@@ -83,6 +83,10 @@ gulp.task('minify-hi-sd-ce-pf', () => {
   return minify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', true)
 });
 
+gulp.task('minify-sd-ce', () => {
+  return minify('webcomponents-sd-ce')
+});
+
 gulp.task('refresh-bower', () => {
   return del('bower_components').then(() => {
     let resolve, reject;
@@ -96,4 +100,4 @@ gulp.task('default', (cb) => {
   runseq('refresh-bower', 'build', cb);
 });
 
-gulp.task('build', ['minify-none', 'minify-hi', 'minify-hi-ce', 'minify-hi-sd-ce', 'minify-hi-sd-ce-pf']);
+gulp.task('build', ['minify-none', 'minify-hi', 'minify-hi-ce', 'minify-hi-sd-ce', 'minify-hi-sd-ce-pf', 'minify-sd-ce']);
