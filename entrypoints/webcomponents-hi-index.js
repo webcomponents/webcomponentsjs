@@ -23,3 +23,4 @@ import '../bower_components/shadycss/src/custom-style-element.js'
 
 import '../src/post-polyfill.js'
 import '../src/unresolved.js'
+import '../src/ready.js'
