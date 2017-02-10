@@ -10,12 +10,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 'use strict';
 
 /*
- * Polyfills loaded: HTML Imports, Custom Elements, Shady DOM/Shady CSS, platform polyfills (URL/template)
+ * Polyfills loaded: HTML Imports, Custom Elements, Shady DOM/Shady CSS, platform polyfills, template
  * Used in: IE 11
  */
 
 import '../bower_components/webcomponents-platform/webcomponents-platform.js'
-import '../bower_components/URL/url.js'
 import '../bower_components/template/template.js'
 import '../bower_components/es6-promise/dist/es6-promise.auto.min.js'
 import '../bower_components/html-imports/src/html-imports.js'
