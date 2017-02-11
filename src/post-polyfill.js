@@ -21,6 +21,7 @@
         let cb = flushCallback;
         flushCallback = null;
         cb();
+        return true;
       }
     }
     let origWhenReady = HTMLImports.whenReady;
@@ -31,8 +32,14 @@
 
     HTMLImports.whenReady = function(cb) {
       origWhenReady(function() {
-        runAndClearCallback();
-        cb();
+        // custom element code may add dynamic imports
+        // to match processing of native custom elements before
+        // domContentLoaded, we wait for these imports to resolve first.
+        if (runAndClearCallback()) {
+          HTMLImports.whenReady(cb);
+        } else {
+          cb();
+        }
       });
     }
 
