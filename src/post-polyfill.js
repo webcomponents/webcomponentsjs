@@ -36,7 +36,7 @@
         // to match processing of native custom elements before
         // domContentLoaded, we wait for these imports to resolve first.
         if (runAndClearCallback()) {
-          origWhenReady(cb);
+          HTMLImports.whenReady(cb);
         } else {
           cb();
         }
