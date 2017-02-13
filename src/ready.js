@@ -10,9 +10,14 @@
 
 (function() {
   'use strict';
-  HTMLImports.whenReady(function() {
+  function fireReady() {
     requestAnimationFrame(function() {
       window.dispatchEvent(new CustomEvent('WebComponentsReady'));
     });
-  });
+  }
+  if (window.HTMLImports) {
+    HTMLImports.whenReady(fireReady);
+  } else {
+    fireReady();
+  }
 })();
