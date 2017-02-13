@@ -17,12 +17,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import '../bower_components/webcomponents-platform/webcomponents-platform.js'
 import '../bower_components/URL/url.js'
 import '../bower_components/template/template.js'
-import '../bower_components/es6-promise/dist/es6-promise.auto.min.js'
+import '../bower_components/es6-promise/dist/es6-promise.auto.js'
 import '../bower_components/html-imports/src/html-imports.js'
+
 import '../src/pre-polyfill.js'
-import '../bower_components/shadydom/shadydom.min.js'
-import '../bower_components/custom-elements/custom-elements.min.js'
-import '../bower_components/shadycss/src/ShadyCSS.js'
-import '../bower_components/shadycss/src/custom-style-element.js'
+
+import '../bower_components/shadydom/src/env.js'
+import '../bower_components/custom-elements/src/custom-elements.js'
+import '../bower_components/shadycss/src/shady-css.js'
+
 import '../src/post-polyfill.js'
 import '../src/unresolved.js'

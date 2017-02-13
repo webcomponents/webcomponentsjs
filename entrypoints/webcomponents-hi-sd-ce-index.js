@@ -15,9 +15,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  */
 
 import '../bower_components/html-imports/src/html-imports.js'
-import '../bower_components/shadydom/shadydom.min.js'
-import '../bower_components/custom-elements/custom-elements.min.js'
-import '../bower_components/shadycss/src/ShadyCSS.js'
-import '../bower_components/shadycss/src/custom-style-element.js'
+import '../bower_components/shadydom/src/env.js'
+import '../bower_components/custom-elements/src/custom-elements.js'
+import '../bower_components/shadycss/src/shady-css.js'
+
 import '../src/post-polyfill.js'
 import '../src/unresolved.js'
