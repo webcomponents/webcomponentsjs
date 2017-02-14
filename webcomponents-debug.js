@@ -54,13 +54,14 @@
     '../../URL/url.js',
     '../../template/template.js',
     '../../es6-promise/dist/es6-promise.auto.min.js',
-    '../../html-imports/src/html-imports.js',
+    '../../html-imports/html-imports-loader.js',
     'pre-polyfill.js',
     '../../shadydom/shadydom.min.js',
     '../../custom-elements/custom-elements.min.js',
     '../../shadycss/shadycss.min.js',
     'post-polyfill.js',
-    'unresolved.js'
+    'unresolved.js',
+    'ready.js'
   ];
 
   var src = script.getAttribute('src');

@@ -16,34 +16,6 @@
     polyfills.push('hi');
   }
 
-  // Stub out HTMLImports if we're using native imports
-  window.HTMLImports = {
-    useNative: useNativeImports,
-    whenReady: function(callback) {
-      if (useNativeImports) {
-        // When native imports boot, the are "ready" the first rAF after
-        // the document becomes interactive, so wait for the correct state change.
-        if (document.readyState !== 'interactive') {
-          function once() {
-            document.removeEventListener('readystatechange', once);
-            window.HTMLImports.whenReady(callback);
-          }
-          document.addEventListener('readystatechange', once);
-        } else {
-          // TODO(sorvell): Ideally `whenReady` should return synchronously
-          // when imports are not pending but this would require a more
-          // robust implementation that should probably be a small complementary
-          // library available via the html-imports polyfill.
-          requestAnimationFrame(function() {
-            callback();
-          });
-        }
-      } else {
-        window.addEventListener('HTMLImportsLoaded', callback);
-      }
-    }
-  };
-
   if (!('attachShadow' in Element.prototype) || (window.ShadyDOM && window.ShadyDOM.force)) {
     polyfills.push('sd');
   }
@@ -72,10 +44,4 @@
     newScript.src = url;
     document.head.appendChild(newScript);
   }
-
-  HTMLImports.whenReady(function() {
-    requestAnimationFrame(function() {
-      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
-    })
-  });
 })();

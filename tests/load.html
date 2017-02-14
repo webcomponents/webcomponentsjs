@@ -14,10 +14,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta charset="UTF-8">
     <script>
       window.addEventListener('HTMLImportsLoaded', function() {
-        window.importsOk = true;
+        window.importsReadyCount = window.importsReadyCount || 0;
+        window.importsReadyCount++;
       });
       window.addEventListener('WebComponentsReady', function() {
-        window.webComponentsReady = true;
+        window.webComponentsReadyCount = window.webComponentsReadyCount || 0;
+        window.webComponentsReadyCount++;
       });
     </script>
     <script src="../webcomponents-loader.js"></script>
@@ -28,11 +30,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script>
       suite('Loader', function() {
         test('expected boot', function() {
-          assert.ok(window.webComponentsReady, 'failed to fire WebComponentsReady');
+          assert.equal(window.webComponentsReadyCount, 1, 'failed to fire WebComponentsReady');
           if (!window.HTMLImports.useNative) {
-            assert.ok(window.importsOk, 'WebComponentsReady without HTMLImportsLoaded');
+            assert.equal(window.importsReadyCount, 1, 'WebComponentsReady without HTMLImportsLoaded');
           }
-          assert.ok(window.importTest, 'import failed to set global value');
+          assert.equal(window.importTestCount, 1, 'import failed to set global value');
         });
       });
     </script>

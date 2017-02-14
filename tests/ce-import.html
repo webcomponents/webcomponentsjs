@@ -30,6 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         HTMLImports.whenReady(function() {
           assert.isTrue(xfoo.isCreated, 'element in main document, registered in dynamic import is upgraded');
           var ix = link.import.querySelector('x-foo');
+          assert.equal(HTMLImports.importForElement(ix), link.import, 'import for element should be link import');
           assert.isTrue(ix.isCreated, 'element in import, registered in dynamic import is upgraded');
           done();
         });

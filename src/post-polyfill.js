@@ -8,7 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-(function(scope) {
+(function() {
 
   'use strict';
 
@@ -45,10 +45,4 @@
 
   }
 
-  HTMLImports.whenReady(function() {
-    requestAnimationFrame(function() {
-      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
-    });
-  });
-
-})(window.WebComponents);
+})();
