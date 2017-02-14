@@ -59,6 +59,11 @@
   // https://github.com/webcomponents/shadycss/issues/46.
   if (!polyfills.length) {
     polyfills.push('none');
+    HTMLImports.whenReady(function() {
+      requestAnimationFrame(function() {
+        window.dispatchEvent(new CustomEvent('WebComponentsReady'));
+      })
+    });
   } else if (polyfills.length === 4) {  // hi-ce-sd-pf is actually called lite.
     polyfills = ['lite'];
   }
@@ -72,10 +77,4 @@
     newScript.src = url;
     document.head.appendChild(newScript);
   }
-
-  HTMLImports.whenReady(function() {
-    requestAnimationFrame(function() {
-      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
-    })
-  });
 })();
