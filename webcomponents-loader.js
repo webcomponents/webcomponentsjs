@@ -11,29 +11,7 @@
 (function() {
   // Feature detect which polyfill needs to be imported.
   let polyfills = [];
-  if ('import' in document.createElement('link')) {
-    // Stub out HTMLImports if we're using native imports.
-    window.HTMLImports = {
-      useNative: true,
-      importForElement: function(el) {
-        return el.ownerDocument !== document ? el.ownerDocument : null;
-      },
-      whenReady: function(callback) {
-        // When native imports boot, the are "ready" the first rAF after
-        // the document becomes interactive, so wait for the correct state change.
-        if (document.readyState === 'loading') {
-          document.addEventListener('readystatechange', function once() {
-            document.removeEventListener('readystatechange', once);
-            HTMLImports.whenReady(callback);
-          });
-        } else if (document.readyState === 'interactive') {
-          requestAnimationFrame(callback);
-        } else {
-          callback();
-        }
-      }
-    };
-  } else {
+  if (!('import' in document.createElement('link'))) {
     polyfills.push('hi');
   }
   if (!('attachShadow' in Element.prototype) || (window.ShadyDOM && window.ShadyDOM.force)) {
@@ -69,10 +47,8 @@
   // is removed. Addressing this is blocked on
   // https://github.com/webcomponents/shadycss/issues/46.
   if (polyfills[0] === 'none') {
-    HTMLImports.whenReady(function() {
-      requestAnimationFrame(function() {
-        window.dispatchEvent(new CustomEvent('WebComponentsReady'));
-      });
+    requestAnimationFrame(function() {
+      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
     });
   }
 })();

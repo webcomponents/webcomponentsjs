@@ -38,7 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       test('upgraded document tree', function(done) {
-        if (CustomElements.useNative || HTMLImports.useNative) {
+        if (CustomElements.useNative || !window.HTMLImports) {
           return done();
         } else {
           window.addEventListener('WebComponentsReady', function() {
