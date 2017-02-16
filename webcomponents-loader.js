@@ -36,9 +36,8 @@
       'webcomponents-loader.js', `webcomponents-${polyfills.join('-')}.js`);
     newScript.src = url;
     document.head.appendChild(newScript);
-  }
-  // Ensure `WebComponentsReady` is fired also when there are no polyfills loaded.
-  if (!polyfills.length) {
+  } else {
+    // Ensure `WebComponentsReady` is fired also when there are no polyfills loaded.
     requestAnimationFrame(function() {
       window.dispatchEvent(new CustomEvent('WebComponentsReady'));
     });
