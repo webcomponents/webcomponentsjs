@@ -25,7 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     constructor() {
       super();
       this.bestName = 'batman';
-      window.ShadyCSS.applyStyle(this);
+      window.ShadyCSS.styleElement(this);
 
       if (template && !this.shadowRoot) {
         this.attachShadow({mode: 'open'});
