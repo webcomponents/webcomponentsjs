@@ -26,8 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         link.rel = 'import';
         link.href = 'imports/element-import.html';
         document.head.appendChild(link);
-
-        HTMLImports.whenReady(function() {
+        link.addEventListener('load', function() {
           assert.isTrue(xfoo.isCreated, 'element in main document, registered in dynamic import is upgraded');
           var ix = link.import.querySelector('x-foo');
           assert.isTrue(ix.isCreated, 'element in import, registered in dynamic import is upgraded');
