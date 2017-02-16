@@ -24,9 +24,6 @@
     polyfills.push('pf');
   }
 
-  // TODO(notwaldorf): This is a temporary hack because Chrome still needs to
-  // load some things for now. Addressing this is blocked on
-  // https://github.com/webcomponents/shadycss/issues/46.
   if (polyfills.length === 4) { // hi-ce-sd-pf is actually called lite.
     polyfills = ['lite'];
   }
