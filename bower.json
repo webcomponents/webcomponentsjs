@@ -20,8 +20,8 @@
     "custom-elements": "webcomponents/custom-elements#master",
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
     "html-imports": "webcomponents/html-imports#master",
-    "shadydom": "webcomponents/shadydom#master",
-    "shadycss": "webcomponents/shadycss#master",
+    "shadydom": "webcomponents/shadydom#split-shadycss",
+    "shadycss": "webcomponents/shadycss#split-shadycss",
     "template": "webcomponents/template#master",
     "URL": "webcomponents/URL#master",
     "webcomponents-platform": "webcomponents/webcomponents-platform#master"
