@@ -27,9 +27,7 @@
   // TODO(notwaldorf): This is a temporary hack because Chrome still needs to
   // load some things for now. Addressing this is blocked on
   // https://github.com/webcomponents/shadycss/issues/46.
-  if (!polyfills.length) {
-    polyfills.push('none');
-  } else if (polyfills.length === 4) { // hi-ce-sd-pf is actually called lite.
+  if (polyfills.length === 4) { // hi-ce-sd-pf is actually called lite.
     polyfills = ['lite'];
   }
 
@@ -43,10 +41,7 @@
     document.head.appendChild(newScript);
   }
   // Ensure `WebComponentsReady` is fired also when there are no polyfills loaded.
-  // TODO(valdrin): only check for `!polyfills.length` once 'none' bundle
-  // is removed. Addressing this is blocked on
-  // https://github.com/webcomponents/shadycss/issues/46.
-  if (polyfills[0] === 'none') {
+  if (!polyfills.length) {
     requestAnimationFrame(function() {
       window.dispatchEvent(new CustomEvent('WebComponentsReady'));
     });

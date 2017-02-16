@@ -63,10 +63,6 @@ function minify(sourceName, fileName, needsContext) {
   .pipe(gulp.dest('./'))
 }
 
-gulp.task('minify-none', () => {
-  return minify('webcomponents-none')
-});
-
 gulp.task('minify-hi', () => {
   return minify('webcomponents-hi')
 });
@@ -100,4 +96,4 @@ gulp.task('default', (cb) => {
   runseq('refresh-bower', 'build', cb);
 });
 
-gulp.task('build', ['minify-none', 'minify-hi', 'minify-hi-ce', 'minify-hi-sd-ce', 'minify-hi-sd-ce-pf', 'minify-sd-ce']);
+gulp.task('build', ['minify-hi', 'minify-hi-ce', 'minify-hi-sd-ce', 'minify-hi-sd-ce-pf', 'minify-sd-ce']);
