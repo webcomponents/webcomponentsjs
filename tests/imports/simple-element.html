@@ -18,14 +18,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <slot id="slot"></slot>
     `;
   if (template) {
-    window.ShadyCSS.prepareTemplate(template, 'simple-element');
+    if (window.ShadyCSS) {
+      window.ShadyCSS.prepareTemplate(template, 'simple-element');
+    }
   }
 
   class SimpleElement extends HTMLElement {
     constructor() {
       super();
       this.bestName = 'batman';
-      window.ShadyCSS.applyStyle(this);
+      if (window.ShadyCSS) {
+        window.ShadyCSS.styleElement(this);
+      }
 
       if (template && !this.shadowRoot) {
         this.attachShadow({mode: 'open'});
