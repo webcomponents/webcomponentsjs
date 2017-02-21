@@ -58,7 +58,7 @@
     'pre-polyfill.js',
     '../../shadydom/shadydom.min.js',
     '../../custom-elements/custom-elements.min.js',
-    '../../shadycss/shadycss.min.js',
+    '../../shadycss/scoping-shim.min.js',
     'post-polyfill.js',
     'unresolved.js'
   ];
