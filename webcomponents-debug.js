@@ -51,7 +51,6 @@
   // construct full dependency list
   var modules = [
     '../../webcomponents-platform/webcomponents-platform.js',
-    '../../URL/url.js',
     '../../template/template.js',
     '../../es6-promise/dist/es6-promise.auto.min.js',
     '../../html-imports/src/html-imports.js',

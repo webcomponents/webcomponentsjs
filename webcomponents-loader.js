@@ -20,7 +20,7 @@
   if (!window.customElements || window.customElements.forcePolyfill) {
     polyfills.push('ce');
   }
-  if (!('content' in document.createElement('template')) || !window.Promise || !window.URL) {
+  if (!('content' in document.createElement('template')) || !window.Promise) {
     polyfills.push('pf');
   }
 

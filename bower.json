@@ -23,7 +23,6 @@
     "shadydom": "webcomponents/shadydom#master",
     "shadycss": "webcomponents/shadycss#master",
     "template": "webcomponents/template#master",
-    "URL": "webcomponents/URL#master",
     "webcomponents-platform": "webcomponents/webcomponents-platform#master"
   }
 }
