@@ -35,13 +35,15 @@
     },
 
     texImage2D: function() {
-      arguments[5] = unwrapIfNeeded(arguments[5]);
-      unsafeUnwrap(this).texImage2D.apply(unsafeUnwrap(this), arguments);
+      var args = Array.prototype.slice.call(arguments);
+      args[5] = unwrapIfNeeded(args[5]);
+      unsafeUnwrap(this).texImage2D.apply(unsafeUnwrap(this), args);
     },
 
     texSubImage2D: function() {
-      arguments[6] = unwrapIfNeeded(arguments[6]);
-      unsafeUnwrap(this).texSubImage2D.apply(unsafeUnwrap(this), arguments);
+      var args = Array.prototype.slice.call(arguments);
+      args[6] = unwrapIfNeeded(args[6]);
+      unsafeUnwrap(this).texSubImage2D.apply(unsafeUnwrap(this), args);
     }
   });
 

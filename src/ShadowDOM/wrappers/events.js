@@ -598,9 +598,10 @@
 
   function getInitFunction(name, relatedTargetIndex) {
     return function() {
-      arguments[relatedTargetIndex] = unwrap(arguments[relatedTargetIndex]);
+      var args = Array.prototype.slice.call(arguments);
+      args[relatedTargetIndex] = unwrap(args[relatedTargetIndex]);
       var impl = unwrap(this);
-      impl[name].apply(impl, arguments);
+      impl[name].apply(impl, args);
     };
   }
 

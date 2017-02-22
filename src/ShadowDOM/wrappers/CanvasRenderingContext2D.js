@@ -31,13 +31,15 @@
     },
 
     drawImage: function() {
-      arguments[0] = unwrapIfNeeded(arguments[0]);
-      unsafeUnwrap(this).drawImage.apply(unsafeUnwrap(this), arguments);
+      var args = Array.prototype.slice.call(arguments);
+      args[0] = unwrapIfNeeded(args[0]);
+      unsafeUnwrap(this).drawImage.apply(unsafeUnwrap(this), args);
     },
 
     createPattern: function() {
-      arguments[0] = unwrap(arguments[0]);
-      return unsafeUnwrap(this).createPattern.apply(unsafeUnwrap(this), arguments);
+      var args = Array.prototype.slice.call(arguments);
+      args[0] = unwrap(args[0]);
+      return unsafeUnwrap(this).createPattern.apply(unsafeUnwrap(this), args);
     }
   });
 
