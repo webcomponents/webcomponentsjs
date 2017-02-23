@@ -3,27 +3,54 @@ webcomponents.js
 
 [![Build Status](https://travis-ci.org/webcomponents/webcomponentsjs.svg?branch=master)](https://travis-ci.org/webcomponents/webcomponentsjs)
 
-A suite of polyfills supporting the [Web Components](http://webcomponents.org) specs.
+A suite of polyfills supporting the [Web Components](http://webcomponents.org) specs:
 
 - **Custom Elements**: allows authors to define their own custom tags ([spec](https://w3c.github.io/webcomponents/spec/custom/)).
 - **HTML Imports**: a way to include and reuse HTML documents via other HTML documents ([spec](https://w3c.github.io/webcomponents/spec/imports/)).
 - **Shadow DOM**: provides encapsulation by hiding DOM subtrees under shadow roots ([spec](https://w3c.github.io/webcomponents/spec/shadow/)).
 
-## Releases
+## How to use
 
-Pre-built (concatenated & minified) versions of the polyfills are maintained in the [tagged versions](https://github.com/webcomponents/webcomponentsjs/releases) of this repo. There are several variants:
+The polyfills are built (concatenated & minified) into several bundles that target
+different browsers and spec readiness:
 
-- `webcomponents-lite.js` includes all of the polyfills.
-- `webcomponents-loader.js` is a custom loader that dynamically load a minified polyfill
-bundle, using feature detection. The bundles that can be loaded are:
-  - `webcomponents-hi` -- HTML Imports (needed by Safari Tech Preview)
-  - `webcomponents-hi-ce` -- HTML Imports and Custom Elements (needed by Safari 10)
-  - `webcomponents-hi-ce-sd` -- HTML Imports, Custom Elements and Shady DOM/CSS (needed by Safari 9, Firefox, Edge)
-  - `webcomponents-lite` -- HTML Imports, Custom Elements, Shady DOM/CSS and generic platform polyfills (such as Template, ES6 Promise, Constructable events, etc.) (needed by Internet Explorer 11)
+- `webcomponents-hi` -- HTML Imports (needed by Safari Tech Preview)
+- `webcomponents-hi-ce` -- HTML Imports and Custom Elements (needed by Safari 10)
+- `webcomponents-hi-sd-ce` -- HTML Imports, Custom Elements and Shady DOM/CSS (needed by Safari 9, Firefox, Edge)
+- `webcomponents-sd-ce` -- Custom Elements and Shady DOM/CSS (no HTML Imports)
+- `webcomponents-lite` -- all of the polyfills: HTML Imports, Custom Elements, Shady DOM/CSS and generic platform polyfills (such as Template, ES6 Promise, Constructable events, etc.) (needed by Internet Explorer 11)
+
+If you are only targetting a specific browser, you can just use the bundle that's
+needed by it; alternatively, if you're using server-side rendering, you can
+send the polyfill bundle that's necessary for the browser making that request.
+
+## `webcomponents-loader.js`
+
+Alternatively, this repo also comes with `webcomponents-loader.js`, a client-side
+loader that dynamically loads the correct polyfill bundle, using feature detection.
+Note that because the bundle will be loaded asynchronously, you should wait for the `WebComponentsReady` before you can safely assume that all the polyfills have
+loaded and are ready to be used (i.e. if you want to dynamically load other custom
+elements, etc.). Here's an example:
+
+```
+<head>
+  <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <script>
+    // When the polyfill has loaded, lazy-load another custom element (otherwise,
+    // if we do this before CustomElements has loaded, the element registration
+    // will fail.)
+    window.addEventListener('WebComponentsReady', function() {
+      var s = document.createElement('script');
+      s.src = 'lazy-element.js';
+      document.head.appendChild(s);
+    });
+  </script>
+</head>
+```
 
 ## Browser Support
 
-Our polyfills are intended to work in the latest versions of evergreen browsers. See below
+The polyfills are intended to work in the latest versions of evergreen browsers. See below
 for our complete browser support matrix:
 
 | Polyfill   | IE11+ | Chrome* | Firefox* | Safari 9+* | Chrome Android* | Mobile Safari* |
@@ -34,13 +61,13 @@ for our complete browser support matrix:
 
 \*Indicates the current version of the browser
 
-The polyfills may work in older browsers, however require additional polyfills (such as classList)
-to be used. We cannot guarantee support for browsers outside of our compatibility matrix.
+The polyfills may work in older browsers, however require additional polyfills (such as classList, or other [platform](https://github.com/webcomponents/webcomponents-platform)
+polyfills) to be used. We cannot guarantee support for browsers outside of our compatibility matrix.
 
 
 ### Manually Building
 
-If you wish to build the polyfills yourself, you'll need `node` and `npm` on your system:
+If you wish to build the bundles yourself, you'll need `node` and `npm` on your system:
 
  * install [node.js](http://nodejs.org/) using the instructions on their website
  * use `npm` to install [gulp.js](http://gulpjs.com/): `npm install -g gulp`
