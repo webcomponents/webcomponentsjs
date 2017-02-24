@@ -14,13 +14,16 @@
   if (!('import' in document.createElement('link'))) {
     polyfills.push('hi');
   }
-  if (!('attachShadow' in Element.prototype) || (window.ShadyDOM && window.ShadyDOM.force)) {
+  if (!('attachShadow' in Element.prototype && 'getRootNode' in Element.prototype) ||
+    (window.ShadyDOM && window.ShadyDOM.force)) {
     polyfills.push('sd');
   }
   if (!window.customElements || window.customElements.forcePolyfill) {
     polyfills.push('ce');
   }
-  if (!('content' in document.createElement('template')) || !window.Promise) {
+  if (!('content' in document.createElement('template')) || !window.Promise ||
+    // Edge has broken fragment cloning which means you cannot clone template.content
+    !(document.createDocumentFragment().cloneNode() instanceof DocumentFragment)) {
     polyfills.push('pf');
   }
 
