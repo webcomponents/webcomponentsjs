@@ -9,43 +9,54 @@ A suite of polyfills supporting the [Web Components](http://webcomponents.org) s
 - **HTML Imports**: a way to include and reuse HTML documents via other HTML documents ([spec](https://w3c.github.io/webcomponents/spec/imports/)).
 - **Shadow DOM**: provides encapsulation by hiding DOM subtrees under shadow roots ([spec](https://w3c.github.io/webcomponents/spec/shadow/)).
 
+For browsers that need it, there are also some minor polyfills included:
+- [`HTMLTemplateElement`](https://github.com/webcomponents/template)
+- [`Promise`](https://github.com/stefanpenner/es6-promise)
+- `Event`, `CustomEvent`, `MouseEvent` constructors and `Object.assign`, `Array.from` (see [webcomponents-platform](https://github.com/webcomponents/webcomponents-platform))
+
 ## How to use
 
 The polyfills are built (concatenated & minified) into several bundles that target
 different browsers and spec readiness:
 
-- `webcomponents-hi` -- HTML Imports (needed by Safari Tech Preview)
-- `webcomponents-hi-ce` -- HTML Imports and Custom Elements (needed by Safari 10)
-- `webcomponents-hi-sd-ce` -- HTML Imports, Custom Elements and Shady DOM/CSS (needed by Safari 9, Firefox, Edge)
-- `webcomponents-sd-ce` -- Custom Elements and Shady DOM/CSS (no HTML Imports)
-- `webcomponents-lite` -- all of the polyfills: HTML Imports, Custom Elements, Shady DOM/CSS and generic platform polyfills (such as Template, ES6 Promise, Constructable events, etc.) (needed by Internet Explorer 11)
+- `webcomponents-hi.js` -- HTML Imports (needed by Safari Tech Preview)
+- `webcomponents-hi-ce.js` -- HTML Imports and Custom Elements (needed by Safari 10)
+- `webcomponents-hi-sd-ce.js` -- HTML Imports, Custom Elements and Shady DOM/CSS (needed by Safari 9, Firefox, Edge)
+- `webcomponents-sd-ce.js` -- Custom Elements and Shady DOM/CSS (no HTML Imports)
+- `webcomponents-lite.js` -- all of the polyfills: HTML Imports, Custom Elements, Shady DOM/CSS and generic platform polyfills (such as ES6 Promise, Constructable events, etc.) (needed by Internet Explorer 11), and Template (needed by IE 11 and Edge)
 
-If you are only targetting a specific browser, you can just use the bundle that's
-needed by it; alternatively, if you're using server-side rendering, you can
-send the polyfill bundle that's necessary for the browser making that request.
+If you are only targeting a specific browser, you can just use the bundle that's
+needed by it; alternatively, if your server is capable of serving different assets based on user agent, you can send the polyfill bundle that's necessary for the browser making that request.
 
 ## `webcomponents-loader.js`
 
 Alternatively, this repo also comes with `webcomponents-loader.js`, a client-side
-loader that dynamically loads the correct polyfill bundle, using feature detection.
+loader that dynamically loads the minimum polyfill bundle, using feature detection.
 Note that because the bundle will be loaded asynchronously, you should wait for the `WebComponentsReady` before you can safely assume that all the polyfills have
 loaded and are ready to be used (i.e. if you want to dynamically load other custom
 elements, etc.). Here's an example:
 
 ```
-<head>
-  <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-  <script>
-    // When the polyfill has loaded, lazy-load another custom element (otherwise,
-    // if we do this before CustomElements has loaded, the element registration
-    // will fail.)
-    window.addEventListener('WebComponentsReady', function() {
-      var s = document.createElement('script');
-      s.src = 'lazy-element.js';
-      document.head.appendChild(s);
-    });
-  </script>
-</head>
+<!-- Load polyfills; note that "loader" will load these async -->
+<script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+
+<!-- Load a custom element definition via HTMLImports -->
+<link rel="import" href="my-element.html">
+
+<!-- Use the custom element -->
+<my-element></my-element>
+
+<!-- Interact with the upgraded element -->
+<script>
+  window.addEventListener('WebComponentsReady', function() {
+    // At this point we are guaranteed that all required polyfills have loaded,
+    // all HTML imports have loaded, and all defined custom elements have upgraded
+    let MyElement = customElements.get('my-element');
+    let element = document.querySelector('my-element');
+    console.assert(element instanceof MyElement);  // 👍
+    element.someAPI(); // 👍
+  });
+</script>
 ```
 
 ## Browser Support
