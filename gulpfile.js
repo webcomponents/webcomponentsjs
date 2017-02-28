@@ -12,7 +12,6 @@
 
 const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
-const babel = require('gulp-babel');
 const buffer = require('vinyl-buffer');
 const rename = require('gulp-rename');
 const rollup = require('rollup-stream');
@@ -20,23 +19,9 @@ const source = require('vinyl-source-stream');
 const del = require('del');
 const bower = require('bower');
 const runseq = require('run-sequence');
+const closure = require('google-closure-compiler').gulp();
 
-function singleLicenseComment() {
-  let hasLicense = false;
-  return (comment) => {
-    if (hasLicense) {
-      return false;
-    }
-    return hasLicense = /@license/.test(comment);
-  }
-}
-
-const babiliConfig = {
-  presets: ['babili'],
-  shouldPrintComment: singleLicenseComment()
-};
-
-function minify(sourceName, fileName, needsContext) {
+function debugify(sourceName, fileName, needsContext) {
   if (!fileName)
     fileName = sourceName;
 
@@ -57,30 +42,93 @@ function minify(sourceName, fileName, needsContext) {
   .pipe(source(sourceName +'-index.js'))
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
-  .pipe(babel(babiliConfig))
   .pipe(rename(fileName + '.js'))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('./'))
 }
 
-gulp.task('minify-hi', () => {
-  return minify('webcomponents-hi')
+function closurify(sourceName, fileName) {
+  if (!fileName) {
+    fileName = sourceName;
+  }
+
+  const options = {
+    new_type_inf: true,
+    compilation_level: 'SIMPLE',
+    language_in: 'ES6_STRICT',
+    language_out: 'ES5_STRICT',
+    output_wrapper: '(function(){\n%output%\n}).call(self)',
+    assume_function_wrapper: true,
+    js_output_file: `${fileName}.js`,
+    entry_point: `/entrypoints/${sourceName}-index.js`,
+    dependency_mode: 'STRICT',
+    warning_level: 'VERBOSE',
+    rewrite_polyfills: false,
+    externs: [
+      'externs/webcomponents.js',
+      'bower_components/custom-elements/externs/custom-elements.js',
+      'bower_components/html-imports/externs/html-imports.js',
+      'bower_components/shadycss/externs/shadycss-externs.js',
+    ]
+  };
+
+  const sources = [
+    'entrypoints/*.js',
+    'src/*.js',
+    'bower_components/webcomponents-platform/*.js',
+    'bower_components/template/*.js',
+    'bower_components/es6-promise/dist/es6-promise.auto.min.js',
+    'bower_components/html-imports/src/*.js',
+    'bower_components/shadydom/src/*.js',
+    'bower_components/custom-elements/src/**/*.js',
+    'bower_components/shadycss/{entrypoints,src}/*.js'
+  ];
+
+  return gulp.src(sources)
+  .pipe(sourcemaps.init({loadMaps: true}))
+  .pipe(closure(options))
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest('.'))
+}
+
+gulp.task('debugify-hi', () => {
+  return debugify('webcomponents-hi')
 });
 
-gulp.task('minify-hi-ce', () => {
-  return minify('webcomponents-hi-ce')
+gulp.task('debugify-hi-ce', () => {
+  return debugify('webcomponents-hi-ce')
 });
 
-gulp.task('minify-hi-sd-ce', () => {
-  return minify('webcomponents-hi-sd-ce')
+gulp.task('debugify-hi-sd-ce', () => {
+  return debugify('webcomponents-hi-sd-ce')
 });
 
-gulp.task('minify-hi-sd-ce-pf', () => {
-  return minify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', true)
+gulp.task('debugify-hi-sd-ce-pf', () => {
+  return debugify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', true)
 });
 
-gulp.task('minify-sd-ce', () => {
-  return minify('webcomponents-sd-ce')
+gulp.task('debugify-sd-ce', () => {
+  return debugify('webcomponents-sd-ce')
+});
+
+gulp.task('closurify-hi', () => {
+  return closurify('webcomponents-hi')
+});
+
+gulp.task('closurify-hi-ce', () => {
+  return closurify('webcomponents-hi-ce')
+});
+
+gulp.task('closurify-hi-sd-ce', () => {
+  return closurify('webcomponents-hi-sd-ce')
+});
+
+gulp.task('closurify-hi-sd-ce-pf', () => {
+  return closurify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite')
+});
+
+gulp.task('closurify-sd-ce', () => {
+  return closurify('webcomponents-sd-ce')
 });
 
 gulp.task('refresh-bower', () => {
@@ -93,7 +141,11 @@ gulp.task('refresh-bower', () => {
 });
 
 gulp.task('default', (cb) => {
-  runseq('refresh-bower', 'build', cb);
+  runseq('refresh-bower', 'closure', cb);
 });
 
-gulp.task('build', ['minify-hi', 'minify-hi-ce', 'minify-hi-sd-ce', 'minify-hi-sd-ce-pf', 'minify-sd-ce']);
+gulp.task('debug', ['debugify-hi', 'debugify-hi-ce', 'debugify-hi-sd-ce', 'debugify-hi-sd-ce-pf', 'debugify-sd-ce']);
+
+gulp.task('closure', (cb) => {
+  runseq(...['closurify-hi', 'closurify-hi-ce', 'closurify-hi-sd-ce', 'closurify-hi-sd-ce-pf', 'closurify-sd-ce'], cb);
+});

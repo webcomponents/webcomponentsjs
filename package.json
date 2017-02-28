@@ -21,17 +21,16 @@
   },
   "homepage": "http://webcomponents.org",
   "devDependencies": {
-    "babel-preset-babili": "0.0.9",
     "bower": "^1.8.0",
     "del": "^2.2.2",
+    "google-closure-compiler": "^20170218.0.0",
     "gulp": "^3.8.8",
-    "gulp-babel": "^6.1.2",
     "gulp-rename": "^1.2.2",
-    "gulp-sourcemaps": "1.9.0",
+    "gulp-sourcemaps": "^2.4.1",
     "rollup-stream": "^1.14.0",
     "run-sequence": "^1.2.2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "web-component-tester": "^6.0.0-prerelease.4"
+    "web-component-tester": "^6.0.0-prerelease.5"
   }
 }

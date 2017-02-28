@@ -15,7 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  */
 
 import '../bower_components/html-imports/src/html-imports.js'
-import '../bower_components/custom-elements/custom-elements.min.js'
+import '../bower_components/custom-elements/src/custom-elements.js'
 
 import '../src/post-polyfill.js'
 import '../src/unresolved.js'
