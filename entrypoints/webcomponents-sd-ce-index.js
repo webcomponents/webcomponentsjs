@@ -14,6 +14,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  * Used in: Safari 9, Firefox, Edge
  */
 
-import '../bower_components/shadydom/shadydom.min.js'
-import '../bower_components/custom-elements/custom-elements.min.js'
+import '../bower_components/shadydom/src/shadydom.js'
+import '../bower_components/custom-elements/src/custom-elements.js'
 import '../bower_components/shadycss/entrypoints/scoping-shim.js'
