@@ -69,7 +69,7 @@ Loader.prototype = {
       return true;
     }
     var resource;
-    if (this.cache[url]) {
+    if (this.cache[url] != undefined) {
       this.onload(url, elt, this.cache[url]);
       // finished this transaction
       this.tail();
