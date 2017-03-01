@@ -50,6 +50,16 @@ Loader.prototype = {
 
   require: function(elt) {
     var url = elt.src || elt.href;
+    
+    // Ensure an absolute URL
+    // (Firefox reports a relative URL for components loaded from a
+    // component that had an explicit <base> tag set.)
+    if (!/^(https?:)?\/\//.test(url)) {
+      var a = document.createElement('a');
+      a.href = url;
+      url = a.href;
+    }
+    
     // ensure we have a standard url that can be used
     // reliably for deduping.
     // TODO(sjmiles): ad-hoc

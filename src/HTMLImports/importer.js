@@ -128,22 +128,28 @@ function makeDocument(resource, url) {
   var doc = document.implementation.createHTMLDocument(IMPORT_LINK_TYPE);
   // cache the new document's source url
   doc._URL = url;
-  // establish a relative path via <base>
-  var base = doc.createElement('base');
-  base.setAttribute('href', url);
-  // add baseURI support to browsers (IE) that lack it.
-  if (!doc.baseURI && !hasBaseURIAccessor(doc)) {
-    // Use defineProperty since Safari throws an exception when using assignment.
-    Object.defineProperty(doc, 'baseURI', {value:url});
+  
+  // install html
+  doc.body.innerHTML = resource;
+
+  // establish a base for paths via <base>
+  var base = doc.querySelector('base');
+  if (!base) {
+      base = doc.createElement('base');
+      base.setAttribute('href', url);
+      doc.head.appendChild(base);
   }
+      
+  // add baseURI support to browsers (IE) that lack it.
+  // Note that FireFox sometimes reports "about:blank", so always set it.
+  // Use defineProperty since Safari throws an exception when using assignment.
+  Object.defineProperty(doc, 'baseURI', {value:url});
+
   // ensure UTF-8 charset
   var meta = doc.createElement('meta');
   meta.setAttribute('charset', 'utf-8');
-
   doc.head.appendChild(meta);
-  doc.head.appendChild(base);
-  // install html
-  doc.body.innerHTML = resource;
+  
   // TODO(sorvell): ideally this code is not aware of Template polyfill,
   // but for now the polyfill needs help to bootstrap these templates
   if (window.HTMLTemplateElement && HTMLTemplateElement.bootstrap) {
