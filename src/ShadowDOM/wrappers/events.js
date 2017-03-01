@@ -777,7 +777,7 @@
       listeners.push(listener);
 
       var target = getTargetToListenAt(this);
-      target.addEventListener_(type, dispatchOriginalEvent, true);
+      target.addEventListener_(type, dispatchOriginalEvent, capture);
     },
     removeEventListener: function(type, fun, capture) {
       capture = Boolean(capture);
@@ -797,7 +797,7 @@
 
       if (found && count === 1) {
         var target = getTargetToListenAt(this);
-        target.removeEventListener_(type, dispatchOriginalEvent, true);
+        target.removeEventListener_(type, dispatchOriginalEvent, capture);
       }
     },
     dispatchEvent: function(event) {
