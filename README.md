@@ -1,18 +1,19 @@
-webcomponents.js
+webcomponents.js (v0 spec polyfills)
 ================
 
 [![Build Status](https://travis-ci.org/webcomponents/webcomponentsjs.svg?branch=master)](https://travis-ci.org/webcomponents/webcomponentsjs)
 
+> **Note**. For polyfills that work with Custom Elements and Shadow DOM v1, see the [v1 branch](https://github.com/webcomponents/webcomponentsjs/tree/v1).
+
 A suite of polyfills supporting the [Web Components](http://webcomponents.org) specs:
 
-**Custom Elements**: allows authors to define their own custom tags ([spec](https://w3c.github.io/webcomponents/spec/custom/)).
+**Custom Elements v0**: allows authors to define their own custom tags ([spec](https://w3c.github.io/webcomponents/spec/custom/)).
 
 **HTML Imports**: a way to include and reuse HTML documents via other HTML documents ([spec](https://w3c.github.io/webcomponents/spec/imports/)).
 
-**Shadow DOM**: provides encapsulation by hiding DOM subtrees under shadow roots ([spec](https://w3c.github.io/webcomponents/spec/shadow/)).
+**Shadow DOM v0**: provides encapsulation by hiding DOM subtrees under shadow roots ([spec](https://w3c.github.io/webcomponents/spec/shadow/)).
 
 This also folds in polyfills for `MutationObserver` and `WeakMap`.
-
 
 ## Releases
 
