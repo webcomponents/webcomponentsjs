@@ -53,6 +53,9 @@
     },
     nextNode: function() {
       return wrap(unsafeUnwrap(this).nextNode());
+    },
+    nextSibling: function() {
+      return wrap(unsafeUnwrap(this).nextSibling());
     }
   };
 
