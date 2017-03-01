@@ -184,7 +184,7 @@ if (useNative) {
     }
   }).observe(document.head, {childList: true});
 
-  function handleImports(nodes) {
+  var handleImports = function handleImports(nodes) {
     for (var i=0, l=nodes.length, n; (i<l) && (n=nodes[i]); i++) {
       if (isImport(n)) {
         handleImport(n);
@@ -192,11 +192,11 @@ if (useNative) {
     }
   }
 
-  function isImport(element) {
+  var isImport = function isImport(element) {
     return element.localName === 'link' && element.rel === 'import';
   }
 
-  function handleImport(element) {
+  var handleImport = function handleImport(element) {
     var loaded = element.import;
     if (loaded) {
       markTargetLoaded({target: element});
