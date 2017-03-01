@@ -35,6 +35,8 @@ var importParser = {
     'link[rel=stylesheet]:not([type])',
     'style:not([type])',
     'script:not([type])',
+    'link[rel=stylesheet][type="text/css"]',
+    'style[type="text/css"]',
     'script[type="application/javascript"]',
     'script[type="text/javascript"]'
   ].join(','),

@@ -36,9 +36,11 @@
   <div class="styled">red?</div>
   <div class="overridden-style">black?</div>
 
+  <div class="link-wrong-typed">red?</div>
   <div class="link-typed">red?</div>
 
-  <div class="style-typed">red?</div>
+  <div class="style-wrong-typed">red?</div>
+  <div class="style-typed">green?</div>
 
 
   <script>
@@ -63,11 +65,13 @@
         // styles in style are applied in the correct order and overriddable
         chai.assert.equal(computedStyle('.overridden-style').backgroundColor, 'rgb(0, 0, 0)');
         if (!HTMLImports.useNative) {
-          // links with type attr are not imported
-          chai.assert.notEqual(computedStyle('.link-typed').backgroundColor, 'rgb(0, 0, 128)');
+          // links with type attr != text/css are not imported
+          chai.assert.equal(computedStyle('.link-typed').backgroundColor, 'rgb(0, 128, 0)');
+          chai.assert.notEqual(computedStyle('.link-wrong-typed').backgroundColor, 'rgb(0, 0, 128)');
         }
-        // styles with type attr are not imported
-        chai.assert.notEqual(computedStyle('.style-typed').backgroundColor, 'rgb(255, 0, 0)');
+        // styles with type attr != text/css are not imported
+        chai.assert.equal(computedStyle('.style-typed').backgroundColor, 'rgb(0, 0, 255)');
+        chai.assert.notEqual(computedStyle('.style-wrong-typed').backgroundColor, 'rgb(255, 0, 0)');
 
         done();
       });
