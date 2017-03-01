@@ -334,6 +334,7 @@
     distributionResolution: function(node) {
       if (isShadowHost(node)) {
         var shadowHost = node;
+        var currentShadowHostRenderer = getRendererForHost(shadowHost);
         // 1.1
         var pool = poolPopulation(shadowHost);
 
@@ -342,7 +343,7 @@
         // 1.2
         for (var i = 0; i < shadowTrees.length; i++) {
           // 1.2.1
-          this.poolDistribution(shadowTrees[i], pool);
+          this.poolDistribution(shadowTrees[i], pool, currentShadowHostRenderer);
         }
 
         // 1.3
@@ -383,13 +384,13 @@
     },
 
     // http://w3c.github.io/webcomponents/spec/shadow/#dfn-pool-distribution-algorithm
-    poolDistribution: function (node, pool) {
+    poolDistribution: function (node, pool, currentShadowHostRenderer) {
       if (node instanceof HTMLShadowElement)
         return;
 
       if (node instanceof HTMLContentElement) {
         var content = node;
-        this.updateDependentAttributes(content.getAttribute('select'));
+        this.updateDependentAttributes(content.getAttribute('select'), currentShadowHostRenderer);
 
         var anyDistributed = false;
 
@@ -419,7 +420,7 @@
       }
 
       for (var child = node.firstChild; child; child = child.nextSibling) {
-        this.poolDistribution(child, pool);
+        this.poolDistribution(child, pool, currentShadowHostRenderer);
       }
     },
 
@@ -470,7 +471,7 @@
      * being used in the selector.
      * @param {string} selector
      */
-    updateDependentAttributes: function(selector) {
+    updateDependentAttributes: function(selector, currentShadowHostRenderer) {
       if (!selector)
         return;
 
@@ -485,7 +486,7 @@
         attributes['id'] = true;
 
       selector.replace(/\[\s*([^\s=\|~\]]+)/g, function(_, name) {
-        attributes[name] = true;
+        currentShadowHostRenderer.attributes[name] = true;
       });
 
       // Pseudo selectors have been removed from the spec.
