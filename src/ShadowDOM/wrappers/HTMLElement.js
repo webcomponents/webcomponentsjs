@@ -23,6 +23,7 @@
   var unwrap = scope.unwrap;
   var wrap = scope.wrap;
   var wrappers = scope.wrappers;
+  var rebuildChildNodes = scope.rebuildChildNodes;
 
   /////////////////////////////////////////////////////////////////////////////
   // innerHTML and outerHTML
@@ -204,6 +205,10 @@
         setInnerHTML(this.content, value);
       } else {
         unsafeUnwrap(this).innerHTML = value;
+
+        if (this.childNodes_ !== undefined) {
+          rebuildChildNodes(this);
+        }
       }
 
       var addedNodes = snapshotNodeList(this.childNodes);
