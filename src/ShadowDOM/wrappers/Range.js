@@ -24,6 +24,13 @@
   var ShadowRoot = scope.wrappers.ShadowRoot;
 
   function getHost(node) {
+    var parent = node;
+    while (parent = parent.parentNode) {
+      if (parent.shadowRoot) {
+        return null;
+      }
+    }
+
     var root = getTreeScope(node).root;
     if (root instanceof ShadowRoot) {
       return root.host;

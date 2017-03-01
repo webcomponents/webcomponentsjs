@@ -102,7 +102,11 @@ suite('Range', function() {
 
   function createShadowDom(element, shadowDomContentsArray) {
     shadowDomContentsArray.forEach(function(shadowDomContent) {
-      element.createShadowRoot().innerHTML = shadowDomContent;
+      if (typeof shadowDomContent == 'string') {
+        element.createShadowRoot().innerHTML = shadowDomContent;
+      } else {
+        wrapIfNeeded(element).createShadowRoot().appendChild(shadowDomContent);
+      }
     });
     return element;
   }
@@ -189,32 +193,32 @@ suite('Range', function() {
     range.setEnd(host, 2);
     selection.addRange(range);
 
-    assert.isTrue(range.startContainer === host);
-    assert.isTrue(range.endContainer === host);
-    assert.isTrue(range.commonAncestorContainer === host);
-    assert.isTrue(range.toString() === "OneTwo");
+    assert.strictEqual(range.startContainer, host);
+    assert.strictEqual(range.endContainer, host);
+    assert.strictEqual(range.commonAncestorContainer, host);
+    assert.strictEqual(range.toString(), "OneTwo");
 
     range.setStart(host, 0);
     range.setEnd(host, 1);
-    assert.isTrue(range.toString() === "One");
+    assert.strictEqual(range.toString(), "One");
     selection.removeAllRanges();
     selection.addRange(range);
 
     range.setStart(host, 1);
     range.setEnd(host, 2);
-    assert.isTrue(range.toString() === "Two");
+    assert.strictEqual(range.toString(), "Two");
     selection.removeAllRanges();
     selection.addRange(range);
 
     range.setStart(host, 2);
     range.setEnd(host, 3);
-    assert.isTrue(range.toString() === "Three");
+    assert.strictEqual(range.toString(), "Three");
     selection.removeAllRanges();
     selection.addRange(range);
 
     range.setStart(host, 0);
     range.setEnd(host, 3);
-    assert.isTrue(range.toString() === "OneTwoThree");
+    assert.strictEqual(range.toString(), "OneTwoThree");
     selection.removeAllRanges();
     selection.addRange(range);
 
@@ -225,7 +229,7 @@ suite('Range', function() {
     var span2 = host.childNodes[2];
     range.setStart(span0, 1);
     range.setEnd(span2, 0);
-    assert.isTrue(range.toString() === "Two");
+    assert.strictEqual(range.toString(), "Two");
     selection.removeAllRanges();
     selection.addRange(range);
 
@@ -237,12 +241,16 @@ suite('Range', function() {
     range.setEnd(span2TextNode, 1);
     selection.removeAllRanges();
     selection.addRange(range);
-    assert.isTrue(range.toString() === "neTwoT");
+    assert.strictEqual(range.startContainer, span0TextNode);
+    assert.strictEqual(range.endContainer, span2TextNode);
+    assert.strictEqual(range.toString(), "neTwoT");
   }
 
   function testRangeWithHosts(hosts) {
     hosts.forEach(function(host) {
-      document.body.appendChild(wrapIfNeeded(host));
+      if (!host.parentNode) {
+        document.body.appendChild(wrapIfNeeded(host));
+      }
       testRangeWith3SpansHTML(host);
     });
   }
@@ -397,6 +405,19 @@ suite('Range', function() {
       testRangeWithHosts(hosts);
     });
 
+    test("div - <content> wrapped nested in Shadow DOM", function() {
+      var shadowDomContent = "<div>before</div>";
+      shadowDomContent += "<div id='container'><content></content></div>";
+      shadowDomContent += "<div>after</div>";
+      var childHosts = createHostsWithShadowDom([shadowDomContent], "div");
+      hosts = createHostsWithShadowDom([''], "div");
+      for (var i = 0; i < childHosts.length; ++i) {
+        hosts[i].shadowRoot.appendChild(childHosts[i]);
+        document.body.appendChild(wrapIfNeeded(hosts[i]));
+      }
+      testRangeWithHosts(childHosts);
+    });
+
   });
 
   suite("Standard+Custom elements with oldest+youngest Shadow Dom", function() {
@@ -498,10 +519,10 @@ suite('Range', function() {
       range.setStart(host, 0);
       range.setEnd(host, host.childNodes.length + 1);
 
-      assert.isTrue(range.startContainer === host);
-      assert.isTrue(range.endContainer === host);
-      assert.isTrue(range.commonAncestorContainer === host);
-      //assert.isTrue(range.toString() === "bold1italic1");
+      assert.strictEqual(range.startContainer, host);
+      assert.strictEqual(range.endContainer, host);
+      assert.strictEqual(range.commonAncestorContainer, host);
+      //assert.strictEqual(range.toString(), "bold1italic1");
     }
 
     test.skip("div with multiple <content> wrapped", function() {
