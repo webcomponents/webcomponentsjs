@@ -632,19 +632,19 @@
       }
       return s;
     },
-    set textContent(textContent) {
-      if (textContent == null) textContent = '';
+    set textContent(_textContent) {
+      if (_textContent == null) _textContent = '';
       var removedNodes = snapshotNodeList(this.childNodes);
 
       if (this.invalidateShadowRenderer()) {
         removeAllChildNodes(this);
-        if (textContent !== '') {
-          var textNode = unsafeUnwrap(this).ownerDocument.createTextNode(textContent);
+        if (_textContent !== '') {
+          var textNode = unsafeUnwrap(this).ownerDocument.createTextNode(_textContent);
           this.appendChild(textNode);
         }
       } else {
         clearChildNodes(this);
-        unsafeUnwrap(this).textContent = textContent;
+        unsafeUnwrap(this).textContent = _textContent;
       }
 
       var addedNodes = snapshotNodeList(this.childNodes);

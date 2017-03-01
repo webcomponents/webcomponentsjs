@@ -494,83 +494,83 @@
           (this._isRelative ? '//' + authority + this.host : '') +
           this.pathname + this._query + this._fragment;
     },
-    set href(href) {
+    set href(_href) {
       clear.call(this);
-      parse.call(this, href);
+      parse.call(this, _href);
     },
 
     get protocol() {
       return this._scheme + ':';
     },
-    set protocol(protocol) {
+    set protocol(_protocol) {
       if (this._isInvalid)
         return;
-      parse.call(this, protocol + ':', 'scheme start');
+      parse.call(this, _protocol + ':', 'scheme start');
     },
 
     get host() {
       return this._isInvalid ? '' : this._port ?
           this._host + ':' + this._port : this._host;
     },
-    set host(host) {
+    set host(_host) {
       if (this._isInvalid || !this._isRelative)
         return;
-      parse.call(this, host, 'host');
+      parse.call(this, _host, 'host');
     },
 
     get hostname() {
       return this._host;
     },
-    set hostname(hostname) {
+    set hostname(_hostname) {
       if (this._isInvalid || !this._isRelative)
         return;
-      parse.call(this, hostname, 'hostname');
+      parse.call(this, _hostname, 'hostname');
     },
 
     get port() {
       return this._port;
     },
-    set port(port) {
+    set port(_port) {
       if (this._isInvalid || !this._isRelative)
         return;
-      parse.call(this, port, 'port');
+      parse.call(this, _port, 'port');
     },
 
     get pathname() {
       return this._isInvalid ? '' : this._isRelative ?
           '/' + this._path.join('/') : this._schemeData;
     },
-    set pathname(pathname) {
+    set pathname(_pathname) {
       if (this._isInvalid || !this._isRelative)
         return;
       this._path = [];
-      parse.call(this, pathname, 'relative path start');
+      parse.call(this, _pathname, 'relative path start');
     },
 
     get search() {
       return this._isInvalid || !this._query || '?' == this._query ?
           '' : this._query;
     },
-    set search(search) {
+    set search(_search) {
       if (this._isInvalid || !this._isRelative)
         return;
       this._query = '?';
-      if ('?' == search[0])
-        search = search.slice(1);
-      parse.call(this, search, 'query');
+      if ('?' == _search[0])
+        _search = _search.slice(1);
+      parse.call(this, _search, 'query');
     },
 
     get hash() {
       return this._isInvalid || !this._fragment || '#' == this._fragment ?
           '' : this._fragment;
     },
-    set hash(hash) {
+    set hash(_hash) {
       if (this._isInvalid)
         return;
       this._fragment = '#';
-      if ('#' == hash[0])
-        hash = hash.slice(1);
-      parse.call(this, hash, 'fragment');
+      if ('#' == _hash[0])
+        _hash = _hash.slice(1);
+      parse.call(this, _hash, 'fragment');
     },
 
     get origin() {
