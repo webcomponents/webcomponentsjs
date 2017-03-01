@@ -128,9 +128,10 @@ defineBuildTask('CustomElements');
 defineBuildTask('HTMLImports');
 defineBuildTask('ShadowDOM');
 defineBuildTask('MutationObserver');
+defineBuildTask('Template');
 
 gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements', 
-  'HTMLImports', 'ShadowDOM', 'copy-bower', 'MutationObserver']);
+  'HTMLImports', 'ShadowDOM', 'copy-bower', 'MutationObserver', 'Template']);
 
 gulp.task('release', function(cb) {
   isRelease = true;
