@@ -150,6 +150,18 @@ ShadowCSS `:host()` rules can only have (at most) 1-level of nested parentheses 
 ### HTML imports: document.currentScript doesn't work as expected <a id="currentscript"></a>
 In native HTML Imports, document.currentScript.ownerDocument references the import document itself. In the polyfill use document._currentScript.ownerDocument (note the underscore).
 
+#### withCredentials
+
+Note that the current implementation of `HTMLImports` not support the `withCredentials` CORS option. It has been added here in HTMLImportsCors. Use with:
+
+```
+<link rel="import-cors" href="https://mycorsprotectedresource.org/somefile.html"></link>
+<script type="text/javascript">
+  window.HTMLImportsCors = { flags: { withCredentials: true } }
+</script>
+<script src="webcomponents.js"></script>
+```
+
 ### execCommand and contenteditable isn't supported under Shadow DOM <a id="execcommand"></a>
 See [#212](https://github.com/webcomponents/webcomponentsjs/issues/212)
 
