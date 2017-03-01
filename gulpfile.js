@@ -52,7 +52,7 @@ function closurify(sourceName, fileName) {
     fileName = sourceName;
   }
 
-  const options = {
+  const closureOptions = {
     new_type_inf: true,
     compilation_level: 'SIMPLE',
     language_in: 'ES6_STRICT',
@@ -60,8 +60,6 @@ function closurify(sourceName, fileName) {
     output_wrapper: '(function(){\n%output%\n}).call(self)',
     assume_function_wrapper: true,
     js_output_file: `${fileName}.js`,
-    entry_point: `/entrypoints/${sourceName}-index.js`,
-    dependency_mode: 'STRICT',
     warning_level: 'VERBOSE',
     rewrite_polyfills: false,
     externs: [
@@ -72,21 +70,19 @@ function closurify(sourceName, fileName) {
     ]
   };
 
-  const sources = [
-    'entrypoints/*.js',
-    'src/*.js',
-    'bower_components/webcomponents-platform/*.js',
-    'bower_components/template/*.js',
-    'bower_components/es6-promise/dist/es6-promise.auto.min.js',
-    'bower_components/html-imports/src/*.js',
-    'bower_components/shadydom/src/*.js',
-    'bower_components/custom-elements/src/**/*.js',
-    'bower_components/shadycss/{entrypoints,src}/*.js'
-  ];
+  const rollupOptions = {
+    entry: `entrypoints/${sourceName}-index.js`,
+    format: 'iife',
+    moduleName: 'webcomponents',
+    sourceMap: true,
+    context: 'window'
+  };
 
-  return gulp.src(sources)
+  return rollup(rollupOptions)
+  .pipe(source(`${sourceName}-index.js`, 'entrypoints'))
+  .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
-  .pipe(closure(options))
+  .pipe(closure(closureOptions))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('.'))
 }
