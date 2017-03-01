@@ -9,6 +9,10 @@
  */
 
 (function() {
+  // Helper function to check if given source is a string or not
+  function isString(source) {
+    return Object.prototype.toString.call(source) === '[object String]';
+  }
 
   // Establish scope.
   window.WebComponents = window.WebComponents || {flags:{}};
@@ -37,7 +41,7 @@
       }
     }
     // log flags
-    if (flags.log && flags.log.split) {
+    if (isString(flags.log)) {
       var parts = flags.log.split(',');
       flags.log = {};
       parts.forEach(function(f) {
