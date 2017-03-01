@@ -12,6 +12,10 @@
 <head>
   <meta charset="UTF-8">
   <title>WebComponents dom tests</title>
+  <script>
+    Event.customProperty = 'property';
+    CustomEvent.customProperty = 'property';
+  </script>
   <script src="../../../../web-component-tester/browser.js"></script>
   <script src="../../../webcomponents.js"></script>
 </head>
@@ -83,7 +87,7 @@
       assert.isFalse(e.cancelable);
     });
 
-    test('event defaultPrevented', function() {
+    test('Event defaultPrevented', function() {
       var e = new Event('foo', {cancelable: true});
       e.preventDefault();
       assert.isTrue(e.defaultPrevented);
@@ -97,6 +101,14 @@
       assert.isTrue(e.defaultPrevented);
       // call again, just in case
       assert.doesNotThrow(function() {e.preventDefault(); });
+    });
+
+    test('Event custom property', function() {
+      assert.equal(Event.customProperty, 'property');
+    });
+
+    test('CustomEvent custom property', function() {
+      assert.equal(CustomEvent.customProperty, 'property');
     });
 
     test('dispatch and prevent', function() {
