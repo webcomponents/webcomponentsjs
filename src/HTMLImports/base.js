@@ -118,11 +118,14 @@ function watchImportsLoad(callback, doc) {
   var parsedCount = 0, importCount = imports.length, newImports = [], errorImports = [];
   function checkDone() {
     if (parsedCount == importCount && callback) {
-      callback({
-        allImports: imports,
-        loadedImports: newImports,
-        errorImports: errorImports
-      });
+	
+		if(errorImports.length == 0) {
+			callback({
+			allImports: imports,
+			loadedImports: newImports,
+			errorImports: errorImports
+		  });
+		}      
     }
   }
   function loadedImport(e) {
