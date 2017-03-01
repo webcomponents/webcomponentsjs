@@ -59,7 +59,7 @@ var useNative = scope.useNative;
  *        prototype: Object.create(HTMLButtonElement.prototype, {
  *          readyCallback: {
  *            value: function() {
- *              console.log("a fancy-button was created",
+ *              console.log("a fancy-button was created")
  *            }
  *          }
  *        })
