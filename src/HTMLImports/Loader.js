@@ -49,7 +49,16 @@ Loader.prototype = {
   },
 
   require: function(elt) {
-    var url = elt.src || elt.href;
+    var url;
+    if (elt.ownerDocument.baseURI) {
+      url = elt.src || elt.href;
+    } else {
+      // Old Opera/Presto does not reflect correct baseURI in XHR'ed doc; fix up
+      var href = elt.getAttribute('src') || elt.getAttribute('href');
+      var lastSlash = elt.ownerDocument._URL.lastIndexOf('/');
+      var base = elt.ownerDocument._URL.substring(0, lastSlash + 1);
+      url = new URL(href, base).href;
+    }
     // ensure we have a standard url that can be used
     // reliably for deduping.
     // TODO(sjmiles): ad-hoc
