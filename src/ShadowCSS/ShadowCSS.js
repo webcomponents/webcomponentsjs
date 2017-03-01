@@ -40,8 +40,8 @@
       background: red;
     }
 
-  * encapsultion: Styles defined within ShadowDOM, apply only to
-  dom inside the ShadowDOM. Polymer uses one of two techniques to imlement
+  * encapsulation: Styles defined within ShadowDOM, apply only to
+  dom inside the ShadowDOM. Polymer uses one of two techniques to implement
   this feature.
 
   By default, rules are prefixed with the host element tag name
@@ -57,9 +57,6 @@
   x-foo div {
       font-weight: bold;
     }
-
-  becomes:
-
 
   Alternatively, if WebComponents.ShadowCSS.strictStyling is set to true then
   selectors are scoped by adding an attribute selector suffix to each
