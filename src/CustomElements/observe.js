@@ -313,6 +313,7 @@ scope.upgradeDocument = upgradeDocument;
 scope.upgradeSubtree = addedSubtree;
 scope.upgradeAll = addedNode;
 scope.attached = attached;
+scope.detachedNode = detachedNode;
 scope.takeRecords = takeRecords;
 
 });
