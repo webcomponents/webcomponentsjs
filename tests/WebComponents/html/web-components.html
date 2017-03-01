@@ -22,9 +22,17 @@
       window.addEventListener('HTMLImportsLoaded', function() {
         window.importsOk = true;
       });
-      test('expected boot', function() {
+      test('expected boot', function(done) {
         chai.assert.ok(window.importsOk, 'WebComponentsReady without HTMLImportsLoaded');
         chai.assert.ok(window.importTest, 'import failed to set global value');
+
+        WebComponents.whenReady(function() {
+          chai.assert.ok(window.importTest, 'import failed to set global value');
+          // can be called twice
+          WebComponents.whenReady(function() {
+            done();
+          });
+        });
       });
     </script>
   </body>

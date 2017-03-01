@@ -89,6 +89,17 @@ window.addEventListener('WebComponentsReady', function(e) {
 });
 ```
 
+### `WebComponents.whenReady`
+
+Similar to the `WebComponentsReady` event, the `WebComponents.whenReady` can be given a callback to call when elements are ready to interact with.
+
+```js
+WebComponents.whenReady(function() {
+  // imports are loaded and elements are registered
+  console.log('Components are ready');
+});
+```
+
 ## Known Issues
 
   * [Limited CSS encapsulation](#encapsulation)

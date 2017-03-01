@@ -7,5 +7,6 @@
   "../HTMLImports/build.json",
   "../CustomElements/build.json",
   "dom.js",
-  "unresolved.js"
+  "unresolved.js",
+  "whenready.js"
 ]
