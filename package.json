@@ -2,7 +2,7 @@
   "name": "webcomponents.js",
   "version": "0.7.24",
   "description": "webcomponents.js",
-  "main": "webcomponents.js",
+  "main": "dist/webcomponents.js",
   "directories": {
     "test": "tests"
   },
@@ -16,14 +16,17 @@
     "url": "https://github.com/webcomponents/webcomponentsjs/issues"
   },
   "scripts": {
-    "test": "wct"
+    "test": "wct",
+    "prepublish": "gulp build"
   },
   "homepage": "http://webcomponents.org",
   "devDependencies": {
+    "google-closure-compiler": "^20160208.7.0",
     "gulp": "^3.8.8",
     "gulp-audit": "^1.0.0",
     "gulp-concat": "^2.4.1",
     "gulp-header": "^1.1.1",
+    "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.0.1",
     "run-sequence": "^1.0.1",
     "web-component-tester": "^4.0.1"
