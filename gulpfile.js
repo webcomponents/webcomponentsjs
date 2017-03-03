@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+ * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
  * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
@@ -8,135 +8,180 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-// jshint node: true
-
 'use strict';
 
-var
-  audit = require('gulp-audit'),
-  concat = require('gulp-concat'),
-  exec = require('child_process').exec,
-  fs = require('fs'),
-  gulp = require('gulp'),
-  header = require('gulp-header'),
-  path = require('path'),
-  runseq = require('run-sequence'),
-  uglify = require('gulp-uglify')
-;
+/* eslint-env node */
+/* eslint-disable no-console */
 
-// init tests with gulp
-require('web-component-tester').gulp.init(gulp);
+const gulp = require('gulp');
+const sourcemaps = require('gulp-sourcemaps');
+const buffer = require('vinyl-buffer');
+const rename = require('gulp-rename');
+const rollup = require('rollup-stream');
+const source = require('vinyl-source-stream');
+const del = require('del');
+const bower = require('bower');
+const runseq = require('run-sequence');
+const closure = require('google-closure-compiler').gulp();
 
-var isRelease = process.env.RELEASE !== undefined;
+function debugify(sourceName, fileName, needsContext) {
+  if (!fileName)
+    fileName = sourceName;
 
-var banner = fs.readFileSync('banner.txt', 'utf8');
+  const options = {
+    entry: `./entrypoints/${sourceName}-index.js`,
+    format: 'iife',
+    moduleName: 'webcomponentsjs'
+  };
 
-var pkg;
-
-function defineBuildTask(name, manifest) {
-  (function() {
-
-    manifest = manifest || './src/' + name + '/build.json';
-    var output = name;
-    var list = readManifest(manifest);
-    gulp.task(name + '-debug', ['version'], function() {
-      return gulp.src(list)
-      .pipe(concat(output + '.js'))
-      .pipe(uglify({
-        mangle: false,
-        compress: false,
-        output: {
-          beautify: true,
-          indent_level: 2
-        }
-      }))
-      .pipe(header(banner, {pkg: pkg}))
-      .pipe(gulp.dest('dist/'))
-      ;
-    });
-
-    gulp.task(name, ['version', name + '-debug'], function() {
-      return gulp.src(list)
-      .pipe(concat(output + '.min.js'))
-      .pipe(uglify())
-      .pipe(header(banner, {pkg: pkg}))
-      .pipe(gulp.dest('dist/'))
-      ;
-    });
-
-  })();
-}
-
-function readJSON(filename) {
-  var blob = fs.readFileSync(filename, 'utf8');
-  return JSON.parse(blob);
-}
-
-gulp.task('audit', function() {
-  return gulp.src('dist/*.js')
-  .pipe(audit('build.log', {repos:['.']}))
-  .pipe(gulp.dest('dist/'));
-});
-
-gulp.task('version', function(cb) {
-  pkg = require('./package.json');
-  var cmd = ['git', 'rev-parse', '--short', 'HEAD'].join(' ');
-  if (!isRelease) {
-    exec(cmd, function(err, stdout, stderr) {
-      if (err) {
-        return cb(err);
-      }
-      if (stdout) {
-        stdout = stdout.trim();
-      }
-      pkg.version = pkg.version + '-' + stdout;
-      cb();
-    });
-  } else {
-    cb();
+  // The es6-promise polyfill needs to set the correct context.
+  // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
+  if (needsContext) {
+    options.context = 'window';
   }
+
+  return rollup(options)
+  .pipe(source(`${sourceName}-index.js`), 'entrypoints')
+  .pipe(rename(fileName + '.js'))
+  .pipe(gulp.dest('./'))
+}
+
+function closurify(sourceName, fileName) {
+  if (!fileName) {
+    fileName = sourceName;
+  }
+
+  const closureOptions = {
+    new_type_inf: true,
+    compilation_level: 'ADVANCED',
+    language_in: 'ES6_STRICT',
+    language_out: 'ES5_STRICT',
+    output_wrapper: '(function(){\n%output%\n}).call(self)',
+    assume_function_wrapper: true,
+    js_output_file: `${fileName}.js`,
+    warning_level: 'VERBOSE',
+    rewrite_polyfills: false,
+    externs: [
+      'externs/webcomponents.js',
+      'bower_components/custom-elements/externs/custom-elements.js',
+      'bower_components/html-imports/externs/html-imports.js',
+      'bower_components/shadycss/externs/shadycss-externs.js',
+      'bower_components/shadydom/externs/shadydom.js'
+    ],
+    // entry_point: `/entrypoints/${sourceName}-index.js`,
+    // dependency_mode: 'STRICT'
+  };
+
+  //   const closureSources = [
+  //   'src/*.js',
+  //   'entrypoints/*.js',
+  //   'bower_components/custom-elements/src/**/*.js',
+  //   'bower_components/html-imports/src/*.js',
+  //   'bower_components/es6-promise/dist/es6-promise.auto.min.js',
+  //   'bower_components/webcomponents-platform/*.js',
+  //   'bower_components/shadycss/{src,entrypoints}/*.js',
+  //   'bower_components/shadydom/src/*.js',
+  //   'bower_components/template/*.js'
+  // ];
+
+  const rollupOptions = {
+    entry: `entrypoints/${sourceName}-index.js`,
+    format: 'iife',
+    moduleName: 'webcomponents',
+    sourceMap: true,
+    context: 'window'
+  };
+
+  return rollup(rollupOptions)
+  .pipe(source(`${sourceName}-index.js`, 'entrypoints'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init({loadMaps: true}))
+  .pipe(closure(closureOptions))
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest('.'));
+
+  // return gulp.src(sources, {base: './'})
+  // .pipe(sourcemaps.init({loadMaps: true}))
+  // .pipe(closure(closureOptions))
+  // .pipe(sourcemaps.write('.'))
+  // .pipe(gulp.dest('.'));
+}
+
+gulp.task('debugify-hi', () => {
+  return debugify('webcomponents-hi')
 });
 
-function readManifest(filename, modules) {
-  modules = modules || [];
-  var lines = readJSON(filename);
-  var dir = path.dirname(filename);
-  lines.forEach(function(line) {
-    var fullpath = path.join(dir, line);
-    if (line.slice(-5) == '.json') {
-      // recurse
-      modules = modules.concat(readManifest(fullpath, modules));
-    } else {
-      modules.push(fullpath);
-    }
+gulp.task('debugify-hi-ce', () => {
+  return debugify('webcomponents-hi-ce')
+});
+
+gulp.task('debugify-hi-sd-ce', () => {
+  return debugify('webcomponents-hi-sd-ce')
+});
+
+gulp.task('debugify-hi-sd-ce-pf', () => {
+  return debugify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', true)
+});
+
+gulp.task('debugify-sd-ce', () => {
+  return debugify('webcomponents-sd-ce')
+});
+
+gulp.task('closurify-hi', () => {
+  return closurify('webcomponents-hi')
+});
+
+gulp.task('closurify-hi-ce', () => {
+  return closurify('webcomponents-hi-ce')
+});
+
+gulp.task('closurify-hi-sd-ce', () => {
+  return closurify('webcomponents-hi-sd-ce')
+});
+
+gulp.task('closurify-hi-sd-ce-pf', () => {
+  return closurify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite')
+});
+
+gulp.task('closurify-sd-ce', () => {
+  return closurify('webcomponents-sd-ce')
+});
+
+gulp.task('refresh-bower', () => {
+  return del('bower_components').then(() => {
+    let resolve, reject;
+    let p = new Promise((res, rej) => {resolve = res; reject = rej});
+    bower.commands.install().on('end', () => resolve()).on('error', (e) => reject(e));
+    return p;
   });
-  var tmp = Object.create(null);
-  for (var i = 0; i < modules.length; i++) {
-    tmp[modules[i]] = 1;
-  }
-  modules = Object.keys(tmp);
-  return modules;
-}
-
-gulp.task('copy-bower', function() {
-  return gulp.src(['bower.json', 'package.json', 'README.md']).pipe(gulp.dest('dist/'));
 });
 
-defineBuildTask('webcomponents', './src/WebComponents/build.json');
-defineBuildTask('webcomponents-lite', './src/WebComponents/build-lite.json');
-defineBuildTask('CustomElements');
-defineBuildTask('HTMLImports');
-defineBuildTask('ShadowDOM');
-defineBuildTask('MutationObserver');
-
-gulp.task('build', ['webcomponents', 'webcomponents-lite', 'CustomElements', 
-  'HTMLImports', 'ShadowDOM', 'copy-bower', 'MutationObserver']);
-
-gulp.task('release', function(cb) {
-  isRelease = true;
-  runseq('build', 'audit', cb);
+gulp.task('default', (cb) => {
+  runseq('refresh-bower', 'closure', cb);
 });
 
-gulp.task('default', function(cb) {
-  runseq('build', 'audit', cb);
+gulp.task('clean-builds', () => {
+  return del(['webcomponents*.js{,.map}', '!webcomponents-loader.js']);
+})
+
+gulp.task('debug', (cb) => {
+  const tasks = [
+    'debugify-hi',
+    'debugify-hi-ce',
+    'debugify-hi-sd-ce',
+    'debugify-hi-sd-ce-pf',
+    'debugify-sd-ce'
+  ];
+  runseq('clean-builds', tasks, cb);
+});
+
+gulp.task('closure', (cb) => {
+  const tasks = [
+    'closurify-hi',
+    'closurify-hi-ce',
+    'closurify-hi-sd-ce',
+    'closurify-hi-sd-ce-pf',
+    'closurify-sd-ce'
+  ];
+  runseq('clean-builds', ...tasks, cb);
 });
