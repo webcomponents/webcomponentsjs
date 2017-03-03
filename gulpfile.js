@@ -28,12 +28,12 @@ function debugify(sourceName, fileName, needsContext) {
   if (!fileName)
     fileName = sourceName;
 
-  var options = {
-    entry: './entrypoints/' + sourceName + '-index.js',
+  const options = {
+    entry: `./entrypoints/${sourceName}-index.js`,
     format: 'iife',
     moduleName: 'webcomponentsjs',
     sourceMap: true
-  }
+  };
 
   // The es6-promise polyfill needs to set the correct context.
   // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
@@ -42,11 +42,8 @@ function debugify(sourceName, fileName, needsContext) {
   }
 
   return rollup(options)
-  .pipe(source(sourceName +'-index.js'))
-  .pipe(buffer())
-  .pipe(sourcemaps.init({loadMaps: true}))
+  .pipe(source(`${sourceName}-index.js`), 'entrypoints')
   .pipe(rename(fileName + '.js'))
-  .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('./'))
 }
 
@@ -160,36 +157,32 @@ gulp.task('refresh-bower', () => {
   });
 });
 
-gulp.task('webcomponents-debug', () => {
-  return rollup({
-    entry: './entrypoints/webcomponents-hi-sd-ce-pf-index.js',
-    format: 'iife',
-    moduleName: 'webcomponentsjs',
-    context: 'window'
-  })
-  .pipe(source('webcomponents-hi-sd-ce-pf-index.js', 'entrypoints'))
-  .pipe(rename('webcomponents-debug.js'))
-  .pipe(gulp.dest('.'))
-});
-
 gulp.task('default', (cb) => {
-  runseq('refresh-bower', ['webcomponents-debug', 'closure'], cb);
+  runseq('refresh-bower', 'closure', cb);
 });
 
-gulp.task('debug', [
+gulp.task('clean-builds', () => {
+  return del(['webcomponents*.js{,.map}', '!webcomponents-loader.js']);
+})
+
+gulp.task('debug', (cb) => {
+  const tasks = [
     'debugify-hi',
     'debugify-hi-ce',
     'debugify-hi-sd-ce',
     'debugify-hi-sd-ce-pf',
     'debugify-sd-ce'
-  ]);
+  ];
+  runseq('clean-builds', tasks, cb);
+});
 
 gulp.task('closure', (cb) => {
-  runseq(...[
-      'closurify-hi',
-      'closurify-hi-ce',
-      'closurify-hi-sd-ce',
-      'closurify-hi-sd-ce-pf',
-      'closurify-sd-ce'
-    ], cb);
+  const tasks = [
+    'closurify-hi',
+    'closurify-hi-ce',
+    'closurify-hi-sd-ce',
+    'closurify-hi-sd-ce-pf',
+    'closurify-sd-ce'
+  ];
+  runseq('clean-builds', ...tasks, cb);
 });
