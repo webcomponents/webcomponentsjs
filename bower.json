@@ -17,12 +17,12 @@
   "ignore": [],
   "devDependencies": {
     "web-component-tester": "^5",
-    "custom-elements": "webcomponents/custom-elements#master",
+    "custom-elements": "webcomponents/custom-elements#v1.0.0-rc.1",
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
-    "html-imports": "webcomponents/html-imports#master",
-    "shadydom": "webcomponents/shadydom#master",
-    "shadycss": "webcomponents/shadycss#master",
-    "template": "webcomponents/template#master",
-    "webcomponents-platform": "webcomponents/webcomponents-platform#master"
+    "html-imports": "webcomponents/html-imports#v1.0.0-rc.1",
+    "shadydom": "webcomponents/shadydom#v1.0.0-rc.1",
+    "shadycss": "webcomponents/shadycss#v1.0.0-rc.1",
+    "template": "webcomponents/template#v1.0.0-rc.1",
+    "webcomponents-platform": "webcomponents/webcomponents-platform#v1.0.0-rc.1"
   }
 }
