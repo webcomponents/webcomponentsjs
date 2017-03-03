@@ -160,7 +160,7 @@ gulp.task('refresh-bower', () => {
   });
 });
 
-gulp.task('webcomponents-dev', () => {
+gulp.task('webcomponents-debug', () => {
   return rollup({
     entry: './entrypoints/webcomponents-hi-sd-ce-pf-index.js',
     format: 'iife',
@@ -168,12 +168,12 @@ gulp.task('webcomponents-dev', () => {
     context: 'window'
   })
   .pipe(source('webcomponents-hi-sd-ce-pf-index.js', 'entrypoints'))
-  .pipe(rename('webcomponents-dev.js'))
+  .pipe(rename('webcomponents-debug.js'))
   .pipe(gulp.dest('.'))
 });
 
 gulp.task('default', (cb) => {
-  runseq('refresh-bower', ['webcomponents-dev', 'closure'], cb);
+  runseq('refresh-bower', ['webcomponents-debug', 'closure'], cb);
 });
 
 gulp.task('debug', [
