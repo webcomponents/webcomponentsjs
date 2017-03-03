@@ -31,8 +31,7 @@ function debugify(sourceName, fileName, needsContext) {
   const options = {
     entry: `./entrypoints/${sourceName}-index.js`,
     format: 'iife',
-    moduleName: 'webcomponentsjs',
-    sourceMap: true
+    moduleName: 'webcomponentsjs'
   };
 
   // The es6-promise polyfill needs to set the correct context.
