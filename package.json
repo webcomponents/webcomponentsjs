@@ -23,6 +23,7 @@
   "devDependencies": {
     "bower": "^1.8.0",
     "del": "^2.2.2",
+    "eslint": "^3.16.1",
     "google-closure-compiler": "^20170218.0.0",
     "gulp": "^3.8.8",
     "gulp-rename": "^1.2.2",
