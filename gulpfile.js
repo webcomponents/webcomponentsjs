@@ -160,12 +160,36 @@ gulp.task('refresh-bower', () => {
   });
 });
 
-gulp.task('default', (cb) => {
-  runseq('refresh-bower', 'closure', cb);
+gulp.task('webcomponents-dev', () => {
+  return rollup({
+    entry: './entrypoints/webcomponents-hi-sd-ce-pf-index.js',
+    format: 'iife',
+    moduleName: 'webcomponentsjs',
+    context: 'window'
+  })
+  .pipe(source('webcomponents-hi-sd-ce-pf-index.js', 'entrypoints'))
+  .pipe(rename('webcomponents-dev.js'))
+  .pipe(gulp.dest('.'))
 });
 
-gulp.task('debug', ['debugify-hi', 'debugify-hi-ce', 'debugify-hi-sd-ce', 'debugify-hi-sd-ce-pf', 'debugify-sd-ce']);
+gulp.task('default', (cb) => {
+  runseq('refresh-bower', ['webcomponents-dev', 'closure'], cb);
+});
+
+gulp.task('debug', [
+    'debugify-hi',
+    'debugify-hi-ce',
+    'debugify-hi-sd-ce',
+    'debugify-hi-sd-ce-pf',
+    'debugify-sd-ce'
+  ]);
 
 gulp.task('closure', (cb) => {
-  runseq(...['closurify-hi', 'closurify-hi-ce', 'closurify-hi-sd-ce', 'closurify-hi-sd-ce-pf', 'closurify-sd-ce'], cb);
+  runseq(...[
+      'closurify-hi',
+      'closurify-hi-ce',
+      'closurify-hi-sd-ce',
+      'closurify-hi-sd-ce-pf',
+      'closurify-sd-ce'
+    ], cb);
 });
