@@ -13,20 +13,21 @@
   'use strict';
 
   // Establish scope.
-  window.WebComponents = window.WebComponents || {flags:{}};
+  window['WebComponents'] = window['WebComponents'] || {'flags':{}};
 
   // loading script
   var file = 'webcomponents-lite.js';
   var script = document.querySelector('script[src*="' + file + '"]');
+  var flagMatcher = /wc-(.+)/;
 
   // Flags. Convert url arguments to flags
   var flags = {};
-  if (!flags.noOpts) {
+  if (!flags['noOpts']) {
     // from url
     location.search.slice(1).split('&').forEach(function(option) {
       var parts = option.split('=');
       var match;
-      if (parts[0] && (match = parts[0].match(/wc-(.+)/))) {
+      if (parts[0] && (match = parts[0].match(flagMatcher))) {
         flags[match[1]] = parts[1] || true;
       }
     });
@@ -39,29 +40,28 @@
       }
     }
     // log flags
-    if (flags.log && flags.log.split) {
-      var parts = flags.log.split(',');
-      flags.log = {};
+    if (flags['log'] && flags['log']['split']) {
+      var parts = flags['log'].split(',');
+      flags['log'] = {};
       parts.forEach(function(f) {
-        flags.log[f] = true;
+        flags['log'][f] = true;
       });
     } else {
-      flags.log = {};
+      flags['log'] = {};
     }
   }
 
   // exports
-  WebComponents.flags = flags;
-  var scope = window.WebComponents;
-  var forceShady = scope.flags.shadydom;
+  window['WebComponents']['flags'] = flags;
+  var forceShady = flags['shadydom'];
   if (forceShady) {
-    window.ShadyDOM = window.ShadyDOM || {};
-    ShadyDOM.force = forceShady;
+    window['ShadyDOM'] = window['ShadyDOM'] || {};
+    window['ShadyDOM']['force'] = forceShady;
   }
 
-  var forceCE = scope.flags.register || scope.flags.ce;
-  if (forceCE && window.customElements) {
-    customElements.forcePolyfill = forceCE;
+  var forceCE = flags['register'] || flags['ce'];
+  if (forceCE && window['customElements']) {
+    window['customElements']['forcePolyfill'] = forceCE;
   }
 
 })();

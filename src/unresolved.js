@@ -8,8 +8,8 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-(function(scope) {
-
+(function() {
+  'use strict';
   // It's desireable to provide a default stylesheet
   // that's convenient for styling unresolved elements, but
   // it's cumbersome to have to include this manually in every page.
@@ -31,4 +31,4 @@
   var head = document.querySelector('head');
   head.insertBefore(style, head.firstChild);
 
-})(window.WebComponents);
+})();

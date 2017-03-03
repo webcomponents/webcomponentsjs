@@ -10,6 +10,9 @@
 
 'use strict';
 
+/* eslint-env node */
+/* eslint-disable no-console */
+
 const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
 const buffer = require('vinyl-buffer');
@@ -36,7 +39,7 @@ function debugify(sourceName, fileName, needsContext) {
   // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
   if (needsContext) {
     options.context = 'window';
-  };
+  }
 
   return rollup(options)
   .pipe(source(sourceName +'-index.js'))
@@ -54,7 +57,7 @@ function closurify(sourceName, fileName) {
 
   const closureOptions = {
     new_type_inf: true,
-    compilation_level: 'SIMPLE',
+    compilation_level: 'ADVANCED',
     language_in: 'ES6_STRICT',
     language_out: 'ES5_STRICT',
     output_wrapper: '(function(){\n%output%\n}).call(self)',
@@ -67,8 +70,23 @@ function closurify(sourceName, fileName) {
       'bower_components/custom-elements/externs/custom-elements.js',
       'bower_components/html-imports/externs/html-imports.js',
       'bower_components/shadycss/externs/shadycss-externs.js',
-    ]
+      'bower_components/shadydom/externs/shadydom.js'
+    ],
+    // entry_point: `/entrypoints/${sourceName}-index.js`,
+    // dependency_mode: 'STRICT'
   };
+
+  //   const closureSources = [
+  //   'src/*.js',
+  //   'entrypoints/*.js',
+  //   'bower_components/custom-elements/src/**/*.js',
+  //   'bower_components/html-imports/src/*.js',
+  //   'bower_components/es6-promise/dist/es6-promise.auto.min.js',
+  //   'bower_components/webcomponents-platform/*.js',
+  //   'bower_components/shadycss/{src,entrypoints}/*.js',
+  //   'bower_components/shadydom/src/*.js',
+  //   'bower_components/template/*.js'
+  // ];
 
   const rollupOptions = {
     entry: `entrypoints/${sourceName}-index.js`,
@@ -84,7 +102,13 @@ function closurify(sourceName, fileName) {
   .pipe(sourcemaps.init({loadMaps: true}))
   .pipe(closure(closureOptions))
   .pipe(sourcemaps.write('.'))
-  .pipe(gulp.dest('.'))
+  .pipe(gulp.dest('.'));
+
+  // return gulp.src(sources, {base: './'})
+  // .pipe(sourcemaps.init({loadMaps: true}))
+  // .pipe(closure(closureOptions))
+  // .pipe(sourcemaps.write('.'))
+  // .pipe(gulp.dest('.'));
 }
 
 gulp.task('debugify-hi', () => {
