@@ -21,13 +21,13 @@
     var flushCallback;
     var runAndClearCallback = function runAndClearCallback() {
       if (flushCallback) {
-        let cb = flushCallback;
+        var cb = flushCallback;
         flushCallback = null;
         cb();
         return true;
       }
     }
-    let origWhenReady = HTMLImports['whenReady'];
+    var origWhenReady = HTMLImports['whenReady'];
     customElements['polyfillWrapFlushCallback'](function(cb) {
       flushCallback = cb;
       origWhenReady(runAndClearCallback);
