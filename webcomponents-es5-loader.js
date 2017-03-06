@@ -10,7 +10,7 @@
 
 (function() {
   'use strict';
-  var name = 'webcomponents-loader.js';
+  var name = 'webcomponents-es5-loader.js';
   // Feature detect which polyfill needs to be imported.
   var polyfills = [];
   if (!('import' in document.createElement('link'))) {
@@ -22,6 +22,8 @@
   }
   if (!window.customElements || window.customElements.forcePolyfill) {
     polyfills.push('ce');
+  } else {
+    polyfills.push('ce-es5');
   }
   if (!('content' in document.createElement('template')) || !window.Promise ||
     // Edge has broken fragment cloning which means you cannot clone template.content
@@ -34,7 +36,7 @@
   }
 
   if (polyfills.length) {
-    var script = document.querySelector('script[src*="' + name +'"]');
+    var script = document.querySelector('script[src*="' + name + '"]');
     var newScript = document.createElement('script');
     // Load it from the right place.
     var replacement = 'webcomponents-' + polyfills.join('-') + '.js';
