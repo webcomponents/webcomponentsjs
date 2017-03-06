@@ -63,9 +63,7 @@ elements, etc.). Here's an example:
 
 ## `webcomponents-es5-loader.js`
 
-Due to the requirement that Custom Elements be ES6 classes (https://html.spec.whatwg.org/multipage/scripting.html#custom-element-conformance), it may make sense to precompile your elements down to ES5 for wider consumption.
-However, this will conflict with the presence of native Custom Elements in browsers that support them.
-For these scenarios, use the `webcomponents-es5-loader.js` file to use the Custom Elements native compatibility shim where needed.
+Custom Elements must be ES6 classes (https://html.spec.whatwg.org/multipage/scripting.html#custom-element-conformance). Since most projects need to support a wide range of browsers that don't necessary support ES6, it may make sense to compile your project to ES5. However, ES5-style custom element classes will not work with native Custom Elements because ES5-style classes cannot properly extend ES6 classes, like `HTMLElement`.
 
 ## Browser Support
 
