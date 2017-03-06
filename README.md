@@ -38,7 +38,7 @@ Note that because the bundle will be loaded asynchronously, you should wait for 
 loaded and are ready to be used (i.e. if you want to dynamically load other custom
 elements, etc.). Here's an example:
 
-```
+```html
 <!-- Load polyfills; note that "loader" will load these async -->
 <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
 
@@ -60,6 +60,12 @@ elements, etc.). Here's an example:
   });
 </script>
 ```
+
+## `webcomponents-es5-loader.js`
+
+Due to the requirement that Custom Elements be ES6 classes (https://html.spec.whatwg.org/multipage/scripting.html#custom-element-conformance), it may make sense to precompile your elements down to ES5 for wider consumption.
+However, this will conflict with the presence of native Custom Elements in browsers that support them.
+For these scenarios, use the `webcomponents-es5-loader.js` file to use the Custom Elements native compatibility shim where needed.
 
 ## Browser Support
 

@@ -21,6 +21,8 @@
   }
   if (!window.customElements || window.customElements.forcePolyfill) {
     polyfills.push('ce');
+  } else {
+    polyfills.push('ce-es5');
   }
   if (!('content' in document.createElement('template')) || !window.Promise ||
     // Edge has broken fragment cloning which means you cannot clone template.content
