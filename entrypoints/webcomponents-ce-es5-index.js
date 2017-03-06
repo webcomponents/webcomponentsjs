@@ -16,5 +16,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 import '../bower_components/custom-elements/src/native-shim.js'
 
-import '../src/post-polyfill.js'
 import '../src/unresolved.js'
+
+requestAnimationFrame(() => {
+  window.dispatchEvent(new CustomEvent('WebComponentsReady'));
+});
