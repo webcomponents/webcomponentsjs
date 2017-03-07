@@ -31,7 +31,6 @@ If you are only targeting a specific browser, you can just use the bundle that's
 needed by it; alternatively, if your server is capable of serving different assets based on user agent, you can send the polyfill bundle that's necessary for the browser making that request.
 
 ## `webcomponents-loader.js`
-
 Alternatively, this repo also comes with `webcomponents-loader.js`, a client-side
 loader that dynamically loads the minimum polyfill bundle, using feature detection.
 Note that because the bundle will be loaded asynchronously, you should wait for the `WebComponentsReady` before you can safely assume that all the polyfills have
@@ -62,8 +61,11 @@ elements, etc.). Here's an example:
 ```
 
 ## `webcomponents-es5-loader.js`
-
-Custom Elements must be ES6 classes (https://html.spec.whatwg.org/multipage/scripting.html#custom-element-conformance). Since most projects need to support a wide range of browsers that don't necessary support ES6, it may make sense to compile your project to ES5. However, ES5-style custom element classes will not work with native Custom Elements because ES5-style classes cannot properly extend ES6 classes, like `HTMLElement`.
+According to the spec, Custom Elements must be ES6 classes (https://html.spec.whatwg.org/multipage/scripting.html#custom-element-conformance). Since most projects need to support a wide range of browsers that don't necessary support ES6, it may make sense to compile your project to ES5. However, ES5-style custom element classes will **not** work with native Custom Elements because ES5-style classes cannot properly extend ES6 classes, like `HTMLElement`.
+To work around this, `webcomponents-es5-loader.js` first loads an extra ES5 compatibility [shim](https://github.com/webcomponents/custom-elements/blob/master/src/native-shim.js) before
+loading the minimum polyfill bundle, like `webcomponents-loader.js` does. Use `webcomponents-es5-loader.js`
+only if you want to deploy ES5 code -- if this isn't a requirement, then use
+`webcomponents-loader.js` instead.
 
 ## Browser Support
 
