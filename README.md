@@ -62,9 +62,12 @@ elements, etc.). Here's an example:
 
 ## `webcomponents-es5-loader.js`
 According to the spec, Custom Elements must be ES6 classes (https://html.spec.whatwg.org/multipage/scripting.html#custom-element-conformance). Since most projects need to support a wide range of browsers that don't necessary support ES6, it may make sense to compile your project to ES5. However, ES5-style custom element classes will **not** work with native Custom Elements because ES5-style classes cannot properly extend ES6 classes, like `HTMLElement`.
+
 To work around this, `webcomponents-es5-loader.js` first loads an extra ES5 compatibility [shim](https://github.com/webcomponents/custom-elements/blob/master/src/native-shim.js) before
-loading the minimum polyfill bundle, like `webcomponents-loader.js` does. Use `webcomponents-es5-loader.js`
-only if you want to deploy ES5 code -- if this isn't a requirement, then use
+loading the minimum polyfill bundle, like `webcomponents-loader.js` does. 
+
+The reason for having two different loaders (`webcomponents-loader.js` for ES6 deployed code and `webcomponents-es5-loader.js` for ES5) is that the polyfill can't know if you're deploying ES5 or ES6 code -- it runs before your code, and only _you_ as an author of the code know what you're going to deploy. This means that _you_ have to make the decision about which loader to use. 
+**TL; DR: ** Use `webcomponents-es5-loader.js` only if you want to deploy ES5 code to _all_ browsers (both with and without native custom elements support) -- if this isn't a requirement, then use
 `webcomponents-loader.js` instead.
 
 ## Browser Support
