@@ -14,7 +14,18 @@
     "webcomponents"
   ],
   "license": "BSD",
-  "ignore": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src",
+    "test",
+    "tests",
+    "CONTRIBUTING.md",
+    "banner.txt",
+    "gulpfile.js",
+    "package.json"
+  ],
   "devDependencies": {
     "web-component-tester": "^5",
     "custom-elements": "webcomponents/custom-elements#^v1.0.0-rc.1",
