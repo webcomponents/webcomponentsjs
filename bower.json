@@ -1,7 +1,7 @@
 {
   "name": "webcomponentsjs",
   "main": "webcomponents.js",
-  "version": "1.0.0",
+  "version": "1.0.0-rc.6",
   "homepage": "http://webcomponents.org",
   "authors": [
     "The Polymer Authors"
@@ -19,7 +19,7 @@
     "web-component-tester": "^5",
     "custom-elements": "webcomponents/custom-elements#^v1.0.0-rc.1",
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
-    "html-imports": "webcomponents/html-imports#^v1.0.0-rc.1",
+    "html-imports": "webcomponents/html-imports#^v1.0.0-rc.2",
     "shadydom": "webcomponents/shadydom#^v1.0.0-rc.1",
     "shadycss": "webcomponents/shadycss#^v1.0.0-rc.1",
     "template": "webcomponents/template#^v1.0.0-rc.1",
