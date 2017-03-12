@@ -13,7 +13,7 @@
   "keywords": [
     "webcomponents"
   ],
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "ignore": [],
   "devDependencies": {
     "web-component-tester": "^5",
