@@ -11,7 +11,10 @@
     "url": "https://github.com/webcomponents/webcomponentsjs.git"
   },
   "keywords": [
-    "webcomponents"
+    "webcomponents",
+    "web-components",
+    "polyfill",
+    "shim"
   ],
   "license": "BSD",
   "ignore": [],
