@@ -1,7 +1,7 @@
 {
   "name": "webcomponents.js",
   "version": "1.0.0-rc.6",
-  "description": "webcomponents.js",
+  "description": "Web components polyfill",
   "main": "webcomponents.js",
   "directories": {
     "test": "tests"
