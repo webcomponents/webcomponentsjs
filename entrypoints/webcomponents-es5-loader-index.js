@@ -11,13 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 /*
  * Polyfills loaded: Custom Elements ES5 Shim
- * Used in: Chrome
  */
 
 import '../bower_components/custom-elements/src/native-shim.js'
-
-import '../src/unresolved.js'
-
-requestAnimationFrame(() => {
-  window.dispatchEvent(new CustomEvent('WebComponentsReady'));
-});
+import '../webcomponents-es6-loader.js'

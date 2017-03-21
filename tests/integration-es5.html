@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
 @license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
@@ -11,9 +11,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <html>
   <head>
     <title>Integration Test</title>
-    <script src="../webcomponents-es6-loader.js"></script>
+    <script src="../webcomponents-es5-loader.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
-    <link rel="import" href="imports/simple-element.html">
+    <link rel="import" href="imports/simple-element-es5.html">
   </head>
   <body>
 
@@ -21,7 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <simple-element id="basic"><span>Light DOM</span></simple-element>
 
     <script>
-      suite('integration', function() {
+      suite('integration es5', function() {
         var el;
 
         setup(function() {
