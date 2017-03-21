@@ -17,3 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import '../bower_components/shadydom/src/shadydom.js'
 import '../bower_components/custom-elements/src/custom-elements.js'
 import '../bower_components/shadycss/entrypoints/scoping-shim.js'
+
+requestAnimationFrame(() => {
+  window.dispatchEvent(new CustomEvent('WebComponentsReady'));
+});
