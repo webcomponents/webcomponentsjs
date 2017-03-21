@@ -180,7 +180,7 @@ gulp.task('default', (cb) => {
 });
 
 gulp.task('clean-builds', () => {
-  return del(['webcomponents*.js{,.map}', '!webcomponents-loader.js']);
+  return del(['webcomponents*.js{,.map}', '!webcomponents-es6-loader.js']);
 });
 
 gulp.task('debug', (cb) => {
