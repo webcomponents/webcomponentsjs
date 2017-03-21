@@ -16,7 +16,7 @@
   "license": "BSD",
   "ignore": [],
   "devDependencies": {
-    "web-component-tester": "^5",
+    "web-component-tester": "^v6.0.0-prerelease.7",
     "custom-elements": "webcomponents/custom-elements#^v1.0.0-rc.1",
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
     "html-imports": "webcomponents/html-imports#^v1.0.0-rc.2",
