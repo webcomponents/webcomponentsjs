@@ -7531,7 +7531,7 @@ class ScopingShim {
   _ensureApplyShim() {
     if (this._applyShim) {
       return;
-    } else if (window.ShadyCSS.ApplyShim) {
+    } else if (window.ShadyCSS && window.ShadyCSS.ApplyShim) {
       this._applyShim = window.ShadyCSS.ApplyShim;
       this._applyShim['invalidCallback'] = invalidate;
     } else {
@@ -7547,7 +7547,7 @@ class ScopingShim {
   _ensureCustomStyleInterface() {
     if (this._customStyleInterface) {
       return;
-    } else if (window.ShadyCSS.CustomStyleInterface) {
+    } else if (window.ShadyCSS && window.ShadyCSS.CustomStyleInterface) {
       this._customStyleInterface = /** @type {!CustomStyleInterfaceInterface} */(window.ShadyCSS.CustomStyleInterface);
       /** @type {function(!HTMLStyleElement)} */
       this._customStyleInterface['transformCallback'] = (style) => {this.transformCustomStyleForDocument(style);};
