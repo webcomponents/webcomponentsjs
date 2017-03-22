@@ -22,13 +22,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     window.addEventListener('WebComponentsReady', function() {
       window.webComponentsReadyCount++;
     });
-
-    // Tell WCT to wait for WebComponentsReady.
-    window.WCT = {
-      waitFor: function(cb) {
-        addEventListener('WebComponentsReady', cb);
-      }
-    };
   </script>
   <script src="../webcomponents-loader.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
