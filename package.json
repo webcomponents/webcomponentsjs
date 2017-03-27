@@ -19,7 +19,7 @@
     "build": "gulp build",
     "test": "wct"
   },
-  "homepage": "http://webcomponents.org",
+  "homepage": "https://webcomponents.org/polyfills",
   "devDependencies": {
     "babel-preset-babili": "0.0.12",
     "bower": "^1.8.0",
