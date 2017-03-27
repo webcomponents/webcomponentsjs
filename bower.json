@@ -1,5 +1,6 @@
 {
   "name": "webcomponentsjs",
+  "description": "Web components polyfill",
   "main": "webcomponents.js",
   "version": "1.0.0-rc.7",
   "homepage": "http://webcomponents.org",
