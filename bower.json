@@ -16,7 +16,7 @@
     "polyfill",
     "shim"
   ],
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "ignore": [],
   "devDependencies": {
     "web-component-tester": "^v6.0.0-prerelease.7",
