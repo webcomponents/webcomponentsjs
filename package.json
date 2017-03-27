@@ -6,6 +6,12 @@
   "directories": {
     "test": "tests"
   },
+ "keywords": [
+    "webcomponents",
+    "web-components",
+    "polyfill",
+    "shim"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/webcomponents/webcomponentsjs.git"
