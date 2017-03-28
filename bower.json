@@ -1,7 +1,8 @@
 {
   "name": "webcomponentsjs",
+  "description": "Web components polyfill",
   "main": "webcomponents.js",
-  "version": "1.0.0-rc.6",
+  "version": "1.0.0-rc.7",
   "homepage": "https://webcomponents.org/polyfills",
   "authors": [
     "The Polymer Authors"
@@ -11,12 +12,15 @@
     "url": "https://github.com/webcomponents/webcomponentsjs.git"
   },
   "keywords": [
-    "webcomponents"
+    "webcomponents",
+    "web-components",
+    "polyfill",
+    "shim"
   ],
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "ignore": [],
   "devDependencies": {
-    "web-component-tester": "^5",
+    "web-component-tester": "^v6.0.0-prerelease.7",
     "custom-elements": "webcomponents/custom-elements#^v1.0.0-rc.1",
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
     "html-imports": "webcomponents/html-imports#^v1.0.0-rc.2",
