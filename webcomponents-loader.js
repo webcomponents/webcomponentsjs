@@ -45,10 +45,24 @@
     document.head.appendChild(newScript);
   } else {
     // Ensure `WebComponentsReady` is fired also when there are no polyfills loaded.
-    requestAnimationFrame(function() {
-      // Reset the HTMLImports stub.
-      window['HTMLImports'] = null;
-      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
-    });
+    // however, we have to wait for the document to be in 'interactive' state,
+    // otherwise a rAF may fire before scripts in <body>
+
+    var fire = function() {
+      requestAnimationFrame(function() {
+        // Reset the HTMLImports stub.
+        window['HTMLImports'] = null;
+        document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
+      });
+    };
+
+    if (document.readyState !== 'loading') {
+      fire();
+    } else {
+      document.addEventListener('readystatechange', function wait() {
+        fire();
+        document.removeEventListener('readystatechange', wait);
+      });
+    }
   }
 })();
