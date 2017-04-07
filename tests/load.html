@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         window.importsOk = true;
       });
       window.webComponentsReadyCount = 0;
-      window.addEventListener('WebComponentsReady', function() {
+      document.addEventListener('WebComponentsReady', function() {
         window.webComponentsReadyCount++;
       });
     </script>
@@ -26,7 +26,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="import" href="imports/import-file.html">
   </head>
   <body>
+    <my-element></my-element>
     <script>
+      window.addEventListener('WebComponentsReady', () => {
+        class MyElement extends HTMLElement {
+          connectedCallback(){
+            this.textContent = 'upgraded!';
+          }
+        }
+        customElements.define('my-element', MyElement);
+      });
       suite('Loader', function() {
         test('expected boot', function() {
           assert.equal(window.webComponentsReadyCount, 1, 'failed to fire WebComponentsReady');
@@ -35,6 +44,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
           assert.ok(window.importTest, 'import failed to set global value');
         });
+        test('WebComponentsReady was fired on document and bubbled', function() {
+          assert.equal(document.querySelector('my-element').textContent, 'upgraded!');
+        })
       });
     </script>
   </body>

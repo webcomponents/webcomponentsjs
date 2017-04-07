@@ -50,7 +50,7 @@
 
   HTMLImports['whenReady'](function() {
     requestAnimationFrame(function() {
-      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
+      document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
     });
   });
 
