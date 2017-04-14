@@ -22,13 +22,9 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "src",
     "test",
     "tests",
-    "CONTRIBUTING.md",
-    "banner.txt",
-    "gulpfile.js",
-    "package.json"
+    "CONTRIBUTING.md"
   ],
   "devDependencies": {
     "web-component-tester": "^v6.0.0-prerelease.7",
