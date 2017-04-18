@@ -23,13 +23,11 @@
   if (!window.customElements || window.customElements.forcePolyfill) {
     polyfills.push('ce');
   }
-  if (!('content' in document.createElement('template')) || !window.Promise ||
+  // NOTE: any browser that does not have template or ES6 features
+  // must load the full suite (called `lite` for legacy reasons) of polyfills.
+  if (!('content' in document.createElement('template')) || !window.Promise || !Array.from ||
     // Edge has broken fragment cloning which means you cannot clone template.content
     !(document.createDocumentFragment().cloneNode() instanceof DocumentFragment)) {
-    polyfills.push('pf');
-  }
-
-  if (polyfills.length === 4) { // hi-ce-sd-pf is actually called lite.
     polyfills = ['lite'];
   }
 
@@ -42,7 +40,14 @@
     var replacement = 'webcomponents-' + polyfills.join('-') + '.js';
     var url = script.src.replace(name, replacement);
     newScript.src = url;
-    document.head.appendChild(newScript);
+    // NOTE: this is not CSP compliant but it's required to ensure the polyfills
+    // are loaded before *native* html imports load on older Chrome versions.
+    // In all other cases, this can be async.
+    if (document.readyState === 'loading' && ('import' in document.createElement('link'))) {
+      document.write(newScript.outerHTML);
+    } else {
+      document.head.appendChild(newScript);
+    }
   } else {
     // Ensure `WebComponentsReady` is fired also when there are no polyfills loaded.
     // however, we have to wait for the document to be in 'interactive' state,
