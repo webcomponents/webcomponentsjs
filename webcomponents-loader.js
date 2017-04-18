@@ -32,7 +32,6 @@
   }
 
   // NOTE: we stub HTMLImports to enable WCT to wait for "WebComponentsReady" event.
-  window['HTMLImports'] = {};
   if (polyfills.length) {
     var script = document.querySelector('script[src*="' + name +'"]');
     var newScript = document.createElement('script');
@@ -56,7 +55,6 @@
     var fire = function() {
       requestAnimationFrame(function() {
         // Reset the HTMLImports stub.
-        window['HTMLImports'] = null;
         document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
       });
     };
