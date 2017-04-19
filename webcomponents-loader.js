@@ -39,8 +39,9 @@
     var replacement = 'webcomponents-' + polyfills.join('-') + '.js';
     var url = script.src.replace(name, replacement);
     newScript.src = url;
-    // NOTE: this is not CSP compliant but it's required to ensure the polyfills
-    // are loaded before *native* html imports load on older Chrome versions.
+    // NOTE: this is required to ensure the polyfills are loaded before
+    // *native* html imports load on older Chrome versions. This *is* CSP
+    // compliant since CSP rules must have allowed this script to run.
     // In all other cases, this can be async.
     if (document.readyState === 'loading' && ('import' in document.createElement('link'))) {
       document.write(newScript.outerHTML);
