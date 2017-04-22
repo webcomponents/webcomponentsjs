@@ -24,6 +24,7 @@ import '../bower_components/shadycss/entrypoints/scoping-shim.js'
 
   function fire() {
     requestAnimationFrame(() => {
+      document.querySelector('script[src*="webcomponents"]').webComponentsReady = true;
       window.document.dispatchEvent(new CustomEvent('WebComponentsReady', { bubbles: true }));
     })
   }
