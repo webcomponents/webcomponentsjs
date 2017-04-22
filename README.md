@@ -35,7 +35,11 @@ Alternatively, this repo also comes with `webcomponents-loader.js`, a client-sid
 loader that dynamically loads the minimum polyfill bundle, using feature detection.
 Note that because the bundle will be loaded asynchronously, you should wait for the `WebComponentsReady` before you can safely assume that all the polyfills have
 loaded and are ready to be used (i.e. if you want to dynamically load other custom
-elements, etc.). Here's an example:
+elements, etc.).
+
+Additionally, you can check the `webComponentsReady` property on the `webcomponents-loader.js` script to determine if the `WebComponentsReady` event has been fired.
+
+Here's an example:
 
 ```html
 <!-- Load polyfills; note that "loader" will load these async -->
@@ -68,7 +72,7 @@ To work around this, load `custom-elements-es5-adapter.js` before declaring new 
 **The adapter must NOT be compiled.**
 
 ```html
-<!-- Load Custom Elements es5 adapter --> 
+<!-- Load Custom Elements es5 adapter -->
 <script src="bower_components/webcomponentsjs/custom-elements-es5-adapter.js"></script>
 <!-- Load polyfills; note that "loader" will load these async -->
 <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
