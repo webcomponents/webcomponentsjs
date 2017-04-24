@@ -37,7 +37,7 @@ Note that because the bundle will be loaded asynchronously, you should wait for 
 loaded and are ready to be used (i.e. if you want to dynamically load other custom
 elements, etc.).
 
-Additionally, you can check the `webComponentsReady` property on the `webcomponents-loader.js` script to determine if the `WebComponentsReady` event has been fired.
+Additionally, you can check if `window.WebComponents` exists to know if the `WebComponentsReady` event will fire, and you can check if `window.WebComponents.ready` is true to check if the `WebComponentsReady` event has already fired.
 
 Here's an example:
 
