@@ -10,6 +10,9 @@
 
 (function() {
   'use strict';
+  // global for (1) existence means `WebComponentsReady` will file,
+  // (2) WebComponents.ready == true means event has fired.
+  window.WebComponents = window.WebComponents || {};
   var name = 'webcomponents-loader.js';
   // Feature detect which polyfill needs to be imported.
   var polyfills = [];
@@ -54,7 +57,7 @@
 
     var fire = function() {
       requestAnimationFrame(function() {
-        document.querySelector('script[src*="webcomponents"]').webComponentsReady = true;
+        window.WebComponents.ready = true;
         document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
       });
     };

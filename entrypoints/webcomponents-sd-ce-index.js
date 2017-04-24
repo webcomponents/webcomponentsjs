@@ -21,10 +21,13 @@ import '../bower_components/shadycss/entrypoints/scoping-shim.js'
 // NOTE: this is a load-bearing IIFE for Closure
 (function() {
   let document = window.document;
+  // global for (1) existence means `WebComponentsReady` will file,
+  // (2) WebComponents.ready == true means event has fired.
+  window.WebComponents = window.WebComponents || {};
 
   function fire() {
     requestAnimationFrame(() => {
-      document.querySelector('script[src*="webcomponents"]').webComponentsReady = true;
+      window.WebComponents.ready = true;
       window.document.dispatchEvent(new CustomEvent('WebComponentsReady', { bubbles: true }));
     })
   }
