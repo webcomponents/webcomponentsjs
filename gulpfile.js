@@ -15,7 +15,6 @@
 
 const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
-const buffer = require('vinyl-buffer');
 const rename = require('gulp-rename');
 const rollup = require('rollup-stream');
 const source = require('vinyl-source-stream');
@@ -53,7 +52,7 @@ function closurify(sourceName, fileName) {
     compilation_level: 'ADVANCED',
     language_in: 'ES6_STRICT',
     language_out: 'ES5_STRICT',
-    output_wrapper: '(function(){\n%output%\n}).call(self)',
+    isolation_mode: 'IIFE',
     assume_function_wrapper: true,
     js_output_file: `${fileName}.js`,
     warning_level: 'VERBOSE',
@@ -65,43 +64,41 @@ function closurify(sourceName, fileName) {
       'bower_components/shadycss/externs/shadycss-externs.js',
       'bower_components/shadydom/externs/shadydom.js'
     ],
-    // entry_point: `/entrypoints/${sourceName}-index.js`,
-    // dependency_mode: 'STRICT'
+    entry_point: `./entrypoints/${sourceName}-index.js`,
+    dependency_mode: 'STRICT'
   };
 
-  //   const closureSources = [
-  //   'src/*.js',
-  //   'entrypoints/*.js',
-  //   'bower_components/custom-elements/src/**/*.js',
-  //   'bower_components/html-imports/src/*.js',
-  //   'bower_components/es6-promise/dist/es6-promise.auto.min.js',
-  //   'bower_components/webcomponents-platform/*.js',
-  //   'bower_components/shadycss/{src,entrypoints}/*.js',
-  //   'bower_components/shadydom/src/*.js',
-  //   'bower_components/template/*.js'
-  // ];
+  let closureSources = [
+    'bower_components/custom-elements/src/**/*.js',
+    'bower_components/html-imports/src/*.js',
+    'bower_components/es6-promise/dist/es6-promise.auto.min.js',
+    'bower_components/webcomponents-platform/*.js',
+    'bower_components/shadycss/{src,entrypoints}/*.js',
+    'bower_components/shadydom/src/*.js',
+    'bower_components/template/*.js',
+    'entrypoints/*.js',
+    'src/*.js'
+  ];
 
-  const rollupOptions = {
-    entry: `entrypoints/${sourceName}-index.js`,
-    format: 'iife',
-    moduleName: 'webcomponents',
-    sourceMap: true,
-    context: 'window'
-  };
+  let ensureModule = require('stream').Transform({
+    objectMode: true,
+    transform(file, enc, cb) {
+      let content = file.contents.toString();
+      if (!/\bexport\b/.test(content)) {
+        content = content + '\nexport default undefined;';
+        file.contents = new Buffer(content);
+        console.log(`faking export for ${file.relative}`)
+      }
+      cb(null, file);
+    }
+  });
 
-  return rollup(rollupOptions)
-  .pipe(source(`${sourceName}-index.js`, 'entrypoints'))
-  .pipe(buffer())
-  .pipe(sourcemaps.init({loadMaps: true}))
+  return gulp.src(closureSources, {base: './'})
+  .pipe(ensureModule)
+  .pipe(sourcemaps.init())
   .pipe(closure(closureOptions))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('.'));
-
-  // return gulp.src(sources, {base: './'})
-  // .pipe(sourcemaps.init({loadMaps: true}))
-  // .pipe(closure(closureOptions))
-  // .pipe(sourcemaps.write('.'))
-  // .pipe(gulp.dest('.'));
 }
 
 gulp.task('debugify-hi', () => {
