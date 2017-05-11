@@ -2,7 +2,6 @@
   "name": "webcomponentsjs",
   "description": "Web components polyfill",
   "main": "webcomponents.js",
-  "version": "1.0.0-rc.11",
   "homepage": "http://webcomponents.org",
   "authors": [
     "The Polymer Authors"
