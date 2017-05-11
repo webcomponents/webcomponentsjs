@@ -1,5 +1,5 @@
 {
-  "name": "webcomponents.js",
+  "name": "@webcomponents/webcomponentsjs",
   "version": "1.0.0-rc.11",
   "description": "Web Components Polyfills",
   "main": "webcomponents-lite.js",
@@ -48,5 +48,8 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "web-component-tester": "^6.0.0-prerelease.5"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
