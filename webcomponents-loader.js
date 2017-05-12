@@ -10,6 +10,9 @@
 
 (function() {
   'use strict';
+  // global for (1) existence means `WebComponentsReady` will file,
+  // (2) WebComponents.ready == true means event has fired.
+  window.WebComponents = window.WebComponents || {};
   var name = 'webcomponents-loader.js';
   // Feature detect which polyfill needs to be imported.
   var polyfills = [];
@@ -23,18 +26,14 @@
   if (!window.customElements || window.customElements.forcePolyfill) {
     polyfills.push('ce');
   }
-  if (!('content' in document.createElement('template')) || !window.Promise ||
+  // NOTE: any browser that does not have template or ES6 features
+  // must load the full suite (called `lite` for legacy reasons) of polyfills.
+  if (!('content' in document.createElement('template')) || !window.Promise || !Array.from ||
     // Edge has broken fragment cloning which means you cannot clone template.content
     !(document.createDocumentFragment().cloneNode() instanceof DocumentFragment)) {
-    polyfills.push('pf');
-  }
-
-  if (polyfills.length === 4) { // hi-ce-sd-pf is actually called lite.
     polyfills = ['lite'];
   }
 
-  // NOTE: we stub HTMLImports to enable WCT to wait for "WebComponentsReady" event.
-  window['HTMLImports'] = {};
   if (polyfills.length) {
     var script = document.querySelector('script[src*="' + name +'"]');
     var newScript = document.createElement('script');
@@ -42,13 +41,34 @@
     var replacement = 'webcomponents-' + polyfills.join('-') + '.js';
     var url = script.src.replace(name, replacement);
     newScript.src = url;
-    document.head.appendChild(newScript);
+    // NOTE: this is required to ensure the polyfills are loaded before
+    // *native* html imports load on older Chrome versions. This *is* CSP
+    // compliant since CSP rules must have allowed this script to run.
+    // In all other cases, this can be async.
+    if (document.readyState === 'loading' && ('import' in document.createElement('link'))) {
+      document.write(newScript.outerHTML);
+    } else {
+      document.head.appendChild(newScript);
+    }
   } else {
     // Ensure `WebComponentsReady` is fired also when there are no polyfills loaded.
-    requestAnimationFrame(function() {
-      // Reset the HTMLImports stub.
-      window['HTMLImports'] = null;
-      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
-    });
+    // however, we have to wait for the document to be in 'interactive' state,
+    // otherwise a rAF may fire before scripts in <body>
+
+    var fire = function() {
+      requestAnimationFrame(function() {
+        window.WebComponents.ready = true;
+        document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
+      });
+    };
+
+    if (document.readyState !== 'loading') {
+      fire();
+    } else {
+      document.addEventListener('readystatechange', function wait() {
+        fire();
+        document.removeEventListener('readystatechange', wait);
+      });
+    }
   }
 })();

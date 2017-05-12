@@ -18,6 +18,28 @@ import '../bower_components/shadydom/src/shadydom.js'
 import '../bower_components/custom-elements/src/custom-elements.js'
 import '../bower_components/shadycss/entrypoints/scoping-shim.js'
 
-requestAnimationFrame(() => {
-  window.dispatchEvent(new CustomEvent('WebComponentsReady'));
-});
+// NOTE: this is a load-bearing IIFE for Closure
+(function() {
+  let document = window.document;
+  // global for (1) existence means `WebComponentsReady` will file,
+  // (2) WebComponents.ready == true means event has fired.
+  window.WebComponents = window.WebComponents || {};
+
+  function fire() {
+    requestAnimationFrame(() => {
+      window.WebComponents.ready = true;
+      window.document.dispatchEvent(new CustomEvent('WebComponentsReady', { bubbles: true }));
+    })
+  }
+
+  function wait() {
+    fire();
+    document.removeEventListener('readystatechange', wait);
+  }
+
+  if (document.readyState !== 'loading') {
+    fire();
+  } else {
+    document.addEventListener('readystatechange', wait);
+  }
+})();

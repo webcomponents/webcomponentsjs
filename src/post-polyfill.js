@@ -14,6 +14,9 @@
 
   var customElements = window['customElements'];
   var HTMLImports = window['HTMLImports'];
+  // global for (1) existence means `WebComponentsReady` will file,
+  // (2) WebComponents.ready == true means event has fired.
+  window.WebComponents = window.WebComponents || {};
 
   if (customElements && customElements['polyfillWrapFlushCallback']) {
     // Here we ensure that the public `HTMLImports.whenReady`
@@ -50,7 +53,8 @@
 
   HTMLImports['whenReady'](function() {
     requestAnimationFrame(function() {
-      window.dispatchEvent(new CustomEvent('WebComponentsReady'));
+      window.WebComponents.ready = true;
+      document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
     });
   });
 
