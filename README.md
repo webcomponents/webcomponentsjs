@@ -18,6 +18,8 @@ For browsers that need it, there are also some minor polyfills included:
 
 ## How to use
 
+```npm install @webcomponents/webcomponentsjs --save```
+
 The polyfills are built (concatenated & minified) into several bundles that target
 different browsers and spec readiness:
 
@@ -26,6 +28,12 @@ different browsers and spec readiness:
 - `webcomponents-hi-sd-ce.js` -- HTML Imports, Custom Elements v1 and Shady DOM/CSS (needed by Safari 9, Firefox, Edge)
 - `webcomponents-sd-ce.js` -- Custom Elements and Shady DOM/CSS (no HTML Imports)
 - `webcomponents-lite.js` -- all of the polyfills: HTML Imports, Custom Elements, Shady DOM/CSS and generic platform polyfills (such as ES6 Promise, Constructable events, etc.) (needed by Internet Explorer 11), and Template (needed by IE 11 and Edge)
+
+Scripts are located in `node_modules/@webcomponents/webcomponentsjs`, so you can load them like this :
+
+```html
+<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+```
 
 If you are only targeting a specific browser, you can just use the bundle that's
 needed by it; alternatively, if your server is capable of serving different assets based on user agent, you can send the polyfill bundle that's necessary for the browser making that request.
@@ -43,7 +51,7 @@ Here's an example:
 
 ```html
 <!-- Load polyfills; note that "loader" will load these async -->
-<script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
 <!-- Load a custom element definition via HTMLImports -->
 <link rel="import" href="my-element.html">
@@ -73,9 +81,9 @@ To work around this, load `custom-elements-es5-adapter.js` before declaring new 
 
 ```html
 <!-- Load Custom Elements es5 adapter -->
-<script src="bower_components/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+<script src="node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
 <!-- Load polyfills; note that "loader" will load these async -->
-<script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 <!-- Load the es5 compiled custom element definition -->
 <link rel="import" href="my-es5-element.html">
 
