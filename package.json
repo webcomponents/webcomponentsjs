@@ -47,7 +47,7 @@
     "run-sequence": "^1.2.2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "web-component-tester": "^6.0.0-prerelease.5"
+    "web-component-tester": "^6.0.0"
   },
   "publishConfig": {
     "access": "public"
