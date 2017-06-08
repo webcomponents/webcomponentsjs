@@ -4,7 +4,7 @@
   "main": "webcomponents.js",
   "homepage": "http://webcomponents.org",
   "authors": [
-    "The Polymer Authors"
+    "The Polymer Project Authors (https://polymer.github.io/AUTHORS.txt)"
   ],
   "repository": {
     "type": "git",
