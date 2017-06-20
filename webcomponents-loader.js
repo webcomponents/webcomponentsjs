@@ -35,17 +35,25 @@
   }
 
   if (polyfills.length) {
-    var script = document.querySelector('script[src*="' + name +'"]');
+    var url;
+    var polyfillFile = 'webcomponents-' + polyfills.join('-') + '.js';
+
+    if (window.WebComponents.root) {
+      url = window.WebComponents.root + polyfillFile;
+    } else {
+      var script = document.querySelector('script[src*="' + name +'"]');
+      // Load it from the right place.
+      url = script.src.replace(name, polyfillFile);
+    }
+
     var newScript = document.createElement('script');
-    // Load it from the right place.
-    var replacement = 'webcomponents-' + polyfills.join('-') + '.js';
-    var url = script.src.replace(name, replacement);
     newScript.src = url;
+
     // NOTE: this is required to ensure the polyfills are loaded before
     // *native* html imports load on older Chrome versions. This *is* CSP
     // compliant since CSP rules must have allowed this script to run.
     // In all other cases, this can be async.
-    if (document.readyState === 'loading' && ('import' in document.createElement('link'))) {
+    if (document.readyState === 'loading') {
       document.write(newScript.outerHTML);
     } else {
       document.head.appendChild(newScript);

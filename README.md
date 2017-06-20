@@ -64,6 +64,15 @@ Here's an example:
 </script>
 ```
 
+If you have inlined the source of `webcomponent-loader.js`, then you should specify `window.WebComponents.root` as the root from which to load the polyfills. For example:
+
+```html
+<script>
+  window.WebComponents = window.WebComponents || {};
+  window.WebComponents.root = 'bower_components/webcomponentsjs/';
+</script>
+```
+
 ## `custom-elements-es5-adapter.js`
 According to the spec, Custom Elements must be ES6 classes (https://html.spec.whatwg.org/multipage/scripting.html#custom-element-conformance). Since most projects need to support a wide range of browsers that don't necessary support ES6, it may make sense to compile your project to ES5. However, ES5-style custom element classes will **not** work with native Custom Elements because ES5-style classes cannot properly extend ES6 classes, like `HTMLElement`.
 
@@ -150,7 +159,7 @@ window.addEventListener('WebComponentsReady', function(e) {
   * [Custom element's constructor property is unreliable](#constructor)
   * [Contenteditable elements do not trigger MutationObserver](#contentedit)
   * [ShadyCSS: :host(.zot:not(.bar:nth-child(2))) doesn't work](#nestedparens)
-  
+
 ### ShadowDOM CSS is not encapsulated out of the box <a id="shadycss"></a>
 The ShadowDOM polyfill is not able to encapsulate CSS in ShadowDOM out of the box. You need to use specific code from the ShadyCSS library, included with the polyfill. See [ShadyCSS instructions](https://github.com/webcomponents/shadycss).
 
