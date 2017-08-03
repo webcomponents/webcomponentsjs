@@ -323,9 +323,9 @@
   version "1.0.1"
   resolved "http://35.185.235.147/@webcomponents%2fhtml-imports/-/html-imports-1.0.1.tgz#42e8ec6e099f395519a8ad85b78d8ce04eb2ac58"
 
-"@webcomponents/shadycss@^1.0.0":
-  version "1.0.2"
-  resolved "http://35.185.235.147/@webcomponents%2fshadycss/-/shadycss-1.0.2.tgz#c05a70235a1a64b4504e3fac4c4ff52595641d4a"
+"@webcomponents/shadycss@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@webcomponents/shadycss/-/shadycss-1.0.3.tgz#2577d3954eac0155a5b6d9420cd13f319e4a253a"
 
 "@webcomponents/shadydom@^1.0.0":
   version "1.0.1"
@@ -5028,9 +5028,9 @@ temp@^0.8.1:
     os-tmpdir "^1.0.0"
     rimraf "~2.2.6"
 
-"test-fixture@github:polymerelements/test-fixture":
+test-fixture@PolymerElements/test-fixture:
   version "3.0.0-rc.1"
-  resolved "https://codeload.github.com/polymerelements/test-fixture/tar.gz/26118ef0467501c33c02316e7016a2837baba10f"
+  resolved "https://codeload.github.com/PolymerElements/test-fixture/tar.gz/26118ef0467501c33c02316e7016a2837baba10f"
 
 test-value@^2.1.0:
   version "2.1.0"
