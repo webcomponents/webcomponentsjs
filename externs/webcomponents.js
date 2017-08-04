@@ -20,3 +20,5 @@ var exports;
 
 var ShadyDOM;
 var WebComponents;
+
+HTMLTemplateElement.decorate;
