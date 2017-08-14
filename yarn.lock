@@ -148,8 +148,8 @@
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-0.0.29.tgz#fbcfd330573b912ef59eeee14602bface630754b"
 
 "@types/minimatch@*":
-  version "2.0.29"
-  resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-2.0.29.tgz#5002e14f75e2d71e564281df0431c8c1b4a2a36a"
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.0.tgz#a8b68c324817169b6004b432a598478a5d8f025a"
 
 "@types/mz@0.0.29":
   version "0.0.29"
@@ -165,16 +165,16 @@
     "@types/node" "*"
 
 "@types/node@*", "@types/node@^8.0.0":
-  version "8.0.20"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.20.tgz#65c7375255c24b184c215a5d0b63247c32f01c91"
+  version "8.0.22"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.22.tgz#9c6bfee1f45f5e9952ff6b487e657ecca48c7777"
 
 "@types/node@^4.2.3":
-  version "4.2.16"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-4.2.16.tgz#4eb9b218643a03e317535447e13bf78856cbf8ce"
+  version "4.2.18"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-4.2.18.tgz#e1854ae6eff1843f40de8c0559e547eb8b992865"
 
 "@types/node@^6.0.0", "@types/node@^6.0.31", "@types/node@^6.0.41", "@types/node@^6.0.77":
-  version "6.0.85"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.85.tgz#ec02bfe54a61044f2be44f13b389c6a0e8ee05ae"
+  version "6.0.86"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.86.tgz#ae0fff49f6fc13d7ddcd322362581c52e8755ff9"
 
 "@types/opn@^3.0.28":
   version "3.0.28"
@@ -246,8 +246,8 @@
   resolved "https://registry.yarnpkg.com/@webcomponents/shadycss/-/shadycss-1.0.5.tgz#ff8537dd06c46f33eccee082cdecd9507bf39f56"
 
 "@webcomponents/shadydom@^1.0.0":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@webcomponents/shadydom/-/shadydom-1.0.1.tgz#dd4dd1bada9bc55800a38f800b356809ad513fda"
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@webcomponents/shadydom/-/shadydom-1.0.3.tgz#dae8628c5f0c599e4a5b32365a16486324f50e3b"
 
 "@webcomponents/template@^1.0.0":
   version "1.0.0"
