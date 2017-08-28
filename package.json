@@ -27,7 +27,7 @@
   },
   "homepage": "https://webcomponents.org/polyfills",
   "devDependencies": {
-    "@webcomponents/custom-elements": "^1.0.0",
+    "@webcomponents/custom-elements": "^1.0.2",
     "@webcomponents/html-imports": "^1.0.0",
     "@webcomponents/shadycss": "^1.0.3",
     "@webcomponents/shadydom": "^1.0.0",
