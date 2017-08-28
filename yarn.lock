@@ -233,9 +233,9 @@
   dependencies:
     "@types/node" "*"
 
-"@webcomponents/custom-elements@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.0.0.tgz#b1726e12074b556aa31b93f36ff6a03a435259c4"
+"@webcomponents/custom-elements@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.0.2.tgz#4747102701d2d7eb2458af2a36b5015d7e06d9c7"
 
 "@webcomponents/html-imports@^1.0.0":
   version "1.0.1"
