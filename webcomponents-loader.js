@@ -16,9 +16,6 @@
   var name = 'webcomponents-loader.js';
   // Feature detect which polyfill needs to be imported.
   var polyfills = [];
-  if (!('import' in document.createElement('link'))) {
-    polyfills.push('hi');
-  }
   if (!('attachShadow' in Element.prototype && 'getRootNode' in Element.prototype) ||
     (window.ShadyDOM && window.ShadyDOM.force)) {
     polyfills.push('sd');

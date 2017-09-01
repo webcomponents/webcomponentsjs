@@ -10,48 +10,25 @@
 
 'use strict';
 
-let customElements = window['customElements'];
-let HTMLImports = window['HTMLImports'];
+let document = window.document;
 // global for (1) existence means `WebComponentsReady` will file,
 // (2) WebComponents.ready == true means event has fired.
 window.WebComponents = window.WebComponents || {};
 
-if (customElements && customElements['polyfillWrapFlushCallback']) {
-  // Here we ensure that the public `HTMLImports.whenReady`
-  // always comes *after* custom elements have upgraded.
-  let flushCallback;
-  let runAndClearCallback = function runAndClearCallback() {
-    if (flushCallback) {
-      let cb = flushCallback;
-      flushCallback = null;
-      cb();
-      return true;
-    }
-  }
-  let origWhenReady = HTMLImports['whenReady'];
-  customElements['polyfillWrapFlushCallback'](function(cb) {
-    flushCallback = cb;
-    origWhenReady(runAndClearCallback);
-  });
-
-  HTMLImports['whenReady'] = function(cb) {
-    origWhenReady(function() {
-      // custom element code may add dynamic imports
-      // to match processing of native custom elements before
-      // domContentLoaded, we wait for these imports to resolve first.
-      if (runAndClearCallback()) {
-        HTMLImports['whenReady'](cb);
-      } else {
-        cb();
-      }
-    });
-  }
-
+function fire() {
+  requestAnimationFrame(() => {
+    window.WebComponents.ready = true;
+    window.document.dispatchEvent(new CustomEvent('WebComponentsReady', { bubbles: true }));
+  })
 }
 
-HTMLImports['whenReady'](function() {
-  requestAnimationFrame(function() {
-    window.WebComponents.ready = true;
-    document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
-  });
-});
+function wait() {
+  fire();
+  document.removeEventListener('readystatechange', wait);
+}
+
+if (document.readyState !== 'loading') {
+  fire();
+} else {
+  document.addEventListener('readystatechange', wait);
+}

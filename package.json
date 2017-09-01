@@ -28,7 +28,6 @@
   "homepage": "https://webcomponents.org/polyfills",
   "devDependencies": {
     "@webcomponents/custom-elements": "^1.0.2",
-    "@webcomponents/html-imports": "^1.0.0",
     "@webcomponents/shadycss": "^1.0.3",
     "@webcomponents/shadydom": "^1.0.0",
     "@webcomponents/template": "^1.0.0",
@@ -41,7 +40,7 @@
     "gulp": "^3.8.8",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^2.4.1",
-    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-babel": "^3.0.2",
     "rollup-stream": "^1.23.1",
     "run-sequence": "^2.0.0",
     "vinyl-buffer": "^1.0.0",

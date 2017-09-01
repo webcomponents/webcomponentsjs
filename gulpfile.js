@@ -60,7 +60,6 @@ function closurify(sourceName, fileName) {
     externs: [
       'externs/webcomponents.js',
       'node_modules/@webcomponents/custom-elements/externs/custom-elements.js',
-      'node_modules/@webcomponents/html-imports/externs/html-imports.js',
       'node_modules/@webcomponents/shadycss/externs/shadycss-externs.js',
       'node_modules/@webcomponents/shadydom/externs/shadydom.js'
     ]
@@ -83,43 +82,26 @@ function closurify(sourceName, fileName) {
   .pipe(gulp.dest('.'));
 }
 
-gulp.task('debugify-hi', () => {
-  return debugify('webcomponents-hi')
+gulp.task('debugify-ce', () => {
+  return debugify('webcomponents-ce')
 });
 
-gulp.task('debugify-hi-ce', () => {
-  return debugify('webcomponents-hi-ce')
-});
-
-gulp.task('debugify-hi-sd-ce', () => {
-  return debugify('webcomponents-hi-sd-ce')
-});
-
-gulp.task('debugify-hi-sd-ce-pf', () => {
+gulp.task('debugify-sd-ce-pf', () => {
   // The es6-promise polyfill needs to set the correct context.
   // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
   const extraOptions = {context: 'window'};
-  return debugify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', extraOptions)
+  return debugify('webcomponents-sd-ce-pf', 'webcomponents-lite', extraOptions)
 });
 
 gulp.task('debugify-sd-ce', () => {
   return debugify('webcomponents-sd-ce')
 });
 
-gulp.task('closurify-hi', () => {
-  return closurify('webcomponents-hi')
+gulp.task('closurify-ce', () => {
+  return closurify('webcomponents-ce')
 });
-
-gulp.task('closurify-hi-ce', () => {
-  return closurify('webcomponents-hi-ce')
-});
-
-gulp.task('closurify-hi-sd-ce', () => {
-  return closurify('webcomponents-hi-sd-ce')
-});
-
-gulp.task('closurify-hi-sd-ce-pf', () => {
-  return closurify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite')
+gulp.task('closurify-sd-ce-pf', () => {
+  return closurify('webcomponents-sd-ce-pf', 'webcomponents-lite')
 });
 
 gulp.task('closurify-sd-ce', () => {
@@ -153,11 +135,9 @@ gulp.task('clean-builds', () => {
 
 gulp.task('debug', (cb) => {
   const tasks = [
-    'debugify-hi',
-    'debugify-hi-ce',
-    'debugify-hi-sd-ce',
-    'debugify-hi-sd-ce-pf',
+    'debugify-ce',
     'debugify-sd-ce',
+    'debugify-sd-ce-pf',
     'debugify-ce-es5-adapter'
   ];
   runseq('clean-builds', tasks, cb);
@@ -165,11 +145,9 @@ gulp.task('debug', (cb) => {
 
 gulp.task('closure', (cb) => {
   const tasks = [
-    'closurify-hi',
-    'closurify-hi-ce',
-    'closurify-hi-sd-ce',
-    'closurify-hi-sd-ce-pf',
+    'closurify-ce',
     'closurify-sd-ce',
+    'closurify-sd-ce-pf',
     'debugify-ce-es5-adapter'
   ];
   runseq('clean-builds', ...tasks, cb);

@@ -20,6 +20,13 @@ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+
+ Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+ This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+ The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+ Code distributed by Google as part of the polymer project is also
+ subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 'use strict';var kb="undefined"!=typeof window&&window===this?this:"undefined"!=typeof global&&null!=global?global:this;
 (function(){function k(){var a=this;this.m={};this.g=document.documentElement;var b=new ua;b.rules=[];this.h=r.set(this.g,new r(b));this.i=!1;this.b=this.a=null;lb(function(){a.c()})}function C(){this.customStyles=[];this.enqueued=!1}function mb(){}function ba(a){this.cache={};this.c=void 0===a?100:a}function p(){}function r(a,b,c,d,e){this.D=a||null;this.b=b||null;this.ha=c||[];this.L=null;this.U=e||"";this.a=this.w=this.H=null}function q(){}function ua(){this.end=this.start=0;this.rules=this.parent=

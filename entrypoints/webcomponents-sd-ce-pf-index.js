@@ -10,12 +10,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 'use strict';
 
 /*
- * Polyfills loaded: HTML Imports, Custom Elements
- * Used in: Safari 10, Firefox once SD is shipped
+ * Polyfills loaded: HTML Imports, Custom Elements, Shady DOM/Shady CSS, platform polyfills, template
+ * Used in: IE 11
  */
 
-import '../node_modules/@webcomponents/html-imports/src/html-imports.js';
+import '../node_modules/@webcomponents/webcomponents-platform/webcomponents-platform.js';
+import '../node_modules/@webcomponents/template/template.js';
+import '../node_modules/es6-promise/lib/es6-promise.auto.js';
+import '../src/pre-polyfill.js';
+import '../node_modules/@webcomponents/shadydom/src/shadydom.js';
 import '../node_modules/@webcomponents/custom-elements/src/custom-elements.js';
-
+import '../node_modules/@webcomponents/shadycss/entrypoints/scoping-shim.js';
 import '../src/post-polyfill.js';
 import '../src/unresolved.js';
