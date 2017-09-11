@@ -247,7 +247,7 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@webcomponents/html-imports/-/html-imports-1.0.1.tgz#42e8ec6e099f395519a8ad85b78d8ce04eb2ac58"
 
-"@webcomponents/shadycss@^1.0.3":
+"@webcomponents/shadycss@^1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@webcomponents/shadycss/-/shadycss-1.0.5.tgz#ff8537dd06c46f33eccee082cdecd9507bf39f56"
 
