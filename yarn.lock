@@ -239,9 +239,9 @@
   dependencies:
     "@types/node" "*"
 
-"@webcomponents/custom-elements@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.0.2.tgz#4747102701d2d7eb2458af2a36b5015d7e06d9c7"
+"@webcomponents/custom-elements@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.0.4.tgz#f7de0103026f27863ecfabaf1d450b9c21714910"
 
 "@webcomponents/html-imports@^1.0.0":
   version "1.0.1"
@@ -1866,8 +1866,8 @@ eslint-scope@^3.7.1:
     estraverse "^4.1.1"
 
 eslint@^4.4.1:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-4.5.0.tgz#bb75d3b8bde97fb5e13efcd539744677feb019c3"
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-4.6.1.tgz#ddc7fc7fd70bf93205b0b3449bb16a1e9e7d4950"
   dependencies:
     ajv "^5.2.0"
     babel-code-frame "^6.22.0"
@@ -2447,9 +2447,9 @@ glogg@^1.0.0:
   dependencies:
     sparkles "^1.0.0"
 
-google-closure-compiler@^20170806.0.0:
-  version "20170806.0.0"
-  resolved "https://registry.yarnpkg.com/google-closure-compiler/-/google-closure-compiler-20170806.0.0.tgz#1b04d9805a8b6e5c6f97fd9be0ab71e1a7888ee1"
+google-closure-compiler@^20170910.0.0:
+  version "20170910.0.0"
+  resolved "https://registry.yarnpkg.com/google-closure-compiler/-/google-closure-compiler-20170910.0.0.tgz#7a7cf5111d7376b376ce7461137e1b039303f1ea"
   dependencies:
     chalk "^1.0.0"
     vinyl "^2.0.1"
@@ -4453,7 +4453,7 @@ rollup-pluginutils@^1.5.0:
     estree-walker "^0.2.1"
     minimatch "^3.0.2"
 
-rollup-stream@^1.23.1:
+rollup-stream@=1.23:
   version "1.23.1"
   resolved "https://registry.yarnpkg.com/rollup-stream/-/rollup-stream-1.23.1.tgz#084b489cc4f8d780a27c187a53cef6598171f102"
   dependencies:
@@ -4734,7 +4734,13 @@ source-map-resolve@^0.3.0:
     source-map-url "~0.3.0"
     urix "~0.1.0"
 
-source-map-support@^0.4.0, source-map-support@^0.4.15:
+source-map-support@^0.4.0:
+  version "0.4.18"
+  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.4.18.tgz#0286a6de8be42641338594e97ccea75f0a2c585f"
+  dependencies:
+    source-map "^0.5.6"
+
+source-map-support@^0.4.15:
   version "0.4.16"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.4.16.tgz#16fecf98212467d017d586a2af68d628b9421cd8"
   dependencies:
@@ -5447,8 +5453,8 @@ wd@^1.2.0:
     vargs "0.1.0"
 
 web-component-tester@^6.0.0:
-  version "6.1.3"
-  resolved "https://registry.yarnpkg.com/web-component-tester/-/web-component-tester-6.1.3.tgz#8401507de9085670bd82325d1a03f5dd6d3fdf84"
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/web-component-tester/-/web-component-tester-6.1.5.tgz#d88716d15692442af998ff29a6903dbda5f4e622"
   dependencies:
     "@polymer/sinonjs" "^1.14.1"
     "@polymer/test-fixture" "^0.0.3"
