@@ -244,8 +244,8 @@
   resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.0.4.tgz#f7de0103026f27863ecfabaf1d450b9c21714910"
 
 "@webcomponents/html-imports@^1.0.0":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@webcomponents/html-imports/-/html-imports-1.0.1.tgz#42e8ec6e099f395519a8ad85b78d8ce04eb2ac58"
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@webcomponents/html-imports/-/html-imports-1.0.2.tgz#d2529663472293dc5fbe2c346c921d8084b59a7b"
 
 "@webcomponents/shadycss@^1.0.5":
   version "1.0.6"
