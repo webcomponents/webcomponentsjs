@@ -115,15 +115,15 @@ gulp.task('debugify-sd-ce', () => {
 });
 
 gulp.task('closurify-hi', () => {
-  return closurify('webcomponents-hi', true)
+  return closurify('webcomponents-hi', false, true)
 });
 
 gulp.task('closurify-hi-ce', () => {
-  return closurify('webcomponents-hi-ce', true)
+  return closurify('webcomponents-hi-ce', false, true)
 });
 
 gulp.task('closurify-hi-sd-ce', () => {
-  return closurify('webcomponents-hi-sd-ce', true)
+  return closurify('webcomponents-hi-sd-ce', false, true)
 });
 
 gulp.task('closurify-hi-sd-ce-pf', () => {
@@ -131,7 +131,7 @@ gulp.task('closurify-hi-sd-ce-pf', () => {
 });
 
 gulp.task('closurify-sd-ce', () => {
-  return closurify('webcomponents-sd-ce', true)
+  return closurify('webcomponents-sd-ce', false, true)
 });
 
 function singleLicenseComment() {
