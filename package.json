@@ -28,9 +28,9 @@
   "homepage": "https://webcomponents.org/polyfills",
   "devDependencies": {
     "@webcomponents/custom-elements": "^1.0.4",
-    "@webcomponents/html-imports": "^1.0.0",
-    "@webcomponents/shadycss": "^1.0.5",
-    "@webcomponents/shadydom": "^1.0.0",
+    "@webcomponents/html-imports": "^1.0.3",
+    "@webcomponents/shadycss": "^1.0.6",
+    "@webcomponents/shadydom": "^1.0.5",
     "@webcomponents/template": "^1.0.0",
     "@webcomponents/webcomponents-platform": "^1.0.0",
     "babel-preset-minify": "^0.2.0",
