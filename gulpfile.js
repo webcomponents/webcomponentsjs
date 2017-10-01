@@ -75,7 +75,7 @@ function closurify(sourceName, fileName) {
   };
 
   return rollup(rollupOptions)
-  .pipe(source(`${sourceName}-index.js`, 'entrypoints'))
+  .pipe(source(`${sourceName}-bundle.js`))
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
   .pipe(closure(closureOptions))
