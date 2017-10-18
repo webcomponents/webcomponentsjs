@@ -10,7 +10,7 @@
 
 (function() {
   'use strict';
-  // global for (1) existence means `WebComponentsReady` will file,
+  // global for (1) existence means `WebComponentsReady` will fire,
   // (2) WebComponents.ready == true means event has fired.
   window.WebComponents = window.WebComponents || {};
   var name = 'webcomponents-loader.js';
