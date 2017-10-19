@@ -42,7 +42,7 @@ function debugify(sourceName, fileName, extraRollupOptions) {
   .pipe(gulp.dest('./'))
 }
 
-function closurify(sourceName, fileName) {
+function closurify(sourceName, fileName, sourceMapsLoad) {
   if (!fileName) {
     fileName = sourceName;
   }
@@ -70,17 +70,25 @@ function closurify(sourceName, fileName) {
     entry: `entrypoints/${sourceName}-index.js`,
     format: 'iife',
     moduleName: 'webcomponents',
-    sourceMap: true,
+    sourceMap: sourceMapsLoad,
     context: 'window'
   };
 
-  return rollup(rollupOptions)
-  .pipe(source(`${sourceName}-index.js`, 'entrypoints'))
-  .pipe(buffer())
-  .pipe(sourcemaps.init({loadMaps: true}))
-  .pipe(closure(closureOptions))
-  .pipe(sourcemaps.write('.'))
-  .pipe(gulp.dest('.'));
+  if (!sourceMapsLoad) {
+    return rollup(rollupOptions)
+    .pipe(source(`${sourceName}-index.js`, 'entrypoints'))
+    .pipe(buffer())
+    .pipe(closure(closureOptions))
+    .pipe(gulp.dest('.'));
+  } else {
+    return rollup(rollupOptions)
+    .pipe(source(`${sourceName}-index.js`, 'entrypoints'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(closure(closureOptions))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('.'));
+  }
 }
 
 gulp.task('debugify-hi', () => {
@@ -107,23 +115,23 @@ gulp.task('debugify-sd-ce', () => {
 });
 
 gulp.task('closurify-hi', () => {
-  return closurify('webcomponents-hi')
+  return closurify('webcomponents-hi', false, true)
 });
 
 gulp.task('closurify-hi-ce', () => {
-  return closurify('webcomponents-hi-ce')
+  return closurify('webcomponents-hi-ce', false, true)
 });
 
 gulp.task('closurify-hi-sd-ce', () => {
-  return closurify('webcomponents-hi-sd-ce')
+  return closurify('webcomponents-hi-sd-ce', false, true)
 });
 
 gulp.task('closurify-hi-sd-ce-pf', () => {
-  return closurify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite')
+  return closurify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', false)
 });
 
 gulp.task('closurify-sd-ce', () => {
-  return closurify('webcomponents-sd-ce')
+  return closurify('webcomponents-sd-ce', false, true)
 });
 
 function singleLicenseComment() {
