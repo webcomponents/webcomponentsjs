@@ -25,8 +25,8 @@ if (customElements && customElements['polyfillWrapFlushCallback']) {
   let runAndClearCallback = function runAndClearCallback() {
     if (flushCallback) {
       // make sure to run the HTMLTemplateElement polyfill before custom elements upgrade
-      if (Template['bootstrap']) {
-        Template['bootstrap'](window.document);
+      if (Template.bootstrap) {
+        Template.bootstrap(window.document);
       }
       let cb = flushCallback;
       flushCallback = null;
