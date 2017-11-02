@@ -37,7 +37,7 @@
     "del": "^3.0.0",
     "es6-promise": "^4.1.1",
     "eslint": "^4.9.0",
-    "google-closure-compiler": "^20170910.0.0",
+    "google-closure-compiler": "^20171023.0.1",
     "gulp": "^3.8.8",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^2.4.1",

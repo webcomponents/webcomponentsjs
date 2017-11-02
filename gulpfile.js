@@ -57,27 +57,24 @@ function closurify(sourceName, fileName) {
     js_output_file: `${fileName}.js`,
     warning_level: 'VERBOSE',
     rewrite_polyfills: false,
+    module_resolution: 'NODE',
     externs: [
       'externs/webcomponents.js',
       'node_modules/@webcomponents/custom-elements/externs/custom-elements.js',
       'node_modules/@webcomponents/html-imports/externs/html-imports.js',
       'node_modules/@webcomponents/shadycss/externs/shadycss-externs.js',
       'node_modules/@webcomponents/shadydom/externs/shadydom.js'
-    ]
+    ],
+    entry_point: `entrypoints/${sourceName}-index.js`,
+    dependency_mode: 'STRICT'
   };
 
-  const rollupOptions = {
-    entry: `entrypoints/${sourceName}-index.js`,
-    format: 'iife',
-    moduleName: 'webcomponents',
-    sourceMap: true,
-    context: 'window'
-  };
-
-  return rollup(rollupOptions)
-  .pipe(source(`${sourceName}-bundle.js`))
-  .pipe(buffer())
-  .pipe(sourcemaps.init({loadMaps: true}))
+  return gulp.src([
+    'entrypoints/*.js', 'src/*.js',
+    'node_modules/es6-promise/lib/**/*.js',
+    'node_modules/@webcomponents/**/*.js',
+    '!node_modules/@webcomponents/*/externs/*.js'
+  ], {base: './'})
   .pipe(closure(closureOptions))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('.'));
