@@ -36,7 +36,7 @@
     "babel-preset-minify": "^0.2.0",
     "del": "^3.0.0",
     "es6-promise": "^4.1.1",
-    "eslint": "^4.9.0",
+    "eslint": "^4.10.0",
     "google-closure-compiler": "^20171023.0.1",
     "gulp": "^3.8.8",
     "gulp-add-src": "^0.2.0",
@@ -48,7 +48,7 @@
     "run-sequence": "^2.0.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "web-component-tester": "^6.3.0"
+    "web-component-tester": "^6.4.0"
   },
   "publishConfig": {
     "access": "public"
