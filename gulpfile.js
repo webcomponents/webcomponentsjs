@@ -15,7 +15,6 @@
 
 const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
-const buffer = require('vinyl-buffer');
 const rename = require('gulp-rename');
 const rollup = require('rollup-stream');
 const source = require('vinyl-source-stream');
@@ -70,11 +69,12 @@ function closurify(sourceName, fileName) {
   };
 
   return gulp.src([
-    'entrypoints/*.js', 'src/*.js',
-    'node_modules/es6-promise/lib/**/*.js',
-    'node_modules/@webcomponents/**/*.js',
-    '!node_modules/@webcomponents/*/externs/*.js'
-  ], {base: './'})
+      'entrypoints/*.js',
+      'src/*.js',
+      'node_modules/es6-promise/lib/es6-promise/**/*.js',
+      'node_modules/@webcomponents/**/*.js',
+      '!node_modules/@webcomponents/*/externs/*.js'
+    ], {base: './'})
   .pipe(closure(closureOptions))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('.'));
