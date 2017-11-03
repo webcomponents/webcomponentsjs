@@ -57,15 +57,15 @@ function closurify(sourceName, fileName) {
     warning_level: 'VERBOSE',
     rewrite_polyfills: false,
     module_resolution: 'NODE',
+    entry_point: `entrypoints/${sourceName}-index.js`,
+    dependency_mode: 'STRICT',
     externs: [
       'externs/webcomponents.js',
       'node_modules/@webcomponents/custom-elements/externs/custom-elements.js',
       'node_modules/@webcomponents/html-imports/externs/html-imports.js',
       'node_modules/@webcomponents/shadycss/externs/shadycss-externs.js',
       'node_modules/@webcomponents/shadydom/externs/shadydom.js'
-    ],
-    entry_point: `entrypoints/${sourceName}-index.js`,
-    dependency_mode: 'STRICT'
+    ]
   };
 
   return gulp.src([
@@ -75,6 +75,7 @@ function closurify(sourceName, fileName) {
       'node_modules/@webcomponents/**/*.js',
       '!node_modules/@webcomponents/*/externs/*.js'
     ], {base: './'})
+  .pipe(sourcemaps.init())
   .pipe(closure(closureOptions))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('.'));
