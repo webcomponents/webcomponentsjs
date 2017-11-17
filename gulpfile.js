@@ -73,8 +73,10 @@ function closurify(sourceName, fileName) {
       'src/*.js',
       'node_modules/es6-promise/lib/es6-promise/**/*.js',
       'node_modules/@webcomponents/**/*.js',
-      '!node_modules/@webcomponents/*/externs/*.js'
-    ], {base: './'})
+      '!node_modules/@webcomponents/*/externs/*.js',
+      '!node_modules/@webcomponents/*/node_modules/**',
+      '!**/bower_components/**'
+    ], {base: './', follow: true})
   .pipe(sourcemaps.init())
   .pipe(closure(closureOptions))
   .pipe(sourcemaps.write('.'))
