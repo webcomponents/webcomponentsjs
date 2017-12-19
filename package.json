@@ -31,7 +31,7 @@
     "@webcomponents/html-imports": "^1.1.0",
     "@webcomponents/shadycss": "^1.1.0",
     "@webcomponents/shadydom": "^1.0.11",
-    "@webcomponents/template": "^1.2.1",
+    "@webcomponents/template": "^1.2.2",
     "@webcomponents/webcomponents-platform": "^1.0.0",
     "babel-preset-minify": "^0.2.0",
     "del": "^3.0.0",
