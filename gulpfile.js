@@ -15,7 +15,6 @@
 
 const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
-const buffer = require('vinyl-buffer');
 const rename = require('gulp-rename');
 const rollup = require('rollup-stream');
 const source = require('vinyl-source-stream');
@@ -57,6 +56,9 @@ function closurify(sourceName, fileName) {
     js_output_file: `${fileName}.js`,
     warning_level: 'VERBOSE',
     rewrite_polyfills: false,
+    module_resolution: 'NODE',
+    entry_point: `entrypoints/${sourceName}-index.js`,
+    dependency_mode: 'STRICT',
     externs: [
       'externs/webcomponents.js',
       'node_modules/@webcomponents/custom-elements/externs/custom-elements.js',
@@ -65,18 +67,16 @@ function closurify(sourceName, fileName) {
     ]
   };
 
-  const rollupOptions = {
-    entry: `entrypoints/${sourceName}-index.js`,
-    format: 'iife',
-    moduleName: 'webcomponents',
-    sourceMap: true,
-    context: 'window'
-  };
-
-  return rollup(rollupOptions)
-  .pipe(source(`${sourceName}-index.js`, 'entrypoints'))
-  .pipe(buffer())
-  .pipe(sourcemaps.init({loadMaps: true}))
+  return gulp.src([
+      'entrypoints/*.js',
+      'src/*.js',
+      'node_modules/es6-promise/lib/es6-promise/**/*.js',
+      'node_modules/@webcomponents/**/*.js',
+      '!node_modules/@webcomponents/*/externs/*.js',
+      '!node_modules/@webcomponents/*/node_modules/**',
+      '!**/bower_components/**'
+    ], {base: './', follow: true})
+  .pipe(sourcemaps.init())
   .pipe(closure(closureOptions))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('.'));
