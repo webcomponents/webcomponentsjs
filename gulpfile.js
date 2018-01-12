@@ -97,9 +97,14 @@ gulp.task('debugify-sd-ce', () => {
   return debugify('webcomponents-sd-ce')
 });
 
+gulp.task('debugify-sd', () => {
+  return debugify('webcomponents-sd')
+});
+
 gulp.task('closurify-ce', () => {
   return closurify('webcomponents-ce')
 });
+
 gulp.task('closurify-sd-ce-pf', () => {
   return closurify('webcomponents-sd-ce-pf', 'webcomponents-lite')
 });
@@ -107,6 +112,10 @@ gulp.task('closurify-sd-ce-pf', () => {
 gulp.task('closurify-sd-ce', () => {
   return closurify('webcomponents-sd-ce')
 });
+
+gulp.task('closurify-sd', () => {
+  return closurify('webcomponents-sd')
+})
 
 function singleLicenseComment() {
   let hasLicense = false;
@@ -136,6 +145,7 @@ gulp.task('clean-builds', () => {
 gulp.task('debug', (cb) => {
   const tasks = [
     'debugify-ce',
+    'debugify-sd',
     'debugify-sd-ce',
     'debugify-sd-ce-pf',
     'debugify-ce-es5-adapter'
@@ -146,6 +156,7 @@ gulp.task('debug', (cb) => {
 gulp.task('closure', (cb) => {
   const tasks = [
     'closurify-ce',
+    'closurify-sd',
     'closurify-sd-ce',
     'closurify-sd-ce-pf',
     'debugify-ce-es5-adapter'
