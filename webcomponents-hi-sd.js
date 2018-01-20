@@ -147,6 +147,15 @@ le&&(window.ShadyCSS.CustomStyleInterface=le);/*
  subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 var me=window.customElements,ne=window.HTMLImports,oe=window.HTMLTemplateElement;window.WebComponents=window.WebComponents||{};if(me&&me.polyfillWrapFlushCallback){var pe,qe=function(){if(pe){oe.pa&&oe.pa(window.document);var a=pe;pe=null;a();return!0}},re=ne.whenReady;me.polyfillWrapFlushCallback(function(a){pe=a;re(qe)});ne.whenReady=function(a){re(function(){qe()?ne.whenReady(a):a()})}}
-ne.whenReady(function(){requestAnimationFrame(function(){window.WebComponents.ready=!0;document.dispatchEvent(new CustomEvent("WebComponentsReady",{bubbles:!0}))})});var se=document.createElement("style");se.textContent="body {transition: opacity ease-in 0.2s; } \nbody[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } \n";var te=document.querySelector("head");te.insertBefore(se,te.firstChild);}).call(this);
+ne.whenReady(function(){requestAnimationFrame(function(){window.WebComponents.ready=!0;document.dispatchEvent(new CustomEvent("WebComponentsReady",{bubbles:!0}))})});var se=document.createElement("style");se.textContent="body {transition: opacity ease-in 0.2s; } \nbody[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } \n";var te=document.querySelector("head");te.insertBefore(se,te.firstChild);/*
+
+Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+}).call(this);
 
 //# sourceMappingURL=webcomponents-hi-sd.js.map
