@@ -39,6 +39,12 @@
     var newScript = document.createElement('script');
     // Load it from the right place.
     var replacement = 'webcomponents-' + polyfills.join('-') + '.js';
+    
+    // webcomponents-hi-sd.js does currently not exist
+    if (replacement === 'webcomponents-hi-sd.js') {
+      replacement = 'webcomponents-hi-sd-ce.js'
+    }
+    
     var url = script.src.replace(name, replacement);
     newScript.src = url;
     // NOTE: this is required to ensure the polyfills are loaded before
