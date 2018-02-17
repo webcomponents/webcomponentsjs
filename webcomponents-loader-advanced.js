@@ -12,8 +12,19 @@
   'use strict';
   // global for (1) existence means `WebComponentsReady` will file,
   // (2) WebComponents.ready == true means event has fired.
-  window.WebComponents = window.WebComponents || {};
-  var name = 'webcomponents-loader.js';
+  var readyCallbacks = [];
+  window.WebComponents = window.WebComponents || {
+    ready: {
+      then: function(resolve) {
+        readyCallbacks.push(resolve);
+      }
+    }
+  };
+
+  function ready() {
+
+  }
+  var name = 'webcomponents-loader-advanced.js';
   // Feature detect which polyfill needs to be imported.
   var polyfills = [];
   if (!('attachShadow' in Element.prototype && 'getRootNode' in Element.prototype) ||
@@ -38,11 +49,9 @@
     var replacement = 'webcomponents-' + polyfills.join('-') + '.js';
     var url = script.src.replace(name, replacement);
     newScript.src = url;
-    if (document.readyState === 'loading') {
-      document.write(newScript.outerHTML);
-    } else {
-      throw new Error('webcomponents-loader needs to be run synchronously.'
-        + 'Please make sure script does not have async or defer attributes set');
-    }
+    newScript.addEventListener('load', ready);
+    document.head.appendChild(newScript);
+  } else {
+    ready();
   }
 })();

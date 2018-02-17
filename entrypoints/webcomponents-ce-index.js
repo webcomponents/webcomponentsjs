@@ -15,4 +15,3 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  */
 
 import '../node_modules/@webcomponents/custom-elements/src/custom-elements.js';
-import '../src/post-polyfill.js';

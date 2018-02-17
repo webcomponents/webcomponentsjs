@@ -91,7 +91,7 @@ gulp.task('debugify-sd-ce-pf', () => {
   // The es6-promise polyfill needs to set the correct context.
   // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
   const extraOptions = {context: 'window'};
-  return debugify('webcomponents-sd-ce-pf', 'webcomponents-lite', extraOptions)
+  return debugify('webcomponents-sd-ce-pf', null, extraOptions)
 });
 
 gulp.task('debugify-sd-ce', () => {
@@ -107,7 +107,7 @@ gulp.task('closurify-ce', () => {
 });
 
 gulp.task('closurify-sd-ce-pf', () => {
-  return closurify('webcomponents-sd-ce-pf', 'webcomponents-lite')
+  return closurify('webcomponents-sd-ce-pf')
 });
 
 gulp.task('closurify-sd-ce', () => {
@@ -140,7 +140,11 @@ gulp.task('debugify-ce-es5-adapter', () => {
 gulp.task('default', ['closure']);
 
 gulp.task('clean-builds', () => {
-  return del(['custom-elements-es5-adapter.js{,.map}', 'webcomponents*.js{,.map}', '!webcomponents-loader.js']);
+  return del([
+    'custom-elements-es5-adapter.js{,.map}',
+    'webcomponents*.js{,.map}',
+    '!webcomponents-loader*.js',
+  ]);
 });
 
 gulp.task('debug', (cb) => {

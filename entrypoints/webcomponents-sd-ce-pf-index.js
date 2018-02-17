@@ -21,5 +21,4 @@ import '../src/pre-polyfill.js';
 import '../node_modules/@webcomponents/shadydom/src/shadydom.js';
 import '../node_modules/@webcomponents/custom-elements/src/custom-elements.js';
 import '../node_modules/@webcomponents/shadycss/entrypoints/scoping-shim.js';
-import '../src/post-polyfill.js';
 import '../src/unresolved.js';
