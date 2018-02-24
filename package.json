@@ -36,6 +36,7 @@
     "del": "^3.0.0",
     "es6-promise": "4.1.x",
     "eslint": "^4.16.0",
+    "eslint-plugin-html": "^4.0.2",
     "google-closure-compiler": "^20171203.0.0",
     "gulp": "^3.8.8",
     "gulp-add-src": "^0.2.0",
