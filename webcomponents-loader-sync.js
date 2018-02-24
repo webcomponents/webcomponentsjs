@@ -12,8 +12,10 @@
   'use strict';
   // global for (1) existence means `WebComponentsReady` will file,
   // (2) WebComponents.ready == true means event has fired.
-  window.WebComponents = window.WebComponents || {};
-  var name = 'webcomponents-loader.js';
+  window.WebComponents = window.WebComponents || {
+    ready: false
+  };
+  var name = 'webcomponents-loader-sync.js';
   // Feature detect which polyfill needs to be imported.
   var polyfills = [];
   if (!('attachShadow' in Element.prototype && 'getRootNode' in Element.prototype) ||
@@ -28,7 +30,7 @@
   if (!('content' in document.createElement('template')) || !window.Promise || !Array.from ||
     // Edge has broken fragment cloning which means you cannot clone template.content
     !(document.createDocumentFragment().cloneNode() instanceof DocumentFragment)) {
-    polyfills.push('pf');
+    polyfills = ['sd-ce-pf'];
   }
 
   if (polyfills.length) {
@@ -40,6 +42,7 @@
     newScript.src = url;
     if (document.readyState === 'loading') {
       document.write(newScript.outerHTML);
+      this.ready = true;
     } else {
       throw new Error('webcomponents-loader needs to be run synchronously.'
         + 'Please make sure script does not have async or defer attributes set');

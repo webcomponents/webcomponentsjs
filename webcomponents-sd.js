@@ -121,15 +121,6 @@ n.styleSubtree=function(a,b){var c=a.shadowRoot;(c||a===this.c)&&this.styleEleme
 n.getComputedStyleValue=function(a,b){var c;N||(c=(U(a)||U(ce(this,a))).s[b]);return(c=c||window.getComputedStyle(a).getPropertyValue(b))?c.trim():""};n.ra=function(a,b){var c=a.getRootNode();b=b?b.split(/\s/):[];c=c.host&&c.host.localName;if(!c){var d=a.getAttribute("class");if(d){d=d.split(/\s/);for(var e=0;e<d.length;e++)if(d[e]===S.a){c=d[e+1];break}}}c&&b.push(S.a,c);N||(c=U(a))&&c.j&&b.push(Gd.a,c.j);Oc(a,b.join(" "))};n.ia=function(a){return U(a)};X.prototype.flush=X.prototype.Z;
 X.prototype.prepareTemplate=X.prototype.prepareTemplate;X.prototype.styleElement=X.prototype.styleElement;X.prototype.styleDocument=X.prototype.styleDocument;X.prototype.styleSubtree=X.prototype.styleSubtree;X.prototype.getComputedStyleValue=X.prototype.getComputedStyleValue;X.prototype.setElementClass=X.prototype.ra;X.prototype._styleInfoForNode=X.prototype.ia;X.prototype.transformCustomStyleForDocument=X.prototype.Y;X.prototype.getStyleAst=X.prototype.ka;X.prototype.styleAstToString=X.prototype.sa;
 X.prototype.flushCustomStyles=X.prototype.u;Object.defineProperties(X.prototype,{nativeShadow:{get:function(){return M}},nativeCss:{get:function(){return N}}});var Z=new X,de,ee;window.ShadyCSS&&(de=window.ShadyCSS.ApplyShim,ee=window.ShadyCSS.CustomStyleInterface);window.ShadyCSS={ScopingShim:Z,prepareTemplate:function(a,b,c){Z.u();Z.prepareTemplate(a,b,c)},styleSubtree:function(a,b){Z.u();Z.styleSubtree(a,b)},styleElement:function(a){Z.u();Z.styleElement(a)},styleDocument:function(a){Z.u();Z.styleDocument(a)},getComputedStyleValue:function(a,b){return Z.getComputedStyleValue(a,b)},nativeCss:N,nativeShadow:M};de&&(window.ShadyCSS.ApplyShim=de);
-ee&&(window.ShadyCSS.CustomStyleInterface=ee);/*
-
- Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
- This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
- The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
- The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
- Code distributed by Google as part of the polymer project is also
- subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
-*/
-var fe=window.document;window.WebComponents=window.WebComponents||{};function ge(){requestAnimationFrame(function(){window.WebComponents.ready=!0;window.document.dispatchEvent(new CustomEvent("WebComponentsReady",{bubbles:!0}))})}function he(){ge();fe.removeEventListener("readystatechange",he)}"loading"!==fe.readyState?ge():fe.addEventListener("readystatechange",he);}).call(this);
+ee&&(window.ShadyCSS.CustomStyleInterface=ee);}).call(this);
 
 //# sourceMappingURL=webcomponents-sd.js.map

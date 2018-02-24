@@ -13,18 +13,25 @@
   // global for (1) existence means `WebComponentsReady` will file,
   // (2) WebComponents.ready == true means event has fired.
   var readyCallbacks = [];
+  function ready() {
+    window.WebComponents.ready = true;
+    for (var i = 0; i < readyCallbacks.length; i++) {
+      readyCallbacks[i]();
+    }
+    readyCallbacks = null;
+    window.document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
+  }
   window.WebComponents = window.WebComponents || {
-    ready: {
-      then: function(resolve) {
-        readyCallbacks.push(resolve);
+    ready: false,
+    whenReady: function(callback){
+      if (this.ready) {
+        callback();
+      } else {
+        readyCallbacks.push(callback);
       }
     }
   };
-
-  function ready() {
-
-  }
-  var name = 'webcomponents-loader-advanced.js';
+  var name = 'webcomponents-loader-async.js';
   // Feature detect which polyfill needs to be imported.
   var polyfills = [];
   if (!('attachShadow' in Element.prototype && 'getRootNode' in Element.prototype) ||
@@ -39,7 +46,7 @@
   if (!('content' in document.createElement('template')) || !window.Promise || !Array.from ||
     // Edge has broken fragment cloning which means you cannot clone template.content
     !(document.createDocumentFragment().cloneNode() instanceof DocumentFragment)) {
-    polyfills.push('pf');
+    polyfills = ['sd-ce-pf'];
   }
 
   if (polyfills.length) {
@@ -52,6 +59,13 @@
     newScript.addEventListener('load', ready);
     document.head.appendChild(newScript);
   } else {
-    ready();
+    if (document.readyState !== 'loading') {
+      ready();
+    } else {
+      document.addEventListener('readystatechange', function rsc() {
+        document.removeEventListener('readystatechange', rsc);
+        ready();
+      });
+    }
   }
 })();
