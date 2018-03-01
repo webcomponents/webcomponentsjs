@@ -42,7 +42,8 @@
     newScript.src = url;
     if (document.readyState === 'loading') {
       document.write(newScript.outerHTML);
-      this.ready = true;
+      window.WebComponents.ready = true;
+      document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
     } else {
       throw new Error('webcomponents-loader needs to be run synchronously.'
         + 'Please make sure script does not have async or defer attributes set');

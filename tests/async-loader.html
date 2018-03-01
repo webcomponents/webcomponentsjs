@@ -1,0 +1,84 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+
+<head>
+  <title>Test Async Loader</title>
+  <script>WCT = {waitFor(cb){cb()}}</script>
+  <script src="../webcomponents-loader-async.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+</head>
+
+<body>
+  <script>
+    suite('whenLoaded', function () {
+      test('returns a Promise', function() {
+        if (navigator.userAgent.match(/Trident/)) {
+          this.skip();
+        }
+        assert.instanceOf(WebComponents.whenLoaded(), Promise);
+      });
+      test('polyfills are loaded when whenLoaded resolves', function() {
+        return WebComponents.whenLoaded().then(function() {
+          assert.ok(window.ShadowRoot);
+          assert.ok(window.customElements);
+          assert.ok(window.HTMLTemplateElement);
+        });
+      });
+      test('runs an optional function', function(done) {
+        WebComponents.whenLoaded(function() {
+          done();
+        });
+      });
+      test('runs optional function before resolving the returned promise', function() {
+        const order = [];
+        return WebComponents.whenLoaded(function() {
+          order.push(1);
+        }).then(function() {
+          order.push(2);
+        }).then(function() {
+          assert.deepEqual(order, [1,2]);
+        });
+      });
+      test('resolves Promise returned by optional function before itself', function() {
+        return WebComponents.whenLoaded(() => {
+          return new Promise((resolve) => {
+            resolve(42);
+          });
+        }).then((val) => {
+          assert.equal(val, 42);
+        });
+      });
+      test('Custom Elements defined in optional function are delayed', function() {
+        if (window.customElements && !customElements.polyfillWrapFlushCallback) {
+          this.skip();
+        }
+        const el = document.createElement('simple-element');
+        document.body.appendChild(el);
+        return WebComponents.whenLoaded(() => {
+          return new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = 'imports/simple-element.js';
+            script.onload = function() {
+              assert.equal(el.shadowRoot, null);
+              resolve();
+            };
+            document.body.appendChild(script);
+          });
+        }).then(() => {
+          assert.instanceOf(el.shadowRoot, window.ShadowRoot);
+        })
+      })
+    });
+  </script>
+</body>
+
+</html>
