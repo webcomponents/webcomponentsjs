@@ -23,12 +23,14 @@
   function ready() {
     window.WebComponents.ready = true;
     if (!hasPromises) {
+      // convert tinyPromises into real Promises
       var resolver = new Promise(function(res) {
         resolve = res;
       });
       convertFromTiny(promise, resolver);
       promise = resolver;
     }
+    // bootstrap <template> elements before custom elements
     if (HTMLTemplateElement.bootstrap) {
       HTMLTemplateElement.bootstrap(window.document);
     }
@@ -45,6 +47,10 @@
     });
   }
 
+  /*
+   * A tiny Promise shim used to collect `.then` and `.catch` calls off of `whenLoaded`
+   * After polyfill bundle is loaded, these will become real promises
+   */
   function tinyPromise(passFn, failFn) {
     this._passFn = passFn;
     this._failFn = failFn;
@@ -76,10 +82,12 @@
   window.WebComponents = window.WebComponents || {
     ready: false,
     whenLoaded: function(waitFn) {
+      // if handed a `waitFn`, execute that first before resolving whenLoaded promise
       if (waitFn) {
         return promise.then(function() {
           var flushFn;
           var resolved = false;
+          // execute `waitFn` before booting custom elements to optimize CustomElements polyfill work
           if (customElements.polyfillWrapFlushCallback) {
             customElements.polyfillWrapFlushCallback(function(flushCallback) {
               flushFn = flushCallback;
