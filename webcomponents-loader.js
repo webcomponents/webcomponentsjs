@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+ * Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
  * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
@@ -106,7 +106,7 @@
       return promise;
     }
   };
-  var name = 'webcomponents-loader-async.js';
+  var name = 'webcomponents-loader.js';
   // Feature detect which polyfill needs to be imported.
   var polyfills = [];
   if (!('attachShadow' in Element.prototype && 'getRootNode' in Element.prototype) ||
@@ -128,7 +128,7 @@
     var script = document.querySelector('script[src*="' + name +'"]');
     var newScript = document.createElement('script');
     // Load it from the right place.
-    var replacement = 'webcomponents-' + polyfills.join('-') + '.js';
+    var replacement = 'bundles/webcomponents-' + polyfills.join('-') + '.js';
     var url = script.src.replace(name, replacement);
     newScript.src = url;
     newScript.addEventListener('load', function() {

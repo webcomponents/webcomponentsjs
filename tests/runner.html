@@ -15,7 +15,7 @@
 <script src="../../web-component-tester/browser.js"></script>
 
 <script>
-  WCT.loadSuites([
+  window.suites = [
     'template-and-CE.html',
     // 'template-and-imports.html',
     'integration.html',
@@ -31,6 +31,15 @@
     // 'ce-import-upgrade.html',  // Order of upgrade/import is different in v1
     // 'ce-import-upgrade-async.html',
     'promise.html',
-    'async-loader.html'
-  ]);
+    'async-loader.html',
+    'bundle-with-modules.html',
+    'loader-with-modules.html'
+  ];
+</script>
+<!-- splice out the "loader with modules" if modules are not supported -->
+<script nomodule>
+  window.suites.splice(window.suites.length - 1, 1);
+</script>
+<script>
+  WCT.loadSuites(window.suites);
 </script>

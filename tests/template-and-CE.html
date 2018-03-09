@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <html>
   <head>
     <title>Template with HTMLImports Test</title>
-    <script src="../webcomponents-loader-async.js"></script>
+    <script src="../webcomponents-bundle.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
   </head>
   <body>
@@ -59,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         test('templates before elements are bootstrapped before createdCallback', function() {
-          assert(foundTemplate);
+          assert.equal(foundTemplate, true);
         });
       });
     </script>

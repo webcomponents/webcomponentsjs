@@ -1,4 +1,3 @@
-/webcomponents*.js binary
-/webcomponents*.js.map binary
-/webcomponents-loader.js -binary
+/webcomponents-bundle.js* binary
 /package-lock.json binary
+/bundles/* binary
