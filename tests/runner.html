@@ -36,9 +36,13 @@
     'loader-with-modules.html'
   ];
 </script>
-<!-- splice out the "loader with modules" if modules are not supported -->
-<script nomodule>
-  window.suites.splice(window.suites.length - 1, 1);
+<!-- splice out "loader with modules" if dynamic imports are not supported -->
+<script>
+  try {
+    eval('import("")');
+  } catch (e) {
+    window.suites.splice(window.suites.length - 1, 1);
+  }
 </script>
 <script>
   WCT.loadSuites(window.suites);
