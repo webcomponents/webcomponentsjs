@@ -17,11 +17,11 @@
   var hasPromises = !!window.Promise;
 
   function fireEvent() {
+    window.WebComponents.ready = true;
     document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
   }
 
   function ready() {
-    window.WebComponents.ready = true;
     if (!hasPromises) {
       // convert tinyPromises into real Promises
       var resolver = new Promise(function(res) {
@@ -82,28 +82,28 @@
   window.WebComponents = window.WebComponents || {
     ready: false,
     whenLoaded: function(waitFn) {
-      // if handed a `waitFn`, execute that first before resolving whenLoaded promise
-      if (waitFn) {
-        return promise.then(function() {
-          var flushFn;
-          var resolved = false;
-          // execute `waitFn` before booting custom elements to optimize CustomElements polyfill work
-          if (customElements.polyfillWrapFlushCallback) {
-            customElements.polyfillWrapFlushCallback(function(flushCallback) {
-              flushFn = flushCallback;
-              if (resolved) {
-                flushFn();
-              }
-            });
-          }
-          return Promise.resolve().then(waitFn).then(function(resolvedValue) {
-            resolved = true;
-            flushFn && flushFn();
-            return resolvedValue;
-          });
-        });
+      if (!waitFn) {
+        return promise;
       }
-      return promise;
+      // if handed a `waitFn`, execute that first before resolving whenLoaded promise
+      return promise.then(function() {
+        var flushFn;
+        var resolved = false;
+        // execute `waitFn` before booting custom elements to optimize CustomElements polyfill work
+        if (customElements.polyfillWrapFlushCallback) {
+          customElements.polyfillWrapFlushCallback(function(flushCallback) {
+            flushFn = flushCallback;
+            if (resolved) {
+              flushFn();
+            }
+          });
+        }
+        return Promise.resolve().then(waitFn).then(function(resolvedValue) {
+          resolved = true;
+          flushFn && flushFn();
+          return resolvedValue;
+        });
+      });
     }
   };
   var name = 'webcomponents-loader.js';
@@ -127,6 +127,7 @@
   if (polyfills.length) {
     var script = document.querySelector('script[src*="' + name +'"]');
     var newScript = document.createElement('script');
+    newScript.setAttribute('async', '');
     // Load it from the right place.
     var replacement = 'bundles/webcomponents-' + polyfills.join('-') + '.js';
     var url = script.src.replace(name, replacement);
