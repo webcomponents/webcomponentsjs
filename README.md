@@ -7,6 +7,9 @@ webcomponents.js (v1 spec polyfills)
 > **Note**. For polyfills that work with the older Custom Elements and Shadow DOM v0 specs,
 see the [v0 branch](https://github.com/webcomponents/webcomponentsjs/tree/v0).
 
+> **Note**. For polyfills that include HTML Imports,
+see the [v1 branch](https://github.com/webcomponents/webcomponentsjs/tree/v1).
+
 A suite of polyfills supporting the [Web Components](http://webcomponents.org) specs:
 
 - **Custom Elements v1**: allows authors to define their own custom tags ([spec](https://w3c.github.io/webcomponents/spec/custom/), [tutorial](https://developers.google.com/web/fundamentals/getting-started/primers/customelements), [polyfill](https://github.com/webcomponents/custom-elements)).
@@ -25,8 +28,7 @@ For browsers that need it, there are also some minor polyfills included:
 
 The `webcomponents-bundle.js` contains all of the web components polyfills and is
 suitable for use on any supported browser. All of the polyfill code will be loaded
-but each polyfill will only be used if necessary. If the browser supports a native
-feature for which a polyfill has been loaded, the native feature will be used.
+but each polyfill will only be used based on feature detection.
 The bundle includes Custom Elements, Shady DOM/CSS and generic platform polyfills
 (such as ES6 Promise, Constructable events, etc.) (needed by Internet Explorer 11),
 and Template (needed by IE 11 and Edge).
@@ -36,21 +38,12 @@ that is not needed on most modern browsers, slowing page load. For best performa
 use the `webcomponents-loader.js`.
 
 ### Using `webcomponents-loader.js`
+
 The `webcomponents-loader.js` is a client-side loader that dynamically loads the
 minimum polyfill bundle, using feature detection. Note that because the bundle will be
-loaded asynchronously, scripts that depend on webcomponents APIs must be specfically loaded
-using the `WebComponents.whenLoaded` method. This method should load any script
-modules that need the polyfills (typically via `import('my-script.js')) and
-must return a promise that resolves when all scripts have loaded.
-
-You can then wait for the `WebComponentsReady` event to safely run code that
-depends on custom elements having upgraded. Specifcally, this event is fired
-after (1) the polyfills to have executed, (2) any scripts loaded with `whenLoaded`
-have executed, and (3) any custom elements on the page have upgraded.
-
-Additionally, you can check if `window.WebComponents` exists to know if the
-`WebComponentsReady` event will fire, and you can check if `window.WebComponents.ready`
-is true to check if the `WebComponentsReady` event has already fired.
+loaded asynchronously, scripts that depend on webcomponents APIs *must* be loaded
+using `WebComponents.waitFor(loadCallback)`, for example custom elements definitions. The `loadCallback` function should load scripts that need the polyfills (typically via `import('my-script.js')`) and
+should return a promise that resolves when all scripts have loaded.
 
 Here's an example:
 
@@ -58,9 +51,9 @@ Here's an example:
 <!-- Load polyfills; note that "loader" will load these async -->
 <script src="node_modules/webcomponentsjs/webcomponents-loader.js" defer></script>
 
-<!-- Load a custom element definitions in `whenLoaded` and return a promise -->
+<!-- Load a custom element definitions in `waitFor` and return a promise -->
 <script type="module">
-  WebComponents.whenLoaded(() => {
+  WebComponents.waitFor(() => {
     // At this point we are guaranteed that all required polyfills have
     // loaded, and can use web components API's.
     // The standard pattern is to load element definitions that call
@@ -76,30 +69,14 @@ Here's an example:
 <my-element></my-element>
 ```
 
-### Using feature specific bundles
-
-The polyfills are built (concatenated & minified) into several bundles that target
-different browsers and spec readiness (located under the `bundles` folder):
-
-- `bundles/webcomponents-sd.js` -- Shady DOM/CSS
-- `bundles/webcomponents-ce.js` -- Custom Elements
-- `bundles/webcomponents-sd-ce.js` -- Custom Elements and Shady DOM/CSS
-- `bundles/webcomponents-sd-ce-pf.js` -- Custom Elements, Shady DOM/CSS and generic platform polyfills (such as ES6 Promise, Constructable events, etc.) (needed by Internet Explorer 11), and Template (needed by IE 11 and Edge)
-
-If you are only targeting a specific browser, you can just use the bundle that's
-needed by it; alternatively, if your server is capable of serving different assets based on user agent, you can send the polyfill bundle that's necessary for the browser making that request.
-
 ### WebComponentsReady event
 
-The `WebComponentsReady` event is fired when polyfills and element script has loaded and custom elements have been upgraded.
-This event is generally not needed and instead the platform `customElements.whenDefined` API should be used to determine
-when a specific element is available; however, it may be useful in some cases like testing. Note that the event is fired
-only when using `webcomponents-bundle.js` or `webcomponents-loader.js` and not when feature specific bundles are used.
+The `WebComponentsReady` event is fired when polyfills and user scripts have loaded and custom elements have been upgraded. This event is generally not needed; however, it may be useful in some cases like testing. If imperative code should wait until a specific custom element definition has loaded, it can use the platform `customElements.whenDefined` API.
 
 ### `custom-elements-es5-adapter.js`
 According to the spec, only ES6 classes (https://html.spec.whatwg.org/multipage/scripting.html#custom-element-conformance) may be passed to the _native_ `customElements.define` API. For best performnace, ES6 should be served to browsers that support it, and ES5 code should be serve to those that don't. Since this may not always be possible, it may make sense to compile and serve ES5 to all browsers. However, ES5-style custom element classes will **not** work on browsers with native Custom Elements because ES5-style classes cannot properly extend ES6 classes, like `HTMLElement`.
 
-To work around this, load `custom-elements-es5-adapter.js` before defining Custom Elements.  This adapter will automatically wrap ES5
+To work around this, load `custom-elements-es5-adapter.js` before defining Custom Elements.  This adapter will automatically wrap ES5.
 
 **The adapter must NOT be compiled.**
 
@@ -131,7 +108,7 @@ Now you are ready to build the polyfills with:
     # install dependencies
     npm install
     # build
-    gulp
+    npm run build
 
 The builds will be placed into the root directory.
 
@@ -150,9 +127,7 @@ Copyright (c) 2015 The Polymer Authors. All rights reserved.
 * The HTML Imports polyfill has been removed. Given that ES modules have shipped in
 most browsers, the expectation is that web components code will be loaded via
 ES modules.
-* The `WebComponentsReady` event has been removed. This was primarily a signal
-that polyfilled HTML Imports had loaded and custom elements had upgraded. Instead,
-custom elements provides a `customElements.whenDefined` method for this functionality.
+* When using `webcomponents-loader.js`, scripts that rely on the polyfills *must* be loaded using `WebComponents.waitFor(loadCallback)`.
 
 ## Known Issues
 
