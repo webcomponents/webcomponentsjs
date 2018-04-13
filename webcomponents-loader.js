@@ -15,6 +15,7 @@
   var whenLoadedFns = [];
 
   function fireEvent() {
+    window.WebComponents.ready = true;
     document.dispatchEvent(new CustomEvent('WebComponentsReady', { bubbles: true }));
   }
 
@@ -54,7 +55,7 @@
 
   window.WebComponents = window.WebComponents || {
     ready: false,
-    whenLoaded: function(waitFn) {
+    waitFor: function(waitFn) {
       if (!waitFn) {
         return;
       }
@@ -97,10 +98,11 @@
     });
     document.head.appendChild(newScript);
   } else {
+    polyfillsLoaded = true;
     if (document.readyState === 'complete') {
       ready()
     } else {
-      window.addEventListener('load', ready)
+      window.addEventListener('DOMContentLoaded', ready)
     }
   }
 })();

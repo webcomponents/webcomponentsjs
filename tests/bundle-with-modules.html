@@ -14,17 +14,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <title>Test full bundle and modules</title>
   <meta charset="UTF-8">
   <script src="../webcomponents-bundle.js"></script>
-  <script>
-    WCT = {
-      waitFor(cb) {
-        if (document.readyState === 'complete') {
-          cb();
-        } else {
-          addEventListener('load', cb);
-        }
-      }
-    };
-  </script>
   <script src="../../web-component-tester/browser.js"></script>
   <script type="module" src="modules/module-a.js"></script>
 </head>

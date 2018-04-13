@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../webcomponents-loader.js"></script>
   <script>
     window.skipTests = false;
-    WebComponents.whenLoaded(() => {
+    WebComponents.waitFor(() => {
       return import('./modules/module-a.js').catch(() => {
         window.skipTests = true;
       });

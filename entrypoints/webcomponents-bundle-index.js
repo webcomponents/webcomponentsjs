@@ -19,31 +19,22 @@ import './webcomponents-sd-ce-pf-index.js';
 const customElements = window.customElements;
 const Template = window.HTMLTemplateElement;
 
+let shouldFlush = false;
+/** @type {?function()} */
+let flusher = null;
+
 if (customElements['polyfillWrapFlushCallback'] && Template.bootstrap) {
-  let shouldFlush = false;
-  /** @type {?function()} */
-  let flusher = null;
   customElements['polyfillWrapFlushCallback']((flush) => {
     flusher = flush;
     if (shouldFlush) {
       flush();
     }
   });
-  window.addEventListener('DOMContentLoaded', () => {
-    flusher && flusher();
-    shouldFlush = true;
-  });
 }
 
-function finish() {
-  requestAnimationFrame(() => {
-    window.WebComponents.ready = true;
-    document.dispatchEvent(new CustomEvent('WebComponentsReady', { bubbles: true }));
-  });
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('readystatechange', finish, { once: true });
-} else {
-  finish();
-}
+window.addEventListener('DOMContentLoaded', () => {
+  flusher && flusher();
+  shouldFlush = true;
+  window.WebComponents.ready = true;
+  document.dispatchEvent(new CustomEvent('WebComponentsReady', { bubbles: true }));
+});
