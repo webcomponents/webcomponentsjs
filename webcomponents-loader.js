@@ -10,100 +10,58 @@
 
 (function() {
   'use strict';
-  // global for (1) existence means `WebComponentsReady` will file,
-  // (2) WebComponents.ready == true means event has fired.
-  var resolve = null;
-  var promise = null;
-  var hasPromises = !!window.Promise;
+
+  var polyfillsLoaded = false;
+  var whenLoadedFns = [];
 
   function fireEvent() {
-    window.WebComponents.ready = true;
-    document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
+    document.dispatchEvent(new CustomEvent('WebComponentsReady', { bubbles: true }));
   }
 
   function ready() {
-    if (!hasPromises) {
-      // convert tinyPromises into real Promises
-      var resolver = new Promise(function(res) {
-        resolve = res;
-      });
-      convertFromTiny(promise, resolver);
-      promise = resolver;
-    }
     // bootstrap <template> elements before custom elements
     if (HTMLTemplateElement.bootstrap) {
       HTMLTemplateElement.bootstrap(window.document);
     }
-    resolve();
-    promise.then(function() {
-      if (document.readyState !== 'loading') {
-        fireEvent();
-      } else {
-        document.addEventListener('readystatechange', function rsc() {
-          document.removeEventListener('readystatechange', rsc);
-          fireEvent();
-        });
-      }
-    });
+    polyfillsLoaded = true;
+    runWhenLoadedFns().then(fireEvent);
   }
 
-  /*
-   * A tiny Promise shim used to collect `.then` and `.catch` calls off of `whenLoaded`
-   * After polyfill bundle is loaded, these will become real promises
-   */
-  function tinyPromise(passFn, failFn) {
-    this._passFn = passFn;
-    this._failFn = failFn;
-    this._childPromises = [];
-  }
-  tinyPromise.prototype.then = function(passFn, failFn) {
-    var next = new tinyPromise(passFn, failFn);
-    this._childPromises.push(next);
-    return next;
-  };
-  tinyPromise.prototype['catch'] = function(failFn) {
-    return this.then(undefined, failFn);
-  };
-
-  function convertFromTiny(tiny, parent) {
-    if (!tiny || !parent) {
-      return;
+  function runWhenLoadedFns() {
+    if (whenLoadedFns.length === 0) {
+      return Promise.resolve();
     }
-    var p = parent.then(tiny._passFn, tiny._failFn);
-    for (var i = 0; i < tiny._childPromises.length; i++) {
-      convertFromTiny(tiny._childPromises[i], p);
+    // execute `waitFn` before booting custom elements to optimize CustomElements polyfill work
+    var flushFn;
+    var resolved = false;
+    var done = function () {
+      resolved = true;
+      flushFn && flushFn();
+      whenLoadedFns.length = 0;
+    };
+    if (customElements.polyfillWrapFlushCallback) {
+      customElements.polyfillWrapFlushCallback(function (flushCallback) {
+        flushFn = flushCallback;
+        if (resolved) {
+          flushFn();
+        }
+      });
     }
+    return Promise.all(whenLoadedFns.map(function(fn) {
+      return fn instanceof Function ? fn() : fn;
+    })).then(done);
   }
-
-  promise = hasPromises ?
-    new Promise(function(res) { resolve = res }) :
-    new tinyPromise();
 
   window.WebComponents = window.WebComponents || {
     ready: false,
     whenLoaded: function(waitFn) {
       if (!waitFn) {
-        return promise;
+        return;
       }
-      // if handed a `waitFn`, execute that first before resolving whenLoaded promise
-      return promise.then(function() {
-        var flushFn;
-        var resolved = false;
-        // execute `waitFn` before booting custom elements to optimize CustomElements polyfill work
-        if (customElements.polyfillWrapFlushCallback) {
-          customElements.polyfillWrapFlushCallback(function(flushCallback) {
-            flushFn = flushCallback;
-            if (resolved) {
-              flushFn();
-            }
-          });
-        }
-        return Promise.resolve().then(waitFn).then(function(resolvedValue) {
-          resolved = true;
-          flushFn && flushFn();
-          return resolvedValue;
-        });
-      });
+      whenLoadedFns.push(waitFn);
+      if (polyfillsLoaded) {
+        runWhenLoadedFns();
+      }
     }
   };
   var name = 'webcomponents-loader.js';
@@ -127,7 +85,6 @@
   if (polyfills.length) {
     var script = document.querySelector('script[src*="' + name +'"]');
     var newScript = document.createElement('script');
-    newScript.setAttribute('async', '');
     // Load it from the right place.
     var replacement = 'bundles/webcomponents-' + polyfills.join('-') + '.js';
     var url = script.src.replace(name, replacement);
@@ -140,6 +97,10 @@
     });
     document.head.appendChild(newScript);
   } else {
-    ready();
+    if (document.readyState === 'complete') {
+      ready()
+    } else {
+      window.addEventListener('load', ready)
+    }
   }
 })();
