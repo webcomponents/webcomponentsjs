@@ -48,7 +48,7 @@
     if (document.readyState === 'loading' && ('import' in document.createElement('link'))) {
       document.write(newScript.outerHTML);
     } else {
-      document.head.appendChild(newScript);
+      script.parentElement.appendChild(newScript);
     }
   } else {
     // Ensure `WebComponentsReady` is fired also when there are no polyfills loaded.
