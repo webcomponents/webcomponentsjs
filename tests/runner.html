@@ -12,7 +12,7 @@
 <meta charset="utf-8">
 
 <!-- WebComponents -->
-<script src="../../web-component-tester/browser.js"></script>
+<script src="../node_modules/wct-browser-legacy/browser.js"></script>
 
 <script>
   window.suites = [
@@ -32,13 +32,14 @@
     // 'ce-import-upgrade-async.html',
     'promise.html',
     'bundle-with-modules.html',
-    'loader-with-modules.html'
+    'loader-with-modules.html',
+    'async-loader-with-modules.html'
   ];
 </script>
-<!-- splice out "loader with modules" if dynamic imports are not supported -->
+<!-- splice out "async loader with modules" if dynamic imports are not supported -->
 <script>
   try {
-    eval('import("")');
+    eval('import("").catch(function(){})');
   } catch (e) {
     window.suites.splice(window.suites.length - 1, 1);
   }

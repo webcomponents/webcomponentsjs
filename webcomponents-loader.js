@@ -13,10 +13,28 @@
 
   var polyfillsLoaded = false;
   var whenLoadedFns = [];
+  var allowUpgrades = false;
+  var flushFn;
 
   function fireEvent() {
     window.WebComponents.ready = true;
     document.dispatchEvent(new CustomEvent('WebComponentsReady', { bubbles: true }));
+  }
+
+  function batchCustomElements() {
+    if (window.customElements && customElements.polyfillWrapFlushCallback) {
+      customElements.polyfillWrapFlushCallback(function (flushCallback) {
+        flushFn = flushCallback;
+        if (allowUpgrades) {
+          flushFn();
+        }
+      });
+    }
+  }
+
+  function asyncReady() {
+    batchCustomElements();
+    ready();
   }
 
   function ready() {
@@ -29,25 +47,12 @@
   }
 
   function runWhenLoadedFns() {
-    if (whenLoadedFns.length === 0) {
-      return Promise.resolve();
-    }
-    // execute `waitFn` before booting custom elements to optimize CustomElements polyfill work
-    var flushFn;
-    var resolved = false;
-    var done = function () {
-      resolved = true;
-      flushFn && flushFn();
+    allowUpgrades = false;
+    var done = function() {
+      allowUpgrades = true;
       whenLoadedFns.length = 0;
+      flushFn && flushFn();
     };
-    if (customElements.polyfillWrapFlushCallback) {
-      customElements.polyfillWrapFlushCallback(function (flushCallback) {
-        flushFn = flushCallback;
-        if (resolved) {
-          flushFn();
-        }
-      });
-    }
     return Promise.all(whenLoadedFns.map(function(fn) {
       return fn instanceof Function ? fn() : fn;
     })).then(done);
@@ -65,6 +70,7 @@
       }
     }
   };
+
   var name = 'webcomponents-loader.js';
   // Feature detect which polyfill needs to be imported.
   var polyfills = [];
@@ -90,13 +96,20 @@
     var replacement = 'bundles/webcomponents-' + polyfills.join('-') + '.js';
     var url = script.src.replace(name, replacement);
     newScript.src = url;
-    newScript.addEventListener('load', function() {
-      ready();
-    });
-    newScript.addEventListener('error', function() {
-     throw new Error('Could not load polyfill ' + url);
-    });
-    document.head.appendChild(newScript);
+    // if readyState is 'loading', this script is synchronous
+    if (document.readyState === 'loading') {
+      document.write(newScript.outerHTML);
+      batchCustomElements();
+      document.addEventListener('DOMContentLoaded', ready);
+    } else {
+      newScript.addEventListener('load', function () {
+        asyncReady();
+      });
+      newScript.addEventListener('error', function () {
+        throw new Error('Could not load polyfill bundle' + url);
+      });
+      document.head.appendChild(newScript);
+    }
   } else {
     polyfillsLoaded = true;
     if (document.readyState === 'complete') {

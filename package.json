@@ -23,7 +23,7 @@
   },
   "scripts": {
     "build": "gulp",
-    "test": "wct"
+    "test": "wct --npm"
   },
   "homepage": "https://webcomponents.org/polyfills",
   "devDependencies": {
@@ -48,7 +48,8 @@
     "run-sequence": "^2.2.1",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^1.1.2",
-    "web-component-tester": "^6.5.0"
+    "wct-browser-legacy": "0.0.1-pre.12",
+    "web-component-tester": "^6.6.0-pre.5"
   },
   "publishConfig": {
     "access": "public"

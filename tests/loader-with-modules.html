@@ -13,17 +13,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <head>
   <title>Test full bundle and modules</title>
   <meta charset="UTF-8">
-  <!-- <script>WCT={waitFor(cb){cb()}}</script> -->
   <script src="../webcomponents-loader.js"></script>
-  <script>
-    window.skipTests = false;
-    WebComponents.waitFor(() => {
-      return import('./modules/module-a.js').catch(() => {
-        window.skipTests = true;
-      });
-    });
-  </script>
-  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+  <script type="module" src="modules/module-a.js"></script>
 </head>
 
 <body>
@@ -34,9 +26,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     suite('Modules and Bundle', function () {
       test('parsed element upgraded', function() {
-        if (window.skipTests) {
-          this.skip();
-        }
         let el = document.querySelector('#parsed');
         let moduleA = customElements.get('module-a');
         assert.instanceOf(el, moduleA);
@@ -44,9 +33,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assertComputed(el.shadowRoot.querySelector('module-a-sub'), '2px');
       });
       test('dynamic elements upgrade', function () {
-        if (window.skipTests) {
-          this.skip();
-        }
         let el = document.createElement('module-a');
         document.body.appendChild(el);
         let moduleA = customElements.get('module-a');
