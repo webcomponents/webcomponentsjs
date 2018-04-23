@@ -6,9 +6,7 @@ addons:
   firefox: latest
   chrome: stable
 script:
-- npm install -g bower
-- bower install
-- wct -l chrome -l firefox
+- wct --npm -l chrome -l firefox
 - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct -s 'windows 10/microsoftedge@16' -s 'windows 10/microsoftedge@15' -s 'windows 10/microsoftedge@14' -s 'windows 8.1/internet explorer@11' -s 'macos 10.13/safari@11' -s 'macos 10.12/safari@10' -s 'os x 10.11/safari@9' -s 'Linux/chrome@41'; fi
 env:
   global:
