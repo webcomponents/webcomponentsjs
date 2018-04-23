@@ -39,7 +39,7 @@
 
   function ready() {
     // bootstrap <template> elements before custom elements
-    if (HTMLTemplateElement.bootstrap) {
+    if (window.HTMLTemplateElement && HTMLTemplateElement.bootstrap) {
       HTMLTemplateElement.bootstrap(window.document);
     }
     polyfillsLoaded = true;
@@ -60,6 +60,7 @@
 
   window.WebComponents = window.WebComponents || {
     ready: false,
+    _batchCustomElements: batchCustomElements,
     waitFor: function(waitFn) {
       if (!waitFn) {
         return;
@@ -98,8 +99,9 @@
     newScript.src = url;
     // if readyState is 'loading', this script is synchronous
     if (document.readyState === 'loading') {
+      // make sure custom elements are batched whenever parser gets to the injected script
+      newScript.setAttribute('onload', 'window.WebComponents._batchCustomElements()');
       document.write(newScript.outerHTML);
-      batchCustomElements();
       document.addEventListener('DOMContentLoaded', ready);
     } else {
       newScript.addEventListener('load', function () {
