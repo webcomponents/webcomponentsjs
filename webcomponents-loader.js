@@ -55,7 +55,9 @@
     };
     return Promise.all(whenLoadedFns.map(function(fn) {
       return fn instanceof Function ? fn() : fn;
-    })).then(done);
+    })).then(done, function(err) {
+      console.error(err);
+    });
   }
 
   window.WebComponents = window.WebComponents || {
@@ -83,7 +85,7 @@
     polyfills.push('ce');
   }
   // NOTE: any browser that does not have template or ES6 features
-  // must load the full suite (called `lite` for legacy reasons) of polyfills.
+  // must load the full suite of polyfills.
   if (!('content' in document.createElement('template')) || !window.Promise || !Array.from ||
     // Edge has broken fragment cloning which means you cannot clone template.content
     !(document.createDocumentFragment().cloneNode() instanceof DocumentFragment)) {
