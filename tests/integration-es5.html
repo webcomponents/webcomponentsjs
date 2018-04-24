@@ -11,7 +11,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <html>
   <head>
     <title>Integration Test</title>
-    <script src="../custom-elements-es5-adapter.js"></script>
+    <script>
+      if (window.customElements) {
+        var script = document.createElement('script');
+        script.src = '../custom-elements-es5-adapter.js';
+        document.write(script.outerHTML);
+      }
+    </script>
     <script src="../webcomponents-loader.js"></script>
     <script src="./wct-config.js"></script>
     <script src="../node_modules/wct-browser-legacy/browser.js"></script>
