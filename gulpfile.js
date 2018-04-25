@@ -16,8 +16,7 @@
 const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
-const rollup = require('rollup-stream');
-const source = require('vinyl-source-stream');
+const rollup = require('gulp-rollup');
 const del = require('del');
 const runseq = require('run-sequence');
 const closure = require('google-closure-compiler').gulp();
@@ -30,16 +29,20 @@ function debugify(sourceName, fileName, extraRollupOptions) {
     fileName = sourceName;
   }
 
+  const entry = `./entrypoints/${sourceName}-index.js`;
   const options = {
-    entry: `./entrypoints/${sourceName}-index.js`,
-    format: 'iife',
-    moduleName: 'webcomponentsjs'
+    input: entry,
+    output: {
+      format: 'iife',
+      name: 'webcomponentsjs'
+    },
+    allowRealFiles: true
   };
 
   Object.assign(options, extraRollupOptions);
 
-  return rollup(options)
-  .pipe(source(`${sourceName}-index.js`), 'entrypoints')
+  return gulp.src(entry)
+  .pipe(rollup(options))
   .pipe(rename(`${fileName}.js`))
   .pipe(gulp.dest(outDir))
 }
@@ -52,7 +55,6 @@ function closurify(sourceName, fileName) {
   }
 
   const closureOptions = {
-    new_type_inf: true,
     compilation_level: 'ADVANCED',
     language_in: 'ES6_STRICT',
     language_out: 'ES5_STRICT',
@@ -95,7 +97,9 @@ gulp.task('debugify-ce', () => {
 gulp.task('debugify-sd-ce-pf', () => {
   // The es6-promise polyfill needs to set the correct context.
   // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
-  const extraOptions = {context: 'window'};
+  const extraOptions = {
+    context: 'window'
+  };
   return debugify('webcomponents-sd-ce-pf', null, extraOptions)
 });
 
@@ -110,7 +114,10 @@ gulp.task('debugify-sd', () => {
 gulp.task('debugify-bundle', () => {
   // The es6-promise polyfill needs to set the correct context.
   // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
-  return debugify('webcomponents-bundle', 'webcomponents-bundle', {context: 'window'});
+  const extraOptions = {
+    context: 'window'
+  };
+  return debugify('webcomponents-bundle', 'webcomponents-bundle', extraOptions);
 })
 
 gulp.task('closurify-ce', () => {

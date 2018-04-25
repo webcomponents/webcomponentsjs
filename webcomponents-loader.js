@@ -86,7 +86,7 @@
   }
   // NOTE: any browser that does not have template or ES6 features
   // must load the full suite of polyfills.
-  if (!('content' in document.createElement('template')) || !window.Promise || !Array.from ||
+  if (!('content' in document.createElement('template')) || !window.Promise || !Array.from || !window.URL ||
     // Edge has broken fragment cloning which means you cannot clone template.content
     !(document.createDocumentFragment().cloneNode() instanceof DocumentFragment)) {
     polyfills = ['sd-ce-pf'];

@@ -21,4 +21,5 @@ import '../src/flag-parser.js';
 import '../node_modules/@webcomponents/shadydom/src/shadydom.js';
 import '../node_modules/@webcomponents/custom-elements/src/custom-elements.js';
 import '../node_modules/@webcomponents/shadycss/entrypoints/scoping-shim.js';
+import '../node_modules/@webcomponents/url/url.js';
 import '../src/unresolved.js';

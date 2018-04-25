@@ -34,16 +34,16 @@
     'promise.html',
     'bundle-with-modules.html',
     'loader-with-modules.html',
-    'async-loader-with-modules.html'
+    'async-loader-with-modules.html',
+    'url.html'
   ];
 </script>
-<!-- splice out "async loader with modules" if dynamic imports are not supported -->
 <script>
   try {
+    // include `async loader` if `import()` function is supported.
     eval('import("").catch(function(){})');
-  } catch (e) {
-    window.suites.splice(window.suites.length - 1, 1);
-  }
+    window.suites.push('async-loader-with-modules.html');
+  } catch (e) {} // eslint-disable-line no-empty
 </script>
 <script>
   WCT.loadSuites(window.suites);
