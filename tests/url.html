@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
 @license
-Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
@@ -11,31 +11,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <html>
 
 <head>
-  <title>Force polyfills</title>
-  <meta charset="UTF-8">
-  <script>
-    window.ShadyDOM = {
-      force: true
-    };
-    if (window.customElements) customElements.forcePolyfill = true;
-    window.webComponentsReadyCount = 0;
-    window.addEventListener('WebComponentsReady', function() {
-      window.webComponentsReadyCount++;
-    });
-  </script>
-  <script src="../webcomponents-loader.js"></script>
+  <title>URL Polyfill</title>
+  <script id="loader" src="../webcomponents-loader.js"></script>
   <script src="./wct-config.js"></script>
   <script src="../node_modules/wct-browser-legacy/browser.js"></script>
 </head>
-
 <body>
   <script>
-    suite('Force polyfill', function() {
-      test('expected boot', function() {
-        assert.equal(window.webComponentsReadyCount, 1, 'failed to fire WebComponentsReady');
+    suite('URL', function() {
+      test('URL exits on window', function() {
+        assert(window.URL);
+      });
+      test('URL constructor works', function() {
+        assert.doesNotThrow(() => new URL('http://foo.com'));
+      });
+      test('URL does resolution correctly', function () {
+        const loader = document.querySelector('script#loader');
+        const u = new URL('../webcomponents-loader.js', location.href);
+        assert.equal(loader.src, u.href);
       });
     });
   </script>
 </body>
-
 </html>

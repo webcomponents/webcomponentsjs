@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+ * Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
  * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
  * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
  * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
@@ -10,15 +10,103 @@
 
 (function() {
   'use strict';
-  // global for (1) existence means `WebComponentsReady` will fire,
-  // (2) WebComponents.ready == true means event has fired.
-  window.WebComponents = window.WebComponents || {};
+
+  /**
+   * Basic flow of the loader process
+   *
+   * There are 4 flows the loader can take when booting up
+   *
+   * - Synchronous script, no polyfills needed
+   *   - wait for `DOMContentLoaded`
+   *   - run callbacks passed to `waitFor`
+   *   - fire WCR event
+   *
+   * - Synchronous script, polyfills needed
+   *   - document.write the polyfill bundle
+   *   - wait on the `load` event of the bundle to batch Custom Element upgrades
+   *   - wait for `DOMContentLoaded`
+   *   - run callbacks passed to `waitFor`
+   *   - fire WCR event
+   *
+   * - Asynchronous script, no polyfills needed
+   *   - fire WCR event, as there could not be any callbacks passed to `waitFor`
+   *
+   * - Asynchronous script, polyfills needed
+   *   - Append the polyfill bundle script
+   *   - wait for `load` event of the bundle
+   *   - batch Custom Element Upgrades
+   *   - run callbacks pass to `waitFor`
+   *   - fire WCR event
+   */
+
+  var polyfillsLoaded = false;
+  var whenLoadedFns = [];
+  var allowUpgrades = false;
+  var flushFn;
+
+  function fireEvent() {
+    window.WebComponents.ready = true;
+    document.dispatchEvent(new CustomEvent('WebComponentsReady', { bubbles: true }));
+  }
+
+  function batchCustomElements() {
+    if (window.customElements && customElements.polyfillWrapFlushCallback) {
+      customElements.polyfillWrapFlushCallback(function (flushCallback) {
+        flushFn = flushCallback;
+        if (allowUpgrades) {
+          flushFn();
+        }
+      });
+    }
+  }
+
+  function asyncReady() {
+    batchCustomElements();
+    ready();
+  }
+
+  function ready() {
+    // bootstrap <template> elements before custom elements
+    if (window.HTMLTemplateElement && HTMLTemplateElement.bootstrap) {
+      HTMLTemplateElement.bootstrap(window.document);
+    }
+    polyfillsLoaded = true;
+    runWhenLoadedFns().then(fireEvent);
+  }
+
+  function runWhenLoadedFns() {
+    allowUpgrades = false;
+    var done = function() {
+      allowUpgrades = true;
+      whenLoadedFns.length = 0;
+      flushFn && flushFn();
+    };
+    return Promise.all(whenLoadedFns.map(function(fn) {
+      return fn instanceof Function ? fn() : fn;
+    })).then(function() {
+      done();
+    }).catch(function(err) {
+      console.error(err);
+    });
+  }
+
+  window.WebComponents = window.WebComponents || {
+    ready: false,
+    _batchCustomElements: batchCustomElements,
+    waitFor: function(waitFn) {
+      if (!waitFn) {
+        return;
+      }
+      whenLoadedFns.push(waitFn);
+      if (polyfillsLoaded) {
+        runWhenLoadedFns();
+      }
+    }
+  };
+
   var name = 'webcomponents-loader.js';
   // Feature detect which polyfill needs to be imported.
   var polyfills = [];
-  if (!('import' in document.createElement('link'))) {
-    polyfills.push('hi');
-  }
   if (!('attachShadow' in Element.prototype && 'getRootNode' in Element.prototype) ||
     (window.ShadyDOM && window.ShadyDOM.force)) {
     polyfills.push('sd');
@@ -27,48 +115,41 @@
     polyfills.push('ce');
   }
   // NOTE: any browser that does not have template or ES6 features
-  // must load the full suite (called `lite` for legacy reasons) of polyfills.
-  if (!('content' in document.createElement('template')) || !window.Promise || !Array.from ||
+  // must load the full suite of polyfills.
+  if (!('content' in document.createElement('template')) || !window.Promise || !Array.from || !window.URL ||
     // Edge has broken fragment cloning which means you cannot clone template.content
     !(document.createDocumentFragment().cloneNode() instanceof DocumentFragment)) {
-    polyfills = ['lite'];
+    polyfills = ['sd-ce-pf'];
   }
 
   if (polyfills.length) {
     var script = document.querySelector('script[src*="' + name +'"]');
     var newScript = document.createElement('script');
     // Load it from the right place.
-    var replacement = 'webcomponents-' + polyfills.join('-') + '.js';
+    var replacement = 'bundles/webcomponents-' + polyfills.join('-') + '.js';
     var url = script.src.replace(name, replacement);
     newScript.src = url;
-    // NOTE: this is required to ensure the polyfills are loaded before
-    // *native* html imports load on older Chrome versions. This *is* CSP
-    // compliant since CSP rules must have allowed this script to run.
-    // In all other cases, this can be async.
-    if (document.readyState === 'loading' && ('import' in document.createElement('link'))) {
+    // if readyState is 'loading', this script is synchronous
+    if (document.readyState === 'loading') {
+      // make sure custom elements are batched whenever parser gets to the injected script
+      newScript.setAttribute('onload', 'window.WebComponents._batchCustomElements()');
       document.write(newScript.outerHTML);
+      document.addEventListener('DOMContentLoaded', ready);
     } else {
+      newScript.addEventListener('load', function () {
+        asyncReady();
+      });
+      newScript.addEventListener('error', function () {
+        throw new Error('Could not load polyfill bundle' + url);
+      });
       document.head.appendChild(newScript);
     }
   } else {
-    // Ensure `WebComponentsReady` is fired also when there are no polyfills loaded.
-    // however, we have to wait for the document to be in 'interactive' state,
-    // otherwise a rAF may fire before scripts in <body>
-
-    var fire = function() {
-      requestAnimationFrame(function() {
-        window.WebComponents.ready = true;
-        document.dispatchEvent(new CustomEvent('WebComponentsReady', {bubbles: true}));
-      });
-    };
-
-    if (document.readyState !== 'loading') {
-      fire();
+    polyfillsLoaded = true;
+    if (document.readyState === 'complete') {
+      fireEvent()
     } else {
-      document.addEventListener('readystatechange', function wait() {
-        fire();
-        document.removeEventListener('readystatechange', wait);
-      });
+      window.addEventListener('DOMContentLoaded', ready)
     }
   }
 })();
