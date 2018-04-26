@@ -83,7 +83,9 @@
     };
     return Promise.all(whenLoadedFns.map(function(fn) {
       return fn instanceof Function ? fn() : fn;
-    })).then(done, function(err) {
+    })).then(function() {
+      done();
+    }).catch(function(err) {
       console.error(err);
     });
   }
