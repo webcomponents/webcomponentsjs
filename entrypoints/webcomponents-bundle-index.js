@@ -17,13 +17,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import './webcomponents-sd-ce-pf-index.js';
 
 const customElements = window.customElements;
-const Template = window.HTMLTemplateElement;
 
 let shouldFlush = false;
 /** @type {?function()} */
 let flusher = null;
 
-if (customElements['polyfillWrapFlushCallback'] && Template.bootstrap) {
+if (customElements['polyfillWrapFlushCallback']) {
   customElements['polyfillWrapFlushCallback']((flush) => {
     flusher = flush;
     if (shouldFlush) {

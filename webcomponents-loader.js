@@ -11,6 +11,34 @@
 (function() {
   'use strict';
 
+  /**
+   * Basic flow of the loader process
+   *
+   * There are 4 flows the loader can take when booting up
+   *
+   * - Synchronous script, no polyfills needed
+   *   - wait for `DOMContentLoaded`
+   *   - run callbacks passed to `waitFor`
+   *   - fire WCR event
+   *
+   * - Synchronous script, polyfills needed
+   *   - document.write the polyfill bundle
+   *   - wait on the `load` event of the bundle to batch Custom Element upgrades
+   *   - wait for `DOMContentLoaded`
+   *   - run callbacks passed to `waitFor`
+   *   - fire WCR event
+   *
+   * - Asynchronous script, no polyfills needed
+   *   - fire WCR event, as there could not be any callbacks passed to `waitFor`
+   *
+   * - Asynchronous script, polyfills needed
+   *   - Append the polyfill bundle script
+   *   - wait for `load` event of the bundle
+   *   - batch Custom Element Upgrades
+   *   - run callbacks pass to `waitFor`
+   *   - fire WCR event
+   */
+
   var polyfillsLoaded = false;
   var whenLoadedFns = [];
   var allowUpgrades = false;
@@ -117,7 +145,7 @@
   } else {
     polyfillsLoaded = true;
     if (document.readyState === 'complete') {
-      ready()
+      fireEvent()
     } else {
       window.addEventListener('DOMContentLoaded', ready)
     }

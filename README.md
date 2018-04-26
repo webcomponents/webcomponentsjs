@@ -21,6 +21,7 @@ For browsers that need it, there are also some minor polyfills included:
 - [`Promise`](https://github.com/stefanpenner/es6-promise)
 - `Event`, `CustomEvent`, `MouseEvent` constructors and `Object.assign`, `Array.from`
 (see [webcomponents-platform](https://github.com/webcomponents/webcomponents-platform))
+- [`URL constructor`](https://github.com/webcomponents/URL)
 
 ## How to use
 
@@ -37,12 +38,52 @@ The `webcomponents-bundle.js` is very simple to use but it does load code
 that is not needed on most modern browsers, slowing page load. For best performance,
 use the `webcomponents-loader.js`.
 
+Here's an example:
+
+```html
+<!-- load webcomponents bundle, which includes all the necessary polyfills -->
+<script src="node_modules/webcomponentsjs/webcomponents-bundle.js"></script>
+
+<!-- load the element -->
+<script type="module" src="my-element.js"></script>
+
+<!-- use the element -->
+<my-element></my-element>
+```
+
 ### Using `webcomponents-loader.js`
 
 The `webcomponents-loader.js` is a client-side loader that dynamically loads the
-minimum polyfill bundle, using feature detection. Note that because the bundle will be
-loaded asynchronously, scripts that depend on webcomponents APIs *must* be loaded
-using `WebComponents.waitFor(loadCallback)`, for example custom elements definitions. The `loadCallback` function should load scripts that need the polyfills (typically via `import('my-script.js')`) and
+minimum polyfill bundle, using feature detection.
+
+`webcomponents-loader.js` can be loaded synchronously, or asynchronously depending on your needs.
+
+#### Synchronous
+When loaded synchronously, `webcomponents-loader.js` behaves similarly to `webcomponents-bundle.js`.
+
+The appropriate bundle will be loaded with `document.write()` to ensure that WebComponent polyfills are available for subsequent scripts and modules.
+
+Here's an example:
+
+```html
+<!-- load the webcomponents loader, which injects the necessary polyfill bundle -->
+<script src="node_modules/webcomponentsjs/webcomponents-loader.js"></script>
+
+<!-- load the element -->
+<script type="module" src="my-element.js"></script>
+
+<!-- use the element -->
+<my-element></my-element>
+```
+
+#### Asynchronous
+When loaded asychronously with the `defer` attribute, polyfill bundles will be loaded asynchronously,
+which means that scripts and modules that depend on webcomponents APIs *must* be loaded
+using `WebComponents.waitFor` function.
+
+The `WebComponents.waitFor` function takes a callback function as an argument, and will evaluate that callback after the polyfill bundle has been loaded.
+
+The callback function should load scripts that need the polyfills (typically via `import('my-script.js')`) and
 should return a promise that resolves when all scripts have loaded.
 
 Here's an example:
@@ -67,6 +108,27 @@ Here's an example:
 
 <!-- Use the custom element -->
 <my-element></my-element>
+```
+
+The `WebComponents.waitFor` function may be called multiple times, and the callback functions will be processed in order.
+
+Here's a more complicated example:
+
+```html
+<!-- Load polyfills; note that "loader" will load these async -->
+<script src="node_modules/webcomponentsjs/webcomponents-loader.js" defer></script>
+
+<script type="module">
+  WebComponents.waitFor(async () => {
+    if (!window.fetch) {
+      await import('node_modules/fetch-polyfill/fetch.js');
+    }
+    return import('my-element.js');
+  })
+</script>
+
+<script type="module">
+</script>
 ```
 
 ### WebComponentsReady event
@@ -127,7 +189,7 @@ Copyright (c) 2015 The Polymer Authors. All rights reserved.
 * The HTML Imports polyfill has been removed. Given that ES modules have shipped in
 most browsers, the expectation is that web components code will be loaded via
 ES modules.
-* When using `webcomponents-loader.js`, scripts that rely on the polyfills *must* be loaded using `WebComponents.waitFor(loadCallback)`.
+* When using `webcomponents-loader.js` with the `defer` attribute, scripts that rely on the polyfills *must* be loaded using `WebComponents.waitFor(loadCallback)`.
 
 ## Known Issues
 
