@@ -33,7 +33,7 @@
     "@webcomponents/shadycss": "^1.2.0-0",
     "@webcomponents/shadydom": "^1.0.14",
     "@webcomponents/template": "^1.2.4",
-    "@webcomponents/url": "^0.7.0",
+    "@webcomponents/url": "^0.7.1",
     "@webcomponents/webcomponents-platform": "^1.0.0",
     "babel-preset-minify": "^0.4.0",
     "del": "^3.0.0",
