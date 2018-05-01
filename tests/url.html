@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <head>
   <title>URL Polyfill</title>
+  <script>window.URL = null</script>
   <script id="loader" src="../webcomponents-loader.js"></script>
   <script src="./wct-config.js"></script>
   <script src="../node_modules/wct-browser-legacy/browser.js"></script>
@@ -29,6 +30,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         const loader = document.querySelector('script#loader');
         const u = new URL('../webcomponents-loader.js', location.href);
         assert.equal(loader.src, u.href);
+      });
+      test('URL has hash', function() {
+        const u = new URL('#hash', document.baseURI);
+        assert.equal(u.hash, '#hash');
+      });
+
+      test('URL has search', function() {
+        const u = new URL('?search', document.baseURI);
+        assert.equal(u.search, '?search');
       });
     });
   </script>
