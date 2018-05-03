@@ -24,6 +24,10 @@ For browsers that need it, there are also some minor polyfills included:
 - [`URL constructor`](https://github.com/webcomponents/URL)
 
 ## How to use
+### Install polyfills
+```bash
+npm install @webcomponents/webcomponentsjs
+```
 
 ### Using `webcomponents-bundle.js`
 
