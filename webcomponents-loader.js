@@ -136,7 +136,7 @@
 
   // NOTE: any browser that does not have template or ES6 features
   // must load the full suite of polyfills.
-  if (!window.Promise || !Array.from || !window.URL || needsTemplate) {
+  if (!window.Promise || !Array.from || !window.URL || !window.Symbol || needsTemplate) {
     polyfills = ['sd-ce-pf'];
   }
 
@@ -167,7 +167,12 @@
     if (document.readyState === 'complete') {
       fireEvent()
     } else {
-      window.addEventListener('DOMContentLoaded', ready)
+      // this script may come between DCL and load, so listen for both, and cancel load listener if DCL fires
+      window.addEventListener('load', ready);
+      window.addEventListener('DOMContentLoaded', function() {
+        window.removeEventListener('load', ready);
+        ready();
+      })
     }
   }
 })();
