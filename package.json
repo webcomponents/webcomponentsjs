@@ -50,8 +50,8 @@
     "rollup-plugin-node-resolve": "^3.3.0",
     "run-sequence": "^2.2.1",
     "vinyl-buffer": "^1.0.1",
-    "wct-browser-legacy": "0.0.1-pre.12",
-    "web-component-tester": "^6.6.0-pre.5"
+    "wct-browser-legacy": "^1.0.0",
+    "web-component-tester": "^6.6.0"
   },
   "publishConfig": {
     "access": "public"
