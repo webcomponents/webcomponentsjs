@@ -116,7 +116,7 @@
   }
   // NOTE: any browser that does not have template or ES6 features
   // must load the full suite of polyfills.
-  if (!('content' in document.createElement('template')) || !window.Promise || !Array.from || !window.URL ||
+  if (!('content' in document.createElement('template')) || !window.Promise || !Array.from || !window.URL || ! window.Symbol ||
     // Edge has broken fragment cloning which means you cannot clone template.content
     !(document.createDocumentFragment().cloneNode() instanceof DocumentFragment)) {
     polyfills = ['sd-ce-pf'];
@@ -149,7 +149,12 @@
     if (document.readyState === 'complete') {
       fireEvent()
     } else {
-      window.addEventListener('DOMContentLoaded', ready)
+      // this script may come between DCL and load, so listen for both, and cancel load listener if DCL fires
+      window.addEventListener('load', ready);
+      window.addEventListener('DOMContentLoaded', function() {
+        window.removeEventListener('load', ready);
+        ready();
+      })
     }
   }
 })();
