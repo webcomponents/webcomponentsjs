@@ -1,0 +1,48 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+
+<head>
+  <title>Test full bundle and modules</title>
+  <meta charset="UTF-8">
+  <script src="../webcomponents-loader.js"></script>
+  <script src="./wct-config.js"></script>
+  <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+  <script type="module" src="modules/module-a.js"></script>
+</head>
+
+<body>
+  <module-a id="parsed"></module-a>
+  <script>
+    function assertComputed(element, expected, prop = 'border-top-width') {
+      assert.equal(getComputedStyle(element).getPropertyValue(prop).trim(), expected);
+    }
+    suite('Modules and Bundle', function () {
+      test('parsed element upgraded', function() {
+        let el = document.querySelector('#parsed');
+        let moduleA = customElements.get('module-a');
+        assert.instanceOf(el, moduleA);
+        assertComputed(el, '5px');
+        assertComputed(el.shadowRoot.querySelector('module-a-sub'), '2px');
+      });
+      test('dynamic elements upgrade', function () {
+        let el = document.createElement('module-a');
+        document.body.appendChild(el);
+        let moduleA = customElements.get('module-a');
+        assert.instanceOf(el, moduleA);
+        assertComputed(el, '5px');
+        assertComputed(el.shadowRoot.querySelector('module-a-sub'), '2px');
+      });
+    });
+  </script>
+</body>
+
+</html>

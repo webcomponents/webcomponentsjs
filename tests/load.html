@@ -13,17 +13,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <title></title>
     <meta charset="UTF-8">
     <script>
-      window.addEventListener('HTMLImportsLoaded', function() {
-        window.importsOk = true;
-      });
       window.webComponentsReadyCount = 0;
       document.addEventListener('WebComponentsReady', function() {
         window.webComponentsReadyCount++;
       });
     </script>
     <script src="../webcomponents-loader.js"></script>
-    <script src="../../web-component-tester/browser.js"></script>
-    <link rel="import" href="imports/import-file.html">
+    <script src="./wct-config.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
   </head>
   <body>
     <my-element></my-element>
@@ -39,10 +36,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       suite('Loader', function() {
         test('expected boot', function() {
           assert.equal(window.webComponentsReadyCount, 1, 'failed to fire WebComponentsReady');
-          if (window.HTMLImports) {
-            assert.ok(window.importsOk, 'WebComponentsReady without HTMLImportsLoaded');
-          }
-          assert.ok(window.importTest, 'import failed to set global value');
         });
         test('WebComponentsReady was fired on document and bubbled', function() {
           assert.equal(document.querySelector('my-element').textContent, 'upgraded!');

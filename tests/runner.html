@@ -12,24 +12,34 @@
 <meta charset="utf-8">
 
 <!-- WebComponents -->
-<script src="../../web-component-tester/browser.js"></script>
+<script src="./wct-config.js"></script>
+<script src="../node_modules/wct-browser-legacy/browser.js"></script>
 
 <script>
-  WCT.loadSuites([
+  window.suites = [
     'template-and-CE.html',
-    // 'template-and-imports.html',
     'integration.html',
     'integration-es5.html',
     'load.html',
     'force-polyfills.html',
     'dev-loader.html',
     'dev-loader-swizzled.html',
-    // 'smoke.html',
-    // 'ce-import.html',
-    // 'ce-upgradedocumenttree.html',  // Does not exist in the v1 polyfill
-    'ce-upgrade-order.html',
-    // 'ce-import-upgrade.html',  // Order of upgrade/import is different in v1
-    // 'ce-import-upgrade-async.html',
-    'promise.html'
-  ]);
+    'promise.html',
+    'bundle-with-modules.html',
+    'loader-with-modules.html',
+    'url.html',
+    'symbol.html',
+    'bundle-after-load.html',
+    'loader-after-load.html'
+  ];
+</script>
+<script>
+  try {
+    // include `async loader` if `import()` function is supported.
+    eval('import("").catch(function(){})');
+    window.suites.push('async-loader-with-modules.html');
+  } catch (e) {} // eslint-disable-line no-empty
+</script>
+<script>
+  WCT.loadSuites(window.suites);
 </script>

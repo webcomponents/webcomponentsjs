@@ -16,38 +16,45 @@
 const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
-const rollup = require('rollup-stream');
-const source = require('vinyl-source-stream');
+const rollup = require('gulp-rollup');
 const del = require('del');
 const runseq = require('run-sequence');
 const closure = require('google-closure-compiler').gulp();
 const babel = require('rollup-plugin-babel');
 
 function debugify(sourceName, fileName, extraRollupOptions) {
-  if (!fileName)
-    fileName = sourceName;
+  const outDir = fileName ? '.' : './bundles';
 
+  if (!fileName) {
+    fileName = sourceName;
+  }
+
+  const entry = `./entrypoints/${sourceName}-index.js`;
   const options = {
-    entry: `./entrypoints/${sourceName}-index.js`,
-    format: 'iife',
-    moduleName: 'webcomponentsjs'
+    input: entry,
+    output: {
+      format: 'iife',
+      name: 'webcomponentsjs'
+    },
+    allowRealFiles: true
   };
 
   Object.assign(options, extraRollupOptions);
 
-  return rollup(options)
-  .pipe(source(`${sourceName}-index.js`), 'entrypoints')
-  .pipe(rename(fileName + '.js'))
-  .pipe(gulp.dest('./'))
+  return gulp.src(entry)
+  .pipe(rollup(options))
+  .pipe(rename(`${fileName}.js`))
+  .pipe(gulp.dest(outDir))
 }
 
 function closurify(sourceName, fileName) {
+  const outDir = fileName ? '.' : './bundles';
+
   if (!fileName) {
     fileName = sourceName;
   }
 
   const closureOptions = {
-    new_type_inf: true,
     compilation_level: 'ADVANCED',
     language_in: 'ES6_STRICT',
     language_out: 'ES5_STRICT',
@@ -60,10 +67,10 @@ function closurify(sourceName, fileName) {
     module_resolution: 'NODE',
     entry_point: `entrypoints/${sourceName}-index.js`,
     dependency_mode: 'STRICT',
+    process_common_js_modules: true,
     externs: [
       'externs/webcomponents.js',
       'node_modules/@webcomponents/custom-elements/externs/custom-elements.js',
-      'node_modules/@webcomponents/html-imports/externs/html-imports.js',
       'node_modules/@webcomponents/shadycss/externs/shadycss-externs.js',
       'node_modules/@webcomponents/shadydom/externs/shadydom.js'
     ]
@@ -72,6 +79,7 @@ function closurify(sourceName, fileName) {
   return gulp.src([
       'entrypoints/*.js',
       'src/*.js',
+      'node_modules/es-symbol/**/*.js',
       'node_modules/es6-promise/lib/es6-promise/**/*.js',
       'node_modules/@webcomponents/**/*.js',
       '!node_modules/@webcomponents/*/externs/*.js',
@@ -81,59 +89,58 @@ function closurify(sourceName, fileName) {
   .pipe(sourcemaps.init())
   .pipe(closure(closureOptions))
   .pipe(sourcemaps.write('.'))
-  .pipe(gulp.dest('.'));
+  .pipe(gulp.dest(outDir));
 }
 
-gulp.task('debugify-hi', () => {
-  return debugify('webcomponents-hi')
+gulp.task('debugify-ce', () => {
+  return debugify('webcomponents-ce')
 });
 
-gulp.task('debugify-hi-ce', () => {
-  return debugify('webcomponents-hi-ce')
-});
-
-gulp.task('debugify-hi-sd-ce', () => {
-  return debugify('webcomponents-hi-sd-ce')
-});
-
-gulp.task('debugify-hi-sd-ce-pf', () => {
+gulp.task('debugify-sd-ce-pf', () => {
   // The es6-promise polyfill needs to set the correct context.
   // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
-  const extraOptions = {context: 'window'};
-  return debugify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', extraOptions)
+  const extraOptions = {
+    context: 'window'
+  };
+  return debugify('webcomponents-sd-ce-pf', null, extraOptions)
 });
 
 gulp.task('debugify-sd-ce', () => {
   return debugify('webcomponents-sd-ce')
 });
 
-gulp.task('debugify-hi-sd', () => {
-  return debugify('webcomponents-hi-sd')
+gulp.task('debugify-sd', () => {
+  return debugify('webcomponents-sd')
 });
 
-gulp.task('closurify-hi', () => {
-  return closurify('webcomponents-hi')
+gulp.task('debugify-bundle', () => {
+  // The es6-promise polyfill needs to set the correct context.
+  // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
+  const extraOptions = {
+    context: 'window'
+  };
+  return debugify('webcomponents-bundle', 'webcomponents-bundle', extraOptions);
+})
+
+gulp.task('closurify-ce', () => {
+  return closurify('webcomponents-ce')
 });
 
-gulp.task('closurify-hi-ce', () => {
-  return closurify('webcomponents-hi-ce')
-});
-
-gulp.task('closurify-hi-sd-ce', () => {
-  return closurify('webcomponents-hi-sd-ce')
-});
-
-gulp.task('closurify-hi-sd-ce-pf', () => {
-  return closurify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite')
+gulp.task('closurify-sd-ce-pf', () => {
+  return closurify('webcomponents-sd-ce-pf')
 });
 
 gulp.task('closurify-sd-ce', () => {
   return closurify('webcomponents-sd-ce')
 });
 
-gulp.task('closurify-hi-sd', () => {
-  return closurify('webcomponents-hi-sd')
-})
+gulp.task('closurify-sd', () => {
+  return closurify('webcomponents-sd')
+});
+
+gulp.task('closurify-bundle', () => {
+  return closurify('webcomponents-bundle', 'webcomponents-bundle');
+});
 
 function singleLicenseComment() {
   let hasLicense = false;
@@ -151,37 +158,39 @@ const babelOptions = {
 };
 
 gulp.task('debugify-ce-es5-adapter', () => {
-  return debugify('custom-elements-es5-adapter', '', {plugins: [babel(babelOptions)]});
+  return debugify('custom-elements-es5-adapter', 'custom-elements-es5-adapter', {plugins: [babel(babelOptions)]});
 });
 
 gulp.task('default', ['closure']);
 
-gulp.task('clean-builds', () => {
-  return del(['custom-elements-es5-adapter.js{,.map}', 'webcomponents*.js{,.map}', '!webcomponents-loader.js']);
+gulp.task('clean', () => {
+  return del([
+    'custom-elements-es5-adapter.js{,.map}',
+    'bundles',
+    'webcomponents-bundle.js{,.map}'
+  ]);
 });
 
 gulp.task('debug', (cb) => {
   const tasks = [
-    'debugify-hi',
-    'debugify-hi-ce',
-    'debugify-hi-sd',
-    'debugify-hi-sd-ce',
-    'debugify-hi-sd-ce-pf',
+    'debugify-ce',
+    'debugify-sd',
     'debugify-sd-ce',
+    'debugify-sd-ce-pf',
+    'debugify-bundle',
     'debugify-ce-es5-adapter'
   ];
-  runseq('clean-builds', tasks, cb);
+  runseq('clean', tasks, cb);
 });
 
 gulp.task('closure', (cb) => {
   const tasks = [
-    'closurify-hi',
-    'closurify-hi-ce',
-    'closurify-hi-sd',
-    'closurify-hi-sd-ce',
-    'closurify-hi-sd-ce-pf',
+    'closurify-ce',
+    'closurify-sd',
     'closurify-sd-ce',
+    'closurify-sd-ce-pf',
+    'closurify-bundle',
     'debugify-ce-es5-adapter'
   ];
-  runseq('clean-builds', ...tasks, cb);
+  runseq('clean', ...tasks, cb);
 });
