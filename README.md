@@ -41,6 +41,8 @@ Here's an example:
 
 ```html
 <!-- load webcomponents bundle, which includes all the necessary polyfills -->
+<script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-bundle.js"></script>
+<!-- or -->
 <script src="node_modules/webcomponentsjs/webcomponents-bundle.js"></script>
 
 <!-- load the element -->
@@ -66,6 +68,8 @@ Here's an example:
 
 ```html
 <!-- load the webcomponents loader, which injects the necessary polyfill bundle -->
+<script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.js"></script>
+<!-- or -->
 <script src="node_modules/webcomponentsjs/webcomponents-loader.js"></script>
 
 <!-- load the element -->
@@ -89,6 +93,8 @@ Here's an example:
 
 ```html
 <!-- Load polyfills; note that "loader" will load these async -->
+<script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.js" defer></script>
+<!-- or -->
 <script src="node_modules/webcomponentsjs/webcomponents-loader.js" defer></script>
 
 <!-- Load a custom element definitions in `waitFor` and return a promise -->
@@ -115,6 +121,8 @@ Here's a more complicated example:
 
 ```html
 <!-- Load polyfills; note that "loader" will load these async -->
+<script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.js" defer></script>
+<!-- or -->
 <script src="node_modules/webcomponentsjs/webcomponents-loader.js" defer></script>
 
 <script type="module">
