@@ -200,6 +200,8 @@ ES modules.
 ### ShadowDOM CSS is not encapsulated out of the box <a id="shadycss"></a>
 The ShadowDOM polyfill is not able to encapsulate CSS in ShadowDOM out of the box. You need to use specific code from the ShadyCSS library, included with the polyfill. See [ShadyCSS instructions](https://github.com/webcomponents/shadycss).
 
+Alternative to `ShadowDOMPolyfill.wrap` might be to use `querySelector` method, which always wraps results. For instance, you can get wrapped `document` in a generic way without using polyfill-specific calls as `document.querySelector('html').parentNode`.
+
 ### Custom element's constructor property is unreliable <a id="constructor"></a>
 See [#215](https://github.com/webcomponents/webcomponentsjs/issues/215) for background.
 
