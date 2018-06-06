@@ -84,8 +84,7 @@ function closurify(sourceName, fileName) {
       'node_modules/es6-promise/lib/es6-promise/**/*.js',
       'node_modules/@webcomponents/**/*.js',
       '!node_modules/@webcomponents/*/externs/*.js',
-      '!node_modules/@webcomponents/*/node_modules/**',
-      '!**/bower_components/**'
+      '!node_modules/@webcomponents/*/node_modules/**'
     ], {base: './', follow: true})
   .pipe(sourcemaps.init())
   // The `es6-promise` package needs to be transpiled as it uses ES6 classes

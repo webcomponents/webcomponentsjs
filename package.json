@@ -52,7 +52,7 @@
     "rollup-plugin-babel": "^2.7.1",
     "run-sequence": "^2.2.1",
     "vinyl-buffer": "^1.0.1",
-    "wct-browser-legacy": "^1.0.0",
+    "wct-browser-legacy": "^1.0.1",
     "web-component-tester": "^6.6.0"
   },
   "publishConfig": {
