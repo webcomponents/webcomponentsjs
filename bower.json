@@ -17,7 +17,14 @@
     "shim"
   ],
   "license": "BSD-3-Clause",
-  "ignore": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "CONTRIBUTING.md"
+  ],
   "devDependencies": {
     "web-component-tester": "^v6.0.0"
   }
