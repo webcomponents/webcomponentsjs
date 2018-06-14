@@ -17,10 +17,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import '../node_modules/@webcomponents/webcomponents-platform/webcomponents-platform.js';
 import '../node_modules/@webcomponents/template/template.js';
 import '../src/promise.js';
+import '../src/symbol.js';
 import '../src/flag-parser.js';
 import '../node_modules/@webcomponents/shadydom/src/shadydom.js';
 import '../node_modules/@webcomponents/custom-elements/src/custom-elements.js';
 import '../node_modules/@webcomponents/shadycss/entrypoints/scoping-shim.js';
 import '../node_modules/@webcomponents/url/url.js';
-import '../src/symbol.js';
 import '../src/unresolved.js';
