@@ -9,22 +9,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 'use strict';
 
-import Symbol from '../node_modules/es-symbol/dist/symbol.js';
+import SymbolPolyfill from '../node_modules/es-symbol/dist/symbol.js';
 
-if (!window['Symbol']) {
-  window['Symbol'] = Symbol;
+if (!window.Symbol) {
+  window.Symbol = SymbolPolyfill;
+  const iterator = window.Symbol.iterator;
 
   // implement iterators for IE 11
 
   /** @this {Array} */
-  Array.prototype[Symbol.iterator] = function*() {
+  Array.prototype[iterator] = function*() {
     for (let i = 0; i < this.length; i++) {
       yield this[i];
     }
   };
 
   /** @this {Set} */
-  Set.prototype[Symbol.iterator] = function*() {
+  Set.prototype[iterator] = function*() {
     const temp = [];
     this.forEach((value) => {
       temp.push(value);
@@ -35,7 +36,7 @@ if (!window['Symbol']) {
   };
 
   /** @this {Map} */
-  Map.prototype[Symbol.iterator] = function*() {
+  Map.prototype[iterator] = function*() {
     const entries = [];
     this.forEach((value, key) => {
       entries.push([key, value]);
@@ -46,7 +47,7 @@ if (!window['Symbol']) {
   };
 
   /** @this {String} */
-  String.prototype[Symbol.iterator] = function*() {
+  String.prototype[iterator] = function*() {
     for (let i = 0; i < this.length; i++) {
       yield this[i];
     }

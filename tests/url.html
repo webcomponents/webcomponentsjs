@@ -32,12 +32,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.equal(loader.src, u.href);
       });
       test('URL has hash', function() {
-        const u = new URL('#hash', document.baseURI);
+        const u = new URL('#hash', window.location);
         assert.equal(u.hash, '#hash');
       });
 
       test('URL has search', function() {
-        const u = new URL('?search', document.baseURI);
+        const u = new URL('?search', window.location);
         assert.equal(u.search, '?search');
       });
     });
