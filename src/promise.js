@@ -8,19 +8,43 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 'use strict';
-import ES6Promise from '../node_modules/es6-promise/lib/es6-promise/promise.js';
+import PromisePolyfill from '../node_modules/promise-polyfill/src/index.js';
 
 /*
 Assign the ES6 promise polyfill to window ourselves instead of using the "auto" polyfill
 to work around https://github.com/webcomponents/webcomponentsjs/issues/837
 */
 if (!window.Promise) {
-  window.Promise = ES6Promise;
+  window.Promise = PromisePolyfill;
   // save Promise API
-  ES6Promise.prototype['catch'] = ES6Promise.prototype.catch;
-  ES6Promise.prototype['then'] = ES6Promise.prototype.then;
-  ES6Promise['all'] = ES6Promise.all;
-  ES6Promise['race'] = ES6Promise.race;
-  ES6Promise['resolve'] = ES6Promise.resolve;
-  ES6Promise['reject'] = ES6Promise.reject;
+  // PromisePolyfill.prototype['catch'] = PromisePolyfill.prototype.catch;
+  PromisePolyfill.prototype['then'] = PromisePolyfill.prototype.then;
+  // PromisePolyfill.prototype['finally'] = PromisePolyfill.prototype.finally;
+  PromisePolyfill['all'] = PromisePolyfill.all;
+  PromisePolyfill['race'] = PromisePolyfill.race;
+  PromisePolyfill['resolve'] = PromisePolyfill.resolve;
+  PromisePolyfill['reject'] = PromisePolyfill.reject;
+
+  if (!window.setImmediate) {
+    // approach copied from https://github.com/Polymer/polymer/blob/v3.0.2/lib/utils/async.js
+    const node = document.createTextNode('');
+    const twiddleNode = function twiddleNode() {
+      node.textContent = node.textContent.length > 0 ? '' : 'a';
+    };
+    /** @type {!Array<function():void>} */
+    const callbacks = [];
+    (new MutationObserver(() => {
+      const len = callbacks.length;
+      for (let i = 0; i < len; i++) {
+        callbacks[i]();
+      }
+      callbacks.splice(0, len);
+    }).observe(node, {characterData: true}));
+
+    // set _immediateFn to a MutationObserver for close-to-native timing
+    PromisePolyfill._immediateFn = (fn) => {
+      callbacks.push(fn);
+      twiddleNode();
+    }
+  }
 }

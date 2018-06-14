@@ -21,7 +21,8 @@ const del = require('del');
 const runseq = require('run-sequence');
 const closure = require('google-closure-compiler').gulp();
 const babel = require('rollup-plugin-babel');
-const gulpBabel = require('gulp-babel');
+const commonjs = require('rollup-plugin-commonjs');
+const license = require('rollup-plugin-license');
 
 function debugify(sourceName, fileName, extraRollupOptions) {
   const outDir = fileName ? '.' : './bundles';
@@ -37,7 +38,8 @@ function debugify(sourceName, fileName, extraRollupOptions) {
       format: 'iife',
       name: 'webcomponentsjs'
     },
-    allowRealFiles: true
+    allowRealFiles: true,
+    rollup: require('rollup')
   };
 
   Object.assign(options, extraRollupOptions);
@@ -81,23 +83,13 @@ function closurify(sourceName, fileName) {
       'entrypoints/*.js',
       'src/*.js',
       'node_modules/es-symbol/**/*.js',
-      'node_modules/es6-promise/lib/es6-promise/**/*.js',
+      'node_modules/promise-polyfill/src/**/*.js',
       'node_modules/@webcomponents/**/*.js',
       '!node_modules/@webcomponents/*/externs/*.js',
       '!node_modules/@webcomponents/*/node_modules/**',
       '!**/bower_components/**'
     ], {base: './', follow: true})
   .pipe(sourcemaps.init())
-  // The `es6-promise` package needs to be transpiled as it uses ES6 classes
-  // with static properties such as `Promise.resolve` which are erroneously
-  // removed by `google-closure-compiler` in ADVANCED mode:
-  // https://github.com/google/closure-compiler/issues/2763#event-1392964326
-  // TODO: this Babel plugin can be removed when/if the issue is resolved.
-  .pipe(gulpBabel({
-    babelrc: false,
-    only: 'node_modules/es6-promise/lib/es6-promise/promise.js',
-    plugins: [['transform-es2015-classes', { loose: true }]]
-  }))
   .pipe(closure(closureOptions))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest(outDir));
@@ -108,12 +100,10 @@ gulp.task('debugify-ce', () => {
 });
 
 gulp.task('debugify-sd-ce-pf', () => {
-  // The es6-promise polyfill needs to set the correct context.
-  // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
-  const extraOptions = {
-    context: 'window'
+  const rollupOptions = {
+    plugins: [commonjs()]
   };
-  return debugify('webcomponents-sd-ce-pf', null, extraOptions)
+  return debugify('webcomponents-sd-ce-pf', null, rollupOptions)
 });
 
 gulp.task('debugify-sd-ce', () => {
@@ -125,12 +115,10 @@ gulp.task('debugify-sd', () => {
 });
 
 gulp.task('debugify-bundle', () => {
-  // The es6-promise polyfill needs to set the correct context.
-  // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
-  const extraOptions = {
-    context: 'window'
+  const rollupOptions = {
+    plugins: [commonjs()]
   };
-  return debugify('webcomponents-bundle', 'webcomponents-bundle', extraOptions);
+  return debugify('webcomponents-bundle', 'webcomponents-bundle', rollupOptions);
 })
 
 gulp.task('closurify-ce', () => {
@@ -153,23 +141,20 @@ gulp.task('closurify-bundle', () => {
   return closurify('webcomponents-bundle', 'webcomponents-bundle');
 });
 
-function singleLicenseComment() {
-  let hasLicense = false;
-  return (comment) => {
-    if (hasLicense) {
-      return false;
-    }
-    return hasLicense = /@license/.test(comment);
-  }
-}
-
-const babelOptions = {
-  presets: 'minify',
-  shouldPrintComment: singleLicenseComment()
-};
-
 gulp.task('debugify-ce-es5-adapter', () => {
-  return debugify('custom-elements-es5-adapter', 'custom-elements-es5-adapter', {plugins: [babel(babelOptions)]});
+  const rollupOptions = {
+    plugins: [
+      babel({
+        presets: 'minify'
+      }),
+      license({
+        banner: {
+          file: './license-header.txt'
+        }
+      })
+    ]
+  };
+  return debugify('custom-elements-es5-adapter', 'custom-elements-es5-adapter', rollupOptions);
 });
 
 gulp.task('default', ['closure']);
