@@ -10,7 +10,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 'use strict';
 
 /*
- * Polyfills loaded: Custom Elements ES5 Shim
+ * Polyfills loaded: Shady DOM/Shady CSS
+ * Used in: Firefox when CE is implemented
  */
 
-import '../node_modules/@webcomponents/custom-elements/src/native-shim.js';
+import '../node_modules/@webcomponents/shadydom/src/shadydom.js';
+import '../node_modules/@webcomponents/shadycss/entrypoints/scoping-shim.js';
