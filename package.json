@@ -23,8 +23,9 @@
   },
   "scripts": {
     "build": "gulp",
-    "test": "wct --npm",
-    "regen-package-lock": "rm -rf node_modules package-lock.json; npm install"
+    "test": "wct",
+    "regen-package-lock": "rm -rf node_modules package-lock.json; npm install",
+    "prepack": "npm run build"
   },
   "homepage": "https://webcomponents.org/polyfills",
   "devDependencies": {

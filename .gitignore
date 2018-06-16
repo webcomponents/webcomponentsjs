@@ -1,1 +1,4 @@
 node_modules/
+custom-elements-es5-adapter.js
+webcomponents-bundle.js*
+bundles/**/*
