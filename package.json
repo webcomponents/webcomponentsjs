@@ -57,5 +57,13 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "files": [
+    "bundles/**/*",
+    "entrypoints/**/*",
+    "custom-elements-es5-adapter.js",
+    "webcomponents-bundle.js",
+    "webcomponents-bundle.js.map",
+    "webcomponents-loader.js"
+  ]
 }
