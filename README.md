@@ -139,9 +139,9 @@ Here's a more complicated example:
 The `WebComponentsReady` event is fired when polyfills and user scripts have loaded and custom elements have been upgraded. This event is generally not needed; however, it may be useful in some cases like testing. If imperative code should wait until a specific custom element definition has loaded, it can use the platform `customElements.whenDefined` API.
 
 ### `custom-elements-es5-adapter.js`
-According to the spec, only ES6 classes (https://html.spec.whatwg.org/multipage/scripting.html#custom-element-conformance) may be passed to the _native_ `customElements.define` API. For best performnace, ES6 should be served to browsers that support it, and ES5 code should be serve to those that don't. Since this may not always be possible, it may make sense to compile and serve ES5 to all browsers. However, ES5-style custom element classes will **not** work on browsers with native Custom Elements because ES5-style classes cannot properly extend ES6 classes, like `HTMLElement`.
+According to the spec, only ES6 classes (https://html.spec.whatwg.org/multipage/scripting.html#custom-element-conformance) may be passed to the _native_ `customElements.define` API. For best performnace, ES6 should be served to browsers that support it, and ES5 code should be serve to those that don't. Since this may not always be possible, it may make sense to compile and serve ES5 to all browsers. However, if you do so, ES5-style custom element classes will now **not** work on browsers with native Custom Elements because ES5-style classes cannot properly extend ES6 classes, like `HTMLElement`.
 
-To work around this, load `custom-elements-es5-adapter.js` before defining Custom Elements.  This adapter will automatically wrap ES5.
+As a workaround, if your project has been compiled to ES5, load `custom-elements-es5-adapter.js` before defining Custom Elements.  This adapter will automatically wrap ES5.
 
 **The adapter must NOT be compiled.**
 
