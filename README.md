@@ -28,6 +28,8 @@ For browsers that need it, there are also some minor polyfills included:
 npm install @webcomponents/webcomponentsjs
 ```
 
+You can also load the code from a CDN such as unpkg: https://unpkg.com/@webcomponents/webcomponentsjs@2.0.0/
+
 ### Using `webcomponents-bundle.js`
 
 The `webcomponents-bundle.js` contains all of the web components polyfills and is
