@@ -169,6 +169,7 @@ If you wish to build the bundles yourself, you'll need `node` and `npm` on your 
 
  * install [node.js](http://nodejs.org/) using the instructions on their website
  * use `npm` to install [gulp.js](http://gulpjs.com/): `npm install -g gulp`
+ * make sure you have Java installed per https://www.npmjs.com/package/google-closure-compiler#java-version
 
 Now you are ready to build the polyfills with:
 
