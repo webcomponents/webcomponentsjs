@@ -32,17 +32,20 @@ function debugify(sourceName, fileName, extraRollupOptions) {
   }
 
   const entry = `./entrypoints/${sourceName}-index.js`;
+  const {output, ...otherExtraRollupOptions} = extraRollupOptions;
+
   const options = {
     input: entry,
     output: {
       format: 'iife',
-      name: 'webcomponentsjs'
+      name: 'webcomponentsjs',
+      ...output
     },
     allowRealFiles: true,
     rollup: require('rollup')
   };
 
-  Object.assign(options, extraRollupOptions);
+  Object.assign(options, otherExtraRollupOptions);
 
   return gulp.src(entry)
   .pipe(rollup(options))
@@ -142,6 +145,9 @@ gulp.task('closurify-bundle', () => {
 
 gulp.task('debugify-ce-es5-adapter', () => {
   const rollupOptions = {
+    output: {
+      intro: '/* @nocompile */'
+    },
     plugins: [
       babel({
         presets: 'minify'
