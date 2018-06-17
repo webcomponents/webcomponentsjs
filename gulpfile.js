@@ -90,6 +90,10 @@ function closurify(sourceName, fileName) {
     ], {base: './', follow: true})
   .pipe(sourcemaps.init())
   .pipe(closure(closureOptions))
+  .pipe(sourcemaps.mapSources(
+      // We load from node_modules, but the other polyfills are technically siblings of us.
+      // Therefore, rewrite the sourcemap files to fixup the directory location
+      sourcePath => sourcePath.replace(/node_modules\/@webcomponents/, '..')))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest(outDir));
 }
