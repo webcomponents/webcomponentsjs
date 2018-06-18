@@ -15,6 +15,7 @@
 
 const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
+const sourcesContent = require('@gulp-sourcemaps/sources-content');
 const rename = require('gulp-rename');
 const rollup = require('gulp-rollup');
 const del = require('del');
@@ -53,6 +54,7 @@ function debugify(sourceName, fileName, extraRollupOptions) {
 
 function closurify(sourceName, fileName) {
   const outDir = fileName ? '.' : './bundles';
+  const smPrefix = fileName ? '' : '../';
 
   if (!fileName) {
     fileName = sourceName;
@@ -91,10 +93,15 @@ function closurify(sourceName, fileName) {
     ], {base: './', follow: true})
   .pipe(sourcemaps.init())
   .pipe(closure(closureOptions))
+  .pipe(sourcesContent())
   .pipe(sourcemaps.mapSources(
       // We load from node_modules, but the other polyfills are technically siblings of us.
       // Therefore, rewrite the sourcemap files to fixup the directory location
-      sourcePath => sourcePath.replace(/node_modules\/@webcomponents/, '..')))
+      sourcePath => sourcePath
+        .replace(/node_modules\/@webcomponents/, smPrefix + '..')
+        .replace(/node_modules/, smPrefix + '../..')
+        .replace(/^src/, smPrefix + 'src')
+  ))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest(outDir));
 }
