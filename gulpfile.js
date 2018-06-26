@@ -32,20 +32,18 @@ function debugify(sourceName, fileName, extraRollupOptions) {
   }
 
   const entry = `./entrypoints/${sourceName}-index.js`;
-  const {output, ...otherExtraRollupOptions} = extraRollupOptions;
 
   const options = {
     input: entry,
     output: {
       format: 'iife',
-      name: 'webcomponentsjs',
-      ...output
+      name: 'webcomponentsjs'
     },
     allowRealFiles: true,
     rollup: require('rollup')
   };
 
-  Object.assign(options, otherExtraRollupOptions);
+  Object.assign(options, extraRollupOptions);
 
   return gulp.src(entry)
   .pipe(rollup(options))
