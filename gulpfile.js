@@ -146,7 +146,7 @@ gulp.task('closurify-bundle', () => {
 gulp.task('debugify-ce-es5-adapter', () => {
   const rollupOptions = {
     output: {
-      intro: '/* @nocompile */'
+      intro: '/** @nocompile */'
     },
     plugins: [
       babel({
