@@ -32,6 +32,7 @@ function debugify(sourceName, fileName, extraRollupOptions) {
   }
 
   const entry = `./entrypoints/${sourceName}-index.js`;
+
   const options = {
     input: entry,
     output: {
