@@ -47,7 +47,7 @@ Here's an example:
 
 ```html
 <!-- load webcomponents bundle, which includes all the necessary polyfills -->
-<script src="node_modules/webcomponentsjs/webcomponents-bundle.js"></script>
+<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
 <!-- load the element -->
 <script type="module" src="my-element.js"></script>
@@ -72,7 +72,7 @@ Here's an example:
 
 ```html
 <!-- load the webcomponents loader, which injects the necessary polyfill bundle -->
-<script src="node_modules/webcomponentsjs/webcomponents-loader.js"></script>
+<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
 <!-- load the element -->
 <script type="module" src="my-element.js"></script>
@@ -95,7 +95,7 @@ Here's an example:
 
 ```html
 <!-- Load polyfills; note that "loader" will load these async -->
-<script src="node_modules/webcomponentsjs/webcomponents-loader.js" defer></script>
+<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js" defer></script>
 
 <!-- Load a custom element definitions in `waitFor` and return a promise -->
 <script type="module">
@@ -121,7 +121,7 @@ Here's a more complicated example:
 
 ```html
 <!-- Load polyfills; note that "loader" will load these async -->
-<script src="node_modules/webcomponentsjs/webcomponents-loader.js" defer></script>
+<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js" defer></script>
 
 <script type="module">
   WebComponents.waitFor(async () => {
