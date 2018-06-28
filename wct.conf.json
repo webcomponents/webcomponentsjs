@@ -3,6 +3,7 @@
   "clientOptions": {
     "environmentImports": []
   },
+  "npm": true,
   "plugins": {
     "local": {
       "browserOptions": {
