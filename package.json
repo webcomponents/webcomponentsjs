@@ -25,7 +25,8 @@
     "build": "gulp",
     "test": "wct",
     "regen-package-lock": "rm -rf node_modules package-lock.json; npm install",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "clean": "gulp clean"
   },
   "homepage": "https://webcomponents.org/polyfills",
   "devDependencies": {
@@ -41,7 +42,7 @@
     "es-symbol": "^1.1.2",
     "eslint": "^5.0.1",
     "eslint-plugin-html": "^4.0.5",
-    "google-closure-compiler": "^20180506.0.0",
+    "google-closure-compiler": "^20180610.0.2",
     "gulp": "^3.8.8",
     "gulp-babel": "^7.0.1",
     "gulp-rename": "^1.3.0",
