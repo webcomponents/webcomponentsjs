@@ -17,6 +17,7 @@ to work around https://github.com/webcomponents/webcomponentsjs/issues/837
 if (!window.Promise) {
   window.Promise = PromisePolyfill;
   // save Promise API
+  /* eslint-disable no-self-assign */
   // PromisePolyfill.prototype['catch'] = PromisePolyfill.prototype.catch;
   PromisePolyfill.prototype['then'] = PromisePolyfill.prototype.then;
   // PromisePolyfill.prototype['finally'] = PromisePolyfill.prototype.finally;
@@ -24,6 +25,7 @@ if (!window.Promise) {
   PromisePolyfill['race'] = PromisePolyfill.race;
   PromisePolyfill['resolve'] = PromisePolyfill.resolve;
   PromisePolyfill['reject'] = PromisePolyfill.reject;
+  /* eslint-enable */
 
   if (!window.setImmediate) {
     // approach copied from https://github.com/Polymer/polymer/blob/v3.0.2/lib/utils/async.js
