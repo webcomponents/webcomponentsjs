@@ -12,7 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // adapted from
 // https://github.com/webcomponents/html-imports/blob/v1.2.0/src/html-imports.js
 
-if (!Node.prototype.baseURI) {
+if (!Object.hasOwnProperty(Node.prototype, 'baseURI')) {
   Object.defineProperty(Node.prototype, 'baseURI', {
     /**
      * @this {Node}
