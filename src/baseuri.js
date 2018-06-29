@@ -19,7 +19,8 @@ if (!Object.hasOwnProperty(Node.prototype, 'baseURI')) {
      * @return {string}
      */
     get() {
-      const doc = this.ownerDocument;
+      // this.ownerDocument is `null` for documents
+      const doc = this.ownerDocument || this;
       const base = /** @type {HTMLBaseElement} */ (doc.querySelector('base'));
       return (base || window.location).href;
     },
