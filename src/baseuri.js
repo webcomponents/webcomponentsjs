@@ -23,8 +23,8 @@ if (!native_baseURI) {
     get() {
       // this.ownerDocument is `null` for documents
       const doc = this.ownerDocument || this;
-      const base = /** @type {HTMLBaseElement} */ (doc.querySelector('base'));
-      return (base || window.location).href;
+      const base = /** @type {HTMLBaseElement} */ (doc.querySelector('base[href]'));
+      return base && base.href || window.location.href;
     },
     configurable: true,
     enumerable: true
