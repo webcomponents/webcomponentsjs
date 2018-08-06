@@ -72,7 +72,7 @@ function closurify(sourceName, fileName) {
   return gulp.src([
       'entrypoints/*.js',
       'src/*.js',
-      'node_modules/es6-promise/lib/es6-promise/**/*.js',
+      'node_modules/promise-polyfill/src/*.js',
       'node_modules/@webcomponents/**/*.js',
       '!node_modules/@webcomponents/*/externs/*.js',
       '!node_modules/@webcomponents/*/node_modules/**',
