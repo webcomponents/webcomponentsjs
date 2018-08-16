@@ -85,7 +85,7 @@ function closurify(sourceName, fileName) {
   return gulp.src([
       'entrypoints/*.js',
       'src/*.js',
-      'node_modules/es-symbol/**/*.js',
+      'node_modules/polyfill-library/polyfills/Symbol/**/*.js',
       'node_modules/promise-polyfill/src/**/*.js',
       'node_modules/@webcomponents/**/*.js',
       '!node_modules/@webcomponents/*/externs/*.js',
@@ -201,3 +201,8 @@ gulp.task('closure', (cb) => {
   ];
   runseq('clean', ...tasks, cb);
 });
+
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled Promise Rejection:', err);
+  process.exit(1);
+})
