@@ -10,16 +10,5 @@
  * @fileoverview Symbols needed to compile webcomponents
  * @externs
  */
-var require;
-var global;
-var ES6Promise;
-var process;
-var define;
-var module;
-var exports;
-
 var ShadyDOM;
 var WebComponents;
-
-/** @type !Function */
-Promise.cast;
