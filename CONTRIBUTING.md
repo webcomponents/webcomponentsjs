@@ -4,6 +4,8 @@ Want to contribute to webcomponents.js? Great!
 
 We are more than happy to accept external contributions to the project in the form of [bug reports](../../issues) and pull requests.
 
+For any bug report, please use [this jsbin](http://jsbin.com/birajez/edit?html,console,output) to provide a concrete reproduction case that we can debug.
+
 ## Contributor License Agreement
 
 Before we can accept patches, there's a quick web form you need to fill out.
@@ -30,7 +32,7 @@ Other projects require a similar agreement: jQuery, Firefox, Apache, Node, and m
 
         cd $REPO
         npm install
-        gulp build
+        gulp
 
 The builds will be placed into the `dist/` directory if all goes well.
 

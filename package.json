@@ -1,8 +1,8 @@
 {
   "name": "@webcomponents/webcomponentsjs",
-  "version": "1.0.1",
+  "version": "2.0.4",
   "description": "Web Components Polyfills",
-  "main": "webcomponents-lite.js",
+  "main": "webcomponents-bundle.js",
   "directories": {
     "test": "tests"
   },
@@ -23,33 +23,50 @@
   },
   "scripts": {
     "build": "gulp",
-    "test": "wct"
+    "test": "wct",
+    "regen-package-lock": "rm -rf node_modules package-lock.json; npm install",
+    "prepack": "npm run build",
+    "clean": "gulp clean"
   },
   "homepage": "https://webcomponents.org/polyfills",
   "devDependencies": {
-    "@webcomponents/custom-elements": "^1.0.0",
-    "@webcomponents/html-imports": "^1.0.0",
-    "@webcomponents/shadycss": "^1.0.0",
-    "@webcomponents/shadydom": "^1.0.0",
-    "@webcomponents/template": "^1.0.0",
+    "@gulp-sourcemaps/sources-content": "^1.0.0",
+    "@webcomponents/custom-elements": "^1.2.0",
+    "@webcomponents/shadycss": "^1.4.0",
+    "@webcomponents/shadydom": "^1.1.3",
+    "@webcomponents/template": "^1.3.1",
+    "@webcomponents/url": "^0.7.1",
     "@webcomponents/webcomponents-platform": "^1.0.0",
-    "babel-preset-babili": "0.0.12",
-    "bower": "^1.8.0",
-    "del": "^2.2.2",
-    "es6-promise": "^4.1.0",
-    "eslint": "^3.16.1",
-    "google-closure-compiler": "^20170409.0.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-minify": "^0.4.3",
+    "del": "^3.0.0",
+    "eslint": "^5.2.0",
+    "eslint-plugin-html": "^4.0.5",
+    "google-closure-compiler": "^20180610.0.2",
     "gulp": "^3.8.8",
-    "gulp-rename": "^1.2.2",
-    "gulp-sourcemaps": "^2.4.1",
-    "rollup-plugin-babel": "^2.7.1",
-    "rollup-stream": "^1.14.0",
-    "run-sequence": "^1.2.2",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "web-component-tester": "6.0.0-prerelease.9"
+    "gulp-babel": "^7.0.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-rollup": "^2.16.2",
+    "gulp-sourcemaps": "^2.6.4",
+    "polyfill-library": "^3.26.0-0",
+    "promise-polyfill": "^8.0.0",
+    "rollup": "^0.60.7",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-commonjs": "^9.1.4",
+    "rollup-plugin-license": "^0.6.0",
+    "run-sequence": "^2.2.1",
+    "wct-browser-legacy": "^1.0.1",
+    "web-component-tester": "^6.7.1"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "files": [
+    "bundles/**/*",
+    "entrypoints/**/*",
+    "custom-elements-es5-adapter.js",
+    "webcomponents-bundle.js",
+    "webcomponents-bundle.js.map",
+    "webcomponents-loader.js"
+  ]
 }

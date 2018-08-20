@@ -1,0 +1,9 @@
+{
+  "env":{
+    "mocha": true
+  },
+  "globals": {
+    "assert": true,
+    "WCT": true
+  }
+}

@@ -1,0 +1,86 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <title>Symbol Polyfill</title>
+  <script>
+    Object.getOwnPropertySymbols = undefined;
+    window.Symbol = undefined;
+  </script>
+  <script id="loader" src="../webcomponents-loader.js"></script>
+  <script src="./wct-config.js"></script>
+  <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+</head>
+<body>
+  <script>
+    suite('Symbol Polyfill', function() {
+      test('Symbol exists', function() {
+        assert.property(window, 'Symbol');
+      });
+
+      test('Symbol.iterator exists', function() {
+        assert.property(Symbol, 'iterator');
+      });
+
+      suite('Iterators', function() {
+        test('Array iterator', function(){
+          const arr = [1,2,3,4];
+          const out = [];
+          for (const item of arr) {
+            out.push(item);
+          }
+          assert.deepEqual(arr, out);
+        });
+        test('String iterator', function(){
+          const str = 'hello world!';
+          let out = '';
+          for (const char of str) {
+            out += char;
+          }
+          assert.equal(str, out);
+        });
+        test('Map iterator', function(){
+          const map = new Map();
+          map.set(1, 'a');
+          map.set(2, 'b');
+          for (const [key, value] of map) {
+            assert.equal(map.get(key), value);
+          }
+        });
+        test('Set iterator', function(){
+          const set = new Set();
+          set.add(1);
+          set.add(2);
+          set.add(3);
+          for (const item of set) {
+            assert(set.has(item), `set should have item ${item}`);
+          }
+        });
+      });
+
+      test('Object.getOwnPropertySymbols', function() {
+        const s1 = Symbol('s1');
+        const s2 = Symbol('s2');
+        const obj = {
+          a: 1,
+          [s1]: 2,
+          b: 3,
+          [s2]: 4
+        };
+
+        assert.deepEqual(Object.getOwnPropertyNames(obj), ['a', 'b']);
+        assert.deepEqual(Object.keys(obj), ['a', 'b']);
+        assert.deepEqual(Object.getOwnPropertySymbols(obj), [s1, s2]);
+      });
+    })
+  </script>
+</body>
+</html>
