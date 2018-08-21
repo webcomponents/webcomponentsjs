@@ -42,7 +42,7 @@
     "del": "^3.0.0",
     "eslint": "^5.4.0",
     "eslint-plugin-html": "^4.0.5",
-    "google-closure-compiler": "^20180610.0.2",
+    "google-closure-compiler": "^20180805.0.0",
     "gulp": "^3.8.8",
     "gulp-babel": "^7.0.1",
     "gulp-rename": "^1.4.0",
