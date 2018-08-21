@@ -15,6 +15,8 @@ if (!window.Promise) {
   // save Promise API that closure renames
   PromisePolyfill['all'] = PromisePolyfill.all;
   PromisePolyfill['race'] = PromisePolyfill.race;
+  PromisePolyfill['resolve'] = PromisePolyfill.resolve;
+  PromisePolyfill['reject'] = PromisePolyfill.reject;
   /* eslint-enable */
 
   // approach copied from https://github.com/Polymer/polymer/blob/v3.0.2/lib/utils/async.js
