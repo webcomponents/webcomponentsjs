@@ -12,7 +12,10 @@ import PromisePolyfill from '../node_modules/promise-polyfill/src/index.js';
 
 if (!window.Promise) {
   window.Promise = PromisePolyfill;
-  // save Promise API that closure renames
+  // save Promise API that is removed by closure compiler
+  // catch and finally are safe, as they are stringified in the library source
+  /* eslint-disable no-self-assign */
+  PromisePolyfill.prototype['then'] = PromisePolyfill.prototype.then;
   PromisePolyfill['all'] = PromisePolyfill.all;
   PromisePolyfill['race'] = PromisePolyfill.race;
   PromisePolyfill['resolve'] = PromisePolyfill.resolve;
