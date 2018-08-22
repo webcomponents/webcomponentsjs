@@ -41,5 +41,5 @@ if (!window.Promise) {
   PromisePolyfill._immediateFn = (fn) => {
     callbacks.push(fn);
     twiddleNode();
-  }
+  };
 }
