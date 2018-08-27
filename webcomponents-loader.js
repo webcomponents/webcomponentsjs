@@ -90,19 +90,18 @@
     });
   }
 
-  window.WebComponents = window.WebComponents || {
-    ready: false,
-    _batchCustomElements: batchCustomElements,
-    waitFor: function(waitFn) {
-      if (!waitFn) {
-        return;
-      }
-      whenLoadedFns.push(waitFn);
-      if (polyfillsLoaded) {
-        runWhenLoadedFns();
-      }
+  window.WebComponents = window.WebComponents || {};
+  window.WebComponents.ready = window.WebComponents.ready || false;
+  window.WebComponents.waitFor = window.WebComponents.waitFor || function(waitFn) {
+    if (!waitFn) {
+      return;
+    }
+    whenLoadedFns.push(waitFn);
+    if (polyfillsLoaded) {
+      runWhenLoadedFns();
     }
   };
+  window.WebComponents._batchCustomElements = batchCustomElements;
 
   var name = 'webcomponents-loader.js';
   // Feature detect which polyfill needs to be imported.
