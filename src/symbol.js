@@ -15,7 +15,10 @@ import '../node_modules/polyfill-library/polyfills/Symbol/iterator/polyfill.js';
 
 // overwrite Object.keys to filter out symbols
 Object.keys = function(obj) {
-  return Object.getOwnPropertyNames(obj).filter((name) => Object.getOwnPropertyDescriptor(obj, name).enumerable);
+  return Object.getOwnPropertyNames(obj).filter((name) => {
+    const prop = Object.getOwnPropertyDescriptor(obj, name);
+    return prop && prop.enumerable;
+  });
 };
 
 // implement iterators for IE 11
