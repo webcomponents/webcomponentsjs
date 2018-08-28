@@ -80,6 +80,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.deepEqual(Object.keys(obj), ['a', 'b']);
         assert.deepEqual(Object.getOwnPropertySymbols(obj), [s1, s2]);
       });
+
+      // https://github.com/webcomponents/webcomponentsjs/issues/987
+      test('Object.keys does not throw on property with undefined descriptor', function() {
+        assert.doesNotThrow(() => Object.keys(window));
+      });
     })
   </script>
 </body>
