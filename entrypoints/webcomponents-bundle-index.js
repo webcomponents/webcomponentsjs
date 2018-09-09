@@ -32,7 +32,8 @@ if (customElements['polyfillWrapFlushCallback']) {
 }
 
 function flushAndFire() {
-  if (window.HTMLTemplateElement.bootstrap) {
+  if (typeof window.HTMLTemplateElement !== undefined &&
+      window.HTMLTemplateElement.bootstrap) {
     window.HTMLTemplateElement.bootstrap(window.document);
   }
   flusher && flusher();
