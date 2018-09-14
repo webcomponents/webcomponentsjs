@@ -9,9 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 'use strict';
 // import polyfill for Symbol and Object.getOwnPropertySymbols
-import '../node_modules/polyfill-library/polyfills/Symbol/polyfill.js';
-// import polyfill for Symbol.iterator
-import '../node_modules/polyfill-library/polyfills/Symbol/iterator/polyfill.js';
+import '../node_modules/get-own-property-symbols/build/get-own-property-symbols.max.js';
 
 // overwrite Object.keys to filter out symbols
 Object.keys = function(obj) {
@@ -23,24 +21,6 @@ Object.keys = function(obj) {
 
 // implement iterators for IE 11
 const iterator = window.Symbol.iterator;
-
-if (!String.prototype[iterator]) {
-  /** @this {String} */
-  String.prototype[iterator] = function*() {
-    for (let i = 0; i < this.length; i++) {
-      yield this[i];
-    }
-  }
-}
-
-if (!Array.prototype[iterator]) {
-  /** @this {Array} */
-  Array.prototype[iterator] = function*() {
-    for (let i = 0; i < this.length; i++) {
-      yield this[i];
-    }
-  }
-}
 
 if (!Set.prototype[iterator]) {
   /** @this {Set} */

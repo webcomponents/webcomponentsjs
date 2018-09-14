@@ -85,7 +85,7 @@ function closurify(sourceName, fileName) {
   return gulp.src([
       'entrypoints/*.js',
       'src/*.js',
-      'node_modules/polyfill-library/polyfills/Symbol/**/*.js',
+      'node_modules/get-own-property-symbols/build/get-own-property-symbols.max.js',
       'node_modules/promise-polyfill/src/**/*.js',
       'node_modules/@webcomponents/**/*.js',
       '!node_modules/@webcomponents/*/externs/*.js',
