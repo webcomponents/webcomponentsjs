@@ -11,6 +11,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // import polyfill for Symbol and Object.getOwnPropertySymbols
 import '../node_modules/get-own-property-symbols/build/get-own-property-symbols.max.js';
 
+// Polyfill String.prototype.codePointAt for String iterator
+if (!String.prototype.codePointAt) {
+  const codePointAt = function(i) {
+    let code = this.charCodeAt(i);
+    if (code >= 0xd800 && code <= 0xdbff) {
+        const surr = this.charCodeAt(i + 1);
+        if (surr >= 0xdc00 && surr <= 0xdfff)
+            code = 0x10000 + ((code - 0xd800) << 10) + (surr - 0xdc00);
+    }
+    return code;
+  };
+  Object.defineProperty(String.prototype, 'codePointAt', {
+    value: codePointAt,
+    configurable: true,
+    writable: true
+  });
+}
+
 // overwrite Object.keys to filter out symbols
 Object.keys = function(obj) {
   return Object.getOwnPropertyNames(obj).filter((name) => {
