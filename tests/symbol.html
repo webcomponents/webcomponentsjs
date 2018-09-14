@@ -12,8 +12,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <head>
   <title>Symbol Polyfill</title>
   <script>
-    Object.getOwnPropertySymbols = undefined;
-    window.Symbol = undefined;
+    delete Object.getOwnPropertySymbols;
+    delete window.Symbol;
   </script>
   <script id="loader" src="../webcomponents-loader.js"></script>
   <script src="./wct-config.js"></script>
