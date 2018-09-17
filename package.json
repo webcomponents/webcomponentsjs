@@ -29,7 +29,7 @@
   "devDependencies": {
     "@webcomponents/custom-elements": "^1.2.0",
     "@webcomponents/html-imports": "^1.2.0",
-    "@webcomponents/shadycss": "^1.5.0",
+    "@webcomponents/shadycss": "^1.5.2",
     "@webcomponents/shadydom": "^1.2.0",
     "@webcomponents/template": "^1.4.0",
     "@webcomponents/webcomponents-platform": "^1.0.0",
