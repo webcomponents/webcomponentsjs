@@ -182,7 +182,7 @@ polyfills) to be used. We cannot guarantee support for browsers outside of our c
   * [ShadyCSS: :host(.zot:not(.bar:nth-child(2))) doesn't work](#nestedparens)
 
 ### Web components styling does not work as described in the web components standard <a id="shadycss"></a>
-You need to use specific code from the ShadyCSS library (which is already part of webcomponentjs).
+You need to use specific code from the ShadyCSS library (which is already part of webcomponents.js).
 See [ShadyCSS usage](https://github.com/webcomponents/shadycss#usage).
 The reason is that the ShadowDOM polyfill is not able to encapsulate CSS in ShadowDOM out of the box.
 
