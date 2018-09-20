@@ -176,13 +176,15 @@ polyfills) to be used. We cannot guarantee support for browsers outside of our c
 
 ## Known Issues
 
-  * [ShadowDOM CSS is not encapsulated out of the box](#shadycss)
+  * [Web components styling does not work as described in the web components standard](#shadycss)
   * [Custom element's constructor property is unreliable](#constructor)
   * [Contenteditable elements do not trigger MutationObserver](#contentedit)
   * [ShadyCSS: :host(.zot:not(.bar:nth-child(2))) doesn't work](#nestedparens)
 
-### ShadowDOM CSS is not encapsulated out of the box <a id="shadycss"></a>
-The ShadowDOM polyfill is not able to encapsulate CSS in ShadowDOM out of the box. You need to use specific code from the ShadyCSS library, included with the polyfill. See [ShadyCSS instructions](https://github.com/webcomponents/shadycss).
+### Web components styling does not work as described in the web components standard <a id="shadycss"></a>
+You need to use specific code from the ShadyCSS library (which is already part of webcomponentjs).
+See [ShadyCSS usage](https://github.com/webcomponents/shadycss#usage).
+The reason is that the ShadowDOM polyfill is not able to encapsulate CSS in ShadowDOM out of the box.
 
 ### Custom element's constructor property is unreliable <a id="constructor"></a>
 See [#215](https://github.com/webcomponents/webcomponentsjs/issues/215) for background.
