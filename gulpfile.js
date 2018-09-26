@@ -156,7 +156,7 @@ gulp.task('debugify-ce-es5-adapter', () => {
   const rollupOptions = {
     plugins: [
       babel({
-        presets: 'minify'
+        presets: ['minify']
       }),
       license({
         banner: {
