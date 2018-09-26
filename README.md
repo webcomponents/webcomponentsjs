@@ -17,7 +17,7 @@ A suite of polyfills supporting the [Web Components](http://webcomponents.org) s
 
 For browsers that need it, there are also some minor polyfills included:
 - [`HTMLTemplateElement`](https://github.com/webcomponents/template)
-- [`Promise`](https://github.com/stefanpenner/es6-promise)
+- [`Promise`](https://github.com/taylorhakes/promise-polyfill)
 - `Event`, `CustomEvent`, `MouseEvent` constructors and `Object.assign`, `Array.from`
 (see [webcomponents-platform](https://github.com/webcomponents/webcomponents-platform))
 - [`URL constructor`](https://github.com/webcomponents/URL)
