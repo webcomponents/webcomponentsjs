@@ -117,6 +117,13 @@ gulp.task('debugify-sd-ce-pf', () => {
   return debugify('webcomponents-sd-ce-pf', null, rollupOptions)
 });
 
+gulp.task('debugify-sd-ce-pf-bare', () => {
+  const rollupOptions = {
+    plugins: [commonjs()]
+  };
+  return debugify('webcomponents-sd-ce-pf-bare', null, rollupOptions)
+});
+
 gulp.task('debugify-sd-ce', () => {
   return debugify('webcomponents-sd-ce')
 });
@@ -138,6 +145,10 @@ gulp.task('closurify-ce', () => {
 
 gulp.task('closurify-sd-ce-pf', () => {
   return closurify('webcomponents-sd-ce-pf')
+});
+
+gulp.task('closurify-sd-ce-pf-bare', () => {
+  return closurify('webcomponents-sd-ce-pf-bare')
 });
 
 gulp.task('closurify-sd-ce', () => {
@@ -184,6 +195,7 @@ gulp.task('debug', (cb) => {
     'debugify-sd',
     'debugify-sd-ce',
     'debugify-sd-ce-pf',
+    'debugify-sd-ce-pf-bare',
     'debugify-bundle',
     'debugify-ce-es5-adapter'
   ];
@@ -196,6 +208,7 @@ gulp.task('closure', (cb) => {
     'closurify-sd',
     'closurify-sd-ce',
     'closurify-sd-ce-pf',
+    'closurify-sd-ce-pf-bare',
     'closurify-bundle',
     'debugify-ce-es5-adapter'
   ];

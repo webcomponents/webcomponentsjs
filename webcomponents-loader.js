@@ -91,6 +91,7 @@
   }
 
   window.WebComponents = window.WebComponents || {};
+  window.WebComponents.bare = window.WebComponents.bare || false;
   window.WebComponents.ready = window.WebComponents.ready || false;
   window.WebComponents.waitFor = window.WebComponents.waitFor || function(waitFn) {
     if (!waitFn) {
@@ -136,7 +137,7 @@
   // NOTE: any browser that does not have template or ES6 features
   // must load the full suite of polyfills.
   if (!window.Promise || !Array.from || !window.URL || !window.Symbol || needsTemplate) {
-    polyfills = ['sd-ce-pf'];
+    polyfills = ['sd-ce-pf' + (window.WebComponents.bare ? '-bare' : '')];
   }
 
   if (polyfills.length) {
