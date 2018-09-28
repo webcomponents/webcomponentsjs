@@ -176,11 +176,11 @@ polyfills) to be used. We cannot guarantee support for browsers outside of our c
 
 ## Known Issues
 
-  * [Style encapsulation (inline styling in components) does not work as described in the web components standard](#shadycss)
+  * [Style encapsulation (inline styling in components) does not work out of the box](#shadycss)
   * [Custom element's constructor property is unreliable](#constructor)
   * [ShadyCSS: :host(.zot:not(.bar:nth-child(2))) doesn't work](#nestedparens)
 
-### Style encapsulation (inline styling in components) does not work as described in the web components standard <a id="shadycss"></a>
+### Style encapsulation (inline styling in components) does not work out of the box. <a id="shadycss"></a>
 The ShadowDOM polyfill does not properly support CSS in ShadowDoM out of the box:
  * Any styles inside components have an effect on the whole document (instead of on the component only - the encapsulation is broken).
  * Any shadow-dom specific selectors (like `:host`) do not work.
