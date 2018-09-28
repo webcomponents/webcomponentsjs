@@ -176,14 +176,16 @@ polyfills) to be used. We cannot guarantee support for browsers outside of our c
 
 ## Known Issues
 
-  * [Web components styling does not work as described in the web components standard](#shadycss)
+  * [Style encapsulation (inline styling in components) does not work as described in the web components standard](#shadycss)
   * [Custom element's constructor property is unreliable](#constructor)
   * [ShadyCSS: :host(.zot:not(.bar:nth-child(2))) doesn't work](#nestedparens)
 
-### Web components styling does not work as described in the web components standard <a id="shadycss"></a>
-You need to use specific code from the ShadyCSS library (which is already part of webcomponents.js).
-See [ShadyCSS usage](https://github.com/webcomponents/shadycss#usage).
-The reason is that the ShadowDOM polyfill is not able to encapsulate CSS in ShadowDOM out of the box.
+### Style encapsulation (inline styling in components) does not work as described in the web components standard <a id="shadycss"></a>
+The ShadowDOM polyfill does not properly support CSS in ShadowDoM out of the box:
+ * Any styles inside components have an effect on the whole document (instead of on the component only - the encapsulation is broken).
+ * Any shadow-dom specific selectors (like `:host`) do not work.
+ 
+You can fix those issues by manually calling the `ShadyCSS` APIs. See [ShadyCSS usage](https://github.com/webcomponents/shadycss#usage).
 
 ### Custom element's constructor property is unreliable <a id="constructor"></a>
 See [#215](https://github.com/webcomponents/webcomponentsjs/issues/215) for background.
