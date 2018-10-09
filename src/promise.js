@@ -7,7 +7,7 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
-'use strict';
+
 import PromisePolyfill from '../node_modules/promise-polyfill/src/index.js';
 
 if (!window.Promise) {
