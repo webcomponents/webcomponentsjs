@@ -13,6 +13,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <head>
   <title>Test async loader with long sync load</title>
   <meta charset="UTF-8">
+  <script src="./wct-config.js"></script>
+  <script>window.callback = null; WCT.waitFor = (cb) => { window.callback = cb; }</script>
+  <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+
   <script async src="../webcomponents-loader.js"></script>
   <script>
     const start = Date.now();
@@ -21,19 +25,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       diff = Date.now() - start;
     }
     const newScript = document.createElement('script');
-    newScript.src = './wct-config.js';
+    newScript.src = './imports/dummy.js';
     document.write(newScript.outerHTML);
   </script>
-  <script>window.callback = null; WCT.waitFor = (cb) => { window.callback = cb; }</script>
-  <script src="../node_modules/wct-browser-legacy/browser.js"></script>
 </head>
 
 <body>
   <module-a id="parsed"></module-a>
   <script>
-    function assertComputed(element, expected, prop = 'border-top-width') {
-      assert.equal(getComputedStyle(element).getPropertyValue(prop).trim(), expected);
+    const register = () => {
+      try {
+        customElements.define('module-a', class extends HTMLElement { });
+        window.callback();
+      } catch (err) {
+        window.callback();
+      }
+    };
+    if (window.WebComponents && window.WebComponents.ready) {
+      register();
+    } else {
+      addEventListener('WebComponentsReady', () => register());
     }
+
     suite('late everything', function () {
       test('element upgraded', function () {
         let el = document.querySelector('#parsed');
@@ -41,17 +54,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.instanceOf(el, moduleA);
       });
     });
-  </script>
-  <script>
-    addEventListener('load', () => {
-      const script = document.createElement('script');
-      script.src = '../webcomponents-loader.js';
-      addEventListener('WebComponentsReady', () => {
-        customElements.define('module-a', class extends HTMLElement { });
-        window.callback();
-      });
-      document.body.appendChild(script);
-    })
   </script>
 </body>
 
