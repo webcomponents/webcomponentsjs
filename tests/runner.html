@@ -32,7 +32,8 @@
     'symbol.html',
     'bundle-after-load.html',
     'loader-after-load.html',
-    'baseuri.html'
+    'baseuri.html',
+    'async-loader-with-long-load.html'
   ];
 </script>
 <script>
@@ -40,7 +41,7 @@
     // include `async loader` if `import()` function is supported.
     eval('import("").catch(function(){})');
     window.suites.push('async-loader-with-modules.html');
-  } catch (e) {} // eslint-disable-line no-empty
+  } catch (e) { } // eslint-disable-line no-empty
 </script>
 <script>
   WCT.loadSuites(window.suites);
