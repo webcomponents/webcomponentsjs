@@ -154,8 +154,8 @@
 
     var newScript = document.createElement('script');
     newScript.src = url;
-    // if readyState is 'loading', this script is synchronous
-    if (document.readyState === 'loading') {
+    // if readyState is 'loading' and this script is synchronous
+    if (document.readyState === 'loading' && (!document.currentScript.async)) {
       // make sure custom elements are batched whenever parser gets to the injected script
       newScript.setAttribute('onload', 'window.WebComponents._batchCustomElements()');
       document.write(newScript.outerHTML);
@@ -171,7 +171,7 @@
     }
   } else {
     polyfillsLoaded = true;
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    if (document.readyState === 'complete') {
       fireEvent()
     } else {
       // this script may come between DCL and load, so listen for both, and cancel load listener if DCL fires
