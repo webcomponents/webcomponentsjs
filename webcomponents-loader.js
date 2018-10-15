@@ -171,7 +171,7 @@
     }
   } else {
     polyfillsLoaded = true;
-    if (document.readyState === 'complete') {
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
       fireEvent()
     } else {
       // this script may come between DCL and load, so listen for both, and cancel load listener if DCL fires
