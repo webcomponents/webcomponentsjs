@@ -19,6 +19,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script async src="../webcomponents-loader.js"></script>
   <script>
+    // Here we're simulating a case where document is still in 'loading' readyState
+    // when the async webcomponents-loader is excecuted. 
+    // The 5 second delay gives the browser time to fetch the loader and queue for execution. 
+    // After 5 seconds, the browser fetches a dummy js file that will allow an entry for
+    // webcomponent-loader to execute. 
+    // Document is still in 'loading' state because dummy.js script tag is not async. 
     const start = Date.now();
     let diff = 0;
     while (diff < 5000) {

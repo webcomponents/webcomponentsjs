@@ -8,7 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-(function() {
+(function () {
   'use strict';
 
   /**
@@ -76,23 +76,23 @@
 
   function runWhenLoadedFns() {
     allowUpgrades = false;
-    var done = function() {
+    var done = function () {
       allowUpgrades = true;
       whenLoadedFns.length = 0;
       flushFn && flushFn();
     };
-    return Promise.all(whenLoadedFns.map(function(fn) {
+    return Promise.all(whenLoadedFns.map(function (fn) {
       return fn instanceof Function ? fn() : fn;
-    })).then(function() {
+    })).then(function () {
       done();
-    }).catch(function(err) {
+    }).catch(function (err) {
       console.error(err);
     });
   }
 
   window.WebComponents = window.WebComponents || {};
   window.WebComponents.ready = window.WebComponents.ready || false;
-  window.WebComponents.waitFor = window.WebComponents.waitFor || function(waitFn) {
+  window.WebComponents.waitFor = window.WebComponents.waitFor || function (waitFn) {
     if (!waitFn) {
       return;
     }
@@ -114,7 +114,7 @@
     polyfills.push('ce');
   }
 
-  var needsTemplate = (function() {
+  var needsTemplate = (function () {
     // no real <template> because no `content` property (IE and older browsers)
     var t = document.createElement('template');
     if (!('content' in t)) {
@@ -130,7 +130,7 @@
     t.content.appendChild(t2);
     var clone = t.cloneNode(true);
     return (clone.content.childNodes.length === 0 ||
-        clone.content.firstChild.content.childNodes.length === 0);
+      clone.content.firstChild.content.childNodes.length === 0);
   })();
 
   // NOTE: any browser that does not have template or ES6 features
@@ -147,7 +147,7 @@
     if (window.WebComponents.root) {
       url = window.WebComponents.root + polyfillFile;
     } else {
-      var script = document.querySelector('script[src*="' + name +'"]');
+      var script = document.querySelector('script[src*="' + name + '"]');
       // Load it from the right place.
       url = script.src.replace(name, polyfillFile);
     }
@@ -155,7 +155,7 @@
     var newScript = document.createElement('script');
     newScript.src = url;
     // if readyState is 'loading' and this script is synchronous
-    if (document.readyState === 'loading' && (!document.currentScript.async)) {
+    if (document.readyState === 'loading' && document.currentScript && (!document.currentScript.async)) {
       // make sure custom elements are batched whenever parser gets to the injected script
       newScript.setAttribute('onload', 'window.WebComponents._batchCustomElements()');
       document.write(newScript.outerHTML);
@@ -176,7 +176,7 @@
     } else {
       // this script may come between DCL and load, so listen for both, and cancel load listener if DCL fires
       window.addEventListener('load', ready);
-      window.addEventListener('DOMContentLoaded', function() {
+      window.addEventListener('DOMContentLoaded', function () {
         window.removeEventListener('load', ready);
         ready();
       })
