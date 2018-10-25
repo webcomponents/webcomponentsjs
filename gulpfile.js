@@ -152,7 +152,9 @@ gulp.task('closurify-sd', () => {
 })
 
 const babelOptions = {
-  presets: 'minify',
+  presets: [
+    ['minify', {'keepFnName': true}],
+  ],
 };
 
 gulp.task('debugify-ce-es5-adapter', () => {
