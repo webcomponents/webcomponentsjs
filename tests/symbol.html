@@ -81,6 +81,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('Object.keys does not throw on property with undefined descriptor', function() {
         assert.doesNotThrow(() => Object.keys(window));
       });
+
+      // https://github.com/webcomponents/webcomponentsjs/issues/1047
+      test('Object.prototype.toString works correctly when called against null/undefined', function() {
+        assert.equal(Object.prototype.toString.call(undefined), '[object Undefined]');
+        assert.equal(Object.prototype.toString.call(null), '[object Null]');
+        assert.equal(Object.prototype.toString.call(window), '[object Window]');
+      });
+
+      // https://github.com/webcomponents/webcomponentsjs/issues/1047
+      // Mocha's `done` calls Object.prototype.toString.call(undefined) when
+      // no error is passed to `done`
+      test('mocha async tests work', function(done) {
+        done();
+      });
     })
   </script>
 </body>
