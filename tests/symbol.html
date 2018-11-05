@@ -86,7 +86,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('Object.prototype.toString works correctly when called against null/undefined', function() {
         assert.equal(Object.prototype.toString.call(undefined), '[object Undefined]');
         assert.equal(Object.prototype.toString.call(null), '[object Null]');
-        assert.equal(Object.prototype.toString.call(window), '[object Window]');
       });
 
       // https://github.com/webcomponents/webcomponentsjs/issues/1047
