@@ -109,10 +109,16 @@
     }
   };
   window.WebComponents._batchCustomElements = batchCustomElements;
+  window.WebComponents.loadHTMLImports = Boolean(window.WebComponents.loadHTMLImports);
+
+  var hasNativeImports = ('import' in document.createElement('link'));
 
   var name = 'webcomponents-loader.js';
   // Feature detect which polyfill needs to be imported.
   var polyfills = [];
+  if (window.WebComponents.loadHTMLImports && !hasNativeImports) {
+    polyfills.push('hi');
+  }
   if (!('attachShadow' in Element.prototype && 'getRootNode' in Element.prototype) ||
     (window.ShadyDOM && window.ShadyDOM.force)) {
     polyfills.push('sd');
@@ -143,7 +149,11 @@
   // NOTE: any browser that does not have template or ES6 features
   // must load the full suite of polyfills.
   if (!window.Promise || !Array.from || !window.URL || !window.Symbol || needsTemplate) {
-    polyfills = ['hi-sd-ce-pf'];
+    var all = 'sd-ce-pf';
+    if (window.WebComponents.loadHTMLImports) {
+      all = 'hi-' + all;
+    }
+    polyfills = [all];
   }
 
   if (polyfills.length) {
@@ -164,8 +174,7 @@
     // if readyState is 'loading', this script is synchronous
     if (document.readyState === 'loading') {
       // make sure custom elements are batched whenever parser gets to the injected script
-      newScript.onload = batchCustomElements;
-      // newScript.setAttribute('onload', 'window.WebComponents._batchCustomElements()');
+      newScript.setAttribute('onload', 'window.WebComponents._batchCustomElements()');
       document.write(newScript.outerHTML);
       document.addEventListener('DOMContentLoaded', ready);
     } else {
