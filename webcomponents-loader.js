@@ -71,7 +71,14 @@
       HTMLTemplateElement.bootstrap(window.document);
     }
     polyfillsLoaded = true;
-    runWhenLoadedFns().then(fireEvent);
+    var runCallbacksAndFireEvent = function() {
+      runWhenLoadedFns().then(fireEvent);
+    }
+    if (window.HTMLImports) {
+      window.HTMLImports.whenReady(runCallbacksAndFireEvent);
+    } else {
+      runCallbacksAndFireEvent();
+    }
   }
 
   function runWhenLoadedFns() {
@@ -136,7 +143,7 @@
   // NOTE: any browser that does not have template or ES6 features
   // must load the full suite of polyfills.
   if (!window.Promise || !Array.from || !window.URL || !window.Symbol || needsTemplate) {
-    polyfills = ['sd-ce-pf'];
+    polyfills = ['hi-sd-ce-pf'];
   }
 
   if (polyfills.length) {
@@ -157,7 +164,8 @@
     // if readyState is 'loading', this script is synchronous
     if (document.readyState === 'loading') {
       // make sure custom elements are batched whenever parser gets to the injected script
-      newScript.setAttribute('onload', 'window.WebComponents._batchCustomElements()');
+      newScript.onload = batchCustomElements;
+      // newScript.setAttribute('onload', 'window.WebComponents._batchCustomElements()');
       document.write(newScript.outerHTML);
       document.addEventListener('DOMContentLoaded', ready);
     } else {

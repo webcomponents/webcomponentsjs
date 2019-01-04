@@ -21,12 +21,12 @@
   window.customElements.define('a-1', A1);
 
 
-  class SpecialStyle extends HTMLStyleElement {
-    connectedCallback() {
-      window.styleAppliedToDocument = Boolean(this.__appliedElement);
-    }
-  }
-  window.customElements.define('special-style', SpecialStyle);
+  // class SpecialStyle extends HTMLStyleElement {
+  //   connectedCallback() {
+  //     window.styleAppliedToDocument = Boolean(this.__appliedElement);
+  //   }
+  // }
+  // window.customElements.define('special-style', SpecialStyle);
 
 })();
 </script>

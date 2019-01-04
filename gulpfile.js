@@ -77,8 +77,9 @@ function closurify(sourceName, fileName) {
     externs: [
       'externs/webcomponents.js',
       'node_modules/@webcomponents/custom-elements/externs/custom-elements.js',
+      'node_modules/@webcomponents/html-imports/externs/html-imports.js',
       'node_modules/@webcomponents/shadycss/externs/shadycss-externs.js',
-      'node_modules/@webcomponents/shadydom/externs/shadydom.js'
+      'node_modules/@webcomponents/shadydom/externs/shadydom.js',
     ]
   };
 
@@ -130,7 +131,21 @@ gulp.task('debugify-bundle', () => {
     plugins: [commonjs()]
   };
   return debugify('webcomponents-bundle', 'webcomponents-bundle', rollupOptions);
-})
+});
+
+gulp.task('debugify-hi-sd-ce-pf', () => {
+  const rollupOptions = {
+    plugins: [commonjs()]
+  };
+  return debugify('webcomponents-hi-sd-ce-pf', null, rollupOptions);
+});
+
+gulp.task('debugify-bundle-with-hi', () => {
+  const rollupOptions = {
+    plugins: [commonjs()]
+  };
+  return debugify('webcomponents-bundle-with-hi', 'webcomponents-bundle-with-hi', rollupOptions);
+});
 
 gulp.task('closurify-ce', () => {
   return closurify('webcomponents-ce')
@@ -151,6 +166,14 @@ gulp.task('closurify-sd', () => {
 gulp.task('closurify-bundle', () => {
   return closurify('webcomponents-bundle', 'webcomponents-bundle');
 });
+
+gulp.task('closurify-hi-sd-ce-pf', () => {
+  return closurify('webcomponents-hi-sd-ce-pf');
+});
+
+gulp.task('closurify-bundle-with-hi', () => {
+  return closurify('webcomponents-bundle-with-hi', 'webcomponents-bundle-with-hi');
+})
 
 gulp.task('debugify-ce-es5-adapter', () => {
   const rollupOptions = {
@@ -186,7 +209,9 @@ gulp.task('debug', (cb) => {
     'debugify-sd',
     'debugify-sd-ce',
     'debugify-sd-ce-pf',
+    'debugify-hi-sd-ce-pf',
     'debugify-bundle',
+    'debugify-bundle-with-hi',
     'debugify-ce-es5-adapter'
   ];
   runseq('clean', tasks, cb);
@@ -198,7 +223,9 @@ gulp.task('closure', (cb) => {
     'closurify-sd',
     'closurify-sd-ce',
     'closurify-sd-ce-pf',
+    'closurify-hi-sd-ce-pf',
     'closurify-bundle',
+    'closurify-bundle-with-hi',
     'debugify-ce-es5-adapter'
   ];
   runseq('clean', ...tasks, cb);
