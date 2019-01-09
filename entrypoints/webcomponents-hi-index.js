@@ -15,3 +15,4 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  */
 
 import '../node_modules/@webcomponents/html-imports/src/html-imports.js';
+import '../src/unresolved.js';
