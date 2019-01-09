@@ -23,5 +23,5 @@ var WebComponents;
 /** @type {!Function} */
 Promise.cast;
 
-/** @type {function()} */
+/** @param {!Document} doc */
 HTMLTemplateElement.bootstrap;
