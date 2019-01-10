@@ -227,3 +227,10 @@ It's worth noting that `customElement.__proto__.__proto__.constructor` is `HTMLE
 
 ### ShadyCSS: :host(.zot:not(.bar:nth-child(2))) doesn't work <a id="nestedparens"></a>
 ShadyCSS `:host()` rules can only have (at most) 1-level of nested parentheses in its argument selector under ShadyCSS. For example, `:host(.zot)` and `:host(.zot:not(.bar))` both work, but `:host(.zot:not(.bar:nth-child(2)))` does not.
+
+### Radio button groups are not isolated
+If two `<input type="radio">` elements share the same group `name`, but are
+inside two different shadow roots (or one is in the light DOM), then the
+ShadowDOM polyfill will not prevent them from being treated as part of the same
+group, which does not match the spec (see [related Chromium
+bug](https://bugs.chromium.org/p/chromium/issues/detail?id=394302)).
