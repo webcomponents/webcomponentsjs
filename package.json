@@ -33,7 +33,7 @@
     "@gulp-sourcemaps/sources-content": "^1.0.0",
     "@webcomponents/custom-elements": "^1.2.1",
     "@webcomponents/shadycss": "^1.8.0",
-    "@webcomponents/shadydom": "^1.4.1",
+    "@webcomponents/shadydom": "^1.4.2",
     "@webcomponents/template": "^1.4.0",
     "@webcomponents/url": "^0.7.2",
     "@webcomponents/webcomponents-platform": "^1.0.0",
