@@ -76,15 +76,13 @@
 
   function runWhenLoadedFns() {
     allowUpgrades = false;
-    var done = function() {
-      allowUpgrades = true;
-      whenLoadedFns.length = 0;
-      flushFn && flushFn();
-    };
-    return Promise.all(whenLoadedFns.map(function(fn) {
+    var fnsMap = whenLoadedFns.map(function(fn) {
       return fn instanceof Function ? fn() : fn;
-    })).then(function() {
-      done();
+    });
+    whenLoadedFns = [];
+    return Promise.all(fnsMap).then(function() {
+      allowUpgrades = true;
+      flushFn && flushFn();
     }).catch(function(err) {
       console.error(err);
     });
