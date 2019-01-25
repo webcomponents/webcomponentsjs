@@ -53,13 +53,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <body>
   <script>
-    suite('Loader async/no-polyfills tests', function () {
+    suite('Loader async/no-polyfills tests', function() {
       test('Modules are loaded after WCR fires', function(done) {
-        window.addEventListener('WebComponentsReady', function() {
+        var tested = false;
+        var assertModulesLoaded = function() {
+          tested = true;
           assert.isOk(window.mockModule1Loaded);
           assert.isOk(window.mockModule2Loaded);
           done();
-        });
+        };
+        window.addEventListener('WebComponentsReady', assertModulesLoaded);
+        // An issue with WCT on Safari 10 causes `document.readyState` to be wrongly resolved as `complete`.
+        // This causes WCR to fire immediately before the event listener is defined, causing a timeout.
+        // As a workaround, we run a timer to check if WCR has been missed, then run the assertions.
+        setTimeout(function() {
+          if (!tested && WebComponents.ready) {
+            assertModulesLoaded();
+          }
+        }, 4000);
       });
       test('waitFor() callbacks are run exactly once', function() {
         // We expect mockLoadCount to be 2, since we defined two `waitFor` cbs.
