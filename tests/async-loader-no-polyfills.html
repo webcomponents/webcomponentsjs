@@ -1,0 +1,83 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+
+<head>
+  <!--
+    This test should be run only for spec-compliant browsers that require no polyfills.
+    When Loader is used async, we expect `WebComponentsReady` event to fire after all
+    waitFor() callbacks are resolved.
+  -->
+  <title>Test loader async/no-polyfills cases</title>
+  <meta charset="UTF-8">
+  <script src="../webcomponents-loader.js" defer></script>
+  <script src="./wct-config.js"></script>
+  <script>
+    WCT.waitForFrameworks = false;
+    window._wctCallback = function() {};
+  </script>
+  <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+  <script>
+    // Define mock load function that takes `duration` to resolve.
+    window.mockLoadCount = 0;
+    window.mockLoad = function(duration) {
+      return new Promise(function(resolve) {
+        window.mockLoadCount++;
+        setTimeout(resolve, duration);
+      });
+    };
+  </script>
+  <script type="module">
+    WebComponents.waitFor(() => {
+      return mockLoad(1000).then(() => {
+        window.mockModule1Loaded = true;
+      });
+    });
+  </script>
+  <script type="module">
+    WebComponents.waitFor(() => {
+      return mockLoad(500).then(() => {
+        window.mockModule2Loaded = true;
+      })
+    });
+  </script>
+</head>
+
+<body>
+  <script>
+    suite('Loader async/no-polyfills tests', function() {
+      test('Modules are loaded after WCR fires', function(done) {
+        var tested = false;
+        var assertModulesLoaded = function() {
+          tested = true;
+          assert.isOk(window.mockModule1Loaded);
+          assert.isOk(window.mockModule2Loaded);
+          done();
+        };
+        window.addEventListener('WebComponentsReady', assertModulesLoaded);
+        // An issue with WCT on Safari 10 causes `document.readyState` to be wrongly resolved as `complete`.
+        // This causes WCR to fire immediately before the event listener is defined, causing a timeout.
+        // As a workaround, we run a timer to check if WCR has been missed, then run the assertions.
+        setTimeout(function() {
+          if (!tested && WebComponents.ready) {
+            assertModulesLoaded();
+          }
+        }, 4000);
+      });
+      test('waitFor() callbacks are run exactly once', function() {
+        // We expect mockLoadCount to be 2, since we defined two `waitFor` cbs.
+        assert.equal(window.mockLoadCount, 2);
+      });
+    });
+  </script>
+</body>
+
+</html>
