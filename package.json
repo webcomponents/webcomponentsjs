@@ -30,7 +30,7 @@
     "@webcomponents/custom-elements": "^1.2.1",
     "@webcomponents/html-imports": "^1.2.0",
     "@webcomponents/shadycss": "^1.9.0",
-    "@webcomponents/shadydom": "^1.4.3",
+    "@webcomponents/shadydom": "^1.5.0",
     "@webcomponents/template": "^1.4.0",
     "@webcomponents/webcomponents-platform": "^1.0.0",
     "babel-preset-minify": "^0.2.0",
