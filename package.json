@@ -1,6 +1,6 @@
 {
   "name": "@webcomponents/webcomponentsjs",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Web Components Polyfills",
   "main": "webcomponents-lite.js",
   "directories": {
