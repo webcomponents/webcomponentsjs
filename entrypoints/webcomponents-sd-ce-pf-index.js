@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 'use strict';
 
 /*
- * Polyfills loaded: HTML Imports, Custom Elements, Shady DOM/Shady CSS, platform polyfills, template
+ * Polyfills loaded: Custom Elements, Shady DOM/Shady CSS, platform polyfills, template
  * Used in: IE 11
  */
 
