@@ -62,7 +62,6 @@ function closurify(sourceName, fileName) {
 
   const closureOptions = {
     compilation_level: 'ADVANCED',
-    language_in: 'ES6_STRICT',
     language_out: 'ES5_STRICT',
     isolation_mode: 'NONE',
     output_wrapper_file: 'closure-output.txt',
@@ -73,22 +72,15 @@ function closurify(sourceName, fileName) {
     module_resolution: 'NODE',
     entry_point: `entrypoints/${sourceName}-index.js`,
     dependency_mode: 'STRICT',
-    process_common_js_modules: true,
-    externs: [
-      'externs/webcomponents.js',
-      'node_modules/@webcomponents/custom-elements/externs/custom-elements.js',
-      'node_modules/@webcomponents/shadycss/externs/shadycss-externs.js',
-      'node_modules/@webcomponents/shadydom/externs/shadydom.js'
-    ]
   };
 
   return gulp.src([
+      'externs/webcomponents.js',
       'entrypoints/*.js',
       'src/*.js',
       'node_modules/get-own-property-symbols/build/get-own-property-symbols.max.js',
       'node_modules/promise-polyfill/src/**/*.js',
       'node_modules/@webcomponents/**/*.js',
-      '!node_modules/@webcomponents/*/externs/*.js',
       '!node_modules/@webcomponents/*/node_modules/**'
     ], {base: './', follow: true})
   .pipe(sourcemaps.init())
