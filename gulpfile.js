@@ -117,6 +117,13 @@ gulp.task('debugify-sd-ce-pf', () => {
   return debugify('webcomponents-sd-ce-pf', null, rollupOptions)
 });
 
+gulp.task('debugify-ce-sd-pf', () => {
+  const rollupOptions = {
+    plugins: [commonjs()]
+  };
+  return debugify('webcomponents-ce-sd-pf', null, rollupOptions)
+});
+
 gulp.task('debugify-sd-ce', () => {
   return debugify('webcomponents-sd-ce')
 });
@@ -138,6 +145,10 @@ gulp.task('closurify-ce', () => {
 
 gulp.task('closurify-sd-ce-pf', () => {
   return closurify('webcomponents-sd-ce-pf')
+});
+
+gulp.task('closurify-ce-sd-pf', () => {
+  return closurify('webcomponents-ce-sd-pf')
 });
 
 gulp.task('closurify-sd-ce', () => {
