@@ -31,9 +31,9 @@
   "homepage": "https://webcomponents.org/polyfills",
   "devDependencies": {
     "@gulp-sourcemaps/sources-content": "^1.1.0",
-    "@webcomponents/custom-elements": "^1.2.2",
+    "@webcomponents/custom-elements": "^1.2.3",
     "@webcomponents/shadycss": "^1.9.1",
-    "@webcomponents/shadydom": "^1.5.1",
+    "@webcomponents/shadydom": "^1.6.0",
     "@webcomponents/template": "^1.4.0",
     "@webcomponents/url": "^0.7.3",
     "@webcomponents/webcomponents-platform": "^1.0.1",
